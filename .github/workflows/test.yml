@@ -27,12 +27,13 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          version: ${{ env.NODE_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
       - uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
             ${{ runner.os }}-node-
       - name: Install Node dependencies
         run: npm install
