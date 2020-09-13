@@ -1,0 +1,53 @@
+name: Lint & test
+
+on:
+  push:
+    branches:
+  pull_request:
+    branches:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Ruby
+       # Install the version defined in .ruby-version
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Install Ruby dependencies
+        run: bundle install
+
+      - name: Find Node version to install
+        run: |
+          NODE_VERSION=$(sed 's/^v//' .nvmrc)
+          echo "::set-env name=NODE_VERSION::${NODE_VERSION}"
+      - name: Setup NodeJS ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
+            ${{ runner.os }}-node-
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Configure PostgreSQL authentication
+        run: |
+          # Add our authentication line before everything else
+          # https://unix.stackexchange.com/a/99351
+          sudo sed --in-place '1 i\local lea5_test lea5 md5' /etc/postgresql/12/main/pg_hba.conf
+          sudo systemctl restart postgresql.service
+      - name: Create PostgreSQL user and database
+        run: ./.github/workflows/init_test_db.sh
+      - name: Migrate database
+        run: bundle exec rails db:migrate RAILS_ENV=test
+
+      - name: Run tests
+        run: bundle exec rails test
