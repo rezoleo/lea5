@@ -37,3 +37,15 @@ jobs:
             ${{ runner.os }}-node-
       - name: Install Node dependencies
         run: npm install
+
+      - name: Install PostgreSQL
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-12
+      - name: Configure database
+        run: ./.github/workflows/init_test_db.sh
+      - name: Migrate database
+        run: bundle exec rails db:migrate RAILS_ENV=test
+
+      - name: Run tests
+        run: bundle exec rails test
