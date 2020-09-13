@@ -40,8 +40,8 @@ jobs:
 
       - name: Install PostgreSQL
         run: |
-          apt-get update
-          apt-get install --yes postgresql-12
+          sudo apt-get update
+          sudo apt-get install --yes postgresql-12
       - name: Configure database
         run: ./.github/workflows/init_test_db.sh
       - name: Migrate database
