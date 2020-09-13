@@ -38,12 +38,13 @@ jobs:
       - name: Install Node dependencies
         run: npm install
 
-      - name: Install PostgreSQL
+      - name: Configure PostgreSQL authentication
         run: |
-          sudo apt-get update
-          sudo apt-get install --yes postgresql-12
-          sudo systemctl start postgresql.service
-      - name: Configure database
+          # Add our authentication line before everything else
+          # https://unix.stackexchange.com/a/99351
+          sudo sed --in-place '1 i\local lea5_test lea5 md5' /etc/postgresql/12/main/pg_hba.conf
+          sudo systemctl restart postgresql.service
+      - name: Create PostgreSQL user and database
         run: ./.github/workflows/init_test_db.sh
       - name: Migrate database
         run: bundle exec rails db:migrate RAILS_ENV=test
