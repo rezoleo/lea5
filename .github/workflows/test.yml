@@ -12,10 +12,27 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby
+      - name: Setup Ruby
        # Install the version defined in .ruby-version
         uses: ruby/setup-ruby@v1
         with:
-            bundler-cache: true
-      - name: Install dependencies
+          bundler-cache: true
+      - name: Install Ruby dependencies
         run: bundle install
+
+      - name: Find Node version to install
+        run: |
+          NODE_VERSION=$(sed 's/^v//' .nvmrc)
+          echo "::set-env name=NODE_VERSION=::${NODE_VERSION}"
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          version: ${{ env.NODE_VERSION }}
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install Node dependencies
+        run: npm install
