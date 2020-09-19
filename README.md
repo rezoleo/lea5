@@ -14,11 +14,9 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 ## Development
 
 1. Install PostgreSQL
-2. Create a `lea5` user: `sudo --user postgres createuser lea5 --createdb --pwprompt`, and enter `lea5` as a password
-3. Create a development database: `sudo --user postgres createdb lea5_development --owner=lea5`
-4. Create a test database: `sudo --user postgres createdb lea5_test --owner=lea5`
-5. Clone the project
-6. Edit [`config/database.yml`](config/database.yml) if you chose a different password
+2. Clone the project
+3. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql --file ./.github/workflows/init_db.sql`
+4. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
