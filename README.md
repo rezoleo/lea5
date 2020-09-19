@@ -15,7 +15,7 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 
 1. Install PostgreSQL
 2. Clone the project
-3. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql --file ./.github/workflows/init_db.sql`
+3. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 4. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 
 This README would normally document whatever steps are necessary to get the
