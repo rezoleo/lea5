@@ -22,6 +22,13 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 
+## Documentation
+
+See the [docs](docs/) folder for the documentation.
+
+For now only an [image summing up our requirements](docs/Lea5-Definition-des-besoins.png) is available.
+[<img alt="Requirements" src="docs/Lea5-Definition-des-besoins.png" width="230" height="130">](docs/Lea5-Definition-des-besoins.png)
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
