@@ -2,8 +2,8 @@
 
 ## Requirements
 
-- Ruby version 2.7.1
-- Node v12.18.3
+- Ruby version 2.7.1 (see [.ruby-version](.ruby-version))
+- Node v12.18.4 (see [.nvmrc](.nvmrc))
 - PostgreSQL 12.4+
 
 It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language runtimes.
@@ -13,10 +13,14 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 
 ## Development
 
-1. Install PostgreSQL
-2. Clone the project
-3. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
-4. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
+1. Install NodeJS and Ruby in the correct versions (run `rbenv version` and `nvm use` to check)
+2. Install PostgreSQL
+3. Clone the project
+4. Install dependencies:
+   1. `bundle install`
+   2. `npm install`
+5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
+6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
