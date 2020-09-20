@@ -26,9 +26,11 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 
 See the [docs](docs/) folder for the documentation.
 
-For now only an [image summing up our requirements](docs/Lea5-Definition-des-besoins.png) is available.
+For now only the results of a [brainstorming session about our requirements][definition-des-besoins] is available.
 
-[<img alt="Requirements" src="docs/Lea5-Definition-des-besoins.png" width="230" height="130">](docs/Lea5-Definition-des-besoins.png)
+[<img alt="Requirements" src="docs/definition-des-besoins/Lea5-Definition-des-besoins.png" width="230" height="130">][definition-des-besoins]
+
+[definition-des-besoins]: docs/definition-des-besoins/README.md
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
