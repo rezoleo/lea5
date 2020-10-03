@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-node-${{ env.NODE_VERSION }}-
             ${{ runner.os }}-node-
       - name: Install Node dependencies
-        run: npm install
+        run: npm ci
 
       - name: Configure PostgreSQL authentication
         run: |
