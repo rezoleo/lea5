@@ -38,8 +38,22 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
+      - name: Run git hooks
+        run: |
+          bundle exec overcommit --sign
+          bundle exec overcommit --run
+
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
+
+      - name: Run Brakeman
+        continue-on-error: true
+        run: bundle exec brakeman -f sarif -o brakeman.sarif.json .
+
+      - name: Upload Brakeman SARIF
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: brakeman.sarif.json
 
       - name: Configure PostgreSQL authentication
         run: |

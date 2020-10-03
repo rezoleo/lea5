@@ -7,6 +7,9 @@ require:
 AllCops:
   NewCops: enable
 
+Style/Documentation:
+  Enabled: false
+
 RailsI18n:
   Enabled: true
 GetText:
