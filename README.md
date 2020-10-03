@@ -27,7 +27,7 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 - [Minitest][minitest] and [minitest-reporters][minitest-reporters] are used to polish test outputs
 - [Guard][guard] is setup to run tests automatically on changes. You can start it with `bundle exec guard`
 - Test coverage is done with [Simplecov][simplecov]. After running your tests, open `coverage/index.html` in the browser of your choice.
-  For the tests to pass, there must be a minimum coverage of 90% and 80% per branch and file.
+  For the tests to pass, there must be a minimum global coverage of 90% and 80% per branch and file.
 
 [minitest]: https://guides.rubyonrails.org/testing.html
 [minitest-reporters]: https://rubygems.org/gems/minitest-reporters/versions/1.1.11
