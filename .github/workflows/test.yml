@@ -38,6 +38,9 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
+      - name: Run RuboCop
+        run: bundle exec rubocop --parallel
+
       - name: Configure PostgreSQL authentication
         run: |
           # Add our authentication line before everything else
