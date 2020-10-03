@@ -44,7 +44,22 @@ jobs:
           bundle exec overcommit --run
 
       - name: Run RuboCop
-        run: bundle exec rubocop --parallel
+        continue-on-error: true
+        run: bundle exec rubocop --require code_scanning --format CodeScanning::SarifFormatter -o rubocop.sarif
+
+      - name: Upload RuboCop SARIF
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: rubocop.sarif
+
+      - name: Run Brakeman
+        continue-on-error: true
+        run: bundle exec brakeman -f sarif -o brakeman.sarif.json .
+
+      - name: Upload Brakeman SARIF
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: brakeman.sarif.json
 
       - name: Configure PostgreSQL authentication
         run: |
