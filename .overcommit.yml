@@ -25,6 +25,12 @@ PreCommit:
     enabled: true
   RailsSchemaUpToDate:
     enabled: true
+  AuthorEmail:
+    enabled: true
+    on_fail: warn
+  AuthorName:
+    enabled: true
+    on_fail: warn
 #  TrailingWhitespace:
 #    enabled: true
 #    exclude:
