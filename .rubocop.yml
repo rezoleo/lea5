@@ -1,0 +1,13 @@
+require:
+  - rubocop-i18n
+  - rubocop-minitest
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+
+RailsI18n:
+  Enabled: true
+GetText:
+  Enabled: false
