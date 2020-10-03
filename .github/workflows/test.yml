@@ -38,6 +38,11 @@ jobs:
       - name: Install Node dependencies
         run: npm ci
 
+      - name: Run git hooks
+        run: |
+          bundle exec overcommit --sign
+          bundle exec overcommit --run
+
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
 
