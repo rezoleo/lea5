@@ -22,6 +22,18 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 
+## Tests
+
+- [Minitest][minitest] and [minitest-reporters][minitest-reporters] are used to polish test outputs
+- [Guard][guard] is setup to run tests automatically on changes. You can start it with `bundle exec guard`
+- Test coverage is done with [Simplecov][simplecov]. After running your tests, open `coverage/index.html` in the browser of your choice.
+  For the tests to pass, there must be a minimum global coverage of 90% and 80% per branch and file.
+
+[minitest]: https://guides.rubyonrails.org/testing.html
+[minitest-reporters]: https://rubygems.org/gems/minitest-reporters/versions/1.1.11
+[guard]: https://github.com/guard/guard
+[simplecov]: https://github.com/simplecov-ruby/simplecov
+
 ## Documentation
 
 See the [docs](docs/) folder for the documentation.
@@ -37,23 +49,23 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+- Ruby version
 
-* System dependencies
+- System dependencies
 
-* Configuration
+- Configuration
 
-* Database creation
+- Database creation
 
-* Database initialization
+- Database initialization
 
-* How to run the test suite
+- How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+- Services (job queues, cache servers, search engines, etc.)
 
-* Deployment instructions
+- Deployment instructions
 
-* ...
+- ...
 
 ## Inspirations
 

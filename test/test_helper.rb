@@ -1,6 +1,15 @@
+require 'simplecov'
+SimpleCov.start 'rails' do
+  enable_coverage :branch
+end
+SimpleCov.minimum_coverage line: 90, branch: 80
+SimpleCov.minimum_coverage_by_file 80
+
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
+require 'minitest/reporters'
+Minitest::Reporters.use!
 
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
