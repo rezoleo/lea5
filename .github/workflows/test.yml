@@ -23,7 +23,7 @@ jobs:
       - name: Find Node version to install
         run: |
           NODE_VERSION=$(sed 's/^v//' .nvmrc)
-          echo "::set-env name=NODE_VERSION::${NODE_VERSION}"
+          echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
