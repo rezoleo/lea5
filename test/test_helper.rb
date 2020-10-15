@@ -3,9 +3,16 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
   enable_coverage :branch
+  minimum_coverage line: 90, branch: 80
+  minimum_coverage_by_file 80
+
+  if ENV['CI']
+    require 'codecov'
+    formatter SimpleCov::Formatter::Codecov
+  else
+    formatter SimpleCov::Formatter::HTMLFormatter
+  end
 end
-SimpleCov.minimum_coverage line: 90, branch: 80
-SimpleCov.minimum_coverage_by_file 80
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
