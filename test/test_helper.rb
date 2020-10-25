@@ -3,8 +3,6 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
   enable_coverage :branch
-  minimum_coverage line: 90, branch: 80
-  minimum_coverage_by_file 80
 
   if ENV['CI']
     require 'codecov'
