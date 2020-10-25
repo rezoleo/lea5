@@ -59,9 +59,7 @@ jobs:
         run: |
           # Add our authentication line before everything else
           # https://unix.stackexchange.com/a/99351
-          sudo cat /etc/postgresql/13/main/pg_hba.conf
-          sudo sed --in-place '1 i\local lea5_test lea5 md5' /etc/postgresql/13/main/pg_hba.conf
-          sudo cat /etc/postgresql/13/main/pg_hba.conf
+          sudo sed --in-place '1 i\local all lea5 md5' /etc/postgresql/13/main/pg_hba.conf
           sudo systemctl restart postgresql.service
       - name: Create PostgreSQL user and database
         run: sudo --user postgres psql --file ./.github/workflows/init_db.sql
