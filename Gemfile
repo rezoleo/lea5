@@ -52,10 +52,12 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
+  gem 'codecov', '~> 0.2.12'
   gem 'guard'
   gem 'guard-minitest'
   gem 'minitest'
   gem 'minitest-reporters'
+  gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov'
   # Easy installation and use of web drivers to run system tests with browsers
