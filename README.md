@@ -1,5 +1,8 @@
 # README
 
+[![codecov](https://codecov.io/gh/rezoleo/lea5/branch/master/graph/badge.svg)](https://codecov.io/gh/rezoleo/lea5/)
+[![Lint & test](https://github.com/rezoleo/lea5/workflows/Lint%20&%20test/badge.svg)](https://github.com/rezoleo/lea5/actions?query=workflow%3A%22Lint+%26+test%22)
+
 ## Requirements
 
 - Ruby version 2.7.1 (see [.ruby-version](.ruby-version))
