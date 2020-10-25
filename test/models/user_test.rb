@@ -4,29 +4,29 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(firstname: "Paul",
-                        lastname: "Marcel",
-                        email: "paul.marcel@gmail.com",
-                        room: "D112")
+    @user = User.new(firstname: 'Paul',
+                     lastname: 'Marcel',
+                     email: 'paul.marcel@gmail.com',
+                     room: 'D112')
   end
 
-  test "user is valid" do
+  test 'user is valid' do
     assert @user.valid?
   end
 
   test "names can't be nil" do
     @user.firstname = nil
     assert_not @user.valid?
-    @user.firstname = "Paul"
+    @user.firstname = 'Paul'
     @user.lastname = nil
     assert_not @user.valid?
   end
 
   test "names can't be empty" do
-    @user.firstname = "      "
+    @user.firstname = '      '
     assert_not @user.valid?
-    @user.firstname = "Paul"
-    @user.lastname = "         "
+    @user.firstname = 'Paul'
+    @user.lastname = '         '
     assert_not @user.valid?
   end
 
@@ -35,11 +35,11 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
-  test "email must be of a valid format" do
+  test 'email must be of a valid format' do
     valid_emails = %w[users@example.com USER@foo.COM A_US_ER@foo.bar.org
                       first.last@foo.jp alice+bob@baz.cn]
-    invalid_emails = ["user@example,com", "user_at_foo.org", "user.name@example",
-                      "foo@bar_baz.com", "foo@bar+baz.com", "foo@bar..com", "    "]
+    invalid_emails = ['user@example,com', 'user_at_foo.org', 'user.name@example',
+                      'foo@bar_baz.com', 'foo@bar+baz.com', 'foo@bar..com', '    ']
 
     valid_emails.each do |valid_email|
       @user.email = valid_email
@@ -52,25 +52,25 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test "email should be unique" do
+  test 'email should be unique' do
     duplicate_user = @user.dup
     @user.save
-    duplicate_user.email = "PauL.MarCEl@gMAIl.COm"
+    duplicate_user.email = 'PauL.MarCEl@gMAIl.COm'
 
     assert_not duplicate_user.valid?
   end
-  
+
   test "room can't be nil" do
     @user.room = nil
     assert_not @user.valid?
   end
 
   test "room can't be empty" do
-    @user.room = "    "
+    @user.room = '    '
     assert_not @user.valid?
   end
 
-  test "room should be unique" do
+  test 'room should be unique' do
     duplicate_user = @user.dup
     @user.save
     duplicate_user.email.downcase!
