@@ -57,6 +57,7 @@ group :test do
   gem 'guard-minitest'
   gem 'minitest'
   gem 'minitest-reporters'
+  gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov'
   # Easy installation and use of web drivers to run system tests with browsers
