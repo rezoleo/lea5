@@ -10,9 +10,6 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
-Layout/FirstArrayElementIndentation:
-  EnforcedStyle: consistent
-
 RailsI18n:
   Enabled: true
 GetText:
