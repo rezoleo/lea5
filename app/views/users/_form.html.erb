@@ -1,0 +1,14 @@
+<%= form_with(model: @user, local: true) do |f| %>
+
+  <%= f.label :firstname %>
+  <%= f.text_field :firstname, required: true %>
+  <%= f.label :lastname %>
+  <%= f.text_field :lastname, required: true %>
+  <%= f.label :email %>
+  <%= f.email_field :email, required: true %>
+  <%= f.label :room %>
+  <%= f.text_field :room, required: true %>
+
+  <%= f.submit yield(:button_text) %>
+
+<% end %>
