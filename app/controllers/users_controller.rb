@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
+
   def index
     @users = User.all
   end
@@ -15,10 +17,15 @@ class UsersController < ApplicationController
 
   def create
     @user = User.new(user_params)
-    if @user.save
-      redirect_to @user
-    else
-      render 'new'
+
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to @user }
+        format.json { render 'show', status: :created, location: @user }
+      else
+        format.html { render 'new' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -28,10 +35,14 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    if @user.update(user_params)
-      redirect_to @user
-    else
-      render 'edit'
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html { redirect_to @user }
+        format.json { render 'show', status: :ok, location: @user }
+      else
+        format.html { render 'edit' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
