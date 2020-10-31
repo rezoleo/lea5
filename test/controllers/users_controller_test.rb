@@ -24,29 +24,33 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/new'
   end
 
-  test 'should redirect if user is valid' do
-    post users_url(format: :html), params: {
-      user: {
-        firstname: 'patrick',
-        lastname: 'bar',
-        email: 'patrick@bar.com',
-        room: 'E124'
+  test 'should create a user and redirect if user is valid in html' do
+    assert_difference 'User.count', 1 do
+      post users_url(format: :html), params: {
+        user: {
+          firstname: 'patrick',
+          lastname: 'bar',
+          email: 'patrick@bar.com',
+          room: 'E124'
+        }
       }
-    }
+    end
     user = User.find_by(email: 'patrick@bar.com')
     assert_redirected_to user
+  end
 
-    post users_url(format: :json), params: {
-      user: {
-        firstname: 'patrick',
-        lastname: 'bar',
-        email: 'patrickbar@bar.com',
-        room: 'E125'
+  test 'should create a user and send user info if user is valid in json' do
+    assert_difference 'User.count', 1 do
+      post users_url(format: :json), params: {
+        user: {
+          firstname: 'patrick',
+          lastname: 'bar',
+          email: 'patrickbar@bar.com',
+          room: 'E125'
+        }
       }
-    }
-
+    end
     user = @response.parsed_body
-
     assert_template('show')
     assert_response(:created)
     assert_equal 'patrick', user['firstname']
@@ -109,10 +113,17 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response(:unprocessable_entity)
   end
 
-  test 'should destroy a user' do
+  test 'should destroy a user and redirect to users in html' do
     assert_difference 'User.count', -1 do
-      delete user_path @user
+      delete user_url(@user, format: :html)
     end
     assert_redirected_to users_url
+  end
+
+  test 'should destroy a user and send a 204 in json' do
+    assert_difference 'User.count', -1 do
+      delete user_url(@user, format: :json)
+    end
+    assert_response 204
   end
 end
