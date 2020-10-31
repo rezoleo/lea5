@@ -2,13 +2,14 @@
 
 class User < ApplicationRecord
   before_save :downcase_email
-  before_save :upcase_room
+  before_save :format_room
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i.freeze
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :room, presence: true, allow_blank: false, uniqueness: true
+  VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i.freeze
+  validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
   private
 
@@ -16,7 +17,7 @@ class User < ApplicationRecord
     email.downcase!
   end
 
-  def upcase_room
-    room.upcase!
+  def format_room
+    self.room = room.strip.downcase.upcase_first
   end
 end

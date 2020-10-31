@@ -55,9 +55,13 @@ class UserTest < ActiveSupport::TestCase
   test 'email should be unique' do
     duplicate_user = @user.dup
     @user.save
-    duplicate_user.email = 'PauL.MarCEl@gMAIl.COm'
-
     assert_not duplicate_user.valid?
+  end
+
+  test 'email should be downcase on save' do
+    @user.email = 'PauL.MarCEl@gMAIl.COm'
+    @user.save
+    assert_equal 'paul.marcel@gmail.com', @user.email
   end
 
   test "room can't be nil" do
@@ -73,7 +77,28 @@ class UserTest < ActiveSupport::TestCase
   test 'room should be unique' do
     duplicate_user = @user.dup
     @user.save
-    duplicate_user.email.downcase!
+    duplicate_user.room.downcase!
     assert_not duplicate_user.valid?
+  end
+
+  test 'room should be formatted on save' do
+    @user.room = 'a108B'
+    @user.save
+    assert_equal 'A108b', @user.room
+  end
+
+  test 'room must be of a valid format' do
+    valid_rooms = %w[A205 B134a C001b F313 D111b E231a DF1 DF2 DF3 DF4]
+    invalid_rooms = %w[A2005 C404 D111c B1 E22 G207]
+
+    valid_rooms.each do |valid_room|
+      @user.room = valid_room
+      assert @user.valid?, "#{valid_room} should be valid"
+    end
+
+    invalid_rooms.each do |invalid_room|
+      @user.room = invalid_room
+      assert_not @user.valid?, "#{invalid_room} should be invalid"
+    end
   end
 end
