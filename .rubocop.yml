@@ -13,7 +13,13 @@ Style/Documentation:
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
+Metrics/ClassLength:
+  Enabled: true
+  Exclude:
+    - test/**/*
+
 RailsI18n:
   Enabled: true
 GetText:
   Enabled: false
+
