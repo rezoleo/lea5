@@ -36,7 +36,7 @@ end
 group :development do
   gem 'brakeman', '~> 4.10'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '~> 3.2'
+  gem 'listen', '~> 3.3'
   gem 'overcommit', '~> 0.57.0'
   gem 'rubocop', '~> 0.93.1'
   gem 'rubocop-i18n', '~> 2.0'
