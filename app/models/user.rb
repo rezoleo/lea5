@@ -18,6 +18,6 @@ class User < ApplicationRecord
   end
 
   def format_room
-    self.room = room.strip.downcase.upcase_first
+    self.room = room.downcase.upcase_first
   end
 end
