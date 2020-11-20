@@ -7,6 +7,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user = users(:foobar)
   end
 
+  # TODO: when another template index has been made, try to render it and test assert_template 'index'
+  #   to see if it only check a template index or check that it is the users' index template
   test 'should get index' do
     get users_path
     assert_template 'users/index'
@@ -51,7 +53,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     end
     user = @response.parsed_body
-    assert_template('show')
+    assert_template('users/show')
     assert_response(:created)
     assert_equal 'patrick', user['firstname']
     assert_equal 'bar', user['lastname']
@@ -93,7 +95,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         room: 'B231'
       }
     }
-    assert_template 'show'
+    assert_template 'users/show'
     user = @response.parsed_body
 
     assert_equal 'toto', user['firstname']
