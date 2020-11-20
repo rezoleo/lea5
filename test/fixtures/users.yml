@@ -1,9 +1,8 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-foobar:
-  firstname: "Foo"
-  lastname: "Bar"
-  email: "foo@bar.com"
+ironman:
+  firstname: "Tony"
+  lastname: "Stark"
+  email: "tony@avengers.com"
   room: "A200"
-
 
