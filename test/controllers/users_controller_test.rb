@@ -4,7 +4,7 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = users(:foobar)
+    @user = users(:ironman)
   end
 
   # TODO: when another template index has been made, try to render it and test assert_template 'index'
