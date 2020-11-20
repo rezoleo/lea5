@@ -1,0 +1,15 @@
+<%= form_with(model: @user, local: true) do |f| %>
+
+  <%= f.label :firstname %>
+  <%= f.text_field :firstname, required: true %>
+  <%= f.label :lastname %>
+  <%= f.text_field :lastname, required: true %>
+  <%= f.label :email %>
+  <%= f.email_field :email, required: true %>
+  <%= f.label :room %>
+  <%= f.text_field :room, required: true, placeholder: 'A123b, or DF1', minlength: 3, maxlength: 5,
+                   pattern: '([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])' %>
+
+  <%= f.submit yield(:button_text) %>
+
+<% end %>

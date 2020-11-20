@@ -24,6 +24,7 @@ It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language 
    2. `npm install`
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
+7. Install [Overcommit](https://github.com/sds/overcommit): `overcommit --install`
 
 ## Tests
 
