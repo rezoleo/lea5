@@ -1,6 +1,1 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-jarvis:
-  mac: "DE:1A:B3:17:95:C9"
-  name: "jarvis"
-  user: ironman
