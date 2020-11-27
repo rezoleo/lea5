@@ -4,8 +4,9 @@ require 'test_helper'
 
 class MachineTest < ActiveSupport::TestCase
   def setup
-    @machine = Machine.new(name: 'Machine-1',
-                           mac: 'AD:12:A8:F6:45:BD')
+    @user = users(:ironman)
+    @machine = @user.machines.new(name: 'Machine-1',
+                                  mac: 'AD:12:A8:F6:45:BD')
   end
 
   test 'machine is valid' do
@@ -58,6 +59,13 @@ class MachineTest < ActiveSupport::TestCase
     invalid_macs.each do |invalid_mac|
       @machine.mac = invalid_mac
       assert_not @machine.valid?, "#{invalid_mac.inspect} should be invalid"
+    end
+  end
+
+  test 'machines should be destroyed when the user is destroyed' do
+    @machine.save
+    assert_difference 'Machine.count', -1 do
+      @user.destroy
     end
   end
 end
