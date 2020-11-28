@@ -5,8 +5,7 @@ require 'test_helper'
 class MachineTest < ActiveSupport::TestCase
   def setup
     @user = users(:ironman)
-    @machine = @user.machines.new(name: 'Machine-1',
-                                  mac: 'AD:12:A8:F6:45:BD')
+    @machine = @user.machines.first
   end
 
   test 'machine is valid' do
