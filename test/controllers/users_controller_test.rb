@@ -76,7 +76,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
-  test 'should redirect if updates are valid' do
+  test 'should redirect if updates are valid in html' do
     patch user_url(@user, format: :html), params: {
       user: {
         firstname: 'toto',
@@ -86,7 +86,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
       }
     }
     assert_redirected_to @user
+  end
 
+  test 'should redirect if updates are valid in json' do
     patch user_url(@user, format: :json), params: {
       user: {
         firstname: 'toto',
@@ -97,7 +99,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     }
     assert_template 'users/show'
     user = @response.parsed_body
-
+    assert_response(:ok)
     assert_equal 'toto', user['firstname']
     assert_equal 'titi', user['lastname']
     assert_equal 'tototiti@titi.tu', user['email']
