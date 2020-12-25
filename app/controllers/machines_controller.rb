@@ -19,18 +19,14 @@ class MachinesController < ApplicationController
     @machine = @owner.machines.new(machine_params)
     respond_to do |format|
       ip = Ip.where(machine_id: nil).first
-      if !ip.nil?
-        if @machine.save
-          @machine.ip = ip
-          format.html { redirect_to @owner }
-          format.json { render 'show', status: :created, location: @machine }
-        else
-          format.html { render 'new' }
-          format.json { render json: @machine.errors, status: :unprocessable_entity }
-        end
+      if !ip.nil? && @machine.save
+        @machine.ip = ip
+        format.html { redirect_to @owner }
+        format.json { render 'show', status: :created, location: @machine }
       else
-        format.html { render 'utils/error', locals: { error: 'No more Ips available' } }
-        format.json { render plain: 'No more Ips available', status: :unprocessable_entity }
+        @machine.errors[:base] << 'No more IPs available' if ip.nil?
+        format.html { render 'new' }
+        format.json { render json: @machine.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -70,8 +70,8 @@ class MachinesControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-
-    assert_select 'p', 'No more Ips available'
+    assert_template 'machines/new'
+    assert_select 'li', 'No more IPs available'
   end
 
   test 'should show an error and not create a machine if no ip available in json' do
@@ -85,9 +85,9 @@ class MachinesControllerTest < ActionDispatch::IntegrationTest
         }
       }
     end
-
-    assert_match 'No more Ips available', response.body
+    machine = @response.parsed_body
     assert_response(:unprocessable_entity)
+    assert_equal ['No more IPs available'], machine['base']
   end
 
   test 'should re-render new if machine is invalid with html' do
