@@ -2,6 +2,7 @@
 
 ip1:
   ip: "172.130.0.0"
+  machine: jarvis
 
 ip2:
   ip: "172.130.0.1"
