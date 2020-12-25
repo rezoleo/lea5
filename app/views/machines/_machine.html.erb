@@ -2,4 +2,6 @@
   <%= machine.name %>,
   <%= machine.mac %>,
   <%= machine.ip.ip %>
+  <%= link_to "edit", edit_machine_path(machine) %>
+  <%= link_to "delete", machine, method: :delete, data: {confirm: "Are you sure ?"} %>
 </p>

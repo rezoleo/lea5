@@ -1,2 +1,13 @@
+<% provide :button_text, "Create" %>
+
 <h1>Machines#new</h1>
-<p>Find me in app/views/machines/new.html.erb</p>
+
+<%= form_with(model: @machine, local: true, url: user_machines_url(@owner)) do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <%= f.label :name %>
+  <%= f.text_field :name, required: true %>
+  <%= f.label :mac %>
+  <%= f.text_field :mac, required: true %>
+  <%= f.submit yield(:button_text) %>
+<% end %>
+
