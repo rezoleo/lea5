@@ -14,19 +14,27 @@ class MachinesController < ApplicationController
     @machine = @owner.machines.new
   end
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def create
     @machine = @owner.machines.new(machine_params)
-
     respond_to do |format|
-      if @machine.save
-        format.html { redirect_to @owner }
-        format.json { render 'show', status: :created, location: @machine }
+      ip = Ip.where(machine_id: nil).first
+      if !ip.nil?
+        if @machine.save
+          @machine.ip = ip
+          format.html { redirect_to @owner }
+          format.json { render 'show', status: :created, location: @machine }
+        else
+          format.html { render 'new' }
+          format.json { render json: @machine.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render 'new' }
-        format.json { render json: @machine.errors, status: :unprocessable_entity }
+        format.html { render 'utils/error', locals: { error: 'No more Ips available' } }
+        format.json { render plain: 'No more Ips available', status: :unprocessable_entity }
       end
     end
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def edit; end
 

@@ -1,5 +1,5 @@
 <%= form_with(model: @user, local: true) do |f| %>
-
+  <%= render 'utils/error_messages', object: f.object %>
   <%= f.label :firstname %>
   <%= f.text_field :firstname, required: true %>
   <%= f.label :lastname %>
@@ -7,7 +7,7 @@
   <%= f.label :email %>
   <%= f.email_field :email, required: true %>
   <%= f.label :room %>
-  <%= f.text_field :room, required: true, placeholder: 'A123b, or DF1', minlength: 3, maxlength: 5,
+  <%= f.text_field :room, required: true, placeholder: 'A123b or DF1', minlength: 3, maxlength: 5,
                    pattern: '([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])' %>
 
   <%= f.submit yield(:button_text) %>

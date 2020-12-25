@@ -1,1 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+ip1:
+  ip: "172.130.0.0"
+
+ip2:
+  ip: "172.130.0.1"

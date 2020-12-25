@@ -48,6 +48,48 @@ class MachinesControllerTest < ActionDispatch::IntegrationTest
     assert_equal @owner.id, machine['user']['id']
   end
 
+  test 'should add an ip on create' do
+    post user_machines_url(@owner), params: {
+      machine: {
+        name: 'ultron',
+        mac: '66:66:66:66:66:66'
+      }
+    }
+    machine = Machine.find_by(mac: '66:66:66:66:66:66')
+    assert_not_nil machine.ip
+  end
+
+  test 'should show an error and not create a machine if no ip available in html' do
+    Ip.destroy_all
+
+    assert_difference 'Machine.count', 0 do
+      post user_machines_url(@owner), params: {
+        machine: {
+          name: 'ultron',
+          mac: '66:66:66:66:66:66'
+        }
+      }
+    end
+
+    assert_select 'p', 'No more Ips available'
+  end
+
+  test 'should show an error and not create a machine if no ip available in json' do
+    Ip.destroy_all
+
+    assert_difference 'Machine.count', 0 do
+      post user_machines_url(@owner, format: :json), params: {
+        machine: {
+          name: 'ultron',
+          mac: '66:66:66:66:66:66'
+        }
+      }
+    end
+
+    assert_match 'No more Ips available', response.body
+    assert_response(:unprocessable_entity)
+  end
+
   test 'should re-render new if machine is invalid with html' do
     post user_machines_url(@owner), params: { machine: { name: 'No mac' } }
     assert_template 'machines/new'
