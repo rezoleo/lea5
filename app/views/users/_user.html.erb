@@ -1,6 +1,7 @@
 <li>
   <%= user.email %>,
   <%= user.room %>
+  <%= link_to "show", user %>
   <%= link_to "edit", edit_user_path(user) %>
   <%= link_to "delete", user, method: :delete, data: {confirm: "Are you sure ?"} %>
 </li>
