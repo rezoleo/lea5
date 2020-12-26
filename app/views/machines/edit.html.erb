@@ -2,12 +2,7 @@
 
 <h1>Machines#Edit</h1>
 
-<%= form_with(model: @machine, local: true) do |f| %>
-  <%= render 'utils/error_messages', object: f.object %>
-  <%= f.label :name %>
-  <%= f.text_field :name, required: true %>
-  <%= f.label :mac %>
-  <%= f.text_field :mac, required: true %>
-  <%= f.submit yield(:button_text) %>
-<% end %>
+<%= render 'form'%>
+
+
 
