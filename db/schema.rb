@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_28_153354) do
+ActiveRecord::Schema.define(version: 2020_12_26_130919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,16 @@ ActiveRecord::Schema.define(version: 2020_11_28_153354) do
     t.index ["user_id"], name: "index_machines_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "payment", null: false
+    t.integer "duration", null: false
+    t.datetime "date", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "firstname", null: false
     t.string "lastname", null: false
@@ -47,4 +57,5 @@ ActiveRecord::Schema.define(version: 2020_11_28_153354) do
 
   add_foreign_key "ips", "machines"
   add_foreign_key "machines", "users"
+  add_foreign_key "subscriptions", "users"
 end

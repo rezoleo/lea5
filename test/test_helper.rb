@@ -34,7 +34,7 @@ module ActiveSupport
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
+    fixtures %w[users machines ips]
 
     # Add more helper methods to be used by all tests here...
   end
