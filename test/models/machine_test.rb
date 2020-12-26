@@ -67,4 +67,38 @@ class MachineTest < ActiveSupport::TestCase
       @user.destroy
     end
   end
+
+  test "ip can't be nil" do
+    @machine.ip = nil
+    assert_not @machine.valid?
+  end
+
+  test 'machine should have an ip assigned after creation' do
+    machine = Machine.new(name: 'Will have an ip', mac: '42:42:42:42:42:42', user: @user)
+    assert machine.save
+    assert_not_nil machine.ip
+  end
+
+  test 'should raise an error if no more ips available' do
+    machine = Machine.new(name: 'Will not have an ip', mac: '42:42:42:42:42:42', user: @user)
+    Ip.delete_all
+    assert Ip.find_by(machine_id: nil).nil?
+    assert_not machine.valid?
+  end
+
+  test "machine shouldn't be assigned a new ip if it already has one" do
+    machine = Machine.new(name: 'Will have an ip', mac: '42:42:42:42:42:42', user: @user)
+    machine.save
+    assert_not_nil machine.ip
+    ip = machine.ip
+    machine.save
+    assert_equal ip, machine.ip
+  end
+
+  test 'ip should be free when machine is destroyed' do
+    ip = @machine.ip
+    assert_not_nil ip.machine_id
+    @machine.destroy
+    assert_nil ip.machine_id
+  end
 end

@@ -4,7 +4,7 @@ class MachinesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
   before_action :owner, only: %i[index create new]
-  before_action :current_machine, only: %i[edit update destroy]
+  before_action :current_machine, only: %i[show edit update destroy]
 
   def index
     @machines = @owner.machines
@@ -14,23 +14,20 @@ class MachinesController < ApplicationController
     @machine = @owner.machines.new
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def show; end
+
   def create
     @machine = @owner.machines.new(machine_params)
     respond_to do |format|
-      ip = Ip.where(machine_id: nil).first
-      if !ip.nil? && @machine.save
-        @machine.ip = ip
+      if @machine.save
         format.html { redirect_to @owner }
         format.json { render 'show', status: :created, location: @machine }
       else
-        @machine.errors[:base] << 'No more IPs available' if ip.nil?
         format.html { render 'new' }
         format.json { render json: @machine.errors, status: :unprocessable_entity }
       end
     end
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def edit; end
 
