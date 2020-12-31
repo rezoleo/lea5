@@ -121,6 +121,6 @@ class MachinesControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'Machine.count', -1 do
       delete machine_url(@machine, format: :json)
     end
-    assert_response 204
+    assert_response :no_content
   end
 end
