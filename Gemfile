@@ -42,7 +42,7 @@ group :development do
   gem 'overcommit', '~> 0.57.0'
   gem 'rubocop', '~> 0.93.1'
   gem 'rubocop-i18n', '~> 2.0'
-  gem 'rubocop-minitest', '~> 0.10.1'
+  gem 'rubocop-minitest', '~> 0.10.2'
   gem 'rubocop-performance', '~> 1.8'
   gem 'rubocop-rails', '~> 2.8'
   gem 'web-console', '>= 3.3.0'
