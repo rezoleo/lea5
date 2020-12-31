@@ -4,4 +4,7 @@
     <%= @user.lastname %>,
     <%= @user.email %>,
     <%= @user.room %>,
+  <h2>Machines</h2>
+  <%= link_to "create a new machine", new_user_machine_url(@user) %>
+    <%= render @user.machines %>
 </p>

@@ -10,10 +10,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_25_183041) do
+ActiveRecord::Schema.define(version: 2020_11_28_153354) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "ips", force: :cascade do |t|
+    t.inet "ip", null: false
+    t.bigint "machine_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ip"], name: "index_ips_on_ip", unique: true
+    t.index ["machine_id"], name: "index_ips_on_machine_id"
+  end
+
+  create_table "machines", force: :cascade do |t|
+    t.string "name", null: false
+    t.macaddr "mac", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.index ["mac"], name: "index_machines_on_mac", unique: true
+    t.index ["user_id"], name: "index_machines_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "firstname", null: false
@@ -26,4 +45,6 @@ ActiveRecord::Schema.define(version: 2020_10_25_183041) do
     t.index ["room"], name: "index_users_on_room", unique: true
   end
 
+  add_foreign_key "ips", "machines"
+  add_foreign_key "machines", "users"
 end
