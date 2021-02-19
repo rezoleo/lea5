@@ -24,7 +24,7 @@ class MachinesController < ApplicationController
         format.html { redirect_to @owner }
         format.json { render 'show', status: :created, location: @machine }
       else
-        @machine.errors[:base] << 'No more IPs available' if ip.nil?
+        @machine.errors.add(:base, 'No more IPs available') if ip.nil?
         format.html { render 'new' }
         format.json { render json: @machine.errors, status: :unprocessable_entity }
       end
