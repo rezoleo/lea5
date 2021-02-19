@@ -235,10 +235,10 @@ GEM
     rubocop-performance (1.9.2)
       rubocop (>= 0.90.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.8.1)
+    rubocop-rails (2.9.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
-      rubocop (>= 0.87.0)
+      rubocop (>= 0.90.0, < 2.0)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.0)
     sass-rails (6.0.0)
@@ -339,7 +339,7 @@ DEPENDENCIES
   rubocop-i18n (~> 3.0)
   rubocop-minitest (~> 0.10.3)
   rubocop-performance (~> 1.9)
-  rubocop-rails (~> 2.8)
+  rubocop-rails (~> 2.9)
   sass-rails (>= 6)
   selenium-webdriver
   simplecov
