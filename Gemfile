@@ -40,8 +40,8 @@ group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3.4'
   gem 'overcommit', '~> 0.57.0'
-  gem 'rubocop', '~> 0.93.1'
-  gem 'rubocop-i18n', '~> 2.0'
+  gem 'rubocop', '~> 1.7.0'
+  gem 'rubocop-i18n', '~> 3.0'
   gem 'rubocop-minitest', '~> 0.10.3'
   gem 'rubocop-performance', '~> 1.9'
   gem 'rubocop-rails', '~> 2.8'
