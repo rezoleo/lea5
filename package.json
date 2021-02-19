@@ -2,13 +2,13 @@
   "name": "lea5",
   "private": true,
   "dependencies": {
-    "@rails/activestorage": "^6.0.0",
-    "@rails/ujs": "^6.0.0",
+    "@rails/activestorage": "^6.1.3",
+    "@rails/ujs": "^6.1.3",
     "@rails/webpacker": "^5.2.1",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
   "devDependencies": {
-    "webpack-dev-server": "^3.11.0"
+    "webpack-dev-server": "^3.11.2"
   }
 }
