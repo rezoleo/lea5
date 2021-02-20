@@ -4,6 +4,7 @@
     <%= @user.lastname %>,
     <%= @user.email %>,
     <%= @user.room %>,
+    <%= @user.date_end_subscription %>
   <h2>Machines</h2>
   <%= link_to "create a new machine", new_user_machine_url(@user) %>
     <%= render @user.machines %>
