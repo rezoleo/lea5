@@ -5,8 +5,14 @@
     <%= @user.email %>,
     <%= @user.room %>,
     <%= @user.date_end_subscription %>
-    <%= link_to "delete last subscription",user_delete_subscription_url(@user) ,method: :delete %>
+</p>
+<%= link_to "edit last subscription",user_edit_subscription_url(@user) %>
+<%= link_to "delete last subscription",user_subscription_url(@user) ,method: :delete %>
   <h2>Machines</h2>
   <%= link_to "create a new machine", new_user_machine_url(@user) %>
     <%= render @user.machines %>
-</p>
+
+  <h2>Subscriptions</h2>
+  <%= link_to "add a new subscription", new_user_subscription_url(@user) %>
+  <%= render @user.subscriptions %>
+

@@ -79,7 +79,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   test 'should destroy the last subscription and redirect to user' do
     last_subscription = @user.subscriptions.last
     assert_difference 'Subscription.count', -1 do
-      delete user_delete_subscription_url(@user)
+      delete user_subscription_url(@user)
     end
     @user.reload
     assert_not_equal last_subscription, @user.subscriptions.last
@@ -93,7 +93,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     subscription_date_before_deletion = @user.date_end_subscription
     @user.save
 
-    delete user_delete_subscription_url(@user)
+    delete user_subscription_url(@user)
 
     @user.reload
     assert_equal (subscription_date_before_deletion - 7.months).utc.round,
@@ -105,9 +105,73 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_not_nil @user.date_end_subscription
 
-    delete user_delete_subscription_url(@user)
+    delete user_subscription_url(@user)
 
     @user.reload
     assert_nil @user.date_end_subscription
+  end
+
+  test 'should render edit' do
+    get user_edit_subscription_url(@user)
+    assert_template 'subscriptions/edit'
+  end
+
+  test 'should redirect if updates are valid' do
+    patch user_subscription_url(@user), params: {
+      subscription: {
+        duration: 8
+      }
+    }
+    assert_redirected_to @user
+  end
+
+  test 'should cancelled last subscription and add a new one' do
+    last_subscription = @user.subscriptions.last
+    patch user_subscription_url(@user), params: {
+      subscription: {
+        duration: 8
+      }
+    }
+    last_subscription.reload
+    assert last_subscription.cancelled
+  end
+
+  test 'should update subscription end date on edit' do
+    @user.subscriptions.new(duration: 9)
+    date_end_subscription_before_edit = DateTime.now + 9.months
+    @user.date_end_subscription = date_end_subscription_before_edit
+    @user.save
+
+    patch user_subscription_url(@user), params: {
+      subscription: {
+        duration: 6
+      }
+    }
+
+    @user.reload
+    assert_equal (date_end_subscription_before_edit - 3.months).utc.round,
+                 @user.date_end_subscription.utc.round
+  end
+
+  test "can't edit when no subscriptions" do
+    @user.subscriptions.destroy_all
+    @user.save
+
+    patch user_subscription_url(@user), params: {
+      subscription: {
+        duration: 6
+      }
+    }
+
+    assert_redirected_to @user
+  end
+
+  test 'should re-render edit if updates are invalid' do
+    patch user_subscription_url(@user), params: {
+      subscription: {
+        duration: -1
+      }
+    }
+    assert_template 'subscriptions/edit'
   end
 end
