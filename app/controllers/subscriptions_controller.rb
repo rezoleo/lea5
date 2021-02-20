@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
-  before_action :user, only: %i[new create]
+  before_action :user, only: %i[new create destroy]
+
   def new
     @subscription = @user.subscriptions.new
   end
@@ -16,6 +17,19 @@ class SubscriptionsController < ApplicationController
     else
       render 'new'
     end
+  end
+
+  def destroy
+    if @user.subscriptions.count > 1
+      last_subscription = @user.subscriptions.last
+      @user.handle_new_date_end_subscription(-last_subscription.duration)
+      last_subscription.destroy!
+    elsif @user.subscriptions.count == 1
+      @user.subscriptions.last.destroy!
+      @user.date_end_subscription = nil
+    end
+    @user.save
+    redirect_to @user
   end
 
   private

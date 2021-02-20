@@ -75,4 +75,39 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     }
     assert_template 'subscriptions/new'
   end
+
+  test 'should destroy the last subscription and redirect to user' do
+    last_subscription = @user.subscriptions.last
+    assert_difference 'Subscription.count', -1 do
+      delete user_delete_subscription_url(@user)
+    end
+    @user.reload
+    assert_not_equal last_subscription, @user.subscriptions.last
+  end
+
+  test 'should update user subscription date on delete' do
+    sub = @user.subscriptions.new(duration: 7)
+    sub.save
+
+    @user.handle_new_date_end_subscription(sub.duration)
+    subscription_date_before_deletion = @user.date_end_subscription
+    @user.save
+
+    delete user_delete_subscription_url(@user)
+
+    @user.reload
+    assert_equal (subscription_date_before_deletion - 7.months).utc.round,
+                 @user.date_end_subscription.utc.round
+  end
+
+  test 'should set date end subscription to nil if the last subscriptions is deleted' do
+    assert_equal 1, @user.subscriptions.count
+
+    assert_not_nil @user.date_end_subscription
+
+    delete user_delete_subscription_url(@user)
+
+    @user.reload
+    assert_nil @user.date_end_subscription
+  end
 end

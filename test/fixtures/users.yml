@@ -5,4 +5,5 @@ ironman:
   lastname: "Stark"
   email: "tony@avengers.com"
   room: "A200"
+  date_end_subscription: <%= DateTime.now + 2.months%>
 
