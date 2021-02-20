@@ -8,6 +8,11 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     @user = @subscription.user
   end
 
+  test 'should render index' do
+    get subscriptions_url
+    assert_template 'subscriptions/index'
+  end
+
   test 'should render new' do
     get new_user_subscription_path(@user)
     assert_template 'subscriptions/new'

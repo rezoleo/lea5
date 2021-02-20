@@ -4,6 +4,10 @@ class SubscriptionsController < ApplicationController
   before_action :user, only: %i[new create edit update destroy]
   before_action :last_subscription, only: %i[edit update destroy]
 
+  def index
+    @subscriptions = Subscription.all
+  end
+
   def new
     @subscription = @user.subscriptions.new
   end

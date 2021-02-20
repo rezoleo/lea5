@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     delete '/subscriptions', to: 'subscriptions#destroy'
   end
 
+  get '/subscriptions', to: 'subscriptions#index', as: :subscriptions
+
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
