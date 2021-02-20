@@ -44,11 +44,10 @@ class SubscriptionsController < ApplicationController
   def destroy
     if @user.subscriptions.count > 1
       @user.handle_new_date_end_subscription(-@last_subscription.duration)
-      @last_subscription.destroy!
-    elsif @user.subscriptions.count == 1
+    else
       @user.date_end_subscription = nil
-      @last_subscription.destroy!
     end
+    @last_subscription.destroy!
     @user.save
     redirect_to @user
   end
@@ -61,10 +60,6 @@ class SubscriptionsController < ApplicationController
 
   def user
     @user = User.find(params[:user_id])
-  end
-
-  def current_subscription
-    @subscription = Subscription.find(params[:id])
   end
 
   def last_subscription
