@@ -23,6 +23,26 @@ class User < ApplicationRecord
                                  end
   end
 
+  def add_subscription(subscription_params)
+    subscription = subscriptions.new(subscription_params)
+    if subscription.valid?
+      handle_new_date_end_subscription(subscription.duration)
+      save
+    end
+    subscription
+  end
+
+  def cancel_subscription(last_subscription)
+    if subscriptions.count > 1
+      handle_new_date_end_subscription(-last_subscription.duration)
+    else
+      self.date_end_subscription = nil
+    end
+    last_subscription.toggle_cancelled
+    last_subscription.save
+    save
+  end
+
   private
 
   def downcase_email

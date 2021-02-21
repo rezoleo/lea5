@@ -4,6 +4,8 @@ class Subscription < ApplicationRecord
   @monthly_price = 8
   @yearly_price = 80
 
+  scope :not_cancelled, -> { where(cancelled_date: nil) }
+
   belongs_to :user
 
   validates :duration, presence: true, numericality: { only_integer: true, greater_than: 0 }

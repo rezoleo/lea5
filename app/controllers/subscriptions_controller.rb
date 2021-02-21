@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
+  protect_from_forgery unless: -> { request.format.json? }
+
   before_action :user, only: %i[new create destroy]
   before_action :last_subscription, only: %i[destroy]
 
@@ -13,32 +15,29 @@ class SubscriptionsController < ApplicationController
   end
 
   def create
-    @subscription = @user.subscriptions.new(subscriptions_params)
-    if @subscription.save
-      user = User.find(params[:user_id])
-      user.handle_new_date_end_subscription(@subscription.duration)
-      user.save
-      redirect_to user
-    else
-      render 'new'
+    @subscription = @user.add_subscription(subscription_params)
+    respond_to do |format|
+      if @subscription.save
+        format.html { redirect_to @user }
+        format.json { render 'show', status: :created }
+      else
+        format.html { render 'new' }
+        format.json { render json: @subscription.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   def destroy
-    if @user.subscriptions.count > 1
-      @user.handle_new_date_end_subscription(-@last_subscription.duration)
-    else
-      @user.date_end_subscription = nil
+    @user.cancel_subscription(@last_subscription)
+    respond_to do |format|
+      format.html { redirect_to @user }
+      format.json { head :no_content }
     end
-    @last_subscription.toggle_cancelled
-    @last_subscription.save
-    @user.save
-    redirect_to @user
   end
 
   private
 
-  def subscriptions_params
+  def subscription_params
     params.require(:subscription).permit(:duration)
   end
 
@@ -47,7 +46,12 @@ class SubscriptionsController < ApplicationController
   end
 
   def last_subscription
-    @last_subscription = @user.subscriptions.last
-    redirect_to @user unless @last_subscription
+    @last_subscription = @user.subscriptions.not_cancelled.last
+    return if @last_subscription
+
+    respond_to do |format|
+      format.html { redirect_to @user }
+      format.json { render json: { error: 'There is no subscription' }, status: :unprocessable_entity }
+    end
   end
 end
