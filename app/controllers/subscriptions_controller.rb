@@ -30,7 +30,8 @@ class SubscriptionsController < ApplicationController
     else
       @user.date_end_subscription = nil
     end
-    @last_subscription.destroy!
+    @last_subscription.toggle_cancelled
+    @last_subscription.save
     @user.save
     redirect_to @user
   end
