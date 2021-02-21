@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
-  before_action :user, only: %i[new create edit update destroy]
-  before_action :last_subscription, only: %i[edit update destroy]
+  before_action :user, only: %i[new create destroy]
+  before_action :last_subscription, only: %i[destroy]
 
   def index
     @subscriptions = Subscription.all
@@ -21,23 +21,6 @@ class SubscriptionsController < ApplicationController
       redirect_to user
     else
       render 'new'
-    end
-  end
-
-  def edit
-    @subscription = @last_subscription
-  end
-
-  def update
-    @subscription = @user.subscriptions.new(subscriptions_params)
-    if @subscription.save
-      @last_subscription.toggle_cancelled
-      @last_subscription.save
-      @user.handle_new_date_end_subscription(@subscription.duration - @last_subscription.duration)
-      @user.save
-      redirect_to @user
-    else
-      render 'edit'
     end
   end
 

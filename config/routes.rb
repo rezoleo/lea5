@@ -4,9 +4,7 @@ Rails.application.routes.draw do
   resources :users do
     resources :machines, shallow: true
     resources :subscriptions, only: %i[new create], shallow: true
-    get '/subscriptions/edit', to: 'subscriptions#edit', as: :edit_subscription
-    patch '/subscriptions', to: 'subscriptions#update', as: :subscription
-    delete '/subscriptions', to: 'subscriptions#destroy'
+    delete '/subscriptions', to: 'subscriptions#destroy', as: :subscription
   end
 
   get '/subscriptions', to: 'subscriptions#index', as: :subscriptions
