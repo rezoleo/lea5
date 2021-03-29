@@ -40,7 +40,8 @@ class MachineTest < ActiveSupport::TestCase
 
   test 'mac must be of a valid format' do
     valid_macs = %w[AD:14:D4:87:4B:D7 ba:d4:8a:54:47:3f 23:Eb:1a:3A:BC:f7
-                    AD-14-D4-87-4B-D7 ba-d4-8a-54-47-3f AD14D4874BD7 bad48a54473f]
+                    AD-14-D4-87-4B-D7 ba-d4-8a-54-47-3f AD14D4874BD7 bad48a54473f
+                    AD14.D487.4BD7 ad14.d487.4bd7 AD14.d487.4bD7]
 
     invalid_macs = ['AD:14', # must not be too short
                     'AD:14:D4:87:4B:', # trailing colon
@@ -49,7 +50,10 @@ class MachineTest < ActiveSupport::TestCase
                     'AD/14/D4/87/4B/D7',
                     'AD:143:D4:87:4B:D', # must be 6 times XX
                     'AD:14-D4:87:4B:D7', # must follow one format
-                    'AD:14D4:87:4B:D7']
+                    'AD:14D4:87:4B:D7',
+                    'AD14.D487.',
+                    'AD14.D487.4BD',
+                    'AD14.D487.4BD78']
     valid_macs.each do |valid_mac|
       @machine.mac = valid_mac
       assert @machine.valid?, "#{valid_mac.inspect} should be valid"
