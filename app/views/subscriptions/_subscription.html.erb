@@ -1,0 +1,7 @@
+<p>
+  <%= subscription.id %>,
+  <%= pluralize(subscription.duration, 'month') %>,
+  <%= subscription.price %> €,
+  <%= subscription.updated_at %>,
+  <%= subscription.cancelled ? "cancelled" : nil %>
+</p>

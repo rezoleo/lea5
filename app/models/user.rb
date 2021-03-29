@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   has_many :machines, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   before_save :downcase_email
   before_save :format_room
@@ -12,6 +13,35 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i.freeze
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
+
+  def handle_new_date_end_subscription(duration)
+    time_now = DateTime.now
+    self.date_end_subscription = if date_end_subscription && (date_end_subscription > time_now)
+                                   date_end_subscription + duration.months
+                                 else
+                                   time_now + duration.months
+                                 end
+  end
+
+  def add_subscription(subscription_params)
+    subscription = subscriptions.new(subscription_params)
+    if subscription.valid?
+      handle_new_date_end_subscription(subscription.duration)
+      save
+    end
+    subscription
+  end
+
+  def cancel_subscription(last_subscription)
+    if subscriptions.count > 1
+      handle_new_date_end_subscription(-last_subscription.duration)
+    else
+      self.date_end_subscription = nil
+    end
+    last_subscription.toggle_cancelled
+    last_subscription.save
+    save
+  end
 
   private
 

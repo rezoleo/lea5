@@ -7,18 +7,28 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user = users(:ironman)
   end
 
-  # TODO: when another template index has been made, try to render it and test assert_template 'index'
-  #   to see if it only check a template index or check that it is the users' index template
   test 'should get index' do
     get users_path
     assert_template 'users/index'
   end
 
-  test 'should get show' do
-    get user_path @user
+  test 'should get show with html' do
+    get user_path(@user, format: :html)
     assert_template 'users/show'
     assert_match @user.email, @response.body
     assert_match @user.room, @response.body
+  end
+
+  test 'should get show with json' do
+    get user_path(@user, format: :json)
+    user = @response.parsed_body
+    assert_template('users/show')
+    assert_response(:ok)
+    assert_equal 'Tony', user['firstname']
+    assert_equal 'Stark', user['lastname']
+    assert_not_nil user['date_end_subscription']
+    assert_equal 'tony@avengers.com', user['email']
+    assert_equal 'A200', user['room']
   end
 
   test 'should get new' do
@@ -57,6 +67,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response(:created)
     assert_equal 'patrick', user['firstname']
     assert_equal 'bar', user['lastname']
+    assert_nil user['date_end_subscription']
     assert_equal 'patrickbar@bar.com', user['email']
     assert_equal 'E125', user['room']
   end
