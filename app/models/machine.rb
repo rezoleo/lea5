@@ -20,7 +20,7 @@ class Machine < ApplicationRecord
 
     ip = Ip.lock('FOR UPDATE SKIP LOCKED').find_by(machine_id: nil)
 
-    errors['base'] << 'No more IPs available' if ip.nil?
+    errors.add('base', 'No more IPs available') if ip.nil?
 
     self.ip = ip
   end

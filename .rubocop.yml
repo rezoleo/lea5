@@ -18,8 +18,8 @@ Metrics/ClassLength:
   Exclude:
     - test/**/*
 
-RailsI18n:
+I18n/RailsI18n:
   Enabled: true
-GetText:
+I18n/GetText:
   Enabled: false
 

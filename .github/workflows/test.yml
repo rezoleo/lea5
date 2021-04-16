@@ -25,10 +25,10 @@ jobs:
           NODE_VERSION=$(sed 's/^v//' .nvmrc)
           echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2.1.4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ env.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
