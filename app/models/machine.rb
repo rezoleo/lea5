@@ -7,7 +7,7 @@ class Machine < ApplicationRecord
   before_validation :set_ip, on: :create
 
   validates :name, presence: true, allow_blank: false
-  VALID_MAC_REGEX = /\A((\h{2}:){5}\h{2}|(\h{2}-){5}\h{2}|(\h{2}){5}\h{2}|(\h{4}.){2}\h{4})\z/i.freeze
+  VALID_MAC_REGEX = /\A((\h{2}:){5}\h{2}|(\h{2}-){5}\h{2}|(\h{2}){5}\h{2}|(\h{4}.){2}\h{4})\z/i
   validates :mac, presence: true, format: { with: VALID_MAC_REGEX },
                   uniqueness: { unless: ->(machine) { machine.errors.include?(:mac) } }
   validates :ip, presence: true
@@ -20,7 +20,7 @@ class Machine < ApplicationRecord
 
     ip = Ip.lock('FOR UPDATE SKIP LOCKED').find_by(machine_id: nil)
 
-    errors['base'] << 'No more IPs available' if ip.nil?
+    errors.add('base', 'No more IPs available') if ip.nil?
 
     self.ip = ip
   end

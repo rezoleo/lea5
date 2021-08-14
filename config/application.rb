@@ -26,6 +26,13 @@ module Lea5
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
+    # Custom config for Lea5
+
+    # Set strict load mode for associations on every Model
+    # TODO: dependant destroy are lazy loaded then triggering strict loading error
+    #       cannot disable strict loading check for a specific query
+    # config.active_record.strict_loading_by_default = true
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
