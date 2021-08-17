@@ -47,7 +47,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
+    User.includes(machines: :ip).find(params[:id]).destroy
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }

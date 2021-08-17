@@ -5,8 +5,9 @@
 
 ## Requirements
 
-- Ruby version 2.7.1 (see [.ruby-version](.ruby-version))
-- Node v12.18.4 (see [.nvmrc](.nvmrc))
+- Ruby version 3.0.2 (see [.ruby-version](.ruby-version))
+- Node v16.6.2 (see [.nvmrc](.nvmrc))
+- Yarn v1
 - PostgreSQL 12.4+
 
 It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language runtimes.

@@ -86,7 +86,7 @@ class MachineTest < ActiveSupport::TestCase
   test 'should raise an error if no more ips available' do
     machine = Machine.new(name: 'Will not have an ip', mac: '42:42:42:42:42:42', user: @user)
     Ip.delete_all
-    assert Ip.find_by(machine_id: nil).nil?
+    assert_nil Ip.find_by(machine_id: nil)
     assert_not machine.valid?
   end
 
