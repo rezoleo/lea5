@@ -2,9 +2,7 @@ name: Lint & test
 
 on:
   push:
-    branches:
   pull_request:
-    branches:
 
 jobs:
   test:
@@ -46,8 +44,8 @@ jobs:
 
       - name: Upload Brakeman SARIF
         # Because of https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/,
-        # we cannot upload the security scan on PR opened by Dependabot, so we skip this step
-        if: ${{ github.actor != 'dependabot[bot]' }}
+        # we cannot upload the security scan on the "push" event of PRs opened by Dependabot, so we skip this step
+        if: "!( github.actor == 'dependabot[bot]' && github.event_name == 'push')"
         uses: github/codeql-action/upload-sarif@v1
         with:
           sarif_file: brakeman.sarif.json
