@@ -56,7 +56,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
-  gem 'codecov', '~> 0.5'
+  gem 'codecov', '~> 0.6'
   gem 'guard'
   gem 'guard-minitest'
   gem 'minitest'
