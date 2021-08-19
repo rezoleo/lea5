@@ -38,7 +38,7 @@ end
 group :development do
   gem 'brakeman', '~> 5.0'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '~> 3.3'
+  gem 'listen', '~> 3.7'
   gem 'overcommit', '~> 0.57.0'
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
