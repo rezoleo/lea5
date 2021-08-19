@@ -39,7 +39,7 @@ group :development do
   gem 'brakeman', '~> 5.0'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3.3'
-  gem 'overcommit', '~> 0.57.0'
+  gem 'overcommit', '~> 0.58.0'
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem 'rack-mini-profiler', '~> 2.0'
@@ -56,7 +56,7 @@ end
 group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
-  gem 'codecov', '~> 0.5'
+  gem 'codecov', '~> 0.6'
   gem 'guard'
   gem 'guard-minitest'
   gem 'minitest'
