@@ -1,0 +1,103 @@
+class Ip < ApplicationRecord
+  extend _ActiveRecord_Relation_ClassMethods[Ip, ActiveRecord_Relation, Integer]
+
+  attr_accessor id(): Integer
+  def id_changed?: () -> bool
+  def id_change: () -> [ Integer?, Integer? ]
+  def id_will_change!: () -> void
+  def id_was: () -> Integer?
+  def id_previously_changed?: () -> bool
+  def id_previous_change: () -> Array[Integer?]?
+  def id_previously_was: () -> Integer?
+  def id_before_last_save: () -> Integer?
+  def id_change_to_be_saved: () -> Array[Integer?]?
+  def id_in_database: () -> Integer?
+  def saved_change_to_id: () -> Array[Integer?]?
+  def saved_change_to_id?: () -> bool
+  def will_save_change_to_id?: () -> bool
+  def restore_id!: () -> void
+  def clear_id_change: () -> void
+
+  attr_accessor ip(): IPAddr
+  def ip_changed?: () -> bool
+  def ip_change: () -> [ IPAddr?, IPAddr? ]
+  def ip_will_change!: () -> void
+  def ip_was: () -> IPAddr?
+  def ip_previously_changed?: () -> bool
+  def ip_previous_change: () -> Array[IPAddr?]?
+  def ip_previously_was: () -> IPAddr?
+  def ip_before_last_save: () -> IPAddr?
+  def ip_change_to_be_saved: () -> Array[IPAddr?]?
+  def ip_in_database: () -> IPAddr?
+  def saved_change_to_ip: () -> Array[IPAddr?]?
+  def saved_change_to_ip?: () -> bool
+  def will_save_change_to_ip?: () -> bool
+  def restore_ip!: () -> void
+  def clear_ip_change: () -> void
+
+  attr_accessor machine_id(): Integer?
+  def machine_id_changed?: () -> bool
+  def machine_id_change: () -> [ Integer?, Integer? ]
+  def machine_id_will_change!: () -> void
+  def machine_id_was: () -> Integer?
+  def machine_id_previously_changed?: () -> bool
+  def machine_id_previous_change: () -> Array[Integer?]?
+  def machine_id_previously_was: () -> Integer?
+  def machine_id_before_last_save: () -> Integer?
+  def machine_id_change_to_be_saved: () -> Array[Integer?]?
+  def machine_id_in_database: () -> Integer?
+  def saved_change_to_machine_id: () -> Array[Integer?]?
+  def saved_change_to_machine_id?: () -> bool
+  def will_save_change_to_machine_id?: () -> bool
+  def restore_machine_id!: () -> void
+  def clear_machine_id_change: () -> void
+
+  attr_accessor created_at(): ActiveSupport::TimeWithZone
+  def created_at_changed?: () -> bool
+  def created_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def created_at_will_change!: () -> void
+  def created_at_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_previously_changed?: () -> bool
+  def created_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def created_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_created_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_created_at?: () -> bool
+  def will_save_change_to_created_at?: () -> bool
+  def restore_created_at!: () -> void
+  def clear_created_at_change: () -> void
+
+  attr_accessor updated_at(): ActiveSupport::TimeWithZone
+  def updated_at_changed?: () -> bool
+  def updated_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def updated_at_will_change!: () -> void
+  def updated_at_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_previously_changed?: () -> bool
+  def updated_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def updated_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_updated_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_updated_at?: () -> bool
+  def will_save_change_to_updated_at?: () -> bool
+  def restore_updated_at!: () -> void
+  def clear_updated_at_change: () -> void
+
+  def machine: () -> Machine
+  def machine=: (Machine?) -> Machine?
+  def build_machine: (untyped) -> Machine
+  def create_machine: (untyped) -> Machine
+  def create_machine!: (untyped) -> Machine
+  def reload_machine: () -> Machine?
+
+  class ActiveRecord_Relation < ActiveRecord::Relation
+    include _ActiveRecord_Relation[Ip, Integer]
+    include Enumerable[Ip]
+  end
+
+  class ActiveRecord_Associations_CollectionProxy < ActiveRecord::Associations::CollectionProxy
+  end
+end

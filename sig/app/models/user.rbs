@@ -1,0 +1,11 @@
+class User
+  VALID_EMAIL_REGEX: Regexp
+
+  VALID_ROOM_REGEX: Regexp
+
+  private
+
+  def downcase_email!: () -> String?
+
+  def format_room!: () -> String
+end

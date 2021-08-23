@@ -1,0 +1,7 @@
+class Machine
+  VALID_MAC_REGEX: Regexp
+
+  private
+
+  def set_ip: () -> Ip?
+end

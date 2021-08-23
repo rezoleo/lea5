@@ -1,0 +1,8 @@
+# TODO: this does not work :(
+
+module ActionMailer
+  class Base
+    def default: (from: String) -> void
+    def layout: (String) -> void
+  end
+end

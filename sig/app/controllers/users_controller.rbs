@@ -1,0 +1,23 @@
+# TODO: type this correctly
+
+class UsersController < ApplicationController
+  extend _RbsRailsPathHelpers
+
+  def index: () -> untyped
+
+  def show: () -> untyped
+
+  def new: () -> untyped
+
+  def create: () -> untyped
+
+  def edit: () -> untyped
+
+  def update: () -> untyped
+
+  def destroy: () -> untyped
+
+  private
+
+  def user_params: () -> untyped
+end

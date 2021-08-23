@@ -3,8 +3,8 @@
 class User < ApplicationRecord
   has_many :machines, dependent: :destroy
 
-  before_save :downcase_email
-  before_save :format_room
+  before_save :downcase_email!
+  before_save :format_room!
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
@@ -15,11 +15,11 @@ class User < ApplicationRecord
 
   private
 
-  def downcase_email
+  def downcase_email!
     email.downcase!
   end
 
-  def format_room
+  def format_room!
     self.room = room.downcase.upcase_first
   end
 end

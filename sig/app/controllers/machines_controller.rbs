@@ -1,0 +1,25 @@
+# TODO: type this correctly
+
+class MachinesController < ApplicationController
+  def index: () -> untyped
+
+  def new: () -> untyped
+
+  def show: () -> nil
+
+  def create: () -> untyped
+
+  def edit: () -> nil
+
+  def update: () -> untyped
+
+  def destroy: () -> untyped
+
+  private
+
+  def machine_params: () -> untyped
+
+  def owner: () -> untyped
+
+  def current_machine: () -> untyped
+end

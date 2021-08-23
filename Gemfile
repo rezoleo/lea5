@@ -43,6 +43,7 @@ group :development do
   # Display performance information such as SQL time and flame graphs for each request in your browser.
   # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
   gem 'rack-mini-profiler', '~> 2.0'
+  gem 'rbs_rails', '~> 0.8.2'
   gem 'rubocop', '~> 1.19.0'
   gem 'rubocop-i18n', '~> 3.0'
   gem 'rubocop-minitest', '~> 0.15.0'
@@ -51,6 +52,7 @@ group :development do
   gem 'web-console', '>= 4.1.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'steep', '~> 0.45.0'
 end
 
 group :test do
