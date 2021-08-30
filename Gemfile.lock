@@ -151,7 +151,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
-    rack-mini-profiler (2.3.2)
+    rack-mini-profiler (2.3.3)
       rack (>= 1.2.0)
     rack-proxy (0.7.0)
       rack
@@ -295,7 +295,7 @@ DEPENDENCIES
   overcommit (~> 0.58.0)
   pg (~> 1.1)
   puma (~> 5.0)
-  rack-mini-profiler (~> 2.0)
+  rack-mini-profiler (~> 2.3)
   rails (~> 6.1.4)
   rails-controller-testing (~> 1.0)
   rubocop (~> 1.19.0)
