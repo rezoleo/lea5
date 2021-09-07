@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.2'
+ruby '2.7.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.1.4'
@@ -30,6 +30,10 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 gem 'ipaddress', '~> 0.8.3'
 
+gem 'sorbet-runtime', '~> 0.5.9105'
+# Sorbet generators for Rails magic
+gem 'sorbet-rails', '~> 0.7.4'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
@@ -48,6 +52,7 @@ group :development do
   gem 'rubocop-minitest', '~> 0.15.0'
   gem 'rubocop-performance', '~> 1.11.4'
   gem 'rubocop-rails', '~> 2.11.3'
+  gem 'sorbet', '~> 0.5.9105'
   gem 'web-console', '>= 4.1.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
