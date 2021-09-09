@@ -1,20 +1,23 @@
-# typed: true
+# typed: strict
 # frozen_string_literal: true
 
 class Machine < ApplicationRecord
+  extend T::Sig
+
   belongs_to :user
   has_one :ip, dependent: :nullify
 
   before_validation :set_ip, on: :create
 
   validates :name, presence: true, allow_blank: false
-  VALID_MAC_REGEX = /\A((\h{2}:){5}\h{2}|(\h{2}-){5}\h{2}|(\h{2}){5}\h{2}|(\h{4}.){2}\h{4})\z/i.freeze
+  VALID_MAC_REGEX = T.let(/\A((\h{2}:){5}\h{2}|(\h{2}-){5}\h{2}|(\h{2}){5}\h{2}|(\h{4}.){2}\h{4})\z/i.freeze, Regexp)
   validates :mac, presence: true, format: { with: VALID_MAC_REGEX },
                   uniqueness: { unless: ->(machine) { machine.errors.include?(:mac) } }
   validates :ip, presence: true
 
   private
 
+  sig { void }
   def set_ip
     # Rails runs the save in a transaction hence privatizing the ip thanks to lock
     # SKIP LOCKED hides the ip from other requests while in the transaction instead of blocking
