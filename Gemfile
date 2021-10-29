@@ -36,7 +36,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'brakeman', '~> 5.0'
+  gem 'brakeman', '~> 5.1'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '~> 3.3'
   gem 'overcommit', '~> 0.58.0'
