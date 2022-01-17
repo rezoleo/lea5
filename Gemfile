@@ -47,7 +47,7 @@ group :development do
   gem 'rubocop-i18n', '~> 3.0'
   gem 'rubocop-minitest', '~> 0.15.0'
   gem 'rubocop-performance', '~> 1.11.4'
-  gem 'rubocop-rails', '~> 2.11.3'
+  gem 'rubocop-rails', '~> 2.13.2'
   gem 'web-console', '>= 4.1.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
