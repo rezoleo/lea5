@@ -23,7 +23,7 @@ jobs:
           NODE_VERSION=$(sed 's/^v//' .nvmrc)
           echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
       - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2.4.0
+        uses: actions/setup-node@v3.1.0
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: yarn
