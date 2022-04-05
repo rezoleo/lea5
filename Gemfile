@@ -45,7 +45,7 @@ group :development do
   gem 'rack-mini-profiler', '~> 2.0'
   gem 'rubocop', '~> 1.19.0'
   gem 'rubocop-i18n', '~> 3.0'
-  gem 'rubocop-minitest', '~> 0.15.0'
+  gem 'rubocop-minitest', '~> 0.19.0'
   gem 'rubocop-performance', '~> 1.11.4'
   gem 'rubocop-rails', '~> 2.11.3'
   gem 'web-console', '>= 4.1.0'
