@@ -9,33 +9,33 @@ class MachineTest < ActiveSupport::TestCase
   end
 
   test 'machine is valid' do
-    assert @machine.valid?
+    assert_predicate @machine, :valid?
   end
 
   test "name can't be nil" do
     @machine.name = nil
-    assert_not @machine.valid?
+    assert_not_predicate @machine, :valid?
   end
 
   test "name can't be empty" do
     @machine.name = '    '
-    assert_not @machine.valid?
+    assert_not_predicate @machine, :valid?
   end
 
   test "mac can't be nil" do
     @machine.mac = nil
-    assert_not @machine.valid?
+    assert_not_predicate @machine, :valid?
   end
 
   test "mac can't be empty" do
     @machine.mac = '     '
-    assert_not @machine.valid?
+    assert_not_predicate @machine, :valid?
   end
 
   test 'mac should be unique' do
     duplicate_machine = @machine.dup
     @machine.save
-    assert_not duplicate_machine.valid?
+    assert_not_predicate duplicate_machine, :valid?
   end
 
   test 'mac must be of a valid format' do
@@ -56,12 +56,12 @@ class MachineTest < ActiveSupport::TestCase
                     'AD14.D487.4BD78']
     valid_macs.each do |valid_mac|
       @machine.mac = valid_mac
-      assert @machine.valid?, "#{valid_mac.inspect} should be valid"
+      assert_predicate @machine, :valid?, "#{valid_mac.inspect} should be valid"
     end
 
     invalid_macs.each do |invalid_mac|
       @machine.mac = invalid_mac
-      assert_not @machine.valid?, "#{invalid_mac.inspect} should be invalid"
+      assert_not_predicate @machine, :valid?, "#{invalid_mac.inspect} should be invalid"
     end
   end
 
@@ -74,7 +74,7 @@ class MachineTest < ActiveSupport::TestCase
 
   test "ip can't be nil" do
     @machine.ip = nil
-    assert_not @machine.valid?
+    assert_not_predicate @machine, :valid?
   end
 
   test 'machine should have an ip assigned after creation' do
@@ -87,7 +87,7 @@ class MachineTest < ActiveSupport::TestCase
     machine = Machine.new(name: 'Will not have an ip', mac: '42:42:42:42:42:42', user: @user)
     Ip.delete_all
     assert_nil Ip.find_by(machine_id: nil)
-    assert_not machine.valid?
+    assert_not_predicate machine, :valid?
   end
 
   test "machine shouldn't be assigned a new ip if it already has one" do

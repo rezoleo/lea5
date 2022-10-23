@@ -9,23 +9,23 @@ class IpTest < ActiveSupport::TestCase
   end
 
   test 'ip should be valid' do
-    assert @ip.valid?
+    assert_predicate @ip, :valid?
   end
 
   test "ip can't be nil" do
     @ip.ip = nil
-    assert_not @ip.valid?
+    assert_not_predicate @ip, :valid?
   end
 
   test "ip can't be empty" do
     @ip.ip = '   '
-    assert_not @ip.valid?
+    assert_not_predicate @ip, :valid?
   end
 
   test 'ip should be unique' do
     dup_ip = Ip.new(ip: '172.30.48.245')
     @ip.save
-    assert_not dup_ip.valid?
+    assert_not_predicate dup_ip, :valid?
   end
 
   test 'ip must be of a valid format' do
@@ -34,12 +34,12 @@ class IpTest < ActiveSupport::TestCase
 
     valid_ips.each do |valid_ip|
       @ip.ip = valid_ip
-      assert @ip.valid?, "#{valid_ip} should be valid"
+      assert_predicate @ip, :valid?, "#{valid_ip} should be valid"
     end
 
     invalid_ips.each do |invalid_ip|
       @ip.ip = invalid_ip
-      assert_not @ip.valid?, "#{invalid_ip} should be invalid"
+      assert_not_predicate @ip, :valid?, "#{invalid_ip} should be invalid"
     end
   end
 end
