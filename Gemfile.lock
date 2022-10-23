@@ -173,7 +173,7 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (5.0.0)
-    puma (5.6.5)
+    puma (6.0.0)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.4)
@@ -310,7 +310,7 @@ DEPENDENCIES
   minitest-reporters (~> 1.5)
   overcommit (~> 0.59.1)
   pg (~> 1.1)
-  puma (~> 5.0)
+  puma (~> 6.0)
   rack-mini-profiler
   rails (~> 7.0.4)
   rails-controller-testing (~> 1.0)
