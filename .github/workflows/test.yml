@@ -11,24 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Setup Ruby
-       # Install the version defined in .ruby-version
+        # Install the version defined in .ruby-version
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
         env:
           BUNDLE_FROZEN: "true"
-
-      - name: Find Node version to install
-        run: |
-          NODE_VERSION=$(sed 's/^v//' .nvmrc)
-          echo "NODE_VERSION=${NODE_VERSION}" >> $GITHUB_ENV
-      - name: Setup NodeJS ${{ env.NODE_VERSION }}
-        uses: actions/setup-node@v2.4.0
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-      - name: Install Node dependencies
-        run: yarn install --frozen-lockfile
 
       - name: Run git hooks
         run: |
@@ -54,15 +42,12 @@ jobs:
         run: |
           # Add our authentication line before everything else
           # https://unix.stackexchange.com/a/99351
-          sudo sed --in-place '1 i\local all lea5 md5' /etc/postgresql/13/main/pg_hba.conf
+          sudo sed --in-place '1 i\local all lea5 md5' /etc/postgresql/*/main/pg_hba.conf
           sudo systemctl restart postgresql.service
       - name: Create PostgreSQL user and database
         run: sudo --user postgres psql --file ./.github/workflows/init_db.sql
       - name: Migrate database
         run: bundle exec rails db:migrate RAILS_ENV=test
-
-      - name: Compile assets
-        run: bundle exec rails webpacker:compile
 
       - name: Run tests
         run: bundle exec rails test

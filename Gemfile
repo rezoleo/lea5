@@ -3,70 +3,86 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.0.2'
+ruby '3.1.2'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.4'
+# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
+gem 'rails', '~> 7.0.4'
+
+# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem 'sprockets-rails'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
-# Use Puma as the app server
+
+# Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
-# Use SCSS for stylesheets
-gem 'sass-rails', '>= 6'
-# Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.0'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.7'
-# Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
 
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
+# Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
+gem 'importmap-rails'
 
-# Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.4.4', require: false
+# Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
+gem 'turbo-rails'
 
-gem 'ipaddress', '~> 0.8.3'
+# Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
+gem 'stimulus-rails'
 
-group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
-end
+# Build JSON APIs with ease [https://github.com/rails/jbuilder]
+gem 'jbuilder'
 
-group :development do
-  gem 'brakeman', '~> 5.0'
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '~> 3.3'
-  gem 'overcommit', '~> 0.58.0'
-  # Display performance information such as SQL time and flame graphs for each request in your browser.
-  # Can be configured to work on production as well see: https://github.com/MiniProfiler/rack-mini-profiler/blob/master/README.md
-  gem 'rack-mini-profiler', '~> 2.0'
-  gem 'rubocop', '~> 1.19.0'
-  gem 'rubocop-i18n', '~> 3.0'
-  gem 'rubocop-minitest', '~> 0.15.0'
-  gem 'rubocop-performance', '~> 1.11.4'
-  gem 'rubocop-rails', '~> 2.11.3'
-  gem 'web-console', '>= 4.1.0'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-end
+# Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
+# gem "kredis"
 
-group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 3.26'
-  gem 'codecov', '~> 0.6'
-  gem 'guard'
-  gem 'guard-minitest'
-  gem 'minitest'
-  gem 'minitest-reporters'
-  gem 'rails-controller-testing', '~> 1.0'
-  gem 'selenium-webdriver'
-  gem 'simplecov'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
-end
+# Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
+# gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+
+# Reduces boot times through caching; required in config/boot.rb
+gem 'bootsnap', require: false
+
+gem 'ipaddress', '~> 0.8.3'
+
+# Use Sass to process CSS
+# gem "sassc-rails"
+
+# Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
+# gem "image_processing", "~> 1.2"
+
+group :development, :test do
+  # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
+end
+
+group :development do
+  gem 'brakeman', '~> 5.3'
+  gem 'overcommit', '~> 0.59.1'
+
+  # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
+  gem 'rack-mini-profiler'
+
+  gem 'rubocop', '~> 1.37'
+  gem 'rubocop-i18n', '~> 3.0'
+  gem 'rubocop-minitest', '~> 0.22.2'
+  gem 'rubocop-performance', '~> 1.15'
+  gem 'rubocop-rails', '~> 2.17'
+  # Use console on exceptions pages [https://github.com/rails/web-console]
+  gem 'web-console'
+
+  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
+  # gem "spring"
+end
+
+group :test do
+  # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
+  gem 'capybara'
+  gem 'codecov', '~> 0.6.0'
+  gem 'guard', '~> 2.18'
+  gem 'guard-minitest', '~> 2.4'
+  gem 'minitest', '~> 5.16'
+  gem 'minitest-reporters', '~> 1.5'
+  gem 'rails-controller-testing', '~> 1.0'
+  gem 'selenium-webdriver'
+  gem 'simplecov', '~> 0.21.2'
+  gem 'webdrivers'
+end

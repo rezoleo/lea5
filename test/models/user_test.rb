@@ -11,28 +11,28 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'user is valid' do
-    assert @user.valid?
+    assert_predicate @user, :valid?
   end
 
   test "names can't be nil" do
     @user.firstname = nil
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
     @user.firstname = 'Paul'
     @user.lastname = nil
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
   end
 
   test "names can't be empty" do
     @user.firstname = '      '
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
     @user.firstname = 'Paul'
     @user.lastname = '         '
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
   end
 
   test "email can't be nil" do
     @user.email = nil
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
   end
 
   test 'email must be of a valid format' do
@@ -43,19 +43,19 @@ class UserTest < ActiveSupport::TestCase
 
     valid_emails.each do |valid_email|
       @user.email = valid_email
-      assert @user.valid?, "#{valid_email.inspect} should be valid"
+      assert_predicate @user, :valid?, "#{valid_email.inspect} should be valid"
     end
 
     invalid_emails.each do |invalid_email|
       @user.email = invalid_email
-      assert_not @user.valid?, "#{invalid_email.inspect} should be invalid"
+      assert_not_predicate @user, :valid?, "#{invalid_email.inspect} should be invalid"
     end
   end
 
   test 'email should be unique' do
     duplicate_user = @user.dup
     @user.save
-    assert_not duplicate_user.valid?
+    assert_not_predicate duplicate_user, :valid?
   end
 
   test 'email should be downcase on save' do
@@ -66,19 +66,19 @@ class UserTest < ActiveSupport::TestCase
 
   test "room can't be nil" do
     @user.room = nil
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
   end
 
   test "room can't be empty" do
     @user.room = '    '
-    assert_not @user.valid?
+    assert_not_predicate @user, :valid?
   end
 
   test 'room should be unique' do
     duplicate_user = @user.dup
     @user.save
     duplicate_user.room.downcase!
-    assert_not duplicate_user.valid?
+    assert_not_predicate duplicate_user, :valid?
   end
 
   test 'room should be formatted on save' do
@@ -93,12 +93,12 @@ class UserTest < ActiveSupport::TestCase
 
     valid_rooms.each do |valid_room|
       @user.room = valid_room
-      assert @user.valid?, "#{valid_room} should be valid"
+      assert_predicate @user, :valid?, "#{valid_room} should be valid"
     end
 
     invalid_rooms.each do |invalid_room|
       @user.room = invalid_room
-      assert_not @user.valid?, "#{invalid_room} should be invalid"
+      assert_not_predicate @user, :valid?, "#{invalid_room} should be invalid"
     end
   end
 end
