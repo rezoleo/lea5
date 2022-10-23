@@ -22,6 +22,8 @@ jobs:
         run: |
           bundle exec overcommit --sign
           bundle exec overcommit --run
+        env:
+          OVERCOMMIT_COLOR: "1"
 
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
