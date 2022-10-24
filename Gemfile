@@ -76,7 +76,6 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
-  gem 'codecov', '~> 0.6.0'
   gem 'guard', '~> 2.18'
   gem 'guard-minitest', '~> 2.4'
   gem 'minitest', '~> 5.16'
@@ -84,5 +83,6 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.21.2'
+  gem 'simplecov-cobertura', '~> 2.1'
   gem 'webdrivers'
 end

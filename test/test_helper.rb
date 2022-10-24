@@ -5,8 +5,8 @@ SimpleCov.start 'rails' do
   enable_coverage :branch
 
   if ENV['CI']
-    require 'codecov'
-    formatter SimpleCov::Formatter::Codecov
+    require 'simplecov-cobertura'
+    formatter SimpleCov::Formatter::CoberturaFormatter
   else
     formatter SimpleCov::Formatter::HTMLFormatter
   end
