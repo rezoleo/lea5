@@ -53,3 +53,6 @@ jobs:
 
       - name: Run tests
         run: bundle exec rails test
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
