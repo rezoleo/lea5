@@ -1,0 +1,60 @@
+# Workflow created with the help of GitHub examples at
+# https://github.com/rezoleo/lea5/actions/new?category=security
+name: Security scan
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "master" ]
+  schedule:
+    # Run it on a schedule, so we get notified when new vulnerabilities are added to GitHub database
+    - cron: '15 16 * * 3'
+
+jobs:
+  security-scan:
+    permissions:
+      contents: read # for actions/checkout to fetch code
+      security-events: write # for github/codeql-action/upload-sarif to upload SARIF results
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Ruby
+        # Install the version defined in .ruby-version
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+        env:
+          BUNDLE_FROZEN: "true"
+
+      - name: Run Brakeman
+        continue-on-error: true
+        run: bundle exec brakeman -f sarif -o brakeman.sarif.json .
+
+      - name: Upload Brakeman SARIF
+        # Because of https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/,
+        # we cannot upload the security scan on the "push" event of PRs opened by Dependabot, so we skip this step
+        if: "!( github.actor == 'dependabot[bot]' && github.event_name == 'push')"
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: brakeman.sarif.json
+          category: brakeman
+
+      - name: Clean vendored Ruby deps
+        run: rm -rf vendor/bundle
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+          # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+          languages: javascript, ruby
+          # Queries from the default suite, plus lower severity and precision queries
+          queries: security-extended
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "codeql"

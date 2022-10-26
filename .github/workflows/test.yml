@@ -28,18 +28,6 @@ jobs:
       - name: Run RuboCop
         run: bundle exec rubocop --parallel
 
-      - name: Run Brakeman
-        continue-on-error: true
-        run: bundle exec brakeman -f sarif -o brakeman.sarif.json .
-
-      - name: Upload Brakeman SARIF
-        # Because of https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/,
-        # we cannot upload the security scan on the "push" event of PRs opened by Dependabot, so we skip this step
-        if: "!( github.actor == 'dependabot[bot]' && github.event_name == 'push')"
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: brakeman.sarif.json
-
       - name: Configure PostgreSQL authentication
         run: |
           # Add our authentication line before everything else
