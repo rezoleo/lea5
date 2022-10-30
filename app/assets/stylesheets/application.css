@@ -44,3 +44,8 @@ svg {
     height: var(--text-md);
     width: var(--text-md);
 }
+
+button {
+    border: none;
+    cursor: pointer;
+}

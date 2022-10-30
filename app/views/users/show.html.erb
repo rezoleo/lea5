@@ -1,10 +1,55 @@
-<h1>Users#show</h1>
+<div class="container">
+  <div class="card card-user card-details card-user-details">
+    <div class="card-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path xmlns="http://www.w3.org/2000/svg" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+      </svg>
+      <h2>Personal Data</h2>
+    </div>
+
+    <%= render "components/button_primary", text: "edit" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z"/>
+      </svg>
+    <% end %>
+  </div>
+  <div class="card card-user card-content">
+    <div class="spacer"></div>
+    <div class="card-user-content">
+      <span><%= "#{@user.firstname} #{@user.lastname}" %></span>
+      <span class="internet-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM369 209L241 337l-17 17-17-17-64-64-17-17L160 222.1l17 17 47 47L335 175l17-17L385.9 192l-17 17z"/>
+      </svg>
+      Internet
+    </span>
+      <span><%= @user.email %></span>
+      <span>Internet on until 15 January 2020</span>
+      <span><%= @user.room %></span>
+      <span><%= pluralize(@user.machines.count, "machine") %></span>
+    </div>
+  </div>
+  <div class="card card-machines card-details card-machines-details">
+    <div class="card-title">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path xmlns="http://www.w3.org/2000/svg" d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0S96 57.3 96 128s57.3 128 128 128zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"/>
+      </svg>
+      <h2>Machines</h2>
+    </div>
+    <%= render "components/button_primary", text: "new machine" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path d="M256 80V48H192V80 224H48 16v64H48 192V432v32h64V432 288H400h32V224H400 256V80z"/>
+      </svg>
+    <% end %>
+  </div>
+  <div class="card card-machines card-content">
+    <div class="spacer"></div>
+    <div class="card-machines-content">
+        <%= render(@user.machines) || "No machines" %>
+    </div>
+  </div>
+</div>
 <p>
-    <%= @user.firstname %>
-    <%= @user.lastname %>,
-    <%= @user.email %>,
-    <%= @user.room %>,
-  <h2>Machines</h2>
-  <%= link_to "create a new machine", new_user_machine_url(@user) %>
-    <%= render @user.machines %>
+<h2>Machines</h2>
+<%= link_to "create a new machine", new_user_machine_url(@user) %>
 </p>
