@@ -58,7 +58,7 @@
 }
 
 .card-details-user {
-    box-shadow: -0.4rem 0 0 0 var(--primary-600);
+    border-left: 0.4rem solid var(--primary-600);
 }
 
 .card-content-user {
@@ -79,7 +79,7 @@
 }
 
 .card-details-machines {
-    box-shadow: -0.4rem 0 0 0 var(--primary-400);
+    border-left: 0.4rem solid var(--primary-400);
 }
 
 .card-content-machines {
