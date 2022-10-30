@@ -7,6 +7,9 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <% if content_for?(:head) %>
+      <%= yield(:head) %>
+    <% end %>
     <%= javascript_importmap_tags %>
   </head>
 
