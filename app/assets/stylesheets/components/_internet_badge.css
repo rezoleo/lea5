@@ -1,5 +1,3 @@
-@import 'constants.css';
-
 .internet-badge {
     border-radius: var(--rounded-lg);
     background-color: var(--gray-200);

@@ -1,5 +1,3 @@
-@import 'constants.css';
-
 .button-primary {
     background-color: var(--primary-600);
     color: var(--primary-50);
