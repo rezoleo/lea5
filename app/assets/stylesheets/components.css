@@ -6,10 +6,10 @@
     grid-template-rows: repeat(2, auto);
 }
 
-.spacer {
+.divider {
     width: 1px;
     background-color: var(--primary-500);
-    margin-right: var(--padding-md);
+    margin: var(--padding-md);
 }
 
 .card {
@@ -22,6 +22,12 @@
     align-items: start;
     grid-column: 1 / 2;
     padding-right: 0;
+}
+
+.card-details-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .card-content {
@@ -53,7 +59,7 @@
     background-color: white;
 }
 
-.card-title-user {
+.card-details-user {
     box-shadow: -0.4rem 0 0 0 var(--primary-600);
 }
 
@@ -74,7 +80,7 @@
     background-color: var(--primary-100);
 }
 
-.card-title-machines {
+.card-details-machines {
     box-shadow: -0.4rem 0 0 0 var(--primary-400);
 }
 
