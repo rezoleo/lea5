@@ -1,4 +1,4 @@
-<%= button_to(path, method: :get, class: "button-primary", form: { data: { turbo_frame: dom_id(@user) }}) do %>
+<%= button_to(path, method: :get, class: "button-primary", 'aria-label': aria_label, form: { data: { turbo_frame: dom_id(@user) }}) do %>
   <%= text %>
   <%= yield %>
 <% end %>
