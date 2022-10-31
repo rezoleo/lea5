@@ -1,0 +1,4 @@
+<%= button_to(path, method: :get, class: "button-primary", form: { data: { turbo_frame: dom_id(@user) }}) do %>
+  <%= text %>
+  <%= yield %>
+<% end %>
