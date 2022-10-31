@@ -101,4 +101,12 @@ class UserTest < ActiveSupport::TestCase
       assert_not_predicate @user, :valid?, "#{invalid_room} should be invalid"
     end
   end
+
+  test 'machines should be sorted by creation date' do
+    @user.save
+    machine1 = @user.machines.create(name: 'Machine-1', mac: '11:11:11:11:11:11')
+    @user.machines.create(name: 'Machine-2', mac: '22:22:22:22:22:22')
+    machine1.update(mac: '33:33:33:33:33:33')
+    assert_equal @user.machines.sort_by(&:created_at), @user.machines
+  end
 end
