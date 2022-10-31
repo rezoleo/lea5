@@ -1,3 +1,10 @@
+.title {
+    font-size: var(--text-lg);
+    color: var(--gray-500);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--padding-md);
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(3,1fr);
