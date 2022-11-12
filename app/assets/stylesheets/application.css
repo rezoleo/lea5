@@ -13,3 +13,38 @@
  *= require_tree .
  *= require_self
  */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    overflow-y: scroll;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: var(--gray-50);
+}
+
+h2 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-bold);
+    color: var(--gray-800);
+}
+
+svg {
+    height: var(--text-md);
+    width: var(--text-md);
+}
+
+button {
+    border: none;
+    cursor: pointer;
+}

@@ -1,0 +1,36 @@
+:root {
+    --text-sm: 0.75rem;
+    --text-md: 1.25rem;
+    --text-lg: 1.75rem;
+    --font-light: 300;
+    --font-medium: 500;
+    --font-bold: 700;
+    --font-black: 900;
+    --spacing-lg: 0.25em;
+    --rounded-lg: 0.5rem;
+    --padding-xs: 0.5rem;
+    --padding-sm: 0.75rem;
+    --padding-md: 1rem;
+    --primary-50: rgb(249 250 251);
+    --primary-100: rgb(243 244 246);
+    --primary-200: rgb(229 231 235);
+    --primary-300: rgb(209 213 219);
+    --primary-400: rgb(156 163 175);
+    --primary-500: rgb(107 114 128);
+    --primary-600: rgb(75 85 99);
+    --primary-700: rgb(55 65 81);
+    --primary-800: rgb(31 41 55);
+    --primary-900: rgb(17 24 39);
+    --white: rgb(249 250 251);
+    --black: rgb(17 24 39);
+    --gray-50: rgb(249 250 251);
+    --gray-100: rgb(243 244 246);
+    --gray-200: rgb(229 231 235);
+    --gray-300: rgb(209 213 219);
+    --gray-400: rgb(156 163 175);
+    --gray-500: rgb(107 114 128);
+    --gray-600: rgb(75 85 99);
+    --gray-700: rgb(55 65 81);
+    --gray-800: rgb(31 41 55);
+    --gray-900: rgb(17 24 39);
+}

@@ -1,0 +1,19 @@
+.internet-badge {
+    border-radius: var(--rounded-lg);
+    background-color: var(--gray-200);
+    letter-spacing: var(--spacing-lg);
+    text-transform: uppercase;
+    font-size: var(--text-sm);
+    width: fit-content;
+    height: fit-content;
+    color: var(--gray-600);
+    font-weight: var(--font-bold);
+    padding: var(--padding-xs) var(--padding-md);
+    display: flex;
+    align-items: center;
+}
+
+.internet-badge svg {
+    padding-right: var(--padding-sm);
+    fill: var(--gray-500);
+}

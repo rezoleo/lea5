@@ -1,0 +1,105 @@
+.title {
+    font-size: var(--text-lg);
+    color: var(--gray-500);
+    font-weight: var(--font-medium);
+    margin-bottom: var(--padding-md);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    grid-template-rows: repeat(2, auto);
+}
+
+.divider {
+    width: 1px;
+    background-color: var(--primary-500);
+    margin: var(--padding-md);
+}
+
+.card {
+    padding: calc(var(--padding-md)*2);
+}
+
+.card-details {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    grid-column: 1 / 2;
+    padding-right: 0;
+}
+
+.card-details-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.card-content {
+    grid-column: 2 / 4;
+    display: flex;
+    flex-direction: row;
+    padding-left: 0;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.card-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: var(--padding-md);
+}
+
+.card-title svg {
+    fill: var(--primary-500);
+    background-color: var(--primary-300);
+    border-radius: 100%;
+    border: var(--padding-xs) solid var(--primary-300);
+    margin-right: var(--padding-sm);
+}
+
+.card-user {
+    grid-row: 1/2;
+    background-color: white;
+}
+
+.card-details-user {
+    border-left: 0.4rem solid var(--primary-600);
+}
+
+.card-content-user {
+    flex: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: var(--padding-xs);
+    font-size: var(--text-md);
+    color: var(--gray-800);
+    font-weight: var(--font-medium);
+    grid-column: 2 / 3;
+}
+
+.card-machines {
+    grid-row: 2/3;
+    background-color: var(--primary-100);
+}
+
+.card-details-machines {
+    border-left: 0.4rem solid var(--primary-400);
+}
+
+.card-content-machines {
+    flex: 2;
+    font-size: var(--text-md);
+    color: var(--gray-800);
+    font-weight: var(--font-medium);
+    grid-column: 2 / 3;
+    display: grid;
+    row-gap: var(--padding-md);
+}
+
+.card-content-machines > * + * {
+    border-top: solid var(--primary-200) 2px;
+    padding-top: var(--padding-md);
+}

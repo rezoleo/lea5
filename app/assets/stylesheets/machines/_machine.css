@@ -1,0 +1,15 @@
+.machine {
+    display: grid;
+    grid-template-columns: minmax(5ch, 10ch) 1fr 1fr auto auto;
+    column-gap: calc(var(--padding-md)*2);
+}
+
+.machine span:first-child {
+    font-weight: var(--font-bold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.machine svg {
+    fill: var(--primary-600);
+}

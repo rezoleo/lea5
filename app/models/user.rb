@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_many :machines, dependent: :destroy
+  has_many :machines, -> { order created_at: :asc }, dependent: :destroy, inverse_of: :user
 
   before_save :downcase_email
   before_save :format_room

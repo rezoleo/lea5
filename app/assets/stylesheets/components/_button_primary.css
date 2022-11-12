@@ -1,0 +1,18 @@
+.button-primary {
+    background-color: var(--primary-600);
+    color: var(--primary-50);
+    border-radius: var(--rounded-lg);
+    letter-spacing: var(--spacing-lg);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    border: none;
+    font-weight: var(--font-bold);
+    padding: var(--padding-xs) var(--padding-md);
+    display: flex;
+    align-items: center;
+}
+
+.button-primary svg {
+    padding-left: var(--padding-sm);
+    fill: var(--primary-300);
+}

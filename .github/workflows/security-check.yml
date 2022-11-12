@@ -42,6 +42,7 @@ jobs:
           sarif_file: brakeman.sarif.json
           category: brakeman
 
+      # Removed to prevent CodeQL to scan our dependencies code
       - name: Clean vendored Ruby deps
         run: rm -rf vendor/bundle
 
