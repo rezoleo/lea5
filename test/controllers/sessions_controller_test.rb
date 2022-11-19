@@ -32,4 +32,11 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to user_path User.find_by(email: 'john@doe.com').id
   end
+
+  test 'should create a session with current_user' do
+    get auth_callback_path
+
+    assert_predicate self, :logged_in?
+    assert_equal User.find_by(email: 'john@doe.com').id, current_user.id
+  end
 end
