@@ -40,7 +40,7 @@ jobs:
         run: bundle exec rails db:migrate RAILS_ENV=test
 
       - name: Run tests
-        run: bundle exec rails test
+        run: bundle exec rails test:all
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
