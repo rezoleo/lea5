@@ -55,6 +55,7 @@ module ActiveSupport
                                             extra: { raw_info: { room: user.room } } })
     end
 
+    # Depending on the test running, the methods are different to sign out
     def sign_out
       if self.class < ActionDispatch::IntegrationTest
         delete logout_path
@@ -65,7 +66,7 @@ module ActiveSupport
 
     private
 
-    # Depending on the test running, the methods are different to log in
+    # Depending on the test running, the methods are different to sign in
     def sign_in
       if self.class < ActionDispatch::IntegrationTest
         get auth_callback_path
