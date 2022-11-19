@@ -13,6 +13,18 @@ class User < ApplicationRecord
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
+  def self.upsert_from_auth_hash(auth_hash)
+    user = find_or_initialize_by("#{auth_hash[:provider]}_id": auth_hash[:uid])
+    user.update(
+      firstname: auth_hash[:info][:first_name],
+      lastname: auth_hash[:info][:last_name],
+      email: auth_hash[:info][:email],
+      room: auth_hash[:extra][:raw_info][:room]
+    )
+    user.save!
+    user
+  end
+
   private
 
   def downcase_email

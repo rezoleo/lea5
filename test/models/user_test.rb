@@ -8,6 +8,12 @@ class UserTest < ActiveSupport::TestCase
                      lastname: 'Marcel',
                      email: 'paul.marcel@gmail.com',
                      room: 'D112')
+    @auth_hash = { provider: 'keycloak',
+                   uid: '11111111-1111-1111-1111-111111111111',
+                   info: { first_name: 'John',
+                           last_name: 'Doe',
+                           email: 'john@doe.com' },
+                   extra: { raw_info: { room: 'F123' } } }
   end
 
   test 'user is valid' do
@@ -108,5 +114,40 @@ class UserTest < ActiveSupport::TestCase
     @user.machines.create(name: 'Machine-2', mac: '22:22:22:22:22:22')
     machine1.update(mac: '33:33:33:33:33:33')
     assert_equal @user.machines.sort_by(&:created_at), @user.machines
+  end
+
+  test 'should create new user from auth hash' do
+    assert_difference 'User.count', 1 do
+      created_user = User.upsert_from_auth_hash(@auth_hash)
+      assert_equal 'John', created_user.firstname
+      assert_equal 'Doe', created_user.lastname
+      assert_equal 'john@doe.com', created_user.email
+      assert_equal 'F123', created_user.room
+      assert_equal '11111111-1111-1111-1111-111111111111', created_user.keycloak_id
+    end
+  end
+
+  test 'should return existing user from auth hash' do
+    @user.update(keycloak_id: '11111111-1111-1111-1111-111111111111')
+    @user.save
+
+    assert_difference 'User.count', 0 do
+      updated_user = User.upsert_from_auth_hash(@auth_hash)
+      assert_equal @user.id, updated_user.id
+    end
+  end
+
+  test 'should update existing user from auth hash' do
+    @user.update(keycloak_id: '11111111-1111-1111-1111-111111111111')
+    @user.save
+
+    User.upsert_from_auth_hash(@auth_hash)
+    @user.reload
+
+    assert_equal 'John', @user.firstname
+    assert_equal 'Doe', @user.lastname
+    assert_equal 'john@doe.com', @user.email
+    assert_equal 'F123', @user.room
+    assert_equal '11111111-1111-1111-1111-111111111111', @user.keycloak_id
   end
 end
