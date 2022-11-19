@@ -42,13 +42,17 @@ module ActiveSupport
     OmniAuth.config.test_mode = true
 
     def sign_in_as(user)
+      setup_auth_conf_for(user)
+      sign_in
+    end
+
+    def setup_auth_conf_for(user)
       OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
                                             uid: user.keycloak_id,
                                             info: { first_name: user.firstname,
                                                     last_name: user.lastname,
                                                     email: user.email },
                                             extra: { raw_info: { room: user.room } } })
-      sign_in
     end
 
     private

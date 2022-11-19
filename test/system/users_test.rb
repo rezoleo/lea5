@@ -93,4 +93,14 @@ class UsersTest < ApplicationSystemTestCase
 
     assert_no_text(/#{machine.mac}/i)
   end
+
+  test 'clicking on login should redirect to user profile' do
+    setup_auth_conf_for @user
+
+    visit users_path
+    click_on 'Login'
+
+    assert_selector 'h1', text: 'My Profile'
+    assert_text @user.email
+  end
 end
