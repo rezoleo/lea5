@@ -103,4 +103,12 @@ class UsersTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'My Profile'
     assert_text @user.email
   end
+
+  test 'clicking on logout should redirect to users page' do
+    sign_in_as @user
+
+    click_on 'Logout'
+
+    assert_selector 'h1', text: 'Users#index'
+  end
 end

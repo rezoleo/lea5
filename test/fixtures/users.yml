@@ -5,4 +5,4 @@ ironman:
   lastname: "Stark"
   email: "tony@avengers.com"
   room: "A200"
-
+  keycloak_id: "12345678-1234-1234-1234-123456789abc"

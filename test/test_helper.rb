@@ -57,8 +57,14 @@ module ActiveSupport
 
     private
 
+    # Depending on the test running, the methods are different to log in
     def sign_in
-      get auth_callback_path
+      if self.class < ActionDispatch::IntegrationTest
+        get auth_callback_path
+      elsif self.class < ApplicationSystemTestCase
+        visit users_path # We must first visit a page to click on the button
+        click_on 'Login'
+      end
     end
   end
 end
