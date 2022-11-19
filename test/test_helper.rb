@@ -40,5 +40,21 @@ module ActiveSupport
     include SessionsHelper
 
     OmniAuth.config.test_mode = true
+
+    def sign_in_as(user)
+      OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
+                                            uid: user.keycloak_id,
+                                            info: { first_name: user.firstname,
+                                                    last_name: user.lastname,
+                                                    email: user.email },
+                                            extra: { raw_info: { room: user.room } } })
+      sign_in
+    end
+
+    private
+
+    def sign_in
+      get auth_callback_path
+    end
   end
 end
