@@ -7,10 +7,10 @@ class LogoutTest < ActionDispatch::IntegrationTest
     sign_in_as users(:ironman)
   end
 
-  test 'user should be logged out when deleting session' do
+  test 'user should be logged out' do
     assert_predicate self, :logged_in?
 
-    delete logout_path
+    sign_out
 
     assert_not logged_in?
   end

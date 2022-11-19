@@ -55,6 +55,14 @@ module ActiveSupport
                                             extra: { raw_info: { room: user.room } } })
     end
 
+    def sign_out
+      if self.class < ActionDispatch::IntegrationTest
+        delete logout_path
+      elsif self.class < ApplicationSystemTestCase
+        click_on 'Logout'
+      end
+    end
+
     private
 
     # Depending on the test running, the methods are different to log in

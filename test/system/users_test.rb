@@ -94,20 +94,17 @@ class UsersTest < ApplicationSystemTestCase
     assert_no_text(/#{machine.mac}/i)
   end
 
-  test 'clicking on login should redirect to user profile' do
-    setup_auth_conf_for @user
-
-    visit users_path
-    click_on 'Login'
+  test 'signing in should redirect to user profile' do
+    sign_in_as @user
 
     assert_selector 'h1', text: 'My Profile'
     assert_text @user.email
   end
 
-  test 'clicking on logout should redirect to users page' do
+  test 'signing out should redirect to users page' do
     sign_in_as @user
 
-    click_on 'Logout'
+    sign_out
 
     assert_selector 'h1', text: 'Users#index'
   end
