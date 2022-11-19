@@ -39,4 +39,10 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_predicate self, :logged_in?
     assert_equal User.find_by(email: 'john@doe.com').id, current_user.id
   end
+
+  test 'logout should redirect to users' do
+    delete logout_path
+
+    assert_redirected_to users_path
+  end
 end

@@ -6,4 +6,9 @@ class SessionsController < ApplicationController
     log_in user
     redirect_to user_path user
   end
+
+  def destroy
+    log_out
+    redirect_to users_path
+  end
 end
