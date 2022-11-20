@@ -5,49 +5,75 @@
 
 ## Requirements
 
-- Ruby version 3.0.2 (see [.ruby-version](.ruby-version))
-- Node v16.6.2 (see [.nvmrc](.nvmrc))
-- Yarn v1
+- Ruby version 3.1.2 (see [.ruby-version](.ruby-version))
 - PostgreSQL 12.4+
 
-It is recommended to use [rbenv][rbenv] and [nvm][nvm] to install both language runtimes.
+It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 
 [rbenv]: https://github.com/rbenv/rbenv
-[nvm]: https://github.com/nvm-sh/nvm
 
 ## Development
 
-1. Install NodeJS and Ruby in the correct versions (run `rbenv version` and `nvm use` to check)
+1. Install Ruby with the correct version (run `rbenv version` to check)
 2. Install PostgreSQL
 3. Clone the project
-4. Install dependencies:
-   1. `bundle install`
-   2. `yarn install`
+4. Install dependencies with `bundle install`
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 7. Install [Overcommit](https://github.com/sds/overcommit): `bundle exec overcommit --install`
 
 ## Tests
 
+The basic command to run tests is `rails test`.
+
+By default, "system" tests (end-to-end tests with a real browser) are not run with `rails test`. You need to
+run `rails test:system` to run them specifically, or `rails test:all`. System tests execute in a headless Chrome/Chromium
+browser (meaning the browser window will not appear), but you can select your browser of choice (Chrome, Firefox or
+Firefox Nightly) and configure the headless behaviour with the following commands:
+- `rails test:system:chrome`
+- `rails 'test:system:chrome[headless]'`
+- `rails test:system:firefox`
+- `rails 'test:system:firefox[headless]'`
+- `rails 'test:system:firefox[nightly]'`
+- `rails 'test:system:firefox[nightly,headless]'`
+
+Note that if you pass arguments to the rails tasks (using square brackets), you need to quote the entire task name or
+else your shell will probably try to expand the brackets (see the examples above).
+
+We use a bit of tooling around tests to help us and increase our confidence in our code:
 - [Minitest][minitest] and [minitest-reporters][minitest-reporters] are used to polish test outputs
-- [Guard][guard] is setup to run tests automatically on changes. You can start it with `bundle exec guard`
+- [Guard][guard] is set up to run tests automatically on changes. You can start it with `bundle exec guard`
 - Test coverage is done with [Simplecov][simplecov]. After running your tests, open `coverage/index.html` in the browser of your choice.
   For the tests to pass, there must be a minimum global coverage of 90% and 80% per branch and file.
 
 [minitest]: https://guides.rubyonrails.org/testing.html
-[minitest-reporters]: https://rubygems.org/gems/minitest-reporters/versions/1.1.11
+[minitest-reporters]: https://rubygems.org/gems/minitest-reporters
 [guard]: https://github.com/guard/guard
 [simplecov]: https://github.com/simplecov-ruby/simplecov
 
 ## Documentation
 
-See the [docs](docs/) folder for the documentation.
+See the [docs](docs) folder for the documentation.
 
 For now only the results of a [brainstorming session about our requirements][definition-des-besoins] is available.
 
 [<img alt="Requirements" src="docs/definition-des-besoins/Lea5-Definition-des-besoins.png" width="230" height="130">][definition-des-besoins]
 
 [definition-des-besoins]: docs/definition-des-besoins/README.md
+
+## Inspirations
+
+- Our original project [Lea4][lea4]. We had to move to Re2o when we became independent and needed to manage subscriptions.
+- [Re2o][re2o], which we used for 4 years. Unfortunately it does too much, and is too complex to configure, use and maintain.
+
+[lea4]: https://github.com/rezoleo/le4
+[re2o]: https://gitlab.federez.net/re2o/re2o
+
+## License
+
+[MIT](LICENSE)
+
+---
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
@@ -71,15 +97,3 @@ Things you may want to cover:
 - Deployment instructions
 
 - ...
-
-## Inspirations
-
-- Our original project [Lea4][lea4]. We had to move to Re2o when we became independant and needed to manage subscriptions.
-- [Re2o][re2o], which we used for 4 years. Unfortunately it does too much, and is too complex to configure, use and maintain.
-
-[lea4]: https://github.com/rezoleo/le4/
-[re2o]: https://gitlab.federez.net/re2o/re2o
-
-## License
-
-[MIT](./LICENSE)
