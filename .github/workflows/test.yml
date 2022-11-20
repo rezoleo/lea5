@@ -26,7 +26,7 @@ jobs:
           OVERCOMMIT_COLOR: "1"
 
       - name: Run RuboCop
-        run: bundle exec rubocop --parallel
+        run: bundle exec rubocop --parallel --format github
 
       - name: Configure PostgreSQL authentication
         run: |
