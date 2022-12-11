@@ -57,9 +57,9 @@ module ActiveSupport
 
     # Depending on the test running, the methods are different to sign out
     def sign_out
-      if self.class < ActionDispatch::IntegrationTest
+      if is_a? ActionDispatch::IntegrationTest
         delete logout_path
-      elsif self.class < ApplicationSystemTestCase
+      elsif is_a? ApplicationSystemTestCase
         click_on 'Logout'
       end
     end
@@ -68,9 +68,9 @@ module ActiveSupport
 
     # Depending on the test running, the methods are different to sign in
     def sign_in
-      if self.class < ActionDispatch::IntegrationTest
+      if is_a? ActionDispatch::IntegrationTest
         get auth_callback_path
-      elsif self.class < ApplicationSystemTestCase
+      elsif is_a? ApplicationSystemTestCase
         visit users_path # We must first visit a page to click on the button
         click_on 'Login'
       end
