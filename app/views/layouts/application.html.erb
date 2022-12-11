@@ -11,17 +11,15 @@
 </head>
 
 <body>
-<% unless logged_in? %>
+<% if not logged_in? %>
   <%= form_tag(AUTH_PATH, method: :post, data: { turbo: false }) do %>
     <button type='submit' aria-label="Login">Login</button>
   <% end %>
-<% end %>
-
-<% if logged_in? %>
+<% else %>
   <%= form_tag(logout_path, method: :delete, data: { turbo: false }) do %>
     <button type='submit' aria-label="Logout">Logout</button>
   <% end %>
 <% end %>
-  <%= yield %>
+<%= yield %>
 </body>
 </html>
