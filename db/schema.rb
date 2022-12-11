@@ -42,6 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_074056) do
     t.datetime "updated_at", null: false
     t.string "keycloak_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["keycloak_id"], name: "index_users_on_keycloak_id", unique: true
     t.index ["room"], name: "index_users_on_room", unique: true
   end
 
