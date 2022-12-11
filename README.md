@@ -21,6 +21,7 @@ It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
 7. Install [Overcommit](https://github.com/sds/overcommit): `bundle exec overcommit --install`
+8. Add a `master.key` file in the `config` folder and add the key from vault
 
 ## Tests
 
@@ -50,6 +51,12 @@ We use a bit of tooling around tests to help us and increase our confidence in o
 [minitest-reporters]: https://rubygems.org/gems/minitest-reporters
 [guard]: https://github.com/guard/guard
 [simplecov]: https://github.com/simplecov-ruby/simplecov
+
+## Secrets
+
+We are using the secrets management provided by rails. The secrets are encrypted by a master key, and are stored in 
+`config/credentials.yml.enc`.
+To edit the secrets, use the command `EDITOR="nano" rails credentials:edit` (if you don't have nano, use another editor).
 
 ## Documentation
 

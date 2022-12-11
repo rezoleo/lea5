@@ -37,5 +37,43 @@ module ActiveSupport
     fixtures :all
 
     # Add more helper methods to be used by all tests here...
+    include SessionsHelper
+
+    OmniAuth.config.test_mode = true
+
+    def sign_in_as(user)
+      setup_auth_conf_for(user)
+      sign_in
+    end
+
+    def setup_auth_conf_for(user)
+      OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
+                                            uid: user.keycloak_id,
+                                            info: { first_name: user.firstname,
+                                                    last_name: user.lastname,
+                                                    email: user.email },
+                                            extra: { raw_info: { room: user.room } } })
+    end
+
+    # Depending on the test running, the methods are different to sign out
+    def sign_out
+      if is_a? ActionDispatch::IntegrationTest
+        delete logout_path
+      elsif is_a? ApplicationSystemTestCase
+        click_on 'Logout'
+      end
+    end
+
+    private
+
+    # Depending on the test running, the methods are different to sign in
+    def sign_in
+      if is_a? ActionDispatch::IntegrationTest
+        get auth_callback_path
+      elsif is_a? ApplicationSystemTestCase
+        visit users_path # We must first visit a page to click on the button
+        click_on 'Login'
+      end
+    end
   end
 end
