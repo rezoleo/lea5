@@ -9,8 +9,8 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     }
   elsif Rails.env.development?
     client_options = {
-      identifier: ENV.fetch('SSO_DEV_ID'),
-      secret: ENV.fetch('SSO_DEV_SECRET'),
+      identifier: Rails.application.credentials.sso_dev_id!,
+      secret: Rails.application.credentials.sso_dev_secret!,
       redirect_uri: "http://127.0.0.1:3000/#{AUTH_CALLBACK_PATH}"
     }
   end
