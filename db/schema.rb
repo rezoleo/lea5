@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_04_090306) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_05_105655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,6 +38,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_090306) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -48,6 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_090306) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "keycloak_id"
+    t.datetime "subscription_expiration"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["keycloak_id"], name: "index_users_on_keycloak_id", unique: true
     t.index ["room"], name: "index_users_on_room", unique: true
@@ -55,4 +58,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_090306) do
 
   add_foreign_key "ips", "machines"
   add_foreign_key "machines", "users"
+  add_foreign_key "subscriptions", "users"
 end

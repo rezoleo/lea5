@@ -2,6 +2,7 @@
 
 class User < ApplicationRecord
   has_many :machines, -> { order created_at: :asc }, dependent: :destroy, inverse_of: :user
+  has_many :subscriptions, dependent: :destroy
 
   before_save :downcase_email
   before_save :format_room

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
+  belongs_to :user
+
   validates :duration, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :cannot_change_after_cancelled, :cannot_change_duration, on: :update
 

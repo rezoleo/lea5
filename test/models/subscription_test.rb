@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SubscriptionTest < ActiveSupport::TestCase
   def setup
+    @user = users(:ironman)
     @subscription = subscriptions(:one)
   end
 
@@ -17,25 +18,25 @@ class SubscriptionTest < ActiveSupport::TestCase
   end
 
   test "duration can't be nil" do
-    subscription = Subscription.new(duration: nil)
+    subscription = @user.subscriptions.new(duration: nil)
     assert_not_predicate subscription, :valid?
   end
 
   test 'duration must be integer' do
-    subscription = Subscription.new(duration: 1.1)
+    subscription = @user.subscriptions.new(duration: 1.1)
     assert_not_predicate subscription, :valid?
   end
 
   test 'duration must be strictly positive' do
-    subscription = Subscription.new(duration: 0)
+    subscription = @user.subscriptions.new(duration: 0)
     assert_not_predicate subscription, :valid?
 
-    subscription = Subscription.new(duration: -1)
+    subscription = @user.subscriptions.new(duration: -1)
     assert_not_predicate subscription, :valid?
   end
 
-  test "cancelled_at can't be changed when not nil" do
-    subscription = Subscription.new(duration: 2, cancelled_at: DateTime.now)
+  test "canceled_at can't be changed when not nil" do
+    subscription = @user.subscriptions.new(duration: 2, cancelled_at: DateTime.now)
     subscription.save
 
     subscription.cancelled_at = subscription.cancelled_at + 1.day
@@ -46,10 +47,16 @@ class SubscriptionTest < ActiveSupport::TestCase
   end
 
   test 'cancelled_at can be changed when nil' do
-    subscription = Subscription.new(duration: 2)
+    subscription = @user.subscriptions.new(duration: 2)
     subscription.save
 
     subscription.cancelled_at = DateTime.now
     assert_predicate subscription, :valid?
+  end
+
+  test 'subscription should be destroyed when the user is destroyed' do
+    assert_difference 'Subscription.count', -1 do
+      @user.destroy
+    end
   end
 end
