@@ -35,7 +35,7 @@ class SubscriptionTest < ActiveSupport::TestCase
     assert_not_predicate subscription, :valid?
   end
 
-  test "canceled_at can't be changed when not nil" do
+  test "cancelled_at can't be changed when not nil" do
     subscription = @user.subscriptions.new(duration: 2, cancelled_at: DateTime.now)
     subscription.save
 
@@ -58,5 +58,29 @@ class SubscriptionTest < ActiveSupport::TestCase
     assert_difference 'Subscription.count', -1 do
       @user.destroy
     end
+  end
+
+  test 'when extending a valid subscription expiration,it should be extend by duration' do
+    freeze_time
+    @user.subscription_expiration = DateTime.now + 1.month
+
+    new_subscription_expiration = @subscription.extend_subscription(@user.subscription_expiration)
+    assert_equal @user.subscription_expiration + @subscription.duration.month, new_subscription_expiration
+  end
+
+  test 'when extending an expired subscription expiration,it should be now + duration' do
+    freeze_time
+    @user.subscription_expiration = DateTime.now - 1.month
+
+    new_subscription_expiration = @subscription.extend_subscription(@user.subscription_expiration)
+    assert_equal DateTime.now + @subscription.duration.month, new_subscription_expiration
+  end
+
+  test 'when extending a nil subscription expiration,it should be now + duration' do
+    freeze_time
+    @user.subscription_expiration = nil
+
+    new_subscription_expiration = @subscription.extend_subscription(@user.subscription_expiration)
+    assert_equal DateTime.now + @subscription.duration.month, new_subscription_expiration
   end
 end
