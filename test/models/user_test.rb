@@ -150,4 +150,38 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'F123', @user.room
     assert_equal '11111111-1111-1111-1111-111111111111', @user.keycloak_id
   end
+
+  test 'when extending a nil subscription expiration, it should be now + duration' do
+    freeze_time
+    @user.subscription_expiration = nil
+
+    assert_difference 'Subscription.count', 1 do
+      new_subscription = @user.extend_subscription!(duration: 3)
+      assert_equal 3, new_subscription.duration
+    end
+    assert_equal DateTime.now + 3.months, @user.subscription_expiration
+  end
+
+  test 'when extending a valid subscription expiration, it should be extend by duration' do
+    freeze_time
+    old_expiration = DateTime.now + 1.month
+    @user.subscription_expiration = old_expiration
+
+    assert_difference 'Subscription.count', 1 do
+      new_subscription = @user.extend_subscription!(duration: 3)
+      assert_equal 3, new_subscription.duration
+    end
+    assert_equal old_expiration + 3.months, @user.subscription_expiration
+  end
+
+  test 'when extending an expired subscription expiration, it should be now + duration' do
+    freeze_time
+    @user.subscription_expiration = DateTime.now - 1.month
+
+    assert_difference 'Subscription.count', 1 do
+      new_subscription = @user.extend_subscription!(duration: 3)
+      assert_equal 3, new_subscription.duration
+    end
+    assert_equal DateTime.now + 3.months, @user.subscription_expiration
+  end
 end

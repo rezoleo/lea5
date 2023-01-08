@@ -6,14 +6,6 @@ class Subscription < ApplicationRecord
   validates :duration, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validate :cannot_change_after_cancelled, :cannot_change_duration, on: :update
 
-  def extend_subscription(subscription_expiration)
-    if subscription_expiration.nil? || (subscription_expiration < DateTime.now)
-      DateTime.now + duration.month
-    else
-      subscription_expiration + duration.month
-    end
-  end
-
   private
 
   def cannot_change_after_cancelled

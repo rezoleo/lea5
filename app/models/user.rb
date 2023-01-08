@@ -14,6 +14,20 @@ class User < ApplicationRecord
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
+  # @param [Integer] duration subscription duration in months
+  # @return [Subscription] the newly created subscription
+  def extend_subscription!(duration:)
+    new_subscription = subscriptions.new(duration:)
+    if subscription_expiration.nil? || (subscription_expiration < DateTime.now)
+      self.subscription_expiration = DateTime.now + duration.months
+    else
+      self.subscription_expiration += duration.months
+    end
+
+    save!
+    new_subscription
+  end
+
   def self.upsert_from_auth_hash(auth_hash)
     user = find_or_initialize_by("#{auth_hash[:provider]}_id": auth_hash[:uid])
     user.update(
