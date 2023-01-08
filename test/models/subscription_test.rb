@@ -34,7 +34,7 @@ class SubscriptionTest < ActiveSupport::TestCase
     assert_not_predicate subscription, :valid?
   end
 
-  test "canceled_at can't be changed when not nil" do
+  test "cancelled_at can't be changed when not nil" do
     subscription = Subscription.new(duration: 2, cancelled_at: DateTime.now)
     subscription.save
 
