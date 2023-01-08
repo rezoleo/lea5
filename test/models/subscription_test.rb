@@ -40,6 +40,9 @@ class SubscriptionTest < ActiveSupport::TestCase
 
     subscription.cancelled_at = subscription.cancelled_at + 1.day
     assert_not_predicate subscription, :valid?
+
+    subscription.cancelled_at = nil
+    assert_not_predicate subscription, :valid?
   end
 
   test 'cancelled_at can be changed when nil' do
