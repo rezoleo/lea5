@@ -3,8 +3,13 @@
 class Subscription < ApplicationRecord
   belongs_to :user
 
-  validates :duration, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validate :cannot_change_after_cancelled, :cannot_change_duration, on: :update
+  validates :end_at, comparison: { greater_than: :start_at }
+  validate :cannot_change_after_cancelled, on: :update
+
+  def cancel!
+    self.cancelled_at = Time.current
+    save!
+  end
 
   private
 
@@ -12,11 +17,5 @@ class Subscription < ApplicationRecord
     return if cancelled_at_was.nil?
 
     errors.add(:cancelled_at, 'Subscription has already been cancelled')
-  end
-
-  def cannot_change_duration
-    return if changes[:duration].nil?
-
-    errors.add(:duration, 'Duration is immutable')
   end
 end
