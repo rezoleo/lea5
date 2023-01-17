@@ -245,7 +245,6 @@ class UserTest < ActiveSupport::TestCase
     @user.save
 
     @user.cancel_current_subscription!
-    @user.cancel_current_subscription!
 
     assert_nil @user.subscription_expiration
   end
