@@ -248,7 +248,6 @@ class UserTest < ActiveSupport::TestCase
     @user.cancel_current_subscription!
 
     assert_nil @user.subscription_expiration
-    assert_nil @user.subscription_expiration
   end
 
   test 'when cancelling an expired subscription, it should cancel it' do
