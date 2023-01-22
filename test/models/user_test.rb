@@ -4,10 +4,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @user = User.new(firstname: 'Paul',
-                     lastname: 'Marcel',
-                     email: 'paul.marcel@gmail.com',
-                     room: 'D112')
+    @user = users(:ironman)
     @auth_hash = { provider: 'keycloak',
                    uid: '11111111-1111-1111-1111-111111111111',
                    info: { first_name: 'John',
@@ -149,5 +146,140 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'john@doe.com', @user.email
     assert_equal 'F123', @user.room
     assert_equal '11111111-1111-1111-1111-111111111111', @user.keycloak_id
+  end
+
+  test 'current_subscription is nil when user has no subscriptions' do
+    @user.subscriptions.delete_all
+    @user.save
+
+    assert_nil @user.current_subscription
+  end
+
+  test 'current_subscription is nil when user has cancelled subscription' do
+    @user.subscriptions.delete_all
+    @user.save
+
+    @user.subscriptions.create!(start_at: Time.current, end_at: 1.month.from_now, cancelled_at: Time.current)
+    assert_nil @user.current_subscription
+  end
+
+  test 'current_subscription is last non cancelled subscription' do
+    @user.subscriptions.delete_all
+    @user.save
+
+    current_subscription = @user.subscriptions.create!(start_at: 2.months.ago, end_at: 1.month.ago)
+    @user.subscriptions.create!(start_at: Time.current, end_at: 1.month.from_now, cancelled_at: Time.current)
+    assert_equal current_subscription, @user.current_subscription
+  end
+
+  test 'current_subscription is correct when user has valid, cancelled and expired subscriptions' do
+    @user.subscriptions.delete_all
+    @user.save
+
+    # expired
+    @user.subscriptions.create!(start_at: 2.months.ago, end_at: 1.month.ago)
+    current = @user.subscriptions.create!(start_at: Time.current, end_at: 1.month.from_now)
+    # cancelled
+    @user.subscriptions.create!(start_at: 1.month.from_now, end_at: 2.months.from_now, cancelled_at: Time.current)
+    assert_equal @user.current_subscription, current
+  end
+
+  test 'current_subscription is the last valid subscription' do
+    @user.subscriptions.delete_all
+    @user.save
+
+    @user.subscriptions.create!(start_at: Time.current, end_at: 2.months.from_now)
+    last_valid = @user.subscriptions.create!(start_at: 2.months.from_now, end_at: 4.months.from_now)
+    assert_equal @user.current_subscription, last_valid
+  end
+
+  test 'when extending a nil subscription expiration, it should be now + duration' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.save
+
+    assert_nil @user.subscription_expiration
+
+    assert_difference 'Subscription.count', 1 do
+      @user.extend_subscription!(duration: 3)
+    end
+    assert_equal 3.months.from_now, @user.subscription_expiration
+  end
+
+  test 'when extending a valid subscription expiration, it should be extend by duration' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.save
+
+    old_expiration = 1.month.from_now
+    @user.subscriptions.create(start_at: 1.month.ago, end_at: old_expiration)
+
+    assert_equal old_expiration, @user.subscription_expiration
+
+    assert_difference 'Subscription.count', 1 do
+      @user.extend_subscription!(duration: 3)
+    end
+    assert_equal old_expiration + 3.months, @user.subscription_expiration
+  end
+
+  test 'when extending an expired subscription expiration, it should be now + duration' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.save
+
+    expired_expiration = 1.month.ago
+    @user.subscriptions.create(start_at: 2.months.ago, end_at: expired_expiration)
+
+    assert_equal expired_expiration, @user.subscription_expiration
+
+    assert_difference 'Subscription.count', 1 do
+      @user.extend_subscription!(duration: 3)
+    end
+    assert_equal 3.months.from_now, @user.subscription_expiration
+  end
+
+  test 'when cancelling user with zero subscriptions, do nothing' do
+    freeze_time
+
+    @user.subscriptions.delete_all
+    @user.save
+
+    @user.cancel_current_subscription!
+    assert_nil @user.subscription_expiration
+  end
+
+  test 'when cancelling an expired subscription, it should cancel it' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.save
+
+    expired_subscription = @user.subscriptions.create(start_at: 2.months.ago, end_at: 1.month.ago)
+    assert_equal expired_subscription.end_at, @user.subscription_expiration
+
+    @user.cancel_current_subscription!
+    assert_nil @user.subscription_expiration
+  end
+
+  test 'when cancelling a valid subscription, it should be reduced by duration' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.save
+
+    previous_valid_subscription = @user.subscriptions.create(start_at: 2.months.ago, end_at: 1.month.from_now)
+    current_subscription = @user.subscriptions.create(start_at: 1.month.from_now, end_at: 3.months.from_now)
+
+    assert_equal current_subscription.end_at, @user.subscription_expiration
+
+    @user.cancel_current_subscription!
+    assert_equal previous_valid_subscription.end_at, @user.subscription_expiration
+  end
+
+  test 'when cancelling a subscription, it should not be deleted' do
+    freeze_time
+    @user.subscriptions.create(start_at: 1.month.from_now, end_at: 3.months.from_now)
+
+    assert_no_difference 'Subscription.count' do
+      @user.cancel_current_subscription!
+    end
   end
 end
