@@ -25,3 +25,6 @@ I18n/GetText:
 
 Minitest/MultipleAssertions:
   Max: 10
+
+Metrics/MethodLength:
+  Max: 12

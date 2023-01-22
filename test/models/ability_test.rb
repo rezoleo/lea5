@@ -4,8 +4,10 @@ require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
   def setup
-    @user = users(:ironman)
+    @user = users(:pepper)
     @user_ability = Ability.new(@user)
+    @admin = users(:ironman)
+    @admin_ability = Ability.new(@admin)
   end
 
   test 'user can read themselves' do
@@ -22,5 +24,9 @@ class AbilityTest < ActiveSupport::TestCase
 
   test 'user cannot create a new user' do
     assert @user_ability.cannot?(:create, @user)
+  end
+
+  test 'admin can do everything' do
+    assert @admin_ability.can?(:manage, :all)
   end
 end

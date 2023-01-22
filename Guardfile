@@ -53,10 +53,10 @@ end
 
 # Returns the controller tests corresponding to the given resource.
 def controller_test(resource)
-  "test/controllers/#{resource}_controller_test.rb"
+  Dir["test/controllers/#{resource}_controller*_test.rb"]
 end
 
 # Returns all tests for the given resource.
 def resource_tests(resource)
-  integration_tests(resource) << controller_test(resource)
+  integration_tests(resource) + controller_test(resource)
 end

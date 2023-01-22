@@ -50,6 +50,10 @@ class User < ApplicationRecord
     user
   end
 
+  def admin?
+    firstname == 'Tony'
+  end
+
   private
 
   def downcase_email

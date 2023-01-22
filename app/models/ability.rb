@@ -7,5 +7,9 @@ class Ability
     return if user.blank?
 
     can %i[read update], User, id: user.id
+
+    return unless user.admin?
+
+    can :manage, :all
   end
 end

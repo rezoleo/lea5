@@ -4,7 +4,10 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @user = users(:ironman)
+    @user = users(:pepper)
+
+    @admin = users(:ironman)
+    sign_in_as @admin
   end
 
   # TODO: when another template index has been made, try to render it and test assert_template 'index'
