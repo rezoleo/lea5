@@ -78,6 +78,7 @@ GEM
       msgpack (~> 1.2)
     brakeman (5.3.1)
     builder (3.2.4)
+    cancancan (3.4.0)
     capybara (3.38.0)
       addressable
       matrix
@@ -360,6 +361,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   brakeman (~> 5.3)
+  cancancan (~> 3.4)
   capybara (~> 3.38)
   debug
   guard (~> 2.18)
