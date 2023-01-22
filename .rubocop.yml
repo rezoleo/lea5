@@ -28,3 +28,9 @@ Minitest/MultipleAssertions:
 
 Metrics/MethodLength:
   Max: 12
+
+Metrics/AbcSize:
+  Max: 20
+
+Rails/HelperInstanceVariable:
+  Enabled: false

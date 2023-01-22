@@ -7,6 +7,7 @@ class AbilityTest < ActiveSupport::TestCase
     @user = users(:pepper)
     @user_ability = Ability.new(@user)
     @admin = users(:ironman)
+    @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
     @admin_ability = Ability.new(@admin)
   end
 

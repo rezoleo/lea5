@@ -7,7 +7,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     @user = users(:pepper)
 
     @admin = users(:ironman)
-    sign_in_as @admin
+    sign_in_as @admin, ['rezoleo']
   end
 
   # TODO: when another template index has been made, try to render it and test assert_template 'index'

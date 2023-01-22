@@ -14,6 +14,9 @@ class User < ApplicationRecord
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
+  # @return [Array<String>]
+  attr_accessor :groups
+
   def current_subscription
     subscriptions.where(cancelled_at: nil).order(end_at: :desc).first
   end
@@ -46,12 +49,15 @@ class User < ApplicationRecord
       email: auth_hash[:info][:email],
       room: auth_hash[:extra][:raw_info][:room]
     )
+    user.groups = auth_hash[:extra][:raw_info][:groups]
     user.save!
     user
   end
 
   def admin?
-    firstname == 'Tony'
+    return false if groups.nil?
+
+    groups.include?('rezoleo')
   end
 
   private

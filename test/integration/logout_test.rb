@@ -4,7 +4,7 @@ require 'test_helper'
 
 class LogoutTest < ActionDispatch::IntegrationTest
   def setup
-    sign_in_as users(:ironman)
+    sign_in_as users(:ironman), ['rezoleo']
   end
 
   test 'user should be logged out' do
