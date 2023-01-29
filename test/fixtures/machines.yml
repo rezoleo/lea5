@@ -4,3 +4,8 @@ jarvis:
   mac: "DE:1A:B3:17:95:C9"
   name: "jarvis"
   user: ironman
+
+friday:
+  mac: "DE:1A:B3:17:95:B8"
+  name: "friday"
+  user: pepper
