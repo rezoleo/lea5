@@ -6,11 +6,7 @@ class MachinesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @machine = machines(:jarvis)
     @owner = @machine.user
-  end
-
-  test 'should get index' do
-    get user_machines_path(@owner)
-    assert_template 'machines/index'
+    sign_in_as @owner
   end
 
   test 'should get new' do

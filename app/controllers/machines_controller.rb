@@ -3,23 +3,25 @@
 class MachinesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
-  before_action :owner, only: %i[index create new]
+  before_action :owner, only: %i[create new]
   before_action :current_machine, only: %i[show edit update destroy]
 
-  def index
-    @machines = @owner.machines
+  def show
+    authorize! :show, @machine
   end
-
-  def show; end
 
   def new
     @machine = @owner.machines.new
+    authorize! :new, @machine
   end
 
-  def edit; end
+  def edit
+    authorize! :edit, @machine
+  end
 
   def create
     @machine = @owner.machines.new(machine_params)
+    authorize! :create, @machine
     respond_to do |format|
       if @machine.save
         format.html { redirect_to @owner }
@@ -32,6 +34,7 @@ class MachinesController < ApplicationController
   end
 
   def update
+    authorize! :update, @machine
     owner = @machine.user
     respond_to do |format|
       if @machine.update(machine_params)
@@ -45,6 +48,7 @@ class MachinesController < ApplicationController
   end
 
   def destroy
+    authorize! :destroy, @machine
     owner = @machine.user
     @machine.destroy
     respond_to do |format|
