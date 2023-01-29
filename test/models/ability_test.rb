@@ -52,17 +52,17 @@ class AbilityTest < ActiveSupport::TestCase
   end
 
   test 'user can edit their machines' do
-    assert @user_ability.can?(:edit, @user_machine)
+    assert @user_ability.can?(:update, @user_machine)
   end
 
   test 'user can delete their machines' do
-    assert @user_ability.can?(:delete, @user_machine)
+    assert @user_ability.can?(:destroy, @user_machine)
   end
 
   test 'user cannot interact with other users machines' do
     assert @user_ability.cannot?(:create, @admin_machine)
     assert @user_ability.cannot?(:edit, @admin_machine)
-    assert @user_ability.cannot?(:delete, @admin_machine)
+    assert @user_ability.cannot?(:destroy, @admin_machine)
   end
 
   test 'admin can do everything' do
