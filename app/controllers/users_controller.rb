@@ -4,24 +4,27 @@ class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
   def index
-    @users = User.all
+    @users = User.accessible_by(current_ability)
   end
 
   def show
     @user = User.includes(machines: :ip).find(params[:id])
+    authorize! :show, @user
   end
 
   def new
     @user = User.new
+    authorize! :new, @user
   end
 
   def edit
     @user = User.find(params[:id])
+    authorize! :edit, @user
   end
 
   def create
     @user = User.new(user_params)
-
+    authorize! :create, @user
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user }
@@ -35,6 +38,7 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    authorize! :update, @user
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user }
@@ -47,7 +51,9 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.includes(machines: :ip).find(params[:id]).destroy
+    @user = User.includes(machines: :ip).find(params[:id])
+    authorize! :destroy, @user
+    @user.destroy
     respond_to do |format|
       format.html { redirect_to users_url }
       format.json { head :no_content }

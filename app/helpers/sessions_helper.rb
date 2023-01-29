@@ -2,7 +2,11 @@
 
 module SessionsHelper
   def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    return nil if session[:user_id].nil?
+
+    @current_user ||= User.find(session[:user_id])
+    @current_user&.groups = session[:groups]
+    @current_user
   end
 
   def logged_in?
@@ -13,6 +17,7 @@ module SessionsHelper
     reset_session # For security reasons, we clear the session data before login
     session[:user_id] = user.id
     session[:expires_at] = Time.current + SESSION_DURATION_TIME
+    session[:groups] = user.groups
   end
 
   # TODO: also logout of sso

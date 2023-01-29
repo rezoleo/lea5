@@ -25,3 +25,12 @@ I18n/GetText:
 
 Minitest/MultipleAssertions:
   Max: 10
+
+Metrics/MethodLength:
+  Max: 12
+
+Metrics/AbcSize:
+  Max: 20
+
+Rails/HelperInstanceVariable:
+  Enabled: false

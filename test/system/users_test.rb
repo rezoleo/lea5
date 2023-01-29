@@ -5,6 +5,7 @@ require 'application_system_test_case'
 class UsersTest < ApplicationSystemTestCase
   def setup
     @user = users(:ironman)
+    sign_in_as @user
   end
 
   test 'visiting profile' do
@@ -95,6 +96,7 @@ class UsersTest < ApplicationSystemTestCase
   end
 
   test 'signing in should redirect to user profile' do
+    sign_out
     sign_in_as @user
 
     assert_selector 'h1', text: 'My Profile'
@@ -102,6 +104,7 @@ class UsersTest < ApplicationSystemTestCase
   end
 
   test 'signing out should redirect to users page' do
+    sign_out
     sign_in_as @user
 
     sign_out
