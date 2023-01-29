@@ -7,7 +7,6 @@ class MachinesController < ApplicationController
   before_action :current_machine, only: %i[show edit update destroy]
 
   def show
-    @machine = Machine.find(params[:id])
     authorize! :show, @machine
   end
 
@@ -17,7 +16,6 @@ class MachinesController < ApplicationController
   end
 
   def edit
-    @machine = Machine.find(params[:id])
     authorize! :edit, @machine
   end
 
