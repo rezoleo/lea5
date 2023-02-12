@@ -201,7 +201,8 @@ class UserTest < ActiveSupport::TestCase
     assert_nil @user.subscription_expiration
 
     assert_difference 'Subscription.count', 1 do
-      @user.extend_subscription!(duration: 3)
+      @user.extend_subscription(duration: 3)
+      @user.save
     end
     assert_equal 3.months.from_now, @user.subscription_expiration
   end
@@ -217,7 +218,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal old_expiration, @user.subscription_expiration
 
     assert_difference 'Subscription.count', 1 do
-      @user.extend_subscription!(duration: 3)
+      @user.extend_subscription(duration: 3)
+      @user.save
     end
     assert_equal old_expiration + 3.months, @user.subscription_expiration
   end
@@ -233,7 +235,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal expired_expiration, @user.subscription_expiration
 
     assert_difference 'Subscription.count', 1 do
-      @user.extend_subscription!(duration: 3)
+      @user.extend_subscription(duration: 3)
+      @user.save
     end
     assert_equal 3.months.from_now, @user.subscription_expiration
   end

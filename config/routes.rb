@@ -7,5 +7,6 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :machines, shallow: true, except: [:index]
+    resources :subscriptions, shallow: true, except: %i[index show edit update]
   end
 end

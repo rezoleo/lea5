@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_15_153448) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_12_181444) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_15_153448) do
     t.bigint "user_id", null: false
     t.datetime "start_at", precision: nil, null: false
     t.datetime "end_at", precision: nil, null: false
+    t.virtual "duration", type: :integer, comment: "Duration in months", as: "EXTRACT(months FROM age(end_at, start_at))", stored: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
