@@ -7,11 +7,13 @@ class AbilityTest < ActiveSupport::TestCase
     @user = users(:pepper)
     @user_ability = Ability.new(@user)
     @user_machine = @user.machines.first
+    @user_subscription = @user.subscriptions.first
 
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
     @admin_ability = Ability.new(@admin)
     @admin_machine = @admin.machines.first
+    @admin_subscription = @admin.subscriptions.first
   end
 
   test 'user can read themselves' do
@@ -63,6 +65,19 @@ class AbilityTest < ActiveSupport::TestCase
     assert @user_ability.cannot?(:create, @admin_machine)
     assert @user_ability.cannot?(:edit, @admin_machine)
     assert @user_ability.cannot?(:destroy, @admin_machine)
+  end
+
+  test 'user can read their subscription' do
+    assert @user_ability.can?(:read, @user_subscription)
+    assert @user_ability.cannot?(:read, @admin_subscription)
+  end
+
+  test 'user cannot create a new subscription to themselves' do
+    assert @user_ability.cannot?(:create, @user_subscription)
+  end
+
+  test 'user cannot delete their subscription' do
+    assert @user_ability.cannot?(:destroy, @user_subscription)
   end
 
   test 'admin can do everything' do

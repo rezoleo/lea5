@@ -5,7 +5,7 @@ require 'test_helper'
 class SubscriptionTest < ActiveSupport::TestCase
   def setup
     @user = users(:ironman)
-    @subscription = subscriptions(:one)
+    @subscription = subscriptions(:subscription1)
   end
 
   test 'subscription is valid' do
