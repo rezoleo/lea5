@@ -1,14 +1,7 @@
 <div class="subscription">
-  <span>Starts at: <%= time_with_relative_tag subscription.start_at %></span>
-  <span>Ends at: <%= time_with_relative_tag subscription.end_at %></span>
+  <span><%= time_with_relative_tag subscription.start_at %>-<%= time_with_relative_tag subscription.end_at %></span>
+  <span>Duration: <%= pluralize(subscription.duration, "month") %></span>
   <% unless subscription.cancelled_at.nil? %>
-    <span>Ends at: <%= time_with_relative_tag subscription.cancelled_at %></span>
-  <% end %>
-  <% if can? :delete, subscription %>
-    <%= button_to(subscription, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this subscription') do %>
-      <svg>
-        <use href="/assets/icons.svg#icon_delete"></use>
-      </svg>
-    <% end %>
+    <span>Cancelled at: <%= time_with_relative_tag subscription.cancelled_at %></span>
   <% end %>
 </div>

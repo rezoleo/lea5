@@ -285,4 +285,10 @@ class UserTest < ActiveSupport::TestCase
       @user.cancel_current_subscription!
     end
   end
+
+  test 'subscriptions should be sorted by creation date descending' do
+    @user.subscriptions.create(start_at: 1.month.from_now, end_at: 3.months.from_now)
+    @user.subscriptions.create(start_at: 4.months.from_now, end_at: 5.months.from_now)
+    assert_equal @user.subscriptions.sort_by(&:created_at).reverse, @user.subscriptions
+  end
 end

@@ -1,0 +1,13 @@
+<%= button_to(
+      path,
+      method: :delete,
+      class: "button-secondary",
+      'aria-label': aria_label,
+      form: { data: { turbo_frame: dom_id(@user) }},
+      data: { turbo_confirm: "Are you sure ?" }
+    ) do %>
+  <%= text %>
+  <svg>
+    <use href="/assets/icons.svg#icon_delete"></use>
+  </svg>
+<% end %>

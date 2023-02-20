@@ -20,9 +20,13 @@
     <div class="card card-user card-content">
       <div class="card-content-user">
         <span><%= "#{@user.firstname} #{@user.lastname}" %></span>
-        <%= render "components/internet_badge" %>
+        <%= render "components/internet_badge", user: @user %>
         <span><%= @user.email %></span>
-        <span>Internet on until 15 January 2020</span>
+        <% if @user.subscription_expiration %>
+          <span>Internet on until <%= time_with_relative_tag @user.subscription_expiration %></span>
+        <% else %>
+          <span>No subscription</span>
+        <% end %>
         <span><%= @user.room %></span>
         <span><%= pluralize(@user.machines.size, "machine") %></span>
       </div>
@@ -61,8 +65,11 @@
           <h2>Subscriptions</h2>
         </div>
 
-        <% if can? :create, Subscription%>
+        <% if can? :create, Subscription %>
           <%= render "components/buttons/button_primary_create", text: "new subscription", path: new_user_subscription_path(@user), aria_label: "Add a new subscription" %>
+        <% end %>
+        <% if can?(:delete, Subscription) && @user.current_subscription %>
+          <%= render "components/buttons/button_secondary_delete", text: "cancel last subscription", path: user_last_subscription_path(@user), aria_label: "Cancel last subscription" %>
         <% end %>
       </div>
 

@@ -40,8 +40,19 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should cancel without deleting a subscription and redirect to owner' do
     assert_no_difference 'Subscription.count' do
-      delete subscription_url @subscription
+      delete user_last_subscription_url @owner
     end
+    assert_redirected_to user_url @owner
+  end
+
+  test 'should do nothing when no subscriptions' do
+    @owner.subscriptions.delete_all
+    @owner.reload
+
+    assert_no_difference 'Subscription.count' do
+      delete user_last_subscription_url @owner
+    end
+
     assert_redirected_to user_url @owner
   end
 
@@ -53,7 +64,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
     @owner.save
     assert_equal 5.months.from_now, @owner.subscription_expiration
 
-    delete subscription_url @owner.current_subscription
+    delete user_last_subscription_url @owner
 
     assert_equal 2.months.from_now, @owner.subscription_expiration
   end

@@ -62,4 +62,16 @@ class SubscriptionTest < ActiveSupport::TestCase
     @subscription.cancel!
     assert_equal Time.current, @subscription.cancelled_at
   end
+
+  test 'duration should give months' do
+    freeze_time
+
+    subscription = @user.subscriptions.create(start_at: Time.current, end_at: 8.months.from_now)
+    subscription.reload
+    assert_equal 8, subscription.duration
+
+    subscription = @user.subscriptions.create(start_at: Time.current, end_at: 13.months.from_now)
+    subscription.reload
+    assert_equal 13, subscription.duration
+  end
 end

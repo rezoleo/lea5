@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
-  before_action :owner, only: %i[create new]
-  before_action :current_subscription, only: %i[destroy]
+  before_action :owner, only: %i[create new destroy]
 
   def new
     @subscription = @owner.subscriptions.new
@@ -20,8 +19,7 @@ class SubscriptionsController < ApplicationController
   end
 
   def destroy
-    authorize! :destroy, @subscription
-    owner = @subscription.user
+    authorize! :destroy, @owner.current_subscription
     owner.cancel_current_subscription!
     redirect_to owner
   end
@@ -34,9 +32,5 @@ class SubscriptionsController < ApplicationController
 
   def owner
     @owner = User.find(params[:user_id])
-  end
-
-  def current_subscription
-    @subscription = Subscription.find(params[:id])
   end
 end
