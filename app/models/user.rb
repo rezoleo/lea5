@@ -2,7 +2,7 @@
 
 class User < ApplicationRecord
   has_many :machines, -> { order created_at: :asc }, dependent: :destroy, inverse_of: :user
-  has_many :subscriptions, dependent: :destroy
+  has_many :subscriptions, -> { order created_at: :desc }, dependent: :destroy, inverse_of: :user
 
   before_save :downcase_email
   before_save :format_room
@@ -27,12 +27,9 @@ class User < ApplicationRecord
 
   # @param [Integer] duration subscription duration in months
   # @return [Subscription] the newly created subscription
-  def extend_subscription!(duration:)
+  def extend_subscription(duration:)
     start_at = subscription_expired? ? Time.current : subscription_expiration
-    new_subscription = subscriptions.new(start_at:, end_at: start_at + duration.months)
-
-    save!
-    new_subscription
+    subscriptions.new(start_at:, end_at: start_at + duration.months)
   end
 
   def cancel_current_subscription!

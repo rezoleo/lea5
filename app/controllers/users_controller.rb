@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.includes(machines: :ip).find(params[:id])
+    @user = User.includes(:subscriptions, { machines: :ip }).find(params[:id])
     authorize! :show, @user
   end
 

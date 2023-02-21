@@ -1,0 +1,8 @@
+<% provide :button_text, "Create" %>
+
+<%= form_with(model: [@owner, @subscription]) do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <%= f.label :duration %>
+  <%= f.number_field :duration, required: true, min: 1, step: 1 %>
+  <%= f.submit yield(:button_text) %>
+<% end %>

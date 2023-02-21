@@ -1,0 +1,7 @@
+<div class="subscription">
+  <span><%= time_with_relative_tag subscription.start_at %>-<%= time_with_relative_tag subscription.end_at %></span>
+  <span>Duration: <%= pluralize(subscription.duration, "month") %></span>
+  <% unless subscription.cancelled_at.nil? %>
+    <span>Cancelled at: <%= time_with_relative_tag subscription.cancelled_at %></span>
+  <% end %>
+</div>

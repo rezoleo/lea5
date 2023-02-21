@@ -13,6 +13,8 @@ class Ability
       machine.user == user && user.machines.size < USER_MACHINES_LIMIT
     end
 
+    can [:read], Subscription, user: user
+
     return unless user.admin?
 
     can :manage, :all

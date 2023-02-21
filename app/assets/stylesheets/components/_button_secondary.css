@@ -1,11 +1,11 @@
-.button-primary {
-    background-color: var(--primary-600);
-    color: var(--primary-50);
+.button-secondary {
+    background-color: transparent;
+    color: var(--primary-600);
     border-radius: var(--rounded-lg);
     letter-spacing: var(--spacing-lg);
     font-size: var(--text-sm);
     text-transform: uppercase;
-    border: none;
+    border: 2px solid var(--primary-600);
     font-weight: var(--font-bold);
     padding: var(--padding-xs) var(--padding-md);
     margin-bottom: var(--padding-md);
@@ -13,7 +13,7 @@
     align-items: center;
 }
 
-.button-primary svg {
+.button-secondary svg {
     padding-left: var(--padding-sm);
-    fill: var(--primary-300);
+    fill: var(--primary-500);
 }

@@ -1,0 +1,15 @@
+.subscription {
+    display: grid;
+    grid-template-columns: minmax(5ch, 10ch) 1fr 1fr auto auto;
+    column-gap: calc(var(--padding-md)*2);
+}
+
+.subscription span:first-child {
+    font-weight: var(--font-bold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subscription svg {
+    fill: var(--primary-600);
+}
