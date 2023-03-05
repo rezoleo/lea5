@@ -8,6 +8,6 @@ module ApplicationHelper
                         else
                           "#{time_ago_in_words(date_or_time)} ago"
                         end
-    time_tag date_or_time, title: time_ago_in_words
+    time_tag date_or_time.to_date, title: time_ago_in_words
   end
 end

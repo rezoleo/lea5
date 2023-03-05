@@ -22,8 +22,17 @@ class User < ApplicationRecord
     subscriptions.where(cancelled_at: nil).order(end_at: :desc).first
   end
 
+  def current_free_access
+    free_accesses.order(end_at: :desc).first
+  end
+
   def subscription_expiration
     current_subscription&.end_at # Safe operator, return nil if object is nil
+  end
+
+  def internet_expiration
+    # .compact removes all nil from an array
+    [current_subscription&.end_at, current_free_access&.end_at].compact.max
   end
 
   # @param [Integer] duration subscription duration in months

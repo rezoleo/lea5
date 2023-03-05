@@ -40,7 +40,7 @@
     display: flex;
     flex-direction: row;
     padding-left: 0;
-    max-height: 50vh;
+    max-height: 30vh;
     overflow-y: auto;
 }
 

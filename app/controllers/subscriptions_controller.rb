@@ -14,7 +14,7 @@ class SubscriptionsController < ApplicationController
     if @subscription.save
       redirect_to @owner
     else
-      render 'new'
+      render 'new', status: :unprocessable_entity
     end
   end
 

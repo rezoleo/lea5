@@ -1,0 +1,17 @@
+<div class="free-access">
+  <span><%= time_with_relative_tag free_access.start_at %>-<%= time_with_relative_tag free_access.end_at %></span>
+  <% if can?(:edit, free_access) %>
+    <%= button_to(edit_free_access_path(free_access), method: :get, 'aria-label': 'Edit this free access') do %>
+      <svg>
+        <use href="/assets/icons.svg#icon_edit"></use>
+      </svg>
+    <% end %>
+  <% end %>
+  <% if can?(:delete, free_access) %>
+    <%= button_to(free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this free access') do %>
+      <svg>
+        <use href="/assets/icons.svg#icon_delete"></use>
+      </svg>
+    <% end %>
+  <% end %>
+</div>

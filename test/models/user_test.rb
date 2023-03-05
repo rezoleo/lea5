@@ -291,4 +291,10 @@ class UserTest < ActiveSupport::TestCase
     @user.subscriptions.create(start_at: 4.months.from_now, end_at: 5.months.from_now)
     assert_equal @user.subscriptions.sort_by(&:created_at).reverse, @user.subscriptions
   end
+
+  test 'free_accesses should be sorted by creation date descending' do
+    @user.free_accesses.create(start_at: 1.month.from_now, end_at: 3.months.from_now, reason: 'Good cat')
+    @user.free_accesses.create(start_at: 4.months.from_now, end_at: 5.months.from_now, reason: 'Good girl')
+    assert_equal @user.free_accesses.sort_by(&:created_at).reverse, @user.free_accesses
+  end
 end

@@ -5,7 +5,7 @@ class FreeAccessesController < ApplicationController
   before_action :current_free_access, only: %i[edit update destroy]
 
   def new
-    @free_access = @owner.free_accesses.new
+    @free_access = @owner.free_accesses.new(start_at: Time.current)
     authorize! :new, @free_access
   end
 
@@ -19,7 +19,7 @@ class FreeAccessesController < ApplicationController
     if @free_access.save
       redirect_to @owner
     else
-      render 'new'
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class FreeAccessesController < ApplicationController
     if @free_access.update(free_access_params)
       redirect_to owner
     else
-      render 'edit'
+      render 'edit', status: :unprocessable_entity
     end
   end
 
