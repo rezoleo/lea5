@@ -1,5 +1,5 @@
 <div class="free-access">
-  <span><%= time_with_relative_tag free_access.start_at %>-<%= time_with_relative_tag free_access.end_at %></span>
+  <span><%= time_with_relative_tag free_access.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag free_access.end_at %></span>
   <% if can?(:edit, free_access) %>
     <%= button_to(edit_free_access_path(free_access), method: :get, 'aria-label': 'Edit this free access') do %>
       <svg>

@@ -1,0 +1,15 @@
+.free-access {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    column-gap: calc(var(--padding-md)*2);
+}
+
+.free-access span:first-child {
+    font-weight: var(--font-bold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.free-access svg {
+    fill: var(--primary-600);
+}
