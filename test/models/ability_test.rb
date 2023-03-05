@@ -3,18 +3,22 @@
 require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
+  # rubocop:disable Metrics/AbcSize
   def setup
     @user = users(:pepper)
     @user_ability = Ability.new(@user)
     @user_machine = @user.machines.first
     @user_subscription = @user.subscriptions.first
+    @user_free_access = @user.free_accesses.first
 
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
     @admin_ability = Ability.new(@admin)
     @admin_machine = @admin.machines.first
     @admin_subscription = @admin.subscriptions.first
+    @admin_free_access = @admin.free_accesses.first
   end
+  # rubocop:enable Metrics/AbcSize
 
   test 'user can read themselves' do
     assert @user_ability.can?(:read, @user)
@@ -76,8 +80,29 @@ class AbilityTest < ActiveSupport::TestCase
     assert @user_ability.cannot?(:create, @user_subscription)
   end
 
+  test 'user cannot edit their subscription' do
+    assert @user_ability.cannot?(:edit, @user_subscription)
+  end
+
   test 'user cannot delete their subscription' do
     assert @user_ability.cannot?(:destroy, @user_subscription)
+  end
+
+  test 'user can read their free_access' do
+    assert @user_ability.can?(:read, @user_free_access)
+    assert @user_ability.cannot?(:read, @admin_free_access)
+  end
+
+  test 'user cannot create a new free_access to themselves' do
+    assert @user_ability.cannot?(:create, @user_free_access)
+  end
+
+  test 'user cannot edit their free_access' do
+    assert @user_ability.cannot?(:edit, @user_free_access)
+  end
+
+  test 'user cannot delete their free_access' do
+    assert @user_ability.cannot?(:destroy, @user_free_access)
   end
 
   test 'admin can do everything' do
