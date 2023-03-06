@@ -297,4 +297,45 @@ class UserTest < ActiveSupport::TestCase
     @user.free_accesses.create(start_at: 4.months.from_now, end_at: 5.months.from_now, reason: 'Good girl')
     assert_equal @user.free_accesses.sort_by(&:created_at).reverse, @user.free_accesses
   end
+
+  test 'free_access should not impact starting date of subscription' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.free_accesses.delete_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    @user.free_accesses.create(start_at: Time.current, end_at: 5.months.from_now, reason: 'Good doggo')
+    @user.extend_subscription(duration: 3)
+    @user.save
+
+    assert_equal 5.months.from_now, @user.current_free_access.end_at
+    assert_equal 3.months.from_now, @user.subscription_expiration
+  end
+
+  test 'internet expiration should be the max between free_access and subscription' do
+    freeze_time
+    @user.subscriptions.delete_all
+    @user.free_accesses.delete_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    @user.free_accesses.create(start_at: Time.current, end_at: 5.months.from_now, reason: 'Good kitty')
+    @user.extend_subscription(duration: 3)
+    @user.save
+
+    assert_equal 5.months.from_now, @user.internet_expiration
+  end
+
+  test 'internet expiration should be nil when no free_access or subscription' do
+    @user.subscriptions.delete_all
+    @user.free_accesses.delete_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    assert_nil @user.internet_expiration
+  end
 end
