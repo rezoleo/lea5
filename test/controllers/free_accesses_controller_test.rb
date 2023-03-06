@@ -29,7 +29,13 @@ class FreeAccessesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should re-render new if free_access is invalid' do
-    post user_free_accesses_url(@owner), params: { free_access: { reason: 'Bad cop' } }
+    post user_free_accesses_url(@owner), params: {
+      free_access: {
+        start_at: 3.months.from_now,
+        end_at: Time.current,
+        reason: 'Bad cop'
+      }
+    }
     assert_template 'free_accesses/new'
   end
 

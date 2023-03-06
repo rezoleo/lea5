@@ -9,7 +9,7 @@
       </svg>
     <% end %>
   <% end %>
-  <% if can?(:delete, machine) %>
+  <% if can?(:destroy, machine) %>
     <%= button_to(machine, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this machine') do %>
       <svg>
         <use href="/assets/icons.svg#icon_delete"></use>

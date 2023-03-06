@@ -7,7 +7,7 @@
       </svg>
     <% end %>
   <% end %>
-  <% if can?(:delete, free_access) %>
+  <% if can?(:destroy, free_access) %>
     <%= button_to(free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this free access') do %>
       <svg>
         <use href="/assets/icons.svg#icon_delete"></use>

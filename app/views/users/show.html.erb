@@ -75,7 +75,7 @@
         <% if can?(:create, Subscription) %>
           <%= render "components/buttons/button_primary_create", text: "new subscription", path: new_user_subscription_path(@user), aria_label: "Add a new subscription" %>
         <% end %>
-        <% if can?(:delete, Subscription) && @user.current_subscription %>
+        <% if can?(:destroy, Subscription) && @user.current_subscription %>
           <%= render "components/buttons/button_secondary_delete", text: "cancel last subscription", path: user_last_subscription_path(@user), aria_label: "Cancel last subscription" %>
         <% end %>
       </div>
