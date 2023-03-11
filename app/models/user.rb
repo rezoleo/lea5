@@ -50,15 +50,17 @@ class User < ApplicationRecord
 
   def self.upsert_from_auth_hash(auth_hash)
     user = find_or_initialize_by("#{auth_hash[:provider]}_id": auth_hash[:uid])
-    user.update(
-      firstname: auth_hash[:info][:first_name],
-      lastname: auth_hash[:info][:last_name],
-      email: auth_hash[:info][:email],
-      room: auth_hash[:extra][:raw_info][:room]
-    )
+    user.update_from_sso(firstname: auth_hash[:info][:first_name],
+                         lastname: auth_hash[:info][:last_name],
+                         email: auth_hash[:info][:email],
+                         room: auth_hash[:extra][:raw_info][:room])
     user.groups = auth_hash[:extra][:raw_info][:groups]
     user.save!
     user
+  end
+
+  def update_from_sso(firstname:, lastname:, email:, room:)
+    update(firstname:, lastname:, email:, room:)
   end
 
   def admin?
