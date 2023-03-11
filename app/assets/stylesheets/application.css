@@ -47,4 +47,5 @@ svg {
 button {
     border: none;
     cursor: pointer;
+    font-family: inherit;
 }

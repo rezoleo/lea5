@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_many :machines, -> { order created_at: :asc }, dependent: :destroy, inverse_of: :user
-  has_many :subscriptions, -> { order created_at: :desc }, dependent: :destroy, inverse_of: :user
+  has_many :machines, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
+  has_many :free_accesses, dependent: :destroy
 
   before_save :downcase_email
   before_save :format_room
@@ -21,8 +22,17 @@ class User < ApplicationRecord
     subscriptions.where(cancelled_at: nil).order(end_at: :desc).first
   end
 
+  def current_free_access
+    free_accesses.order(end_at: :desc).first
+  end
+
   def subscription_expiration
     current_subscription&.end_at # Safe operator, return nil if object is nil
+  end
+
+  def internet_expiration
+    # .compact removes all nil from an array
+    [current_subscription&.end_at, current_free_access&.end_at].compact.max
   end
 
   # @param [Integer] duration subscription duration in months

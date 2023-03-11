@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_20_194001) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_05_151029) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "free_accesses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
+    t.string "reason", limit: 255, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_free_accesses_on_user_id"
+  end
 
   create_table "ips", force: :cascade do |t|
     t.inet "ip", null: false
@@ -40,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_194001) do
     t.bigint "user_id", null: false
     t.datetime "start_at", precision: nil, null: false
     t.datetime "end_at", precision: nil, null: false
-    t.virtual "duration", type: :integer, comment: "Duration in months", as: "((date_part('year'::text, age(end_at, start_at)) * (12)::double precision) + date_part('month'::text, age(end_at, start_at)))", stored: true
+    t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(end_at, start_at)) * (12)::numeric) + EXTRACT(month FROM age(end_at, start_at)))", stored: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
@@ -57,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_20_194001) do
     t.index ["room"], name: "index_users_on_room", unique: true
   end
 
+  add_foreign_key "free_accesses", "users"
   add_foreign_key "ips", "machines"
   add_foreign_key "machines", "users"
   add_foreign_key "subscriptions", "users"

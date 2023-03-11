@@ -105,14 +105,6 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'machines should be sorted by creation date' do
-    @user.save
-    machine1 = @user.machines.create(name: 'Machine-1', mac: '11:11:11:11:11:11')
-    @user.machines.create(name: 'Machine-2', mac: '22:22:22:22:22:22')
-    machine1.update(mac: '33:33:33:33:33:33')
-    assert_equal @user.machines.sort_by(&:created_at), @user.machines
-  end
-
   test 'should create new user from auth hash' do
     assert_difference 'User.count', 1 do
       created_user = User.upsert_from_auth_hash(@auth_hash)
@@ -149,14 +141,14 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'current_subscription is nil when user has no subscriptions' do
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     assert_nil @user.current_subscription
   end
 
   test 'current_subscription is nil when user has cancelled subscription' do
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     @user.subscriptions.create!(start_at: Time.current, end_at: 1.month.from_now, cancelled_at: Time.current)
@@ -164,7 +156,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'current_subscription is last non cancelled subscription' do
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     current_subscription = @user.subscriptions.create!(start_at: 2.months.ago, end_at: 1.month.ago)
@@ -173,7 +165,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'current_subscription is correct when user has valid, cancelled and expired subscriptions' do
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     # expired
@@ -185,7 +177,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'current_subscription is the last valid subscription' do
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     @user.subscriptions.create!(start_at: Time.current, end_at: 2.months.from_now)
@@ -195,7 +187,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'when extending a nil subscription expiration, it should be now + duration' do
     freeze_time
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     assert_nil @user.subscription_expiration
@@ -209,7 +201,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'when extending a valid subscription expiration, it should be extend by duration' do
     freeze_time
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     old_expiration = 1.month.from_now
@@ -226,7 +218,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'when extending an expired subscription expiration, it should be now + duration' do
     freeze_time
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     expired_expiration = 1.month.ago
@@ -244,7 +236,7 @@ class UserTest < ActiveSupport::TestCase
   test 'when cancelling user with zero subscriptions, do nothing' do
     freeze_time
 
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     @user.cancel_current_subscription!
@@ -253,7 +245,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'when cancelling an expired subscription, it should cancel it' do
     freeze_time
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     expired_subscription = @user.subscriptions.create(start_at: 2.months.ago, end_at: 1.month.ago)
@@ -265,7 +257,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'when cancelling a valid subscription, it should be reduced by duration' do
     freeze_time
-    @user.subscriptions.delete_all
+    @user.subscriptions.destroy_all
     @user.save
 
     previous_valid_subscription = @user.subscriptions.create(start_at: 2.months.ago, end_at: 1.month.from_now)
@@ -286,9 +278,44 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'subscriptions should be sorted by creation date descending' do
-    @user.subscriptions.create(start_at: 1.month.from_now, end_at: 3.months.from_now)
-    @user.subscriptions.create(start_at: 4.months.from_now, end_at: 5.months.from_now)
-    assert_equal @user.subscriptions.sort_by(&:created_at).reverse, @user.subscriptions
+  test 'free_access should not impact starting date of subscription' do
+    freeze_time
+    @user.subscriptions.destroy_all
+    @user.free_accesses.destroy_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    @user.free_accesses.create(start_at: Time.current, end_at: 5.months.from_now, reason: 'Good doggo')
+    @user.extend_subscription(duration: 3)
+    @user.save
+
+    assert_equal 5.months.from_now, @user.current_free_access.end_at
+    assert_equal 3.months.from_now, @user.subscription_expiration
+  end
+
+  test 'internet expiration should be the max between free_access and subscription' do
+    freeze_time
+    @user.subscriptions.destroy_all
+    @user.free_accesses.destroy_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    @user.free_accesses.create(start_at: Time.current, end_at: 5.months.from_now, reason: 'Good kitty')
+    @user.extend_subscription(duration: 3)
+    @user.save
+
+    assert_equal 5.months.from_now, @user.internet_expiration
+  end
+
+  test 'internet expiration should be nil when no free_access or subscription' do
+    @user.subscriptions.destroy_all
+    @user.free_accesses.destroy_all
+    @user.reload
+    assert_nil @user.current_subscription
+    assert_nil @user.current_free_access
+
+    assert_nil @user.internet_expiration
   end
 end

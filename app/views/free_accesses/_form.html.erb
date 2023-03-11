@@ -1,0 +1,13 @@
+<% min_date = Time.current.strftime("%F") %>
+<%= form_with(model: [@owner, @free_access]) do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <%= f.label :start_at %>
+  <%= f.date_field :start_at, required: true, value: @free_access.start_at.strftime("%F"), min: min_date %>
+  <%= f.label :end_at %>
+  <%= f.date_field :end_at, required: true, min: min_date %>
+  <%= f.label :reason %>
+  <%= f.text_field :reason, required: true, size: 30, maxlength: 255, placeholder: 'Leaves in 3 days' %>
+
+  <%= f.submit yield(:button_text) %>
+
+<% end %>

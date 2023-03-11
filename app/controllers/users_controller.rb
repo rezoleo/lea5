@@ -8,8 +8,11 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.includes(:subscriptions, { machines: :ip }).find(params[:id])
+    @user = User.find(params[:id])
     authorize! :show, @user
+    @machines = @user.machines.includes(:ip).order(created_at: :asc)
+    @subscriptions = @user.subscriptions.order(created_at: :desc)
+    @free_accesses = @user.free_accesses.order(created_at: :desc)
   end
 
   def new
@@ -30,7 +33,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user }
         format.json { render 'show', status: :created, location: @user }
       else
-        format.html { render 'new' }
+        format.html { render 'new', status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -44,7 +47,7 @@ class UsersController < ApplicationController
         format.html { redirect_to @user }
         format.json { render 'show', status: :ok, location: @user }
       else
-        format.html { render 'edit' }
+        format.html { render 'edit', status: :unprocessable_entity }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

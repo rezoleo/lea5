@@ -3,6 +3,7 @@
 class Subscription < ApplicationRecord
   belongs_to :user
 
+  validates :start_at, presence: true
   validates :end_at, comparison: { greater_than: :start_at }
   validate :cannot_change_after_cancelled, on: :update
 
