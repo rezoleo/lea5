@@ -35,7 +35,7 @@
           <span>No Internet</span>
         <% end %>
         <span><%= @user.room %></span>
-        <span><%= pluralize(@user.machines.size, "machine") %></span>
+        <span><%= pluralize(@machines.size, "machine") %></span>
       </div>
     </div>
 
@@ -57,7 +57,7 @@
     <div class="card card-machines card-content">
 
       <div class="card-content-machines">
-        <%= render(@user.machines) || "No machines" %>
+        <%= render(@machines) || "No machines" %>
       </div>
 
     </div>
@@ -85,7 +85,7 @@
     <div class="card card-subscriptions card-content">
 
       <div class="card-content-subscriptions">
-        <%= render(@user.subscriptions) || "No subscriptions" %>
+        <%= render(@subscriptions) || "No subscriptions" %>
       </div>
 
     </div>
@@ -110,7 +110,7 @@
     <div class="card card-free-accesses card-content">
 
       <div class="card-content-free-accesses">
-        <%= render(@user.free_accesses) || "No free accesses" %>
+        <%= render(@free_accesses) || "No free accesses" %>
       </div>
 
     </div>

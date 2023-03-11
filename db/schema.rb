@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_05_151029) do
     t.bigint "user_id", null: false
     t.datetime "start_at", precision: nil, null: false
     t.datetime "end_at", precision: nil, null: false
-    t.virtual "duration", type: :integer, comment: "Duration in months", as: "((date_part('year'::text, age(end_at, start_at)) * (12)::double precision) + date_part('month'::text, age(end_at, start_at)))", stored: true
+    t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(end_at, start_at)) * (12)::numeric) + EXTRACT(month FROM age(end_at, start_at)))", stored: true
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 

@@ -46,7 +46,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should do nothing when no subscriptions' do
-    @owner.subscriptions.delete_all
+    @owner.subscriptions.destroy_all
     @owner.reload
 
     assert_no_difference 'Subscription.count' do
