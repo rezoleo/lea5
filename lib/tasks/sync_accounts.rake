@@ -3,16 +3,18 @@
 require 'net/http'
 require 'json'
 
-desc 'sync accounts from SSO'
-task sync_accounts: [:environment] do
-  sso_users = retrieve_users_from_sso
+namespace :lea5 do
+  desc 'sync accounts from SSO'
+  task sync_accounts: [:environment] do
+    sso_users = retrieve_users_from_sso
 
-  User.all.each do |user|
-    user_from_sso = sso_users[user.keycloak_id]
-    if user_from_sso
-      update_user(user, user_from_sso)
-    else
-      destroy_user(user)
+    User.all.each do |user|
+      user_from_sso = sso_users[user.keycloak_id]
+      if user_from_sso
+        update_user(user, user_from_sso)
+      else
+        destroy_user(user)
+      end
     end
   end
 end

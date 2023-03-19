@@ -18,6 +18,8 @@ require 'rails/test_help'
 require 'minitest/reporters'
 Minitest::Reporters.use! unless ENV['RM_INFO']
 
+require 'webmock/minitest'
+
 module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
