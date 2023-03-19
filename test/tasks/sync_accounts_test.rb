@@ -10,6 +10,8 @@ class SyncAccountsTest < ActiveSupport::TestCase
   def setup
     Rake.application.rake_require 'tasks/sync_accounts'
     Rake::Task.define_task(:environment)
+    Rails.application.credentials.sso_id = '123456'
+    Rails.application.credentials.sso_secret = 'super-secret'
   end
 
   test 'sync_accounts rake task' do
@@ -39,8 +41,8 @@ class KeycloakStub
     WebMock.stub_request(:post, 'https://auth.rezoleo.fr/realms/rezoleo/protocol/openid-connect/token')
            .with(
              body: WebMock.hash_including({
-                                            client_id: 'nodejs-test',
-                                            client_secret: /^.+$/,
+                                            client_id: '123456',
+                                            client_secret: 'super-secret',
                                             grant_type: 'client_credentials'
                                           })
            )
