@@ -54,6 +54,8 @@ def destroy_user(user)
   if user.destroy
     puts "Destroyed #{user.email}"
   else
+    # :nocov:
     puts "Error destroying user #{user.email}"
+    # :nocov:
   end
 end
