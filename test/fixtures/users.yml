@@ -13,3 +13,10 @@ pepper:
   email: "pepper@potts.com"
   room: "A201"
   keycloak_id: "12345678-1234-1234-1234-123456789def"
+
+spiderman:
+  firstname: "Peter"
+  lastname: "Parker"
+  email: "peterp@univ.edu"
+  room: "A202"
+  keycloak_id: "12345678-1234-1234-1234-123456789ghi"

@@ -28,14 +28,22 @@ class SyncAccountsTest < ActiveSupport::TestCase
 end
 
 class KeycloakStub
-  MOCK_KEYCLOAK_USERS = [{
+  MOCK_KEYCLOAK_USER_OK = {
     id: '12345678-1234-1234-1234-123456789abc',
     username: 'user1',
     firstName: 'Tony',
     lastName: 'Stark',
     email: 'tony@avengers.com',
     attributes: { locale: ['en'], room: ['A113'] }
-  }].freeze
+  }.freeze
+  MOCK_KEYCLOAK_USER_BAD_ROOM = {
+    id: '12345678-1234-1234-1234-123456789ghi',
+    username: 'user2',
+    firstName: 'Peter',
+    lastName: 'Parker',
+    email: 'peterp@univ.edu',
+    attributes: { room: ['BAD-ROOM'] }
+  }.freeze
 
   def self.stub_access_token
     WebMock.stub_request(:post, 'https://auth.rezoleo.fr/realms/rezoleo/protocol/openid-connect/token')
@@ -55,7 +63,7 @@ class KeycloakStub
     WebMock.stub_request(:get, 'https://auth.rezoleo.fr/admin/realms/rezoleo/users?max=9999')
            .with(headers: { Authorization: 'Bearer my_access_token' })
            .to_return(status: 200,
-                      body: JSON.dump(MOCK_KEYCLOAK_USERS),
+                      body: JSON.dump([MOCK_KEYCLOAK_USER_OK, MOCK_KEYCLOAK_USER_BAD_ROOM]),
                       headers: {})
   end
 end
