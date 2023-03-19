@@ -1,0 +1,9 @@
+# See https://leethax.org/2017/11/17/systemd-timers.html
+# and https://wiki.archlinux.org/title/Systemd/Timers
+[Timer]
+# Run the service every 3 hours
+OnActiveSec=3h
+OnUnitActiveSec=3h
+
+[Install]
+WantedBy=timer.target
