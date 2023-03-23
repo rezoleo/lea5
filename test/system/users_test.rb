@@ -35,7 +35,7 @@ class UsersTest < ApplicationSystemTestCase
 
     click_on 'Edit your profile'
 
-    assert_selector 'h1', text: 'Users#Edit'
+    assert_selector 'h1', text: "Edit #{@user.firstname} #{@user.lastname}"
 
     fill_in 'Firstname', with: new_firstname
     fill_in 'Lastname', with: new_lastname
@@ -54,7 +54,7 @@ class UsersTest < ApplicationSystemTestCase
 
     click_on 'Add a new machine'
 
-    assert_selector 'h1', text: 'Machines#new'
+    assert_selector 'h1', text: 'Add a new machine'
 
     fill_in 'Name', with: 'New machine'
     fill_in 'Mac', with: mac
@@ -72,7 +72,7 @@ class UsersTest < ApplicationSystemTestCase
 
     click_on 'Edit this machine'
 
-    assert_selector 'h1', text: 'Machines#Edit'
+    assert_selector 'h1', text: 'Edit the machine'
 
     fill_in 'Name', with: new_name
     click_on 'Edit'
@@ -103,12 +103,12 @@ class UsersTest < ApplicationSystemTestCase
     assert_text @user.email
   end
 
-  test 'signing out should redirect to users page' do
+  test 'signing out should redirect to root page' do
     sign_out
     sign_in_as @user
 
     sign_out
 
-    assert_selector 'h1', text: 'Users#index'
+    assert_selector 'h1', count: 0
   end
 end
