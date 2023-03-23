@@ -9,7 +9,6 @@
     <%= f.number_field :duration, required: true, min: 1, step: 1 %>
   </div>
   <div>
-    <%= link_to 'Cancel', :back %>
     <%= f.submit yield(:button_text) %>
   </div>
 <% end %>

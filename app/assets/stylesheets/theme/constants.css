@@ -33,4 +33,12 @@
     --gray-700: rgb(55 65 81);
     --gray-800: rgb(31 41 55);
     --gray-900: rgb(17 24 39);
+    --green-50: #e8f5e9;
+    --green-300: #81c784;
+    --green-700: #388e3c;
+    --green-900: #1b5e20;
+    --red-50: #ffebee;
+    --red-300: #e57373;
+    --red-700: #d32f2f;
+    --red-900: #b71c1c;
 }

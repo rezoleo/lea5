@@ -11,12 +11,6 @@
     margin-bottom: var(--padding-md);
 }
 
-.form div:last-child {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
 .form label {
     font-weight: var(--font-medium);
 }
@@ -33,16 +27,6 @@
     border-color: var(--primary-800);
 }
 
-.form div:last-child a {
-    text-decoration: none;
-    color: var(--black);
-    text-transform: uppercase;
-    letter-spacing: var(--spacing-lg);
-    font-size: var(--text-sm);
-    font-weight: var(--font-bold);
-    padding: var(--padding-xs) 0;
-}
-
 .form div:last-child input[type="submit"] {
     background-color: var(--primary-600);
     color: var(--primary-50);
@@ -52,6 +36,6 @@
     text-transform: uppercase;
     border: none;
     font-weight: var(--font-bold);
-    padding: var(--padding-xs) var(--padding-md);
+    padding: var(--padding-sm) 0;
     cursor: pointer;
 }

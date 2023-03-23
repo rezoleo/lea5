@@ -14,7 +14,6 @@
     <%= f.text_field :reason, required: true, size: 30, maxlength: 255, placeholder: 'Leaves in 3 days' %>
   </div>
   <div>
-    <%= link_to 'Cancel', :back %>
     <%= f.submit yield(:button_text) %>
   </div>
 

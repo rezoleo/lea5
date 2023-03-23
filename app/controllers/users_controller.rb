@@ -30,7 +30,10 @@ class UsersController < ApplicationController
     authorize! :create, @user
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user }
+        format.html do
+          flash[:success] = 'User created!'
+          redirect_to @user
+        end
         format.json { render 'show', status: :created, location: @user }
       else
         format.html { render 'new', status: :unprocessable_entity }
@@ -44,7 +47,10 @@ class UsersController < ApplicationController
     authorize! :update, @user
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user }
+        format.html do
+          flash[:success] = 'User updated!'
+          redirect_to @user
+        end
         format.json { render 'show', status: :ok, location: @user }
       else
         format.html { render 'edit', status: :unprocessable_entity }
@@ -58,7 +64,10 @@ class UsersController < ApplicationController
     authorize! :destroy, @user
     @user.destroy
     respond_to do |format|
-      format.html { redirect_to users_url }
+      format.html do
+        flash[:success] = 'User deleted!'
+        redirect_to users_url
+      end
       format.json { head :no_content }
     end
   end

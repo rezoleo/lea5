@@ -1,11 +1,11 @@
 <main>
+
   <h1 class="title">
     <% if current_user == @user %>
       My Profile
     <% else %>
       Profile of <%= "#{@user.firstname} #{@user.lastname}" %>
     <% end %>
-
   </h1>
 
   <div class="container">

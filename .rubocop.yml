@@ -27,10 +27,18 @@ Minitest/MultipleAssertions:
   Max: 10
 
 Metrics/MethodLength:
-  Max: 12
+  Max: 15
 
 Metrics/AbcSize:
   Max: 20
 
 Rails/HelperInstanceVariable:
+  Enabled: false
+
+# TODO: enable these rules when starting doing i18n
+
+Rails/I18nLocaleTexts:
+  Enabled: false
+
+I18n/RailsI18n/DecorateString:
   Enabled: false
