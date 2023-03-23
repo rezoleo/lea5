@@ -1,8 +1,15 @@
-<%= form_with(model: [@owner, @machine]) do |f| %>
+<%= form_with(model: [@owner, @machine], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <%= f.label :name %>
-  <%= f.text_field :name, required: true %>
-  <%= f.label :mac %>
-  <%= f.text_field :mac, required: true %>
-  <%= f.submit yield(:button_text) %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
+  </div>
+  <div>
+    <%= f.label :mac %>
+    <%= f.text_field :mac, required: true %>
+  </div>
+  <div>
+    <%= link_to 'Cancel', :back %>
+    <%= f.submit yield(:button_text) %>
+  </div>
 <% end %>

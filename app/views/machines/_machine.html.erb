@@ -4,12 +4,12 @@
   <span><%= machine.ip.ip %></span>
   <% if can?(:edit, machine) %>
     <%= button_to(edit_machine_path(machine), method: :get, 'aria-label': 'Edit this machine') do %>
-      <%= svg_tag 'icon_edit' %>
+      <%= svg_icon_tag 'icon_edit' %>
     <% end %>
   <% end %>
   <% if can?(:destroy, machine) %>
     <%= button_to(machine, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this machine') do %>
-      <%= svg_tag 'icon_delete' %>
+      <%= svg_icon_tag 'icon_delete' %>
     <% end %>
   <% end %>
 </div>

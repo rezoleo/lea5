@@ -1,8 +1,15 @@
 <% provide :button_text, "Create" %>
 
-<%= form_with(model: [@owner, @subscription]) do |f| %>
+<h1>Add a new subscription</h1>
+
+<%= form_with(model: [@owner, @subscription], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <%= f.label :duration %>
-  <%= f.number_field :duration, required: true, min: 1, step: 1 %>
-  <%= f.submit yield(:button_text) %>
+  <div>
+    <%= f.label :duration %>
+    <%= f.number_field :duration, required: true, min: 1, step: 1 %>
+  </div>
+  <div>
+    <%= link_to 'Cancel', :back %>
+    <%= f.submit yield(:button_text) %>
+  </div>
 <% end %>

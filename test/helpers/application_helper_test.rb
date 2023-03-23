@@ -14,7 +14,7 @@ class ApplicationHelperTest < ActionView::TestCase
                      time_with_relative_tag(3.months.from_now)
   end
 
-  test 'svg_tag' do
-    assert_dom_equal '<svg><use href="/icons.svg#icon_plus" /></svg>', svg_tag('icon_plus')
+  test 'svg_icon_tag' do
+    assert_dom_equal '<svg><use href="/icons.svg#icon_plus" /></svg>', svg_icon_tag('icon_plus')
   end
 end
