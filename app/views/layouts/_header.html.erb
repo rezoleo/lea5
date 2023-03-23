@@ -1,7 +1,16 @@
 <header>
-  <div>
-    <%= link_to "Lea5", root_path, class: "logo" %>
-  </div>
+  <nav>
+    <ul>
+      <li>
+        <%= link_to "Lea5", root_path, class: "logo" %>
+      </li>
+      <% if logged_in? %>
+        <li>
+          <%= link_to "Users", users_path %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
 
   <div>
     <% if not logged_in? %>

@@ -7,13 +7,26 @@ header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: var(--padding-md);
 }
 
-.logo {
+nav ul {
+    list-style: none;
+}
+
+nav li {
+    display: inline-block;
+}
+
+nav a {
     text-decoration: none;
     color: var(--primary-200);
     font-size: var(--text-md);
+}
+
+.logo {
     font-weight: var(--font-bold);
+    margin-right: calc(2 * var(--padding-md));
 }
 
 .login_button {
@@ -36,7 +49,7 @@ header {
     font-size: var(--text-sm);
     text-transform: uppercase;
     border: none;
-    box-shadow:inset 0px 0px 0px 2px var(--primary-200);
+    box-shadow: inset 0px 0px 0px 2px var(--primary-200);
     font-weight: var(--font-bold);
     padding: var(--padding-xs) var(--padding-md);
 }
