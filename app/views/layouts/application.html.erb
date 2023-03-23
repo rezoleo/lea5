@@ -11,15 +11,7 @@
 </head>
 
 <body>
-<% if not logged_in? %>
-  <%= form_tag(AUTH_PATH, method: :post, data: { turbo: false }) do %>
-    <button type='submit' aria-label="Login">Login</button>
-  <% end %>
-<% else %>
-  <%= form_tag(logout_path, method: :delete, data: { turbo: false }) do %>
-    <button type='submit' aria-label="Logout">Logout</button>
-  <% end %>
-<% end %>
+<%= render 'layouts/header' %>
 <%= yield %>
 </body>
 </html>

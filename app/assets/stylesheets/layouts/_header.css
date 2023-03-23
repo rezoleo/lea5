@@ -1,0 +1,36 @@
+header {
+    background-color: var(--primary-700);
+    padding: var(--padding-md);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.log {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login_button {
+    background-color: var(--primary-600);
+    color: var(--primary-200);
+    border-radius: var(--rounded-lg);
+    letter-spacing: var(--spacing-lg);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    border: none;
+    font-weight: var(--font-bold);
+    padding: var(--padding-xs) var(--padding-md);
+}
+
+.logout_button {
+    background-color: transparent;
+    color: var(--primary-200);
+    border-radius: var(--rounded-lg);
+    letter-spacing: var(--spacing-lg);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    border: 2px solid var(--primary-200);
+    font-weight: var(--font-bold);
+    padding: var(--padding-xs) var(--padding-md);
+    align-items: center;
+}
