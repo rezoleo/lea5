@@ -1,0 +1,16 @@
+.user {
+    display: grid;
+    grid-template-columns: max(20ch) 1fr 1fr auto;
+    column-gap: var(--padding-md);
+    align-items: center;
+    text-decoration: none;
+    color: var(--black);
+}
+
+.user svg {
+    fill: var(--primary-600);
+    margin-left: var(--padding-md);
+    padding: var(--padding-xs);
+    background-color: var(--primary-100);
+    border-radius: 100%;
+}
