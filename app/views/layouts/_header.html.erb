@@ -1,25 +1,27 @@
 <header>
   <div>
-    <div class="log">
-      <% if not logged_in? %>
-        <%= button_to(
-              "Login",
-              AUTH_PATH,
-              method: :post,
-              class: "login_button",
-              'aria-label': "Log in",
-              data: { turbo: false }
-            ) %>
-      <% else %>
-        <%= button_to(
-              "Logout",
-              logout_path,
-              method: :delete,
-              class: "logout_button",
-              'aria-label': "Log out",
-              data: { turbo: false }
-            ) %>
-      <% end %>
-    </div>
+    <%= link_to "Lea5", root_path, class: "logo" %>
+  </div>
+
+  <div>
+    <% if not logged_in? %>
+      <%= button_to(
+            "Login",
+            AUTH_PATH,
+            method: :post,
+            class: "login_button",
+            'aria-label': "Log in",
+            data: { turbo: false }
+          ) %>
+    <% else %>
+      <%= button_to(
+            "Logout",
+            logout_path,
+            method: :delete,
+            class: "logout_button",
+            'aria-label': "Log out",
+            data: { turbo: false }
+          ) %>
+    <% end %>
   </div>
 </header>

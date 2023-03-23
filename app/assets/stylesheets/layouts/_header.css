@@ -3,11 +3,17 @@ header {
     padding: var(--padding-md);
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.log {
-    display: flex;
-    justify-content: flex-end;
+.logo {
+    text-decoration: none;
+    color: var(--primary-200);
+    font-size: var(--text-md);
+    font-weight: var(--font-bold);
 }
 
 .login_button {
@@ -29,8 +35,8 @@ header {
     letter-spacing: var(--spacing-lg);
     font-size: var(--text-sm);
     text-transform: uppercase;
-    border: 2px solid var(--primary-200);
+    border: none;
+    box-shadow:inset 0px 0px 0px 2px var(--primary-200);
     font-weight: var(--font-bold);
     padding: var(--padding-xs) var(--padding-md);
-    align-items: center;
 }
