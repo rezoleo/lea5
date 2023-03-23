@@ -7,8 +7,6 @@
 
 .container {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(2, auto);
 }
 
 .divider {
@@ -36,7 +34,7 @@
 }
 
 .card-content {
-    grid-column: 2 / 4;
+    grid-column: 2 / 3;
     display: flex;
     flex-direction: row;
     padding-left: 0;
