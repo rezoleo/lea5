@@ -6,11 +6,3 @@
     text-decoration: none;
     color: var(--black);
 }
-
-.user svg {
-    fill: var(--primary-600);
-    margin-left: var(--padding-md);
-    padding: var(--padding-xs);
-    background-color: var(--primary-100);
-    border-radius: 100%;
-}
