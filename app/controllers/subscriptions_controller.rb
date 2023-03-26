@@ -12,6 +12,7 @@ class SubscriptionsController < ApplicationController
     @subscription = @owner.extend_subscription(duration: Integer(subscription_params[:duration]))
     authorize! :create, @subscription
     if @subscription.save
+      flash[:success] = 'New subscription added!'
       redirect_to @owner
     else
       render 'new', status: :unprocessable_entity
@@ -21,6 +22,7 @@ class SubscriptionsController < ApplicationController
   def destroy
     authorize! :destroy, @owner.current_subscription
     owner.cancel_current_subscription!
+    flash[:success] = 'Last subscription cancelled!'
     redirect_to owner
   end
 

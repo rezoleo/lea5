@@ -1,0 +1,8 @@
+.user {
+    display: grid;
+    grid-template-columns: max(20ch) 1fr 1fr auto;
+    column-gap: var(--padding-md);
+    align-items: center;
+    text-decoration: none;
+    color: var(--black);
+}

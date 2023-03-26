@@ -1,0 +1,14 @@
+.users {
+    list-style: none;
+    font-size: var(--text-md);
+    color: var(--gray-800);
+    font-weight: var(--font-medium);
+    display: grid;
+    row-gap: var(--padding-md);
+    margin-top: var(--padding-md);
+}
+
+.users > * + * {
+    border-top: solid var(--primary-200) 2px;
+    padding-top: var(--padding-md);
+}

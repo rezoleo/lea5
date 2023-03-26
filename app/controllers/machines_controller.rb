@@ -24,7 +24,10 @@ class MachinesController < ApplicationController
     authorize! :create, @machine
     respond_to do |format|
       if @machine.save
-        format.html { redirect_to @owner }
+        format.html do
+          flash[:success] = 'Machine added!'
+          redirect_to @owner
+        end
         format.json { render 'show', status: :created, location: @machine }
       else
         format.html { render 'new', status: :unprocessable_entity }
@@ -38,7 +41,10 @@ class MachinesController < ApplicationController
     owner = @machine.user
     respond_to do |format|
       if @machine.update(machine_params)
-        format.html { redirect_to owner }
+        format.html do
+          flash[:success] = 'Machine updated!'
+          redirect_to owner
+        end
         format.json { render 'show', status: :ok, location: @machine }
       else
         format.html { render 'edit', status: :unprocessable_entity }
@@ -52,7 +58,10 @@ class MachinesController < ApplicationController
     owner = @machine.user
     @machine.destroy
     respond_to do |format|
-      format.html { redirect_to owner }
+      format.html do
+        flash[:success] = 'Machine deleted!'
+        redirect_to owner
+      end
       format.json { head :no_content }
     end
   end

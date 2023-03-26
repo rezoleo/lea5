@@ -7,8 +7,6 @@
 
 .container {
     display: grid;
-    grid-template-columns: repeat(3,1fr);
-    grid-template-rows: repeat(2, auto);
 }
 
 .divider {
@@ -36,7 +34,7 @@
 }
 
 .card-content {
-    grid-column: 2 / 4;
+    grid-column: 2 / 3;
     display: flex;
     flex-direction: row;
     padding-left: 0;
@@ -74,10 +72,10 @@
     grid-template-columns: 1fr 1fr;
     grid-template-rows: repeat(3, 1fr);
     row-gap: var(--padding-xs);
+    column-gap: var(--padding-md);
     font-size: var(--text-md);
     color: var(--gray-800);
     font-weight: var(--font-medium);
-    grid-column: 2 / 3;
 }
 
 .card-machines {

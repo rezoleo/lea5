@@ -11,15 +11,19 @@
 </head>
 
 <body>
-<% if not logged_in? %>
-  <%= form_tag(AUTH_PATH, method: :post, data: { turbo: false }) do %>
-    <button type='submit' aria-label="Login">Login</button>
-  <% end %>
-<% else %>
-  <%= form_tag(logout_path, method: :delete, data: { turbo: false }) do %>
-    <button type='submit' aria-label="Logout">Logout</button>
+<%= render 'layouts/header' %>
+
+<% flash.each do |message_type, message| %>
+  <%= tag.div class: "alert alert-#{message_type}" do %>
+    <% if message_type == 'success' %>
+      <%= svg_icon_tag 'check' %>
+    <% else %>
+      <%= svg_icon_tag 'cross' %>
+    <% end %>
+    <%= message %>
   <% end %>
 <% end %>
+
 <%= yield %>
 </body>
 </html>

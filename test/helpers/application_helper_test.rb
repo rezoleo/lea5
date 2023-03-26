@@ -13,4 +13,8 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_dom_equal %(<time datetime="2023-05-12T17:45:52Z" title="in 3 months">May 12, 2023</time>),
                      time_with_relative_tag(3.months.from_now)
   end
+
+  test 'svg_icon_tag' do
+    assert_dom_equal '<svg><use href="/icons.svg#icon_plus" /></svg>', svg_icon_tag('icon_plus')
+  end
 end

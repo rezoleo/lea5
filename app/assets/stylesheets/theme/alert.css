@@ -1,0 +1,32 @@
+.alert {
+    border-radius: var(--rounded-lg);
+    border: 2px solid;
+    padding: var(--padding-sm) var(--padding-md);
+    margin: var(--padding-md) 0;
+    display: flex;
+    align-items: center;
+}
+
+.alert svg {
+    padding-right: var(--padding-sm);
+}
+
+.alert-success {
+    border-color: var(--green-300);
+    background-color: var(--green-50);
+    color: var(--green-900);
+}
+
+.alert-success svg {
+    fill: var(--green-700);
+}
+
+.alert-error {
+    border-color: var(--red-300);
+    background-color: var(--red-50);
+    color: var(--red-900);
+}
+
+.alert-error svg {
+    fill: var(--red-700);
+}

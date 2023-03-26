@@ -40,9 +40,9 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal User.find_by(email: 'john@doe.com').id, current_user.id
   end
 
-  test 'logout should redirect to users' do
+  test 'logout should redirect to root' do
     delete logout_path
 
-    assert_redirected_to users_path
+    assert_redirected_to root_path
   end
 end

@@ -1,7 +1,11 @@
 <li>
-  <%= user.email %>,
-  <%= user.room %>
-  <%= link_to "show", user %>
-  <%= link_to "edit", edit_user_path(user) %>
-  <%= button_to "delete", user, method: :delete,  data: {turbo_confirm: "Are you sure ?"} %>
+  <%= link_to user, class: "user" do %>
+  <span><%= user.firstname %> <%= user.lastname %></span>
+  <span><%= user.room %></span>
+  <% if user.internet_expiration.nil? || user.internet_expiration < Time.current %>
+    <span style="color:var(--red-900)">No Internet</span>
+  <% else %>
+    <span style="color:var(--green-900)">Internet</span>
+  <% end %>
+  <% end %>
 </li>

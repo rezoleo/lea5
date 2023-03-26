@@ -1,0 +1,15 @@
+.error_messages {
+    list-style: none;
+}
+
+.form .field_with_errors {
+    margin: 0;
+}
+
+.field_with_errors label {
+    color: var(--red-900);
+}
+
+.field_with_errors input {
+    border-color: var(--red-300);
+}
