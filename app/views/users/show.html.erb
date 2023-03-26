@@ -48,7 +48,7 @@
         </div>
 
         <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
-        <% if can?(:create, Machine.new) %>
+        <% if can?(:create, @user.machines.new) %>
           <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
         <% end %>
 
