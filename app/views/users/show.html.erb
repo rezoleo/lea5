@@ -13,7 +13,7 @@
       <div class="card card-details">
 
         <div class="card-title">
-         <%= svg_icon_tag 'profile' %>
+          <%= svg_icon_tag 'profile' %>
           <h2>Personal Data</h2>
         </div>
 
@@ -47,7 +47,11 @@
           <h2>Machines</h2>
         </div>
 
-        <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
+        <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
+        <% if can?(:create, Machine.new) %>
+          <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
+        <% end %>
+
       </div>
 
       <div class="divider"></div>
