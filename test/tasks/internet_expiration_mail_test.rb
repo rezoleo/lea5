@@ -12,6 +12,12 @@ class InternetExpirationMailTest < ActionDispatch::IntegrationTest
     @user = users(:ironman)
   end
 
+  def teardown
+    # Once invoked, a rake task must be re-enabled to be executed a second time
+    # https://medium.com/@shaneilske/invoke-a-rake-task-multiple-times-1bcb01dee9d9
+    Rake::Task['lea5:internet_expiration_mail'].reenable
+  end
+
   test 'should send an email when subscription expires in 7 days' do
     @user.subscriptions.destroy_all
     @user.subscriptions.new(start_at: Time.current, end_at: 7.days.from_now)
