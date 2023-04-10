@@ -3,6 +3,7 @@
 require 'json'
 require 'rake'
 require 'webmock'
+require 'test_helper'
 
 class SyncAccountsTest < ActiveSupport::TestCase
   # https://blog.10pines.com/2019/01/14/testing-rake-tasks/
