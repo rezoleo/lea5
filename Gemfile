@@ -69,7 +69,7 @@ group :development do
 
   gem 'rubocop', '~> 1.37'
   gem 'rubocop-i18n', '~> 3.0'
-  gem 'rubocop-minitest', '~> 0.22.2'
+  gem 'rubocop-minitest', '~> 0.35.0'
   gem 'rubocop-performance', '~> 1.15'
   gem 'rubocop-rails', '~> 2.17'
   # Use console on exceptions pages [https://github.com/rails/web-console]
