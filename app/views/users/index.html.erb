@@ -1,5 +1,15 @@
 <h1>Users</h1>
 
+<br>
+<div class="form-container">
+  <%= form_with(url: users_path, method: :get) do %>
+    <%= text_field_tag :search, params[:search], placeholder: "Search by name or room" %>
+    <%= submit_tag "Search" %>
+  <% end %>
+
+</div>
+<br>
+
 <ul class="users">
   <%= render @users %>
 </ul>

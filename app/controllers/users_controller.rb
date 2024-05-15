@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 
+@show_filter = false
 class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
   def index
     @users = User.accessible_by(current_ability)
+
+    return if params[:search].blank?
+
+    @users = @users.where(
+      'firstname LIKE :search OR lastname LIKE :search OR room LIKE :search',
+      search: "%#{params[:search]}%"
+    )
   end
 
   def show

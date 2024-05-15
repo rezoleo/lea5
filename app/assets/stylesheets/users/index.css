@@ -12,3 +12,39 @@
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
 }
+
+/* Style du formulaire */
+input[type="submit"] {
+  padding: 8px 16px;
+  font-size: 16px;
+  background-color: var(--green-300);
+  color: var(--primary-200);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#filter-button {
+  background-color: var(--gray-400);
+}
+
+input[type="submit"]:hover {
+  background-color: var(--green-700);
+}
+
+#filter-button:hover {
+  background-color: var(--gray-700);
+}
+
+form {
+  display: flex;
+  justify-content: space-between;
+}
+
+input[type="text"],
+input[type="submit"] {
+  flex: 1;
+  margin-right: 10px;
+  border-radius: 10px;
+  text-align: center;
+}

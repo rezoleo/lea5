@@ -1,0 +1,9 @@
+Filter By
+<%= form_tag("#", method: :get) do %>
+  <label>
+    <%= check_box_tag "filter_by_internet" %>
+    Filter by Internet
+  </label>
+
+  <%= submit_tag "Internet", id: "internet_button", type: "button", disabled: true %>
+<% end %>
