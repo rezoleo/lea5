@@ -17,7 +17,7 @@ namespace :test do
     end
 
     desc 'Run system tests with Firefox (can be run headless and/or use Firefox Nightly)'
-    task :firefox, %i[headless nightly] => [:environment] do |_task, args|
+    task :firefox, [:headless, :nightly] => [:environment] do |_task, args|
       # Small (ab)use of args.to_a, normally used to retrieve a variable number of arguments
       # Since here we only care that the *strings* 'headless' or 'nightly' are passed, we convert
       # the args struct to an array of all argument values, then just check if a specific string is in it.

@@ -39,8 +39,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email must be of a valid format' do
-    valid_emails = %w[users@example.com USER@foo.COM A_US_ER@foo.bar.org
-                      first.last@foo.jp alice+bob@baz.cn]
+    valid_emails = ['users@example.com', 'USER@foo.COM', 'A_US_ER@foo.bar.org', 'first.last@foo.jp', 'alice+bob@baz.cn']
     invalid_emails = ['user@example,com', 'user_at_foo.org', 'user.name@example',
                       'foo@bar_baz.com', 'foo@bar+baz.com', 'foo@bar..com', '    ']
 
@@ -91,8 +90,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'room must be of a valid format' do
-    valid_rooms = %w[A205 B134a C001b F313 D111b E231a DF1 DF2 DF3 DF4]
-    invalid_rooms = %w[A2005 C404 D111c B1 E22 G207]
+    valid_rooms = ['A205', 'B134a', 'C001b', 'F313', 'D111b', 'E231a', 'DF1', 'DF2', 'DF3', 'DF4']
+    invalid_rooms = ['A2005', 'C404', 'D111c', 'B1', 'E22', 'G207']
 
     valid_rooms.each do |valid_room|
       @user.room = valid_room

@@ -39,9 +39,9 @@ class MachineTest < ActiveSupport::TestCase
   end
 
   test 'mac must be of a valid format' do
-    valid_macs = %w[AD:14:D4:87:4B:D7 ba:d4:8a:54:47:3f 23:Eb:1a:3A:BC:f7
-                    AD-14-D4-87-4B-D7 ba-d4-8a-54-47-3f AD14D4874BD7 bad48a54473f
-                    AD14.D487.4BD7 ad14.d487.4bd7 AD14.d487.4bD7]
+    valid_macs = ['AD:14:D4:87:4B:D7', 'ba:d4:8a:54:47:3f', '23:Eb:1a:3A:BC:f7', 'AD-14-D4-87-4B-D7',
+                  'ba-d4-8a-54-47-3f', 'AD14D4874BD7', 'bad48a54473f', 'AD14.D487.4BD7',
+                  'ad14.d487.4bd7', 'AD14.d487.4bD7']
 
     invalid_macs = ['AD:14', # must not be too short
                     'AD:14:D4:87:4B:', # trailing colon

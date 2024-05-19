@@ -16,7 +16,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   end
   provider :openid_connect, {
     name: :keycloak,
-    scope: %i[openid email profile room roles],
+    scope: [:openid, :email, :profile, :room, :roles],
     response_type: :code,
     issuer: 'https://auth.rezoleo.fr/realms/rezoleo',
     discovery: true,

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class SubscriptionsController < ApplicationController
-  before_action :owner, only: %i[create new destroy]
+  before_action :owner, only: [:create, :new, :destroy]
 
   def new
     @subscription = @owner.subscriptions.new
