@@ -1,0 +1,43 @@
+[Unit]
+Description=Lea5 - Main server
+Documentation=https://github.com/rezoleo/lea5
+After=network.target
+After=nginx.service
+Requires=nginx.service
+
+[Service]
+Type=notify
+WatchdogSec=10
+User=lea5
+Group=lea5
+WorkingDirectory=/opt/lea5
+ExecStart=/opt/lea5/bin/puma --config config/puma.rb --bind unix:///opt/lea5/tmp/sockets/puma-lea5.sock
+Restart=always
+Environment=PATH=/home/lea5/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=RAILS_ENV=production
+Environment=RAILS_LOG_TO_STDOUT=1
+Environment=RAILS_MASTER_KEY=<insert master key here>
+
+NoNewPrivileges=true
+#PrivateNetwork=true
+PrivateDevices=true
+PrivateMounts=true
+PrivateTmp=true
+PrivateUsers=true
+ProtectHome=tmpfs
+BindReadOnlyPaths=/home/lea5/.rbenv
+ProtectSystem=strict
+ReadWritePaths=/opt/lea5/log
+ReadWritePaths=/opt/lea5/tmp
+ReadWritePaths=/opt/lea5/storage
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+CapabilityBoundingSet=
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
+
+[Install]
+WantedBy=multi-user.target
