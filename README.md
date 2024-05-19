@@ -1,7 +1,7 @@
 # README
 
-[![codecov](https://codecov.io/gh/rezoleo/lea5/branch/master/graph/badge.svg)](https://codecov.io/gh/rezoleo/lea5/)
-[![Lint & test](https://github.com/rezoleo/lea5/workflows/Lint%20&%20test/badge.svg)](https://github.com/rezoleo/lea5/actions?query=workflow%3A%22Lint+%26+test%22)
+[![codecov](https://codecov.io/github/rezoleo/lea5/graph/badge.svg?token=3WJ4FUMWIF)](https://codecov.io/github/rezoleo/lea5)
+[![Lint & test](https://github.com/rezoleo/lea5/actions/workflows/test.yml/badge.svg)](https://github.com/rezoleo/lea5/actions/workflows/test.yml)
 
 ## Requirements
 
