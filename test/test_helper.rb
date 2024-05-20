@@ -21,8 +21,8 @@ Minitest::Reporters.use! unless ENV['RM_INFO']
 require 'webmock/minitest'
 # Allow system tests to get their webdriver release
 WebMock.disable_net_connect!(
-  allow_localhost: true,
-  allow: 'chromedriver.storage.googleapis.com'
+  allow_localhost: true
+  # allow: 'chromedriver.storage.googleapis.com'
 )
 
 module ActiveSupport
