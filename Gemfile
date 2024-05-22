@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '3.1.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.0.4'
+gem 'rails', '~> 7.0.8'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -81,7 +81,7 @@ end
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
-  gem 'capybara', '~> 3.38'
+  gem 'capybara', '~> 3.40'
   gem 'guard', '~> 2.18'
   gem 'guard-minitest', '~> 2.4'
   gem 'minitest', '~> 5.16'
@@ -90,6 +90,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.21.2'
   gem 'simplecov-cobertura', '~> 2.1'
-  gem 'webdrivers'
   gem 'webmock', '~> 3.18'
 end
