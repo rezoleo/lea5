@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class FreeAccessesController < ApplicationController
-  before_action :owner, only: %i[create new]
-  before_action :current_free_access, only: %i[edit update destroy]
+  before_action :owner, only: [:create, :new]
+  before_action :current_free_access, only: [:edit, :update, :destroy]
 
   def new
     @free_access = @owner.free_accesses.new(start_at: Time.current)

@@ -3,8 +3,8 @@
 class MachinesController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
-  before_action :owner, only: %i[create new]
-  before_action :current_machine, only: %i[show edit update destroy]
+  before_action :owner, only: [:create, :new]
+  before_action :current_machine, only: [:show, :edit, :update, :destroy]
 
   def show
     authorize! :show, @machine

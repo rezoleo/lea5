@@ -29,8 +29,9 @@ class IpTest < ActiveSupport::TestCase
   end
 
   test 'ip must be of a valid format' do
-    valid_ips = %w[172.30.110.68]
-    invalid_ips = %w[172..30.110.68 172.300.110.68 172.0004.110.68 172.30.68 172.30.110.68.17 172.30.110.68.]
+    valid_ips = ['172.30.110.68']
+    invalid_ips = ['172..30.110.68', '172.300.110.68', '172.0004.110.68', '172.30.68', '172.30.110.68.17',
+                   '172.30.110.68.']
 
     valid_ips.each do |valid_ip|
       @ip.ip = valid_ip

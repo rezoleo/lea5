@@ -42,3 +42,14 @@ Rails/I18nLocaleTexts:
 
 I18n/RailsI18n/DecorateString:
   Enabled: false
+
+# Allow string or symbol array without literal
+Style/WordArray:
+  EnforcedStyle: brackets
+  SupportedStyles:
+    - brackets
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+  SupportedStyles:
+    - brackets
