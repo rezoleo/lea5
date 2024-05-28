@@ -74,7 +74,7 @@ group :development do
   gem 'rubocop-performance', '~> 1.21'
   gem 'rubocop-rails', '~> 2.25'
   # Use console on exceptions pages [https://github.com/rails/web-console]
-  gem 'web-console'
+  gem 'web-console', '~> 4.2'
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
