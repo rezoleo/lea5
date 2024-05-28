@@ -131,6 +131,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'User.count', -1 do
       delete user_url(@user, format: :json)
     end
-    assert_response 204
+    assert_response :no_content
   end
 end

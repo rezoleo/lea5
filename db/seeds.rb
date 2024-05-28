@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './seeds/ips'
+require_relative 'seeds/ips'
 
 User.create([{ firstname: 'Paul', lastname: 'Marcel', room: 'A123', email: 'paul.marcel@gmail.com' },
              { firstname: 'Gérard', lastname: 'Dupont', room: 'd145', email: 'xXgerardDUPONTXx@gmail.com' }])

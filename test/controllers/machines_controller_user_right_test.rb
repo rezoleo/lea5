@@ -57,7 +57,6 @@ class MachinesControllerUserRightTest < ActionDispatch::IntegrationTest
     assert_difference 'Machine.count', 1 do
       post user_machines_url(@user), params: { machine: }
     end
-
   ensure
     silence_warnings do
       Object.const_set(:USER_MACHINES_LIMIT, old_value)
@@ -76,7 +75,6 @@ class MachinesControllerUserRightTest < ActionDispatch::IntegrationTest
     assert_raises CanCan::AccessDenied do
       post user_machines_url(@user), params: { machine: }
     end
-
   ensure
     silence_warnings do
       Object.const_set(:USER_MACHINES_LIMIT, old_value)

@@ -8,7 +8,7 @@ namespace :lea5 do
   task sync_accounts: [:environment] do
     sso_users = retrieve_users_from_sso
 
-    User.all.each do |user|
+    User.find_each do |user|
       user_from_sso = sso_users[user.keycloak_id]
       if user_from_sso
         update_user(user, user_from_sso)
