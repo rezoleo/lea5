@@ -65,7 +65,7 @@ group :development do
   gem 'overcommit', '~> 0.63.0'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  gem 'rack-mini-profiler'
+  gem 'rack-mini-profiler', '~> 3.3'
 
   gem 'rubocop', '~> 1.64'
   gem 'rubocop-capybara', '~> 2.20'
