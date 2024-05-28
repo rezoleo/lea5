@@ -39,7 +39,7 @@ class User < ApplicationRecord
   # @return [Subscription] the newly created subscription
   def extend_subscription(duration:)
     start_at = subscription_expired? ? Time.current : subscription_expiration
-    subscriptions.new(start_at:, end_at: start_at + duration.months)
+    subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
   end
 
   def cancel_current_subscription!

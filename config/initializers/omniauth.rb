@@ -20,6 +20,6 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     response_type: :code,
     issuer: 'https://auth.rezoleo.fr/realms/rezoleo',
     discovery: true,
-    client_options:
+    client_options: client_options
   }
 end

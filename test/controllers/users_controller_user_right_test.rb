@@ -10,7 +10,7 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
   end
 
   test 'non-admin user should see only themselves in index' do
-    assert User.count > 1
+    assert_operator User.count, :>, 1
 
     get users_path
     assert_select 'a.user', count: 1

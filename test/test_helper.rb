@@ -67,7 +67,7 @@ module ActiveSupport
                                                     last_name: user.lastname,
                                                     email: user.email },
                                             extra: { raw_info: { room: user.room,
-                                                                 groups: } } })
+                                                                 groups: groups } } })
     end
 
     # Depending on the test running, the methods are different to sign out
