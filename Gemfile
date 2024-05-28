@@ -91,5 +91,5 @@ group :test do
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.22.0'
   gem 'simplecov-cobertura', '~> 2.1'
-  gem 'webmock', '~> 3.18'
+  gem 'webmock', '~> 3.23'
 end
