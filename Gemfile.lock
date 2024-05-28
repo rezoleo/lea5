@@ -77,7 +77,8 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
-    brakeman (5.3.1)
+    brakeman (6.1.2)
+      racc
     builder (3.2.4)
     cancancan (3.4.0)
     capybara (3.40.0)
@@ -373,7 +374,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap
-  brakeman (~> 5.3)
+  brakeman (~> 6.1)
   cancancan (~> 3.4)
   capybara (~> 3.40)
   debug
