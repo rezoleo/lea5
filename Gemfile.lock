@@ -75,7 +75,7 @@ GEM
     base64 (0.2.0)
     bindata (2.4.14)
     bindex (0.8.1)
-    bootsnap (1.13.0)
+    bootsnap (1.18.3)
       msgpack (~> 1.2)
     brakeman (5.3.1)
     builder (3.2.4)
@@ -169,7 +169,7 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
-    msgpack (1.6.0)
+    msgpack (1.7.2)
     nenv (0.3.0)
     net-imap (0.4.11)
       date
