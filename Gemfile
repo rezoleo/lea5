@@ -88,7 +88,7 @@ group :test do
   gem 'minitest-reporters', '~> 1.5'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
-  gem 'simplecov', '~> 0.21.2'
+  gem 'simplecov', '~> 0.22.0'
   gem 'simplecov-cobertura', '~> 2.1'
   gem 'webmock', '~> 3.18'
 end

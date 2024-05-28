@@ -3,6 +3,10 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
   enable_coverage :branch
+  # TODO: This requires Ruby 3.2+; it will enable coverage in ERB templates
+  #       It doesn't fail in the meantime, just logs that we should update Ruby
+  #       https://github.com/simplecov-ruby/simplecov/pull/1037
+  enable_coverage_for_eval
 
   if ENV['CI']
     require 'simplecov-cobertura'

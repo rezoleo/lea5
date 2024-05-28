@@ -310,7 +310,7 @@ GEM
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
     shellany (0.0.1)
-    simplecov (0.21.2)
+    simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
@@ -398,7 +398,7 @@ DEPENDENCIES
   rubocop-performance (~> 1.15)
   rubocop-rails (~> 2.17)
   selenium-webdriver
-  simplecov (~> 0.21.2)
+  simplecov (~> 0.22.0)
   simplecov-cobertura (~> 2.1)
   sprockets-rails
   stimulus-rails
