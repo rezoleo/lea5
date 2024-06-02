@@ -73,5 +73,15 @@ class SubscriptionTest < ActiveSupport::TestCase
     subscription = @user.subscriptions.create(start_at: Time.current, end_at: 13.months.from_now)
     subscription.reload
     assert_equal 13, subscription.duration
+
+    travel_to Time.zone.local(2024, 5, 31)
+
+    subscription = @user.subscriptions.create(start_at: Time.current, end_at: 8.months.from_now)
+    subscription.reload
+    assert_equal 8, subscription.duration
+
+    subscription = @user.subscriptions.create(start_at: Time.current, end_at: 13.months.from_now)
+    subscription.reload
+    assert_equal 13, subscription.duration
   end
 end
