@@ -10,7 +10,16 @@ class ApiKeysController < ApplicationController
   end
 
   def create
-    @api_key = ApiKey.new(api_key_params)
+    @api_key = ApiKey.new(bearer_name: :bearer_name, token: generate_token)
+    respond_to do |format|
+      if @api_key.save
+        format.html do
+          flash[:success] = 'ApiKey added!'
+        end
+      else
+        format.html { render 'new', status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy

@@ -10,18 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_02_124750) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_03_090057) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "api_keys", force: :cascade do |t|
-    t.integer "bearer_id", null: false
     t.string "bearer_name", null: false
     t.string "api_key", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
-    t.index ["bearer_id"], name: "index_api_keys_on_bearer_id", unique: true
   end
 
   create_table "free_accesses", force: :cascade do |t|
