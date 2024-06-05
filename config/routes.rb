@@ -12,4 +12,6 @@ Rails.application.routes.draw do
     delete '/last_subscription', to: 'subscriptions#destroy', as: 'last_subscription'
     resources :free_accesses, shallow: true, except: [:index, :show]
   end
+
+  get 'api_keys/new'
 end
