@@ -13,5 +13,5 @@ Rails.application.routes.draw do
     resources :free_accesses, shallow: true, except: [:index, :show]
   end
 
-  get 'api_keys/new'
+  resources :api_keys
 end
