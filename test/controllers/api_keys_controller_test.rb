@@ -3,28 +3,20 @@
 require 'test_helper'
 
 class ApiKeysControllerTest < ActionDispatch::IntegrationTest
-  test 'should get index' do
-    get api_keys_index_url
-    assert_response :success
+  def setup
+    @user = users(:pepper)
+
+    @admin = users(:ironman)
+    sign_in_as @admin, ['rezoleo']
   end
 
   test 'should get show' do
-    get api_keys_show_url
+    get '/api_keys/show'
     assert_response :success
   end
 
   test 'should get new' do
-    get api_keys_new_url
-    assert_response :success
-  end
-
-  test 'should get create' do
-    get api_keys_create_url
-    assert_response :success
-  end
-
-  test 'should get delete' do
-    get api_keys_delete_url
+    get new_api_key_path
     assert_response :success
   end
 end
