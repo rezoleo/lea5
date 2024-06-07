@@ -2,7 +2,7 @@
 
 class ApiKeysController < ApplicationController
   def index
-    @api_key = ApiKey.accessible_by(current_ability)
+    @api_keys = ApiKey.all
   end
 
   def new
@@ -15,7 +15,7 @@ class ApiKeysController < ApplicationController
       if @api_key.save
         format.html do
           flash[:success] = 'ApiKey added!'
-          redirect_to users_url
+          redirect_to api_keys_url
         end
       else
         format.html { render 'new', status: :unprocessable_entity }
@@ -24,6 +24,7 @@ class ApiKeysController < ApplicationController
   end
 
   def destroy
+    @api_key = ApiKey.find(params[:id])
     @api_key.destroy
   end
 
