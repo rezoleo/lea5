@@ -26,6 +26,8 @@ class ApiKeysController < ApplicationController
   def destroy
     @api_key = ApiKey.find(params[:id])
     @api_key.destroy
+    flash[:success] = 'ApiKey deleted!'
+    redirect_to api_keys_url
   end
 
   private
