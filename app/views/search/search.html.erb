@@ -11,7 +11,7 @@
     <% end %>
 
     <%= render partial: "search/machine", collection: @machines %>
-    <% if @ip then %> 
+    <% if @ip %>
         <%= render partial: "search/machine", locals: {machine: @ip.machine} %>
     <% end %>
 </div>
