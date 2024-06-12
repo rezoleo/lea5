@@ -2,11 +2,15 @@
 
 <h1>Add a new subscription</h1>
 
-<%= form_with(model: [@owner, @subscription], class: 'form') do |f| %>
+<%= form_with(model: [@owner, @subscription], class: 'form', data: { controller: 'subscription' }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
   <div>
     <%= f.label :duration %>
-    <%= f.number_field :duration, required: true, min: 1, step: 1 %>
+    <%= f.number_field :duration, required: true, min: 1, step: 1, data: { subscription_target: 'duration', action: 'subscription#updatePrice' } %>
+  </div>
+  <div>
+    <%= f.label 'Price' %>
+    <p data-subscription-target="price"></p>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>
