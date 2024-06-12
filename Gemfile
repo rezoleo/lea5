@@ -43,8 +43,8 @@ gem 'bootsnap', require: false
 
 gem 'ipaddress', '~> 0.8.3'
 
-gem 'omniauth_openid_connect', '~> 0.4.0'
-
+gem 'omniauth', '~> 2.1'
+gem 'omniauth_openid_connect', '~> 0.7.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'cancancan', '~> 3.4'
