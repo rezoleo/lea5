@@ -14,6 +14,6 @@ class SearchController < ApplicationController
     )
     return unless @query.match?(VALID_IP_REGEX)
 
-    @ip = Ip.accessible_by(current_ability).where(ip: @query).includes(:machine).first
+    @ip = Ip.accessible_by(current_ability).where(ip: @query).where.not(machine: nil).includes(:machine).first
   end
 end

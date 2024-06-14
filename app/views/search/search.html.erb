@@ -2,7 +2,7 @@
     <h1 class="title">Results for "<%= @query %>"</h1>
 
     <% if !@users.empty? %> 
-        <h2>Results among users:</h2> 
+        <h2>Results among users:</h2>
     <% end %>
     <%= render partial: "search/user", collection: @users %>
 
