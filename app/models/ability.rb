@@ -3,20 +3,20 @@
 class Ability
   include CanCan::Ability
 
-  def initialize(entity)
-    return if entity.user?
+  def initialize(user)
+    return if user.blank?
 
-    can [:read, :update], User, id: entity.user.id
-    can [:read, :update, :destroy], Machine, user: entity
+    can [:read, :update], User, id: user.id
+    can [:read, :update, :destroy], Machine, user: user
     # User can create a new machine to themselves if they don't have too many machines
     can [:create], Machine do |machine|
-      machine.user == entity.user && entity.machines.size < USER_MACHINES_LIMIT
+      machine.user == user && user.machines.size < USER_MACHINES_LIMIT
     end
 
-    can [:read], Subscription, user: entity.user
-    can [:read], FreeAccess, user: entity.user
+    can [:read], Subscription, user: user
+    can [:read], FreeAccess, user: user
 
-    return unless entity.user.admin? || entity.api_key?
+    return unless user.admin?
 
     can :manage, :all
   end
