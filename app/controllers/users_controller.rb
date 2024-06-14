@@ -77,4 +77,12 @@ class UsersController < ApplicationController
   def user_params
     params.require(:user).permit(:firstname, :lastname, :email, :room)
   end
+
+  def current_ability
+    if !session[:user_id].nil?
+      @current_ability ||= UserAbility.new(current_user)
+    elsif !session[:api_key_id].nil?
+      @current_ability ||= ApiKeyAbility.new(current_bearer)
+    end
+  end
 end

@@ -12,7 +12,6 @@ module ApiKeyAuthenticatable
   # code when API key authentication fails
   def authenticate_with_api_key!
     @current_bearer = authenticate_or_request_with_http_token { |token, _options| authenticator(token) }
-    @current_api_key.id
   end
 
   # Use this for optional API key authentication

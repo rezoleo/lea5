@@ -13,7 +13,6 @@ module SessionsHelper
     return nil if session[:api_key_id].nil?
 
     @current_bearer = ApiKey.find(session[:api_key_id])
-    @current_bearer&.groups = session[:groups]
     @current_bearer
   end
 
