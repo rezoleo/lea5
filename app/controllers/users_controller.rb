@@ -13,7 +13,6 @@ class UsersController < ApplicationController
     @machines = @user.machines.includes(:ip).order(created_at: :asc)
     @subscriptions = @user.subscriptions.order(created_at: :desc)
     @free_accesses = @user.free_accesses.order(created_at: :desc)
-    @api_keys = ApiKey.all
   end
 
   def new

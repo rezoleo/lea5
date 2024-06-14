@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 class ApiKeysController < ApplicationController
+  include ApiKeyAuthenticatable
+  include SessionsHelper
+
+  # Require token authentication for index
+  prepend_before_action :authenticate_with_api_key!, only: [:index]
+
   def index
     @api_keys = ApiKey.all
+    render json: current_api_key.id
   end
 
   def new

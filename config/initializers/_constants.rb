@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Path to login via api key
+AUTH_API_PATH = '/auth/api'
+
 # Path to login via SSO authentication
 AUTH_PATH = '/auth/keycloak'
 
