@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApiKey < ApplicationRecord
-  HMAC_SECRET_KEY = ENV.fetch('API_KEY_HMAC_SECRET_KEY')
+  HMAC_SECRET_KEY = Rails.application.credentials.api_key_hmac_secret_key!
 
   validates :bearer_name, presence: true, allow_blank: false
 

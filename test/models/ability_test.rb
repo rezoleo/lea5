@@ -6,14 +6,14 @@ class AbilityTest < ActiveSupport::TestCase
   # rubocop:disable Metrics/AbcSize
   def setup
     @user = users(:pepper)
-    @user_ability = Ability.new(@user)
+    @user_ability = UserAbility.new(@user)
     @user_machine = @user.machines.first
     @user_subscription = @user.subscriptions.first
     @user_free_access = @user.free_accesses.first
 
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
-    @admin_ability = Ability.new(@admin)
+    @admin_ability = UserAbility.new(@admin)
     @admin_machine = @admin.machines.first
     @admin_subscription = @admin.subscriptions.first
     @admin_free_access = @admin.free_accesses.first

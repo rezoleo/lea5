@@ -35,14 +35,6 @@ class ApiKeysController < ApplicationController
     redirect_to api_keys_url
   end
 
-  def current_ability
-    if !session[:user_id].nil?
-      @current_ability ||= UserAbility.new(current_user)
-    elsif !session[:api_key_id].nil?
-      @current_ability ||= ApiKeyAbility.new(current_bearer)
-    end
-  end
-
   private
 
   def api_key_params
