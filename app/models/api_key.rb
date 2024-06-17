@@ -15,6 +15,12 @@ class ApiKey < ApplicationRecord
     find_by! api_key: digest
   end
 
+  def self.authenticate_by_token(token)
+    authenticate_by_token! token
+  rescue ActiveRecord::RecordNotFound
+    nil
+  end
+
   def serializable_hash(options = nil)
     h = super(options.merge(except: 'api_key'))
     h['api_key'] = key if key.present?
