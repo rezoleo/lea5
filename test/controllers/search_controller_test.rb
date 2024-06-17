@@ -16,7 +16,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test 'should return nothing for non matching users' do
+  test 'should return nothing for unknown user' do
     non_matching_users = ['Nymous', 'Nymou', 'Laurent', 'Gadac']
 
     non_matching_users.each do |user|
@@ -26,7 +26,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'should return coherent results for matching users' do
+  test 'should return coherent results for known user' do
     searches_and_matches = {
       Tony: 1,
       tony: 1,
@@ -44,7 +44,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'should return nothing for non matching mac' do
+  test 'should return nothing for unknown mac' do
     non_matching_macs = ['DE:1A:B3:17:95:B9', 'DC:1A:B3:17:95:B9']
 
     non_matching_macs.each do |mac|
@@ -54,7 +54,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'should return coherent results for matching mac' do
+  test 'should return coherent results for known mac' do
     searches_and_matches = {
       C9: 1,
       B8: 1,
@@ -73,8 +73,8 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'should return nothing for non matching ips' do
-    invalid_ips = ['300.255', 'not.an.ip']
+  test 'should return nothing for non matching ips or unknown ip' do
+    invalid_ips = ['300.255', 'not.an.ip', '172.130.0.20']
 
     invalid_ips.each do |query|
       get search_path, params: { q: query }
@@ -83,7 +83,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  test 'should return a unique machine for matching ips' do
+  test 'should return a unique machine for known ip' do
     valid_ips = ['172.130.0.1', '172.130.0.0']
 
     valid_ips.each do |query|
