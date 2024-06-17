@@ -35,12 +35,12 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       pe: 2
     }
 
-    searches_and_matches.each do |(usr, nbr)|
-      assert_msg = "should return #{nbr} result(s) for #{usr}"
-      get search_path, params: { q: usr }
+    searches_and_matches.each do |(user, number)|
+      assert_msg = "should return #{number} result(s) for #{user}"
+      get search_path, params: { q: user }
       assert_response :success
       assert_match 'Results among users:', @response.body, assert_msg
-      assert_dom '.user', { count: nbr, text: /.*#{Regexp.escape(usr)}.*/mi }
+      assert_dom '.user', { count: number, text: /.*#{Regexp.escape(user)}.*/mi }
     end
   end
 
