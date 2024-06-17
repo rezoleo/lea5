@@ -5,11 +5,9 @@ class ApiKeysController < ApplicationController
   include SessionsHelper
 
   # Require token authentication for index
-  prepend_before_action :authenticate_with_api_key!, only: [:index]
 
   def index
     @api_keys = ApiKey.all
-    render json: current_api_key.id
   end
 
   def new
@@ -21,7 +19,7 @@ class ApiKeysController < ApplicationController
     respond_to do |format|
       if @api_key.save
         format.html do
-          flash[:success] = 'ApiKey added!'
+          flash[:success] = "ApiKey added! It is #{@api_key.key}"
           redirect_to api_keys_url
         end
       else
@@ -35,6 +33,14 @@ class ApiKeysController < ApplicationController
     @api_key.destroy
     flash[:success] = 'ApiKey deleted!'
     redirect_to api_keys_url
+  end
+
+  def current_ability
+    if !session[:user_id].nil?
+      @current_ability ||= UserAbility.new(current_user)
+    elsif !session[:api_key_id].nil?
+      @current_ability ||= ApiKeyAbility.new(current_bearer)
+    end
   end
 
   private
