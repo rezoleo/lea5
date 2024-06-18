@@ -64,12 +64,12 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       jarvis: 1
     }
 
-    searches_and_matches.each do |(mac, nbr)|
-      assert_msg = "should return #{nbr} result(s) for #{mac}"
+    searches_and_matches.each do |(mac, number)|
+      assert_msg = "should return #{number} result(s) for #{mac}"
       get search_path, params: { q: mac }
       assert_response :success
       assert_match 'Results among machines:', @response.body, assert_msg
-      assert_dom '.machine-search', { count: nbr, text: /.*#{Regexp.escape(mac)}.*/mi }
+      assert_dom '.machine-search', { count: number, text: /.*#{Regexp.escape(mac)}.*/mi }
     end
   end
 
