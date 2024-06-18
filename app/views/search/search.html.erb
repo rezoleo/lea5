@@ -9,8 +9,8 @@
     <% if @machines.present? || @ip.present? %>
         <h2>Results among machines:</h2>
     <% end %>
-
     <%= render partial: "search/machine", collection: @machines %>
+
     <% if @ip.present? %>
         <%= render partial: "search/machine", locals: {machine: @ip.machine} %>
     <% end %>
