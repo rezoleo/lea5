@@ -1,0 +1,11 @@
+<li>
+  <%= link_to user, class: "user" do %>
+  <span><%= user.firstname %> <%= user.lastname %></span>
+  <span><%= user.room %></span>
+  <% if user.internet_expiration.nil? || user.internet_expiration < Time.current %>
+    <span style="color:var(--red-900)">No Internet</span>
+  <% else %>
+    <span style="color:var(--green-900)">Internet</span>
+  <% end %>
+  <% end %>
+</li>
