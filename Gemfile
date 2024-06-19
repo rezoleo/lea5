@@ -9,25 +9,25 @@ ruby '3.1.2'
 gem 'rails', '~> 7.0.8'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem 'sprockets-rails'
+gem 'sprockets-rails', '~> 3.5'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 1.5'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 6.4'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails'
+gem 'importmap-rails', '~> 1.2'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
-gem 'turbo-rails'
+gem 'turbo-rails', '~> 2.0'
 
 # Hotwire's modest JavaScript framework [https://stimulus.hotwired.dev]
-gem 'stimulus-rails'
+gem 'stimulus-rails', '~> 1.3'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder'
+gem 'jbuilder', '~> 2.12'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -43,11 +43,11 @@ gem 'bootsnap', require: false
 
 gem 'ipaddress', '~> 0.8.3'
 
-gem 'omniauth_openid_connect', '~> 0.4.0'
-
+gem 'omniauth', '~> 2.1'
+gem 'omniauth_openid_connect', '~> 0.7.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
-gem 'cancancan', '~> 3.4'
+gem 'cancancan', '~> 3.6'
 
 # Use Sass to process CSS
 # gem "sassc-rails"
