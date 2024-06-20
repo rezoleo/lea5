@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sale: one
+  subscription_offer: one
+  duration: 1
+
+two:
+  sale: two
+  subscription_offer: two
+  duration: 1

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  refund: one
+  subscription_offer: one
+  duration: 1
+
+two:
+  refund: two
+  subscription_offer: two
+  duration: 1

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  seller: one
+  client: one
+  payment_method: one
+  invoice: one
+  total_price: 1
+  verified_at: 2024-06-20 14:35:47
+
+two:
+  seller: two
+  client: two
+  payment_method: two
+  invoice: two
+  total_price: 1
+  verified_at: 2024-06-20 14:35:47

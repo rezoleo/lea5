@@ -4,6 +4,9 @@ class User < ApplicationRecord
   has_many :machines, dependent: :destroy
   has_many :subscriptions, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
+  has_many :sales_as_client, class_name: 'Sale', foreign_key: 'client_id', dependent: :destroy, inverse_of: :client
+  has_many :sales_as_seller, class_name: 'Sale', foreign_key: 'seller_id', dependent: :nullify, inverse_of: :seller
+  has_many :refunds, foreign_key: 'refunder_id', dependent: :destroy, inverse_of: :refunder
 
   before_save :downcase_email
   before_save :format_room
