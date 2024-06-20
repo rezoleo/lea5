@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RefundArticleDetail < ApplicationRecord
+class ArticleRefund < ApplicationRecord
   belongs_to :refund
   belongs_to :article
 end

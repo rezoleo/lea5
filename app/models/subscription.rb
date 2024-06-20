@@ -2,6 +2,7 @@
 
 class Subscription < ApplicationRecord
   belongs_to :user
+  belongs_to :sale
 
   validates :start_at, presence: true
   validates :end_at, comparison: { greater_than: :start_at }
