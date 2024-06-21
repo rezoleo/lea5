@@ -23,7 +23,7 @@ Bundler.require(*Rails.groups)
 module Lea5
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -37,5 +37,10 @@ module Lea5
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Start Rails console in sandbox mode by default, to avoid accidental writing
+    # to the database. This configuration only affects the production environment,
+    # development or test are not affected.
+    config.sandbox_by_default = true
   end
 end
