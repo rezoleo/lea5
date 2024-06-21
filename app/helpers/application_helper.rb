@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# ApplicationHelper module
 module ApplicationHelper
   def time_with_relative_tag(date_or_time)
     time_ago_in_words = if date_or_time > Time.current

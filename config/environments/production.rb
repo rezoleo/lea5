@@ -52,7 +52,7 @@ Rails.application.configure do
   # TODO: Re-enable cop once we update Rubocop configuration
   # rubocop:disable Layout/MultilineMethodCallIndentation
   config.logger = ActiveSupport::Logger.new($stdout)
-    .tap  { |logger| logger.formatter = ::Logger::Formatter.new } # rubocop:disable Style/RedundantConstantBase
+    .tap  { |logger| logger.formatter = Logger::Formatter.new }
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
   # rubocop:enable Layout/MultilineMethodCallIndentation
 
