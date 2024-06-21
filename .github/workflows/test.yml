@@ -24,7 +24,10 @@ jobs:
 
       - name: Run git hooks
         run: |
+          # Sign Overcommit configuration
           bundle exec overcommit --sign
+          # Sign our custom hooks
+          bundle exec overcommit --sign pre-commit
           bundle exec overcommit --run
         env:
           OVERCOMMIT_COLOR: "1"
