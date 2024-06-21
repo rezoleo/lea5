@@ -1,11 +1,11 @@
 <%# locals: (owner:, free_access:) -%>
 
-<% min_date = Time.current.strftime("%F") %>
+<% min_date = Time.current %>
 <%= form_with(model: [owner, free_access], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
   <div>
     <%= f.label :start_at %>
-    <%= f.date_field :start_at, required: true, value: free_access.start_at.strftime("%F"), min: min_date %>
+    <%= f.date_field :start_at, required: true, value: free_access.start_at, min: min_date %>
   </div>
   <div>
     <%= f.label :end_at %>
