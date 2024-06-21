@@ -5,6 +5,7 @@ require 'test_helper'
 class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @subscription = subscriptions(:subscription1)
+    @sale = sales(:one)
     @owner = @subscription.user
     sign_in_as @owner, ['rezoleo']
   end
@@ -16,7 +17,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create a subscription and redirect if subscription is valid' do
     assert_difference 'Subscription.count', 1 do
-      post user_subscriptions_url @owner, params: { subscription: { duration: 8 } }
+      post user_subscriptions_url @owner, params: { subscription: { duration: 8 }, sale: @sale.id }
     end
 
     assert_redirected_to @owner

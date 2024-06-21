@@ -1,16 +1,18 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  refunder: one
+  refunder: ironman
   refund_method: one
+  sale: one
   invoice: one
   total_price: 1
   reason: MyString
   verified_at: 2024-06-20 14:37:19
 
 two:
-  refunder: two
+  refunder: pepper
   refund_method: two
+  sale: two
   invoice: two
   total_price: 1
   reason: MyString

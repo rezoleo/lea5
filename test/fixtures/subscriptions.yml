@@ -4,8 +4,10 @@ subscription1:
   user: ironman
   start_at: 2023-01-01 12:00:00
   end_at: 2023-02-01 12:00:00
+  sale: one
 
 subscription2:
   user: pepper
   start_at: 2023-01-07 12:00:00
   end_at: 2023-02-07 12:00:00
+  sale: two
