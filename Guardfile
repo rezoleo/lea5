@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'active_support/inflector'
+
 # Defines the matching rules for Guard.
 guard :minitest, spring: 'bin/rails test', all_on_start: false do # rubocop:disable Metrics/BlockLength
   watch(%r{^test/(.*)/?(.*)_test\.rb$})
@@ -9,8 +11,20 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do # rubocop:disa
   watch(%r{^app/models/(.*?)\.rb$}) do |matches|
     "test/models/#{matches[1]}_test.rb"
   end
+  watch(%r{^test/fixtures/(.*?)\.yml$}) do |matches|
+    "test/models/#{matches[1].singularize}_test.rb"
+  end
   watch(%r{^app/controllers/(.*?)_controller\.rb$}) do |matches|
     resource_tests(matches[1])
+  end
+  watch(%r{^app/mailers/(.*?)\.rb$}) do |matches|
+    "test/mailers/#{matches[1]}_test.rb"
+  end
+  watch(%r{^test/fixtures/(.*)/(.*?)\.(html|text)$}) do |matches|
+    "test/mailers/#{matches[1]}_test.rb"
+  end
+  watch(%r{^lib/tasks/(.*?)\.rake$}) do |matches|
+    "test/tasks/#{matches[1]}_test.rb"
   end
   watch(%r{^app/views/([^/]*?)/.*\.html\.erb$}) do |matches|
     ["test/controllers/#{matches[1]}_controller_test.rb"] +
@@ -29,14 +43,8 @@ guard :minitest, spring: 'bin/rails test', all_on_start: false do # rubocop:disa
     ['test/controllers/sessions_controller_test.rb',
      'test/integration/users_login_test.rb']
   end
-  watch('app/controllers/account_activations_controller.rb') do
-    'test/integration/users_signup_test.rb'
-  end
-  watch(%r{app/views/users/*}) do
-    resource_tests('users') +
-      ['test/integration/microposts_interface_test.rb']
-  end
 end
+
 # Returns the integration tests corresponding to the given resource.
 def integration_tests(resource = :all)
   if resource == :all

@@ -9,7 +9,7 @@ graph TD
     B --> |No| D[User's subscription ends now + subscription duration]
 ```
 
-**Warning**
-If a user has a free access when a subscription is added, the starting date
-of the subscription is based on the subscription expiration status, *not* the internet
-expiration status.
+> **Warning**
+> If a user has a free access when a subscription is added, the starting date
+> of the subscription is based on the subscription expiration status, *not* the internet
+> expiration status.

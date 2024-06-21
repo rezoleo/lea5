@@ -1,0 +1,38 @@
+[Unit]
+Description=Lea5 - Send email warning users about their soon-to-expire subscription
+Documentation=https://github.com/rezoleo/lea5
+
+[Service]
+# Command runs once then exits, it is not a background service
+Type=oneshot
+User=lea5
+Group=lea5
+WorkingDirectory=/opt/lea5
+# Change start command for a new service
+ExecStart=/opt/lea5/bin/rails lea5:internet_expiration_mail
+
+Environment=PATH=/home/lea5/.rbenv/shims:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=RAILS_ENV=production
+Environment=RAILS_LOG_TO_STDOUT=1
+Environment=RAILS_MASTER_KEY=<insert master key here>
+
+NoNewPrivileges=true
+#PrivateNetwork=true
+PrivateDevices=true
+PrivateMounts=true
+PrivateTmp=true
+PrivateUsers=true
+ProtectHome=tmpfs
+BindReadOnlyPaths=/home/lea5/.rbenv
+ProtectSystem=strict
+ReadWritePaths=/opt/lea5/log
+ReadWritePaths=/opt/lea5/tmp
+ReadWritePaths=/opt/lea5/storage
+ProtectControlGroups=true
+ProtectClock=true
+ProtectHostname=true
+CapabilityBoundingSet=
+ProtectKernelLogs=true
+ProtectKernelModules=true
+ProtectKernelTunables=true
+ProtectProc=invisible
