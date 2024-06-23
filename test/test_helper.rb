@@ -47,6 +47,13 @@ module ActiveSupport
 
     OmniAuth.config.test_mode = true
 
+    def setup
+      super
+      # Reset OmniAuth mocks to a clean state, to keep each test independent
+      OmniAuth.config.mock_auth[:keycloak] = nil
+      OmniAuth.config.mock_auth[:developer] = nil
+    end
+
     # @param [User] user
     # @param [Array<String>] groups
     def sign_in_as(user, groups = [])
