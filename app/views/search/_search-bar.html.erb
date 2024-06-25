@@ -1,3 +1,5 @@
+<%# locals: () -%>
+
 <%= form_with(url: search_path, method: :get) do |f| %>
     <div>
         <%= f.text_field :q, required: true, placeholder: 'Type your search here...'%>

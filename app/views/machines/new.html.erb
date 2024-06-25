@@ -1,6 +1,7 @@
-<% provide :button_text, "Create" %>
+<%# locals: () -%>
 
+<% provide :button_text, "Create" %>
 
 <h1>Add a new machine</h1>
 
-<%= render 'form' %>
+<%= render 'form', owner: @owner, machine: @machine %>

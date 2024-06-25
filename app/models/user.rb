@@ -5,13 +5,14 @@ class User < ApplicationRecord
   has_many :subscriptions, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
 
-  before_save :downcase_email
-  before_save :format_room
+  normalizes :email, with: ->(email) { email.strip.downcase }
+  normalizes :room, with: ->(room) { room.downcase.upcase_first }
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
+  # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
@@ -70,14 +71,6 @@ class User < ApplicationRecord
   end
 
   private
-
-  def downcase_email
-    email.downcase!
-  end
-
-  def format_room
-    self.room = room.downcase.upcase_first
-  end
 
   def subscription_expired?
     subscription_expiration.nil? || (subscription_expiration < Time.current)
