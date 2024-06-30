@@ -1,4 +1,19 @@
-Results for "<%= @query %>"
-<%= render @users %>
-<%= render @machines %>
-<%= render @ip.machine %>
+<%# locals: () -%>
+
+<div class="search-body">
+    <h1 class="title">Results for "<%= @query %>"</h1>
+
+    <% if @users.present? %>
+        <h2>Results among users:</h2>
+    <% end %>
+    <%= render partial: "search/user", collection: @users %>
+
+    <% if @machines.present? || @ip.present? %>
+        <h2>Results among machines:</h2>
+    <% end %>
+    <%= render partial: "search/machine", collection: @machines %>
+
+    <% if @ip.present? %>
+        <%= render partial: "search/machine", locals: {machine: @ip.machine} %>
+    <% end %>
+</div>

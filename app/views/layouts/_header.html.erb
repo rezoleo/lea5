@@ -1,3 +1,5 @@
+<%# locals: () -%>
+
 <header>
   <nav>
     <ul>
@@ -11,6 +13,10 @@
       <% end %>
     </ul>
   </nav>
+
+  <div>
+    <%= render "search/search-bar" %>
+  </div>
 
   <div>
     <% if not logged_in? %>

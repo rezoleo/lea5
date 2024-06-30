@@ -1,3 +1,5 @@
+<%# locals: (free_access:) -%>
+
 <div class="free-access">
   <span><%= time_with_relative_tag free_access.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag free_access.end_at %></span>
   <% if can?(:edit, free_access) %>
