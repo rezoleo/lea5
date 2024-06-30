@@ -5,7 +5,6 @@ require 'test_helper'
 class ApiKeysControllerTest < ActionDispatch::IntegrationTest
   def setup
     @api_key = api_keys(:FakeRadius)
-    Rails.application.credentials.api_key_hmac_secret_key = 'api_key_secret'
   end
 
   test 'should get index' do
