@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_20_180613) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_01_184949) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -132,13 +132,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_20_180613) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
     t.index ["sale_id"], name: "index_subscriptions_on_sale_id"
-    t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -174,5 +172,4 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_20_180613) do
   add_foreign_key "sales_subscription_offers", "sales"
   add_foreign_key "sales_subscription_offers", "subscription_offers"
   add_foreign_key "subscriptions", "sales"
-  add_foreign_key "subscriptions", "users"
 end
