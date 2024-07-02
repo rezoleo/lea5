@@ -31,6 +31,13 @@ PreCommit:
   AuthorName:
     enabled: true
     on_fail: warn
+
+  EnsureStrictLocals:
+    enabled: true
+    description: 'Check for strict locals in partials'
+    include:
+      - 'app/views/**/*.erb'
+      - 'app/views/**/*.jbuilder'
 #  TrailingWhitespace:
 #    enabled: true
 #    exclude:
