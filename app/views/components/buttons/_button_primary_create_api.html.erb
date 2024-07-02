@@ -1,3 +1,5 @@
+<%# locals: (aria_label:, path:, text:) -%>
+
 <%= button_to(path, method: :get, class: "button-primary", 'aria-label': aria_label) do %>
   <%= text %>
   <%= svg_icon_tag 'icon_plus' %>
