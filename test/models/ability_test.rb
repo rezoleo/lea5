@@ -17,6 +17,9 @@ class AbilityTest < ActiveSupport::TestCase
     @admin_machine = @admin.machines.first
     @admin_subscription = @admin.subscriptions.first
     @admin_free_access = @admin.free_accesses.first
+
+    @api_key = api_keys(:FakeRadius)
+    @api_key_ability = ApiKeyAbility.new(@api_key)
   end
   # rubocop:enable Metrics/AbcSize
 
@@ -107,5 +110,9 @@ class AbilityTest < ActiveSupport::TestCase
 
   test 'admin can do everything' do
     assert @admin_ability.can?(:manage, :all)
+  end
+
+  test 'api key bearer can read everything' do
+    assert @api_key_ability.can?(:read, :all)
   end
 end

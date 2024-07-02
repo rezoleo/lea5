@@ -5,6 +5,7 @@ require 'test_helper'
 class ApiKeysControllerTest < ActionDispatch::IntegrationTest
   def setup
     @api_key = api_keys(:FakeRadius)
+    @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
   end
 
   test 'should get index' do
@@ -37,5 +38,10 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
       delete api_key_url(@api_key, format: :html)
     end
     assert_redirected_to api_keys_url
+  end
+
+  test 'should authorize api key authentication' do
+    get '/auth/api', headers: { 'Authorization' => "Bearer #{@real_key}" }
+    assert_response :success
   end
 end
