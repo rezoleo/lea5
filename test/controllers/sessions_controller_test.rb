@@ -4,6 +4,9 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
+    @api_key = api_keys(:FakeRadius)
+    @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
+
     OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
                                           uid: '11111111-1111-1111-1111-111111111111',
                                           info: { first_name: 'John',
@@ -38,6 +41,13 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_predicate self, :logged_in?
     assert_equal User.find_by(email: 'john@doe.com').id, current_user.id
+  end
+
+  test 'should create a session with current_bearer' do
+    get '/auth/api', headers: { 'Authorization' => "Bearer #{@real_key}" }
+
+    assert_predicate self, :logged_in?
+    assert_equal ApiKey.find_by(bearer_name: 'FakeRadius').id, current_bearer.id
   end
 
   test 'logout should redirect to root' do
