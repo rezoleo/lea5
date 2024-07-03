@@ -40,6 +40,24 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to api_keys_url
   end
 
+  test 'should re-render new if bearer is invalid' do
+    post api_keys_url(format: :html), params: {
+      api_key: {
+        bearer_name: ''
+      }
+    }
+    assert_template 'api_keys/new'
+  end
+
+  test 'should send error if bearer is invalid' do
+    post api_keys_url(format: :html), params: {
+      api_key: {
+        bearer_name: ''
+      }
+    }
+    assert_response :unprocessable_entity
+  end
+
   test 'should authorize api key authentication' do
     get '/auth/api', headers: { 'Authorization' => "Bearer #{@real_key}" }
     assert_response :success
