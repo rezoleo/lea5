@@ -51,4 +51,10 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
       delete user_path @user
     end
   end
+
+  test 'non-admin cannot access api keys' do
+    assert_raises CanCan::AccessDenied do
+      get api_keys_path
+    end
+  end
 end

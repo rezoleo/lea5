@@ -7,15 +7,18 @@ class ApiKeysController < ApplicationController
   # Require token authentication for index
 
   def index
-    @api_keys = ApiKey.all
+    @api_keys = ApiKey.accessible_by(current_ability)
+    authorize! :index, @api_keys
   end
 
   def new
     @api_key = ApiKey.new
+    authorize! :new, @api_key
   end
 
   def create
     @api_key = ApiKey.new(api_key_params)
+    authorize! :create, @api_key
     respond_to do |format|
       if @api_key.save
         format.html do
@@ -30,6 +33,7 @@ class ApiKeysController < ApplicationController
 
   def destroy
     @api_key = ApiKey.find(params[:id])
+    authorize! :destroy, @api_key
     @api_key.destroy
     flash[:success] = 'ApiKey deleted!'
     redirect_to api_keys_url

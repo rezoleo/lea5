@@ -4,6 +4,11 @@ require 'test_helper'
 
 class ApiKeysControllerTest < ActionDispatch::IntegrationTest
   def setup
+    @user = users(:pepper)
+
+    @admin = users(:ironman)
+    sign_in_as @admin, ['rezoleo']
+
     @api_key = api_keys(:FakeRadius)
     @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
   end
@@ -11,11 +16,6 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
   test 'should get index' do
     get api_keys_path
     assert_template 'api_keys/index'
-  end
-
-  test 'should get show' do
-    get '/api_keys/show'
-    assert_response :success
   end
 
   test 'should get new' do

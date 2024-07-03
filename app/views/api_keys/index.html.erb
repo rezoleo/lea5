@@ -13,7 +13,7 @@
             </div>
 
             <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
-            <% if can?(:create, FreeAccess) %>
+            <% if can?(:create, ApiKey) %>
                 <%= render "components/buttons/button_primary_create_api", text: "new api key", path: new_api_key_path, aria_label: "Add a new api key" %>
             <% end %>
 
