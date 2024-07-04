@@ -6,7 +6,7 @@ class SubscriptionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     @subscription = subscriptions(:subscription1)
     @sale = sales(:one)
-    @owner = @subscription.user
+    @owner = @subscription.sale.client
     sign_in_as @owner, ['rezoleo']
   end
 
