@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 class Subscription < ApplicationRecord
-  belongs_to :user
   belongs_to :sale
 
   validates :start_at, presence: true
   validates :end_at, comparison: { greater_than: :start_at }
   validate :cannot_change_after_cancelled, on: :update
+
+  def user
+    sale.client
+  end
 
   def cancel!
     self.cancelled_at = Time.current

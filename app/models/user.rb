@@ -40,16 +40,16 @@ class User < ApplicationRecord
 
   # @param [Integer] duration subscription duration in months
   # @return [Subscription] the newly created subscription
-  def extend_subscription(duration:)
-    start_at = subscription_expired? ? Time.current : subscription_expiration
-    subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
-  end
-
-  def cancel_current_subscription!
-    current_subscription&.cancel!
-
-    save!
-  end
+  # def extend_subscription(duration:)
+  #   start_at = subscription_expired? ? Time.current : subscription_expiration
+  #   subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
+  # end
+  #
+  # def cancel_current_subscription!
+  #   current_subscription&.cancel!
+  #
+  #   save!
+  # end
 
   def self.upsert_from_auth_hash(auth_hash)
     user = find_or_initialize_by("#{auth_hash[:provider]}_id": auth_hash[:uid])
