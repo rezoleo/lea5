@@ -2,6 +2,8 @@
 
 module Admin
   class DashboardController < ApplicationController
-    def index; end
+    def index
+      @articles = Article.where(deleted_at: nil).order(created_at: :desc)
+    end
   end
 end

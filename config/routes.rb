@@ -16,8 +16,8 @@ Rails.application.routes.draw do
     resources :free_accesses, shallow: true, except: [:index, :show]
   end
 
-  namespace :admin do
-    root 'dashboard#index'
+  scope module: :admin do
+    get '/admin', as: 'admin', to: 'dashboard#index'
     resources :articles, only: [:new, :create, :destroy]
     resources :subscription_offers, only: [:new, :create, :destroy]
     resources :payment_methods, only: [:new, :create, :destroy]

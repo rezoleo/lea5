@@ -1,2 +1,13 @@
 <h1>Admin::Dashboard#index</h1>
 <p>Find me in app/views/admin/dashboard/index.html.erb</p>
+
+<% if can?(:read, Article) %>
+  <h2>Articles</h2>
+  <% if can?(:create, Article) %>
+    <%= button_to new_article_path, method: :get, class: 'button-primary' do %>
+      <%= 'Create article' %>
+      <%= svg_icon_tag 'icon_plus' %>
+    <% end %>
+  <% end %>
+  <%= render(@articles) || "No articles" %>
+<% end %>
