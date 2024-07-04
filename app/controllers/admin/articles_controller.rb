@@ -21,7 +21,7 @@ module Admin
     def destroy
       @article = Article.find(params[:id])
       authorize! :destroy, @article
-      @article.soft_delete! unless @article.destroy
+      @article.soft_delete unless @article.destroy
       redirect_to admin_path
     end
 

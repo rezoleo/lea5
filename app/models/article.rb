@@ -12,7 +12,7 @@ class Article < ApplicationRecord
 
   before_destroy :can_be_destroyed?
 
-  def soft_delete!
+  def soft_delete
     update(deleted_at: Time.zone.now)
   end
 
