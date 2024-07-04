@@ -1,8 +1,12 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Admin::DashboardControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get admin_dashboard_index_url
-    assert_response :success
+require 'test_helper'
+
+module Admin
+  class DashboardControllerTest < ActionDispatch::IntegrationTest
+    test 'should get index' do
+      get admin_dashboard_index_url
+      assert_response :success
+    end
   end
 end

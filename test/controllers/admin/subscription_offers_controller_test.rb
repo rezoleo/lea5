@@ -1,8 +1,12 @@
-require "test_helper"
+# frozen_string_literal: true
 
-class Admin::SubscriptionOffersControllerTest < ActionDispatch::IntegrationTest
-  test "should get admin/payment_methods" do
-    get admin_subscription_offers_admin/payment_methods_url
-    assert_response :success
+require 'test_helper'
+
+module Admin
+  class SubscriptionOffersControllerTest < ActionDispatch::IntegrationTest
+    test 'should get admin/payment_methods' do
+      get admin_subscription_offers_admin / payment_methods_url
+      assert_response :success
+    end
   end
 end
