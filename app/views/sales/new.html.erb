@@ -4,14 +4,32 @@
 
 <h1>Create new sale</h1>
 
-<%= form_with(model: [@owner, @sale], class: 'form') do |f| %>
+<%= form_with(model: [@owner, @sale], class: 'form', data: { controller: 'sales' }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :article_id %>
-    <%= f.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article'  %>
-    <%= f.label :quantity %>
-    <%= f.number_field :quantity %>
+
+  <div data-sales-target="articles">
+    <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: '1' do |sale_form| %>
+      <%= sale_form.label :article_id %>
+      <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article' %>
+      <%= sale_form.label :quantity %>
+      <%= sale_form.number_field :quantity %>
+    <% end %>
   </div>
+
+  <button id="add_article" data-action="sales#addArticle:prevent">Add article</button>
+
+  <template data-sales-target="articleTemplate">
+    <div data-sales-target="articles">
+      <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: 'NEW_ARTICLE' do |sale_form| %>
+        <%= sale_form.label :article_id %>
+        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article' %>
+        <%= sale_form.label :quantity %>
+        <%= sale_form.number_field :quantity %>
+      <% end %>
+      <button data-action="sales#removeArticle:prevent">Remove article</button>
+    </div>
+  </template>
+
   <div>
     <%= f.submit yield(:button_text) %>
   </div>

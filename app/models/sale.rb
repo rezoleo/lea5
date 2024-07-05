@@ -12,5 +12,7 @@ class Sale < ApplicationRecord
   has_many :sales_subscription_offers, dependent: :destroy
   has_many :subscription_offers, through: :sales_subscription_offers
 
+  accepts_nested_attributes_for :articles_sales
+
   validates :total_price, presence: true
 end
