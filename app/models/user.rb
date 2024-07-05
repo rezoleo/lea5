@@ -6,7 +6,7 @@ class User < ApplicationRecord
   has_many :free_accesses, dependent: :destroy
 
   normalizes :email, with: ->(email) { email.strip.downcase }
-  normalizes :room, with: ->(room) { room.downcase.upcase_first }
+  normalizes :room, with: ->(room) { room.strip.downcase.upcase_first }
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
