@@ -49,12 +49,9 @@ Rails.application.configure do
   config.force_ssl = true
 
   # Log to STDOUT by default
-  # TODO: Re-enable cop once we update Rubocop configuration
-  # rubocop:disable Layout/MultilineMethodCallIndentation
   config.logger = ActiveSupport::Logger.new($stdout)
     .tap  { |logger| logger.formatter = Logger::Formatter.new }
     .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-  # rubocop:enable Layout/MultilineMethodCallIndentation
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]

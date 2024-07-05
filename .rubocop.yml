@@ -11,8 +11,20 @@ AllCops:
 Style/Documentation:
   Enabled: false
 
+Layout/FirstArgumentIndentation:
+  EnforcedStyle: consistent
+
 Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/FirstMethodParameterLineBreak:
+  Enabled: true
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
 
 Metrics/ClassLength:
   Enabled: true

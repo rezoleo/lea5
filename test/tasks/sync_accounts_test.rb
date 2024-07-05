@@ -47,23 +47,27 @@ class KeycloakStub
 
   def self.stub_access_token
     WebMock.stub_request(:post, 'https://auth.rezoleo.fr/realms/rezoleo/protocol/openid-connect/token')
-           .with(
-             body: WebMock.hash_including({
-                                            client_id: '123456',
-                                            client_secret: 'super-secret',
-                                            grant_type: 'client_credentials'
-                                          })
-           )
-           .to_return(status: 200,
-                      body: JSON.dump({ access_token: 'my_access_token' }),
-                      headers: { content_type: 'application/json' })
+      .with(
+        body: WebMock.hash_including({
+          client_id: '123456',
+          client_secret: 'super-secret',
+          grant_type: 'client_credentials'
+        })
+      )
+      .to_return(
+        status: 200,
+        body: JSON.dump({ access_token: 'my_access_token' }),
+        headers: { content_type: 'application/json' }
+      )
   end
 
   def self.stub_list_users
     WebMock.stub_request(:get, 'https://auth.rezoleo.fr/admin/realms/rezoleo/users?max=9999')
-           .with(headers: { Authorization: 'Bearer my_access_token' })
-           .to_return(status: 200,
-                      body: JSON.dump([MOCK_KEYCLOAK_USER_OK, MOCK_KEYCLOAK_USER_BAD_ROOM]),
-                      headers: {})
+      .with(headers: { Authorization: 'Bearer my_access_token' })
+      .to_return(
+        status: 200,
+        body: JSON.dump([MOCK_KEYCLOAK_USER_OK, MOCK_KEYCLOAK_USER_BAD_ROOM]),
+        headers: {}
+      )
   end
 end
