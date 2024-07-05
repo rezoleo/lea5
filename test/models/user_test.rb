@@ -87,7 +87,18 @@ class UserTest < ActiveSupport::TestCase
     @user.room = 'a108B'
     @user.save
     assert_equal 'A108b', @user.room
-    # TODO: Add tests to check that we strip rooms, and that we keep uppercase on 'DF1'
+
+    @user.room = ' a108B '
+    @user.save
+    assert_equal 'A108b', @user.room
+
+    @user.room = 'df1'
+    @user.save
+    assert_equal 'DF1', @user.room
+
+    @user.room = ' df1 '
+    @user.save
+    assert_equal 'DF1', @user.room
   end
 
   test 'room must be of a valid format' do
