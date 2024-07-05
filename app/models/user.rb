@@ -6,14 +6,21 @@ class User < ApplicationRecord
   has_many :free_accesses, dependent: :destroy
 
   normalizes :email, with: ->(email) { email.strip.downcase }
-  normalizes :room, with: ->(room) { room.strip.downcase.upcase_first }
+  normalizes :room, with: lambda { |room|
+    room.strip!
+
+    if /\ADF[1-4]\z/i.match?(room)
+      room.upcase
+    else
+      room.downcase.upcase_first
+    end
+  }
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
-  VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
+  VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
   # @return [Array<String>]
