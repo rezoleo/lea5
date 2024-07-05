@@ -2,7 +2,7 @@
 
 <div class="article">
   <span><%= article.name %></span>
-  <span><%= article.price %></span>
+  <span><%= article.price.to_f / 100 %> €</span>
   <% if can?(:destroy, article) %>
     <%= button_to(article, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this article') do %>
       <%= svg_icon_tag 'icon_delete' %>

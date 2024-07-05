@@ -1,0 +1,11 @@
+<%# locals: () %>
+
+<div class="subscription_offer">
+  <span><%= subscription_offer.duration %> months</span>
+  <span><%= subscription_offer.price.to_f / 100 %> €</span>
+  <% if can?(:destroy, subscription_offer) %>
+    <%= button_to(subscription_offer, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this subscription offer') do %>
+      <%= svg_icon_tag 'icon_delete' %>
+    <% end %>
+  <% end %>
+</div>

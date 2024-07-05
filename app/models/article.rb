@@ -8,7 +8,8 @@ class Article < ApplicationRecord
 
   validates :name, presence: true, allow_blank: false
   validates :price, presence: true, allow_blank: false,
-                    numericality: { greater_than_or_equal_to: 0, only_integer: true }
+                    numericality: { greater_than_or_equal_to: 0, only_integer: true, message: 'Must be a positive
+                     number. Maximum 2 numbers after comma' }
 
   def soft_delete
     update(deleted_at: Time.zone.now)

@@ -5,4 +5,14 @@ class SubscriptionOffer < ApplicationRecord
   has_many :sales, through: :sales_subscription_offers
   has_many :refunds_subscription_offers, dependent: :restrict_with_error
   has_many :refunds, through: :refunds_subscription_offers
+
+  validates :duration, presence: true, allow_blank: false,
+                       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :price, presence: true, allow_blank: false,
+                    numericality: { greater_than_or_equal_to: 0, only_integer: true, message: 'Must be a positive
+                     number. Maximum 2 numbers after comma' }
+
+  def soft_delete
+    update(deleted_at: Time.zone.now)
+  end
 end

@@ -5,7 +5,7 @@ require 'test_helper'
 module Admin
   class ArticlesControllerTest < ActionDispatch::IntegrationTest
     def setup
-      @article = articles(:one)
+      @subscription_offer = articles(:one)
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']
     end
@@ -17,14 +17,14 @@ module Admin
 
     test 'should create article' do
       assert_difference 'Article.count', 1 do
-        post articles_path, params: { article: { name: 'test_name', price: 1456 } }
+        post articles_path, params: { subscription_offer: { name: 'test_name', price: 1456 } }
       end
       assert_redirected_to admin_path
     end
 
     test 'should re-render if missing article information' do
       assert_no_difference 'Article.count' do
-        post articles_path, params: { article: { name: nil } }
+        post articles_path, params: { subscription_offer: { name: nil } }
       end
 
       assert_template 'admin/articles/new'
@@ -32,13 +32,13 @@ module Admin
 
     test 'should not destroy article if soft_delete' do
       assert_no_difference 'Article.count' do
-        @article.soft_delete
+        @subscription_offer.soft_delete
       end
     end
 
     test 'should soft_delete article' do
       assert_no_difference 'Article.count' do
-        delete article_path(@article)
+        delete article_path(@subscription_offer)
       end
     end
   end

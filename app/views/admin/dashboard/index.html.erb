@@ -1,7 +1,6 @@
 <%# locals: () %>
 
-<h1>Admin::Dashboard#index</h1>
-<p>Find me in app/views/admin/dashboard/index.html.erb</p>
+<h1>Admin dashboard</h1>
 
 <% if can?(:read, Article) %>
   <h2>Articles</h2>
@@ -12,4 +11,15 @@
     <% end %>
   <% end %>
   <%= render(@articles) || "No articles" %>
+<% end %>
+
+<% if can?(:read, SubscriptionOffer) %>
+  <h2>Subscription offers</h2>
+  <% if can?(:create, SubscriptionOffer) %>
+    <%= button_to new_subscription_offer_path, method: :get, class: 'button-primary' do %>
+      <%= 'Create Subscription Offer' %>
+      <%= svg_icon_tag 'icon_plus' %>
+    <% end %>
+  <% end %>
+  <%= render(@subscription_offers) || "No subscription offers" %>
 <% end %>

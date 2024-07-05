@@ -4,59 +4,59 @@ require 'test_helper'
 
 class ArticleTest < ActiveSupport::TestCase
   def setup
-    @article = articles(:one)
+    @subscription_offer = articles(:one)
   end
 
   test 'should be valid' do
-    assert_predicate @article, :valid?
+    assert_predicate @subscription_offer, :valid?
   end
 
   test 'should not be valid without name' do
-    @article.name = nil
-    assert_not_predicate @article, :valid?
+    @subscription_offer.name = nil
+    assert_not_predicate @subscription_offer, :valid?
   end
 
   test 'should not be valid without price' do
-    @article.price = nil
-    assert_not_predicate @article, :valid?
+    @subscription_offer.price = nil
+    assert_not_predicate @subscription_offer, :valid?
   end
 
   test 'price should be integer' do
-    @article.price = 10.56
-    assert_not_predicate @article, :valid?
+    @subscription_offer.price = 10.56
+    assert_not_predicate @subscription_offer, :valid?
   end
 
   test 'price should be positive' do
-    @article.price = -5
-    assert_not_predicate @article, :valid?
+    @subscription_offer.price = -5
+    assert_not_predicate @subscription_offer, :valid?
   end
 
   test 'article should soft delete' do
     assert_no_difference 'Article.count' do
-      @article.soft_delete
+      @subscription_offer.soft_delete
     end
   end
 
   test 'article should be destroyed if no sales' do
-    @article.sales.destroy_all
-    @article.refunds.destroy_all
+    @subscription_offer.sales.destroy_all
+    @subscription_offer.refunds.destroy_all
     assert_difference 'Article.count', -1 do
-      @article.destroy
+      @subscription_offer.destroy
     end
   end
 
   test 'article should be destroyable' do
-    @article.sales.destroy_all
-    @article.refunds.destroy_all
-    assert_predicate @article, :destroy
+    @subscription_offer.sales.destroy_all
+    @subscription_offer.refunds.destroy_all
+    assert_predicate @subscription_offer, :destroy
   end
 
   test 'article should not destroy if dependant' do
     assert_no_difference 'Article.count' do
-      assert_not_predicate @article, :destroy
+      assert_not_predicate @subscription_offer, :destroy
     end
 
-    assert_predicate @article, :persisted?
-    assert_includes @article.errors[:base], 'Cannot delete record because dependent articles sales exist'
+    assert_predicate @subscription_offer, :persisted?
+    assert_includes @subscription_offer.errors[:base], 'Cannot delete record because dependent articles sales exist'
   end
 end

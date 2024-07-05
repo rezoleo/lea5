@@ -9,6 +9,11 @@
           <%= link_to "Users", users_path %>
         </li>
       <% end %>
+      <% if can?(:manage, :all) %>
+        <li>
+          <%= link_to "Admin", admin_path %>
+        </li>
+      <% end %>
     </ul>
   </nav>
 
