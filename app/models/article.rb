@@ -10,16 +10,7 @@ class Article < ApplicationRecord
   validates :price, presence: true, allow_blank: false,
                     numericality: { greater_than_or_equal_to: 0, only_integer: true }
 
-  before_destroy :can_be_destroyed?
-
   def soft_delete
     update(deleted_at: Time.zone.now)
-  end
-
-  def can_be_destroyed?
-    return true if sales.empty?
-
-    errors.add(:base, 'Cannot delete a sold article !')
-    throw(:abort)
   end
 end
