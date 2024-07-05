@@ -48,6 +48,14 @@ class ArticleTest < ActiveSupport::TestCase
   test 'article should be destroyable' do
     @article.sales.destroy_all
     @article.refunds.destroy_all
-    assert_predicate @article, :can_be_destroyed?
+    assert_predicate @article, :destroy
+  end
+
+  test 'article should not destroy if dependant' do
+    assert_no_difference 'Article.count' do
+      assert_not_predicate @article, :destroy
+    end
+
+    assert_predicate @article, :persisted?
   end
 end

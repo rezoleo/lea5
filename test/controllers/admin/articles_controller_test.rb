@@ -22,6 +22,14 @@ module Admin
       assert_redirected_to admin_path
     end
 
+    test 'should re-render if missing article information' do
+      assert_no_difference 'Article.count' do
+        post articles_path, params: { article: { name: nil } }
+      end
+
+      assert_template 'admin/articles/new'
+    end
+
     test 'should not destroy article if soft_delete' do
       assert_no_difference 'Article.count' do
         @article.soft_delete
