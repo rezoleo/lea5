@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Sale < ApplicationRecord
-  belongs_to :seller, class_name: 'User'
+  belongs_to :seller, class_name: 'User', optional: true
   belongs_to :client, class_name: 'User'
   belongs_to :payment_method
   belongs_to :invoice
@@ -11,4 +11,6 @@ class Sale < ApplicationRecord
   has_many :articles, through: :articles_sales
   has_many :sales_subscription_offers, dependent: :destroy
   has_many :subscription_offers, through: :sales_subscription_offers
+
+  validates :total_price, presence: true
 end

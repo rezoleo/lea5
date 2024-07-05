@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Refund < ApplicationRecord
-  belongs_to :refunder, class_name: 'User'
+  belongs_to :refunder, class_name: 'User', optional: true
   belongs_to :refund_method, class_name: 'PaymentMethod'
   belongs_to :sale
   belongs_to :invoice
