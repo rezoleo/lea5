@@ -1,1 +1,18 @@
 <%# locals: () %>
+
+<% provide :button_text, "Create" %>
+
+<h1>Create new sale</h1>
+
+<%= form_with(model: [@owner, @sale], class: 'form') do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <div>
+    <%= f.label :article_id %>
+    <%= f.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article'  %>
+    <%= f.label :quantity %>
+    <%= f.number_field :quantity %>
+  </div>
+  <div>
+    <%= f.submit yield(:button_text) %>
+  </div>
+<% end %>

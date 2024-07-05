@@ -5,6 +5,8 @@ class SalesController < ApplicationController
 
   def new
     @sale = @owner.sales_as_client.new
+    @articles = Article.where(deleted_at: nil)
+    @subscription_offers = SubscriptionOffer.where(deleted_at: nil)
     authorize! :new, @sale
   end
 
