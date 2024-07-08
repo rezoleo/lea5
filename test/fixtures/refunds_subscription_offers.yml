@@ -3,9 +3,9 @@
 one:
   refund: one
   subscription_offer: one
-  duration: 1
+  quantity: 1
 
 two:
   refund: two
   subscription_offer: two
-  duration: 1
+  quantity: 1

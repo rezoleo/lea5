@@ -3,9 +3,9 @@
 one:
   sale: one
   subscription_offer: one
-  duration: 1
+  quantity: 1
 
 two:
   sale: two
   subscription_offer: two
-  duration: 1
+  quantity: 1
