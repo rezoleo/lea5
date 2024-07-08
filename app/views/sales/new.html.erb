@@ -7,13 +7,9 @@
 <%= form_with(model: [@owner, @sale], class: 'form', data: { controller: 'sales' }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
 
-  <div data-sales-target="articles">
-    <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: '1' do |sale_form| %>
-      <%= sale_form.label :article_id %>
-      <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article' %>
-      <%= sale_form.label :quantity %>
-      <%= sale_form.number_field :quantity %>
-    <% end %>
+  <div data-sales-target="subscription">
+    <%= f.label :duration %>
+    <%= f.number_field :duration, step: 1 %>
   </div>
 
   <button id="add_article" data-action="sales#addArticle:prevent">Add article</button>

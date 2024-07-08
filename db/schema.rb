@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_20_124608) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_20_124609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -104,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_20_124608) do
   create_table "refunds_subscription_offers", force: :cascade do |t|
     t.bigint "refund_id", null: false
     t.bigint "subscription_offer_id", null: false
-    t.integer "duration"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["refund_id"], name: "index_refunds_subscription_offers_on_refund_id"
@@ -129,7 +129,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_20_124608) do
   create_table "sales_subscription_offers", force: :cascade do |t|
     t.bigint "sale_id", null: false
     t.bigint "subscription_offer_id", null: false
-    t.integer "duration"
+    t.integer "quantity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["sale_id"], name: "index_sales_subscription_offers_on_sale_id"

@@ -5,11 +5,10 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="sales"
 export default class extends Controller {
-  static targets = ["articleTemplate", "articles"]
+  static targets = ["articleTemplate", "articles", "subscription"]
 
   initialize() {
-    // id=1 is in the HTML from the start (we want to add at least one article)
-    this.nextId = 2;
+    this.nextId = 1;
   }
 
   connect() {}
@@ -19,7 +18,8 @@ export default class extends Controller {
     // newArticle.getElementById("sale_article_id_new").id = `sale_article_id_${this.nextId}`
     // newArticle.getElementById("sale_quantity_new").id = `sale_quantity_${this.nextId}`
     const content = newArticle.innerHTML.replace(/NEW_ARTICLE/g, this.nextId)
-    this.articlesTargets.at(-1).insertAdjacentHTML("afterend", content)
+    let insertAfter = this.articlesTargets.length !== 0 ? this.articlesTargets : this.subscriptionTargets
+    insertAfter.at(-1).insertAdjacentHTML("afterend", content)
     this.nextId++
   }
 
