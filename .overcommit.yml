@@ -55,6 +55,9 @@ CommitMsg:
     expected_pattern_message: '<build|ci|docs|feat|fix|perf|refactor|style|test>(<scope>): <message>'
     sample_message: 'ci(rubocop): increase class length limit'
 
+  TextWidth:
+    max_subject_width: 80
+
 PrePush:
   Brakeman:
     enabled: true
