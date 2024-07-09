@@ -56,6 +56,7 @@ CommitMsg:
     sample_message: 'ci(rubocop): increase class length limit'
 
   TextWidth:
+    enabled: true
     max_subject_width: 80
 
 PrePush:
