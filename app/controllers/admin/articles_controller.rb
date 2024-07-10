@@ -8,7 +8,7 @@ module Admin
     end
 
     def create
-      @article = Article.new(name: article_params[:name], price: article_params[:price])
+      @article = Article.new(article_params)
       authorize! :create, @article
       if @article.save
         flash[:success] = "Article #{article_params[:name]} created!"

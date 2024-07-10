@@ -8,8 +8,7 @@ module Admin
     end
 
     def create
-      @subscription_offer = SubscriptionOffer.new(duration: subscription_offer_params[:duration],
-                                                  price: subscription_offer_params[:price])
+      @subscription_offer = SubscriptionOffer.new(subscription_offer_params)
       authorize! :create, @subscription_offer
       if @subscription_offer.save
         flash[:success] = "Subscription offer for #{subscription_offer_params[:duration]} months created!"
