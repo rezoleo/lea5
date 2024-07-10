@@ -39,6 +39,19 @@ end
 class InvoicePdfGenerator
   BASE_FONT_SIZE = 12
 
+  # @input should be a hash with the following keys:
+  # - :invoice_id (String) - ID of the invoice
+  # - :sale_date (String) - Date of sale
+  # - :issue_date (String) - Date the invoice was issued
+  # - :client_name (String) - Name of the client
+  # - :client_address (String) - Address of the client
+  # - :items (Array of Hashes) - List of items, each item being a hash with keys:
+  #   - :item_name (String) - Name of the item
+  #   - :price_cents (Integer) - Price of the item in cents
+  #   - :quantity (Integer) - Quantity of the item
+  # - :payment_amount_cents (Integer, optional) - Amount already paid in cents
+  # - :payment_date (String, optional) - Date of payment
+  # - :payment_method (String, optional) - Method of payment
   def initialize(input)
     @input = input
     @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
@@ -47,6 +60,7 @@ class InvoicePdfGenerator
     setup_document
   end
 
+  # @return [StringIO] A stream containing the generated PDF file data
   def generate_pdf
     @composer.new_page
     add_invoice_header
@@ -55,9 +69,11 @@ class InvoicePdfGenerator
     add_totals
     add_payment_info
 
-    file_path = Rails.root.join('tmp', "FE_#{@input[:invoice_id]}.pdf").to_s
-    @composer.write(file_path)
-    file_path
+    # return the result directly as a file stream
+    pdf_stream = StringIO.new
+    @composer.write(pdf_stream)
+    pdf_stream.rewind
+    pdf_stream
   end
 
   private
@@ -137,12 +153,15 @@ class InvoicePdfGenerator
     @composer.text(InvoiceLib::CONDITIONS, style: :conditions, margin: margin_bottom(3))
   end
 
+  # rubocop:disable Metrics/MethodLength
   def add_payment_info
     header = lambda do |_tb|
       [{ background_color: 'C0C0C0' },
        [
-         table('Date', style: :small), table('Règlement', style: :small),
-         table('Montant', style: :small, text_align: :right), table('À payer', style: :small, text_align: :right)
+         table('Date', style: :small),
+         table('Règlement', style: :small),
+         table('Montant', style: :small, text_align: :right),
+         table('À payer', style: :small, text_align: :right)
        ]]
     end
 
@@ -150,13 +169,15 @@ class InvoicePdfGenerator
     left_to_pay_in_cents = @total_price_in_cents - payed_in_cents
 
     data = [[
-      table(@input[:payment_date] || '', style: :small), table(@input[:payment_method] || '', style: :small),
+      table(@input[:payment_date] || '', style: :small),
+      table(@input[:payment_method] || '', style: :small),
       table(format_cents(payed_in_cents), style: :small, text_align: :right),
       table(format_cents(left_to_pay_in_cents), style: :small, text_align: :right)
     ]]
 
     @composer.table(data, column_widths: [-3, -5, -2, -2], header: header, width: 300)
   end
+  # rubocop:enable Metrics/MethodLength
 
   def margin_bottom(lines)
     [0, 0, lines * BASE_FONT_SIZE]
