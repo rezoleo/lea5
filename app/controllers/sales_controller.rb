@@ -7,6 +7,8 @@ class SalesController < ApplicationController
     @sale = @owner.sales_as_client.new
     @sale.articles_sales.new
     @articles = Article.where(deleted_at: nil)
+    @subscription_offers = SubscriptionOffer.where(deleted_at: nil).order(duration: :desc)
+    @payment_methods = PaymentMethod.where(deleted_at: nil)
     authorize! :new, @sale
   end
 
@@ -21,14 +23,14 @@ class SalesController < ApplicationController
     # @sale.save!
   end
 
+  private
+
   def owner
     @owner = User.find(params[:user_id])
   end
 
-  private
-
   def sales_params
-    params.require(:sale).permit(:duration, articles_sales_attributes: [:article_id, :quantity])
+    params.require(:sale).permit(:duration, :payment_method_id, articles_sales_attributes: [:article_id, :quantity])
   end
 
   def reformated_params

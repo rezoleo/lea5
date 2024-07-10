@@ -5,13 +5,20 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="sales"
 export default class extends Controller {
-  static targets = ["articleTemplate", "articles", "subscription"]
+  static targets = ["articleTemplate", "articles", "totalPrice", "subPrice", "subscription"]
 
   initialize() {
     this.nextId = 1;
   }
 
-  connect() {}
+  connect() {
+    this.articles = {}
+    const articles = JSON.parse(this.element.dataset.articles)
+    articles.forEach(e => {
+      this.articles[e.id] = e.price
+    })
+    this.subscription_offers = JSON.parse(this.element.dataset.subscriptions)
+  }
 
   addArticle() {
     const newArticle = this.articleTemplateTarget//.content.cloneNode(true)
@@ -28,5 +35,37 @@ export default class extends Controller {
    */
   removeArticle(event) {
     event.currentTarget.closest("div").remove()
+    this.updateTotalPrice()
+  }
+
+  updateTotalPrice() {
+    let price = 0
+    let articles = this.articlesTargets
+    articles.forEach(e => {
+      let id = Number.parseInt(e.querySelector('select').value)
+      let quantity = Number.parseInt(e.querySelector('input').value)
+      if (id && quantity) price += this.articles[id] * quantity
+    })
+    price += Number.parseFloat(this.subPriceTarget.textContent) * 100
+    this.totalPriceTarget.textContent = (price / 100).toFixed(2).toLocaleString()
+  }
+
+  /**
+   * @param event {Event}
+   */
+  updateSubPrice(event) {
+    let sub = Number.parseInt(event.currentTarget.value)
+    let price = 0
+    this.subscription_offers.forEach(e => {
+      let quantity = Math.floor(sub / e.duration)
+      sub -= quantity * e.duration
+      price += e.price * quantity
+    })
+    this.subPriceTarget.textContent = (price / 100).toFixed(2).toLocaleString()
+    this.updateTotalPrice()
+  }
+
+  testUpdate() {
+    console.log("test")
   }
 }

@@ -4,12 +4,15 @@
 
 <h1>Create new sale</h1>
 
-<%= form_with(model: [@owner, @sale], class: 'form', data: { controller: 'sales' }) do |f| %>
+<%= form_with(model: [@owner, @sale], class: 'form', data: { controller: 'sales', articles: @articles, subscriptions: @subscription_offers }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
+
+  Total price : <span data-sales-target="totalPrice">0.00</span>
 
   <div data-sales-target="subscription">
     <%= f.label :duration %>
-    <%= f.number_field :duration, step: 1 %>
+    Sub price : <span data-sales-target="subPrice">0.00</span>
+    <%= f.number_field :duration, step: 1, data: { action: 'change->sales#updateSubPrice' } %>
   </div>
 
   <button id="add_article" data-action="sales#addArticle:prevent">Add article</button>
@@ -18,13 +21,18 @@
     <div data-sales-target="articles">
       <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: 'NEW_ARTICLE' do |sale_form| %>
         <%= sale_form.label :article_id %>
-        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article' %>
+        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article', data: { action: 'sales#testUpdate' } %>
         <%= sale_form.label :quantity %>
-        <%= sale_form.number_field :quantity %>
+        <%= sale_form.number_field :quantity, data: { action: 'change->sales#updateTotalPrice' } %>
       <% end %>
       <button data-action="sales#removeArticle:prevent">Remove article</button>
     </div>
   </template>
+
+  <div>
+    <%= f.label :payment_method_id %>
+    <%= f.select :payment_method_id, @payment_methods.collect { |p| [p.name, p.id] }, prompt: 'Select payment method' %>
+  </div>
 
   <div>
     <%= f.submit yield(:button_text) %>
