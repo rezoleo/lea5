@@ -40,6 +40,7 @@ module Admin
       assert_no_difference 'SubscriptionOffer.count' do
         delete subscription_offer_path(@subscription_offer)
       end
+      assert_redirected_to admin_path
     end
   end
 end

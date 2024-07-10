@@ -40,6 +40,7 @@ module Admin
       assert_no_difference 'Article.count' do
         delete article_path(@articles)
       end
+      assert_redirected_to admin_path
     end
   end
 end

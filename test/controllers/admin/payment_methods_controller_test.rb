@@ -40,6 +40,7 @@ module Admin
       assert_no_difference 'PaymentMethod.count' do
         delete article_path(@payment_method)
       end
+      assert_redirected_to admin_path
     end
   end
 end
