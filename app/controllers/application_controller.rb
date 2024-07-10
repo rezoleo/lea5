@@ -5,6 +5,14 @@ class ApplicationController < ActionController::Base
 
   before_action :still_authenticated?
 
+  def current_ability
+    @current_ability ||= if session[:api_key_id].nil?
+                           UserAbility.new(current_user)
+                         else
+                           ApiKeyAbility.new(current_bearer)
+                         end
+  end
+
   private
 
   def still_authenticated?
