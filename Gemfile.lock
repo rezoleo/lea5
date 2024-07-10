@@ -101,6 +101,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (5.0.0)
+    cmdparse (3.0.7)
     coderay (1.1.3)
     concurrent-ruby (1.3.3)
     connection_pool (2.4.1)
@@ -126,6 +127,7 @@ GEM
       net-http
     ffi (1.16.3)
     formatador (1.1.0)
+    geom2d (0.4.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     guard (2.18.1)
@@ -143,6 +145,10 @@ GEM
       minitest (>= 3.0)
     hashdiff (1.1.0)
     hashie (5.0.0)
+    hexapdf (0.40.0)
+      cmdparse (~> 3.0, >= 3.0.3)
+      geom2d (~> 0.4, >= 0.4.1)
+      openssl (>= 2.2.1)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.2.3)
@@ -232,6 +238,7 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
+    openssl (3.2.0)
     overcommit (0.63.0)
       childprocess (>= 0.6.3, < 6)
       iniparse (~> 1.4)
@@ -423,6 +430,7 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   guard (~> 2.18)
   guard-minitest (~> 2.4)
+  hexapdf (~> 0.40.0)
   importmap-rails (~> 1.2)
   ipaddress (~> 0.8.3)
   jbuilder (~> 2.12)
