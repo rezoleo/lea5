@@ -38,7 +38,7 @@ module Admin
 
     test 'should soft_delete payment_method' do
       assert_no_difference 'PaymentMethod.count' do
-        delete article_path(@payment_method)
+        delete payment_method_path(@payment_method)
       end
       assert_redirected_to admin_path
     end
