@@ -43,7 +43,6 @@ class SalesController < ApplicationController
     par
   end
 
-  # rubocop:disable Metrics/MethodLength
   def duration_to_subscription_offers(duration)
     tab = []
     subscription_offers = SubscriptionOffer.where(deleted_at: nil).order(duration: :desc)
@@ -66,7 +65,6 @@ class SalesController < ApplicationController
     end
     tab
   end
-  # rubocop:enable Metrics/MethodLength
 
   def total_price(sale)
     total = 0
