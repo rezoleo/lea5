@@ -5,7 +5,7 @@ require 'test_helper'
 module Admin
   class ArticlesControllerTest < ActionDispatch::IntegrationTest
     def setup
-      @subscription_offer = articles(:one)
+      @articles = articles(:one)
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']
     end
@@ -32,13 +32,13 @@ module Admin
 
     test 'should not destroy article if soft_delete' do
       assert_no_difference 'Article.count' do
-        @subscription_offer.soft_delete
+        @articles.soft_delete
       end
     end
 
     test 'should soft_delete article' do
       assert_no_difference 'Article.count' do
-        delete article_path(@subscription_offer)
+        delete article_path(@articles)
       end
     end
   end
