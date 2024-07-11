@@ -39,10 +39,12 @@ class Sale < ApplicationRecord
   end
 
   def generate_invoice_id
-    hash = JSON.parse(invoice.json)
+    hash = JSON.parse(invoice.generation_json).symbolize_keys
     return unless hash[:invoice_id].nil?
 
     hash[:invoice_id] = "F-#{invoice.id}"
+    self.invoice = Invoice.new(generation_json: hash.to_json)
+    hash[:invoice_id]
   end
 
   private
@@ -51,7 +53,6 @@ class Sale < ApplicationRecord
   # rubocop:disable Metrics/AbcSize
   def global_invoice_hash
     hash = {
-      invoice_id: '111',
       sale_date: Time.zone.today,
       issue_date: Time.zone.today,
       client_name: "#{client.firstname.capitalize} #{client.lastname.upcase}",

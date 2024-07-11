@@ -12,21 +12,29 @@ class SalesController < ApplicationController
     authorize! :new, @sale
   end
 
+  # rubocop:disable Metrics/AbcSize
   def create
     @sale = @owner.sales_as_client.new(reformated_params)
     @sale.update_total_price
+    @sale.seller = current_user
     if @sale.total_price.zero?
-      flash[:error] = "You can't process an empty sale!"
-      return redirect_to new_user_sale_path, status: :unprocessable_entity
+      flash.now[:error] = "You can't process an empty sale!"
+      return render :new, status: :unprocessable_entity
     end
     @sale.verify if @sale.payment_method.auto_verify
     @sale.gen_temp_invoice
     authorize! :create, @sale
-    # if @sale.save
-    #   @sale.generate_invoice_id
-    # end
-    # @sale.save!
+    if @sale.save
+      name = @sale.generate_invoice_id
+      @sale.invoice.pdf.attach(io: @sale.invoice.generate, filename: name, content_type: 'application/pdf')
+      @sale.save!
+      flash[:success] = 'Sale was successfully created.'
+      redirect_to @owner
+    else
+      render :new, status: :unprocessable_entity
+    end
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
 
