@@ -14,12 +14,17 @@ class SalesController < ApplicationController
 
   def create
     @sale = @owner.sales_as_client.new(reformated_params)
-    total_price @sale
+    @sale.update_total_price
     if @sale.total_price.zero?
       flash[:error] = "You can't process an empty sale!"
       return redirect_to new_user_sale_path, status: :unprocessable_entity
     end
+    @sale.verify if @sale.payment_method.auto_verify
+    @sale.gen_temp_invoice
     authorize! :create, @sale
+    # if @sale.save
+    #   @sale.generate_invoice_id
+    # end
     # @sale.save!
   end
 
@@ -64,16 +69,5 @@ class SalesController < ApplicationController
       return false
     end
     tab
-  end
-
-  def total_price(sale)
-    total = 0
-    sale.articles_sales.each do |rec|
-      total += rec.quantity * Article.find(rec.article_id).price
-    end
-    sale.sales_subscription_offers.each do |rec|
-      total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
-    end
-    sale.total_price = total
   end
 end

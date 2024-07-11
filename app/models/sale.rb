@@ -16,4 +16,64 @@ class Sale < ApplicationRecord
   accepts_nested_attributes_for :sales_subscription_offers
 
   validates :total_price, presence: true
+
+  def verify
+    self.verified_at = Time.zone.now if verified_at.nil?
+  end
+
+  def update_total_price
+    total = 0
+    articles_sales.each do |rec|
+      total += rec.quantity * Article.find(rec.article_id).price
+    end
+    sales_subscription_offers.each do |rec|
+      total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
+    end
+    self.total_price = total
+  end
+
+  def gen_temp_invoice
+    return if invoice
+
+    self.invoice = Invoice.new(generation_json: global_invoice_hash.to_json)
+  end
+
+  def generate_invoice_id
+    hash = JSON.parse(invoice.json)
+    return unless hash[:invoice_id].nil?
+
+    hash[:invoice_id] = "F-#{invoice.id}"
+  end
+
+  private
+
+  # rubocop:disable Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
+  def global_invoice_hash
+    hash = {
+      invoice_id: '111',
+      sale_date: Time.zone.today,
+      issue_date: Time.zone.today,
+      client_name: "#{client.firstname.capitalize} #{client.lastname.upcase}",
+      client_address: "Appartement #{client.room}\nRésidence Léonard de Vinci
+                        Avenue Paul Langevin\n59650 Villeneuve-d'Ascq",
+      payment_amount_cent: verified_at.nil? ? 0 : total_price,
+      payment_method: payment_method.name
+    }
+    hash[:payment_date] = verified_at unless verified_at.nil?
+    hash[:items] = []
+    sales_subscription_offers.each do |e|
+      item_hash = { item_name: "Abonnement - #{e.subscription_offer.duration} mois",
+                    price_cents: e.subscription_offer.price, quantity: e.quantity }
+      hash[:items].push item_hash
+    end
+    articles_sales.each do |e|
+      item_hash = { item_name: e.article.name,
+                    price_cents: e.article.price, quantity: e.quantity }
+      hash[:items].push item_hash
+    end
+    hash
+  end
+  # rubocop:enable Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 end
