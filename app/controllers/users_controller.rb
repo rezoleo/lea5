@@ -4,6 +4,7 @@ class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
   def index
+    authorize! :index, User
     @users = User.accessible_by(current_ability)
   end
 
