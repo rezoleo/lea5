@@ -17,8 +17,18 @@ class Sale < ApplicationRecord
 
   validates :total_price, presence: true
 
+  # before_create :create_associated_subscription
+
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
+  end
+
+  def generate(duration:, seller:)
+    generate_sales_subscription_offers duration.to_i
+    self.seller = seller
+    update_total_price
+    verify if payment_method.auto_verify
+    generate_invoice
   end
 
   def update_total_price
@@ -32,19 +42,14 @@ class Sale < ApplicationRecord
     self.total_price = total
   end
 
-  def gen_temp_invoice
+  def generate_invoice
     return if invoice
 
     self.invoice = Invoice.new(generation_json: global_invoice_hash.to_json)
   end
 
-  def generate_invoice_id
-    hash = JSON.parse(invoice.generation_json).symbolize_keys
-    return unless hash[:invoice_id].nil?
-
-    hash[:invoice_id] = "F-#{invoice.id}"
-    self.invoice = Invoice.new(generation_json: hash.to_json)
-    hash[:invoice_id]
+  def empty?
+    @sale.articles_sales.count.zero? && @sale.sales_subscription_offers.count.zero?
   end
 
   private
@@ -77,4 +82,25 @@ class Sale < ApplicationRecord
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+
+  def generate_sales_subscription_offers(duration)
+    subscription_offers = SubscriptionOffer.where(deleted_at: nil).order(duration: :desc)
+    if subscription_offers.empty?
+      errors.add(:base, 'There are no subscription offers registered!')
+      return false
+    end
+    subscription_offers.each do |offer|
+      break if duration.zero?
+
+      quantity = duration / offer.duration
+      if quantity.positive?
+        sales_subscription_offers.new(subscription_offer_id: offer.id, quantity: quantity)
+        duration -= quantity * offer.duration
+      end
+    end
+    return unless duration.zero?
+
+    errors.add(:base, 'Subscription offers are not exhaustive!')
+    false
+  end
 end

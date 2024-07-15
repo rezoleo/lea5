@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_20_124610) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -162,6 +162,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124610) do
     t.datetime "updated_at", null: false
     t.index ["sale_id"], name: "index_sales_subscription_offers_on_sale_id"
     t.index ["subscription_offer_id"], name: "index_sales_subscription_offers_on_subscription_offer_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "value", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["key"], name: "index_settings_on_key", unique: true
   end
 
   create_table "subscription_offers", force: :cascade do |t|
