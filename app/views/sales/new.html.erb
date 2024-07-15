@@ -21,7 +21,7 @@
     <div data-sales-target="articles">
       <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: 'NEW_ARTICLE' do |sale_form| %>
         <%= sale_form.label :article_id %>
-        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, prompt: 'Select an article', data: { action: 'sales#testUpdate' } %>
+        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, { prompt: 'Select an article' }, { data: { action: 'sales#updateTotalPrice' } } %>
         <%= sale_form.label :quantity %>
         <%= sale_form.number_field :quantity, data: { action: 'change->sales#updateTotalPrice' } %>
       <% end %>
