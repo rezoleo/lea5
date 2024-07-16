@@ -42,7 +42,7 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   end
 
   test 'offer should soft delete' do
-    assert_no_difference 'SubscriptionOffer.count' do
+    assert_no_difference 'SubscriptionOffer.unscoped.count' do
       @subscription_offer.soft_delete
     end
   end
@@ -50,7 +50,7 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   test 'offer should be destroyed if no sales' do
     @subscription_offer.sales.destroy_all
     @subscription_offer.refunds.destroy_all
-    assert_difference 'SubscriptionOffer.count', -1 do
+    assert_difference 'SubscriptionOffer.unscoped.count', -1 do
       @subscription_offer.destroy
     end
   end
@@ -62,7 +62,7 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   end
 
   test 'offer should not destroy if dependant' do
-    assert_no_difference 'SubscriptionOffer.count' do
+    assert_no_difference 'SubscriptionOffer.unscoped.count' do
       assert_not_predicate @subscription_offer, :destroy
     end
 

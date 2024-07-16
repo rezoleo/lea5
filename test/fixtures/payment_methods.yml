@@ -3,9 +3,7 @@
 one:
   name: MyString
   auto_verify: false
-  deleted_at: 2024-06-20 14:41:01
 
 two:
   name: MyString
   auto_verify: false
-  deleted_at: 2024-06-20 14:41:01

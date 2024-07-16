@@ -22,7 +22,7 @@ class PaymentMethodTest < ActiveSupport::TestCase
   end
 
   test 'payment_method should soft delete' do
-    assert_no_difference 'PaymentMethod.count' do
+    assert_no_difference 'PaymentMethod.unscoped.count' do
       @payment_method.soft_delete
     end
   end
@@ -30,7 +30,7 @@ class PaymentMethodTest < ActiveSupport::TestCase
   test 'payment_method should be destroyed if no sales' do
     @payment_method.sales.destroy_all
     @payment_method.refunds.destroy_all
-    assert_difference 'PaymentMethod.count', -1 do
+    assert_difference 'PaymentMethod.unscoped.count', -1 do
       @payment_method.destroy
     end
   end
@@ -42,7 +42,7 @@ class PaymentMethodTest < ActiveSupport::TestCase
   end
 
   test 'payment_method should not destroy if dependant' do
-    assert_no_difference 'PaymentMethod.count' do
+    assert_no_difference 'PaymentMethod.unscoped.count' do
       assert_not_predicate @payment_method, :destroy
     end
 

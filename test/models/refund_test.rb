@@ -8,13 +8,13 @@ class RefundTest < ActiveSupport::TestCase
   end
 
   test 'destroy refund should destroy articles_refunds' do
-    assert_difference 'Refund.count', -1 do
+    assert_difference 'ArticlesRefund.count', -1 do
       @refund.destroy
     end
   end
 
   test 'destroy refun should destroy refunds_subscription_offers' do
-    assert_difference 'Refund.count', -1 do
+    assert_difference 'RefundsSubscriptionOffer.count', -1 do
       @refund.destroy
     end
   end

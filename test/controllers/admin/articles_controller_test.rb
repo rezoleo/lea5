@@ -16,28 +16,22 @@ module Admin
     end
 
     test 'should create article' do
-      assert_difference 'Article.count', 1 do
+      assert_difference 'Article.unscoped.count', 1 do
         post articles_path, params: { article: { name: 'test_name', price: 1456 } }
       end
       assert_redirected_to admin_path
     end
 
     test 'should re-render if missing article information' do
-      assert_no_difference 'Article.count' do
+      assert_no_difference 'Article.unscoped.count' do
         post articles_path, params: { article: { name: nil } }
       end
 
       assert_template 'admin/articles/new'
     end
 
-    test 'should not destroy article if soft_delete' do
-      assert_no_difference 'Article.count' do
-        @articles.soft_delete
-      end
-    end
-
     test 'should soft_delete article' do
-      assert_no_difference 'Article.count' do
+      assert_no_difference 'Article.unscoped.count' do
         delete article_path(@articles)
       end
       assert_redirected_to admin_path
