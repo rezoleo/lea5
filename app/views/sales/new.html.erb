@@ -12,7 +12,7 @@
   <div data-sales-target="subscription">
     <%= f.label :duration %>
     Sub price : <span data-sales-target="subPrice">0.00</span>
-    <%= f.number_field :duration, step: 1, data: { action: 'change->sales#updateSubPrice' } %>
+    <%= f.number_field :duration, step: 1, min: 1, data: { action: 'change->sales#updateSubPrice' } %>
   </div>
 
   <button id="add_article" data-action="sales#addArticle:prevent">Add article</button>
