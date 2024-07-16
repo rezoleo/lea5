@@ -6,9 +6,9 @@ class SalesController < ApplicationController
   def new
     @sale = @owner.sales_as_client.new
     @sale.articles_sales.new
-    @articles = Article.where(deleted_at: nil)
-    @subscription_offers = SubscriptionOffer.where(deleted_at: nil).order(duration: :desc)
-    @payment_methods = PaymentMethod.where(deleted_at: nil)
+    @articles = Article.all
+    @subscription_offers = SubscriptionOffer.order(duration: :desc)
+    @payment_methods = PaymentMethod.all
     authorize! :new, @sale
   end
 

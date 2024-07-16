@@ -12,6 +12,8 @@ class SubscriptionOffer < ApplicationRecord
                     numericality: { greater_than_or_equal_to: 0, only_integer: true, message: 'Must be a positive
                      number. Maximum 2 numbers after comma' }
 
+  default_scope { where(deleted_at: nil) }
+
   def soft_delete
     update(deleted_at: Time.zone.now)
   end

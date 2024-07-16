@@ -84,7 +84,7 @@ class Sale < ApplicationRecord
   # rubocop:enable Metrics/AbcSize
 
   def generate_sales_subscription_offers(duration)
-    subscription_offers = SubscriptionOffer.where(deleted_at: nil).order(duration: :desc)
+    subscription_offers = SubscriptionOffer.order(duration: :desc)
     if subscription_offers.empty?
       errors.add(:base, 'There are no subscription offers registered!')
       return false
