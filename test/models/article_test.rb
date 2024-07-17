@@ -32,9 +32,18 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test 'article should soft delete' do
+    @article.deleted_at = nil
     assert_no_difference 'Article.unscoped.count' do
       @article.soft_delete
     end
+    assert_not_predicate @article.deleted_at, :nil?
+  end
+
+  test 'soft_delete should not change deleted_at date' do
+    @article.deleted_at = 3.days.ago
+    before_test = @article.deleted_at
+    @article.soft_delete
+    assert_equal @article.deleted_at, before_test
   end
 
   test 'article should be destroyed if no sales' do

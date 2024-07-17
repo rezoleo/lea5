@@ -21,10 +21,19 @@ class PaymentMethodTest < ActiveSupport::TestCase
     assert_not_predicate @payment_method, :valid?
   end
 
-  test 'payment_method should soft delete' do
+  test 'payment method should soft delete' do
+    @payment_method.deleted_at = nil
     assert_no_difference 'PaymentMethod.unscoped.count' do
       @payment_method.soft_delete
     end
+    assert_not_predicate @payment_method.deleted_at, :nil?
+  end
+
+  test 'soft_delete should not change deleted_at date' do
+    @payment_method.deleted_at = 3.days.ago
+    before_test = @payment_method.deleted_at
+    @payment_method.soft_delete
+    assert_equal @payment_method.deleted_at, before_test
   end
 
   test 'payment_method should be destroyed if no sales' do

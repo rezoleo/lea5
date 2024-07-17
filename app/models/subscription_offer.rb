@@ -15,6 +15,6 @@ class SubscriptionOffer < ApplicationRecord
   default_scope { where(deleted_at: nil) }
 
   def soft_delete
-    update(deleted_at: Time.zone.now)
+    update(deleted_at: Time.zone.now) if deleted_at.nil?
   end
 end
