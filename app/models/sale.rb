@@ -13,7 +13,6 @@ class Sale < ApplicationRecord
   has_many :subscription_offers, through: :sales_subscription_offers
 
   accepts_nested_attributes_for :articles_sales
-  # accepts_nested_attributes_for :sales_subscription_offers
 
   validates :total_price, presence: true
 
@@ -24,6 +23,7 @@ class Sale < ApplicationRecord
   def generate(duration:, seller:)
     generate_sales_subscription_offers duration.to_i
     self.seller = seller
+    create_associated_subscription duration.to_i unless duration.to_i.zero?
     update_total_price
     verify if payment_method.auto_verify
     generate_invoice
@@ -71,5 +71,9 @@ class Sale < ApplicationRecord
 
     errors.add(:base, 'Subscription offers are not exhaustive!')
     false
+  end
+
+  def create_associated_subscription(duration)
+    self.subscription = client.extend_subscription duration: duration
   end
 end
