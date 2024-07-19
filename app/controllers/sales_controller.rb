@@ -15,7 +15,8 @@ class SalesController < ApplicationController
   def create
     @sale = @owner.sales_as_client.new(sales_params)
     @sale.generate(duration: params[:sale][:duration], seller: current_user)
-    redirect_to :new_user_sale, user: @user, status: :unprocessable_entity if @sale.empty
+    return redirect_to :new_user_sale, user: @user, status: :unprocessable_entity if @sale.empty?
+
     authorize! :create, @sale
     if @sale.save
       flash[:success] = 'Sale was successfully created.'

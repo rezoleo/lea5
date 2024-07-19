@@ -13,11 +13,9 @@ class Sale < ApplicationRecord
   has_many :subscription_offers, through: :sales_subscription_offers
 
   accepts_nested_attributes_for :articles_sales
-  accepts_nested_attributes_for :sales_subscription_offers
+  # accepts_nested_attributes_for :sales_subscription_offers
 
   validates :total_price, presence: true
-
-  # before_create :create_associated_subscription
 
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
