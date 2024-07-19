@@ -5,7 +5,7 @@ class Setting < ApplicationRecord
   validates :value, presence: true
 
   def self.next_invoice_id
-    record = lock(true).get_or_create(key: 'last_invoice_id', default: 0)
+    record = lock(true).get_or_create(key: 'next_invoice_id', default: 1)
     next_id = record.value.to_i
     record.update!(value: next_id + 1)
     next_id
