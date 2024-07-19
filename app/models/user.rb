@@ -22,6 +22,14 @@ class User < ApplicationRecord
   # @return [Array<String>]
   attr_accessor :groups
 
+  def display_name
+    "#{firstname.capitalize} #{lastname.upcase}"
+  end
+
+  def display_address
+    "Appartement #{room}\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+  end
+
   def current_subscription
     subscriptions.where(cancelled_at: nil).order(end_at: :desc).first
   end
