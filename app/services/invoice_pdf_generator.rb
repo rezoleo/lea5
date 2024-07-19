@@ -55,13 +55,12 @@ class InvoicePdfGenerator
     @input = input
     @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
     @total_price_in_cents = input[:items].sum { |it| it[:price_cents] * it[:quantity] }
-    @composer = InvoiceComposer.new(skip_page_creation: true)
+    @composer = InvoiceComposer.new
     setup_document
   end
 
   # @return [StringIO] A stream containing the generated PDF file data
   def generate_pdf
-    @composer.new_page
     add_invoice_header
     add_client_info
     add_items_table
@@ -189,18 +188,20 @@ class InvoicePdfGenerator
   end
 
   class InvoiceComposer < HexaPDF::Composer
-    def initialize(skip_page_creation: false, page_size: :A4, page_orientation: :portrait, margin: 36)
+    def initialize(page_size: :A4, page_orientation: :portrait, margin: 36)
       super
 
       document.task(:pdfa)
+    end
+
+    def new_page
+      super
+
       config_font(font_name: 'DejaVu Sans',
                   font_file: Rails.root.join('app/assets/fonts/DejaVuSans.ttf').to_s,
                   bold_font_file: Rails.root.join('app/assets/fonts/DejaVuSans-Bold.ttf').to_s)
-      config_style(font: 'DejaVu Sans', page_size: page_size)
-    end
 
-    def new_page(style = @next_page_style)
-      super
+      config_font_style(font: 'DejaVu Sans')
 
       image(Rails.root.join('app/assets/images/rezoleo_logo.png').to_s, width: 75, position: :float, mask_mode: :none)
       text('Facture Rézoléo', style: :header, margin: [0, 0, 2 * BASE_FONT_SIZE])
@@ -218,14 +219,13 @@ class InvoicePdfGenerator
       }
     end
 
-    def config_style(font:, page_size:)
+    def config_font_style(font:)
       style(:base, font: font, font_size: BASE_FONT_SIZE, line_spacing: 1.2)
       style(:bold, font: [font, { variant: :bold }])
       style(:header, font: [font, { variant: :bold }], font_size: BASE_FONT_SIZE * 7 / 6, text_align: :center)
       style(:footer, font: font, font_size: BASE_FONT_SIZE / 2, text_align: :center)
       style(:small, font: font, font_size: BASE_FONT_SIZE * 0.75)
       style(:conditions, font: font, font_size: BASE_FONT_SIZE * 5 / 6, fill_color: '3C3C3C')
-      page_style(:default, page_size:)
     end
   end
 end
