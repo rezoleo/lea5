@@ -24,12 +24,12 @@ class Sale < ApplicationRecord
     generate_sales_subscription_offers duration.to_i
     self.seller = seller
     create_associated_subscription duration.to_i unless duration.to_i.zero?
-    update_total_price
+    self.total_price = compute_total_price
     verify if payment_method.auto_verify
     generate_invoice
   end
 
-  def update_total_price
+  def compute_total_price
     total = 0
     articles_sales.each do |rec|
       total += rec.quantity * Article.find(rec.article_id).price
@@ -37,13 +37,14 @@ class Sale < ApplicationRecord
     sales_subscription_offers.each do |rec|
       total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
     end
-    self.total_price = total
+    total
   end
 
   def generate_invoice
     return if invoice
 
-    self.invoice = Invoice.new.generate(self)
+    self.invoice = Invoice.new
+    invoice.generate_from(self)
   end
 
   def empty?
@@ -74,6 +75,6 @@ class Sale < ApplicationRecord
   end
 
   def create_associated_subscription(duration)
-    self.subscription = client.extend_subscription duration: duration
+    self.subscription = client.extend_subscription(duration: duration)
   end
 end

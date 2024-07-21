@@ -6,21 +6,21 @@ class Invoice < ApplicationRecord
 
   before_create :create_invoice
 
-  def generate(sale)
-    self.generation_json = generate_hash(sale).to_json if generation_json.nil?
-    self
-  end
-
   def user
     sale.client
+  end
+
+  def generate_from(sale)
+    self.generation_json = generate_hash(sale).to_json if generation_json.nil?
+    self.id = generate_invoice_id if id.nil?
   end
 
   private
 
   def create_invoice
-    id = generate_invoice_id
-    pdf.attach(io: InvoicePdfGenerator.new(JSON.parse(generation_json).deep_symbolize_keys).generate_pdf,
-               filename: id, content_type: 'application/pdf')
+    self.id = generate_invoice_id if id.nil?
+    pdf_stream = InvoicePdfGenerator.new(JSON.parse(generation_json).deep_symbolize_keys).generate_pdf
+    pdf.attach(io: pdf_stream, filename: id, content_type: 'application/pdf')
   end
 
   def generate_invoice_id
