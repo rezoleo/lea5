@@ -21,12 +21,15 @@ class Sale < ApplicationRecord
   end
 
   def generate(duration:, seller:)
+    return false if duration.to_i.negative?
+
     generate_sales_subscription_offers duration.to_i
     self.seller = seller
     create_associated_subscription duration.to_i if duration.to_i.positive?
     self.total_price = compute_total_price
     verify if payment_method.auto_verify
     generate_invoice
+    true
   end
 
   def compute_total_price
