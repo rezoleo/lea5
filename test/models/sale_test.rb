@@ -74,6 +74,13 @@ class SaleTest < ActiveSupport::TestCase
     assert_not @sale.send :generate_sales_subscription_offers, 30
   end
 
+  test 'should return if not exhaustive' do
+    Sale.destroy_all
+    SubscriptionOffer.destroy_all
+    SubscriptionOffer.create!(duration: 2, price: 50)
+    assert_not @sale.send :generate_sales_subscription_offers, 11
+  end
+
   test 'should not present offer12' do
     @sale.sales_subscription_offers.destroy_all
     @sale.send :generate_sales_subscription_offers, 11
