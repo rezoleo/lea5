@@ -14,8 +14,9 @@ class SalesController < ApplicationController
 
   def create
     @sale = @owner.sales_as_client.new(sales_params)
-    return redirect_to :new_user_sale, user: @user, status: :unprocessable_entity unless
-      @sale.generate(duration: params[:sale][:duration], seller: current_user)
+    unless @sale.generate(duration: params[:sale][:duration], seller: current_user)
+      return redirect_to :new_user_sale, user: @user, status: :unprocessable_entity
+    end
     return redirect_to :new_user_sale, user: @user, status: :unprocessable_entity if @sale.empty?
 
     authorize! :create, @sale

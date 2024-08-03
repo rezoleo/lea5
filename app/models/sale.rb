@@ -72,7 +72,7 @@ class Sale < ApplicationRecord
         duration -= quantity * offer.duration
       end
     end
-    return if duration.zero?
+    return true if duration.zero?
 
     errors.add(:base, 'Subscription offers are not exhaustive!')
     false
