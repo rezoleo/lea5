@@ -5,7 +5,7 @@ class Subscription < ApplicationRecord
 
   validates :start_at, presence: true
   validates :end_at, comparison: { greater_than: :start_at }
-  validate :cannot_change_after_cancelled, on: :update
+  # validate :cannot_change_after_cancelled, on: :update
 
   def user
     sale.client
@@ -16,11 +16,11 @@ class Subscription < ApplicationRecord
   #   save!
   # end
 
-  private
+  # private
 
-  def cannot_change_after_cancelled
-    return if cancelled_at_was.nil?
-
-    errors.add(:cancelled_at, 'Subscription has already been cancelled')
-  end
+  # def cannot_change_after_cancelled
+  #   return if cancelled_at_was.nil?
+  #
+  #   errors.add(:cancelled_at, 'Subscription has already been cancelled')
+  # end
 end
