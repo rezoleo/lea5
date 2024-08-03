@@ -11,10 +11,10 @@ class Subscription < ApplicationRecord
     sale.client
   end
 
-  def cancel!
-    self.cancelled_at = Time.current
-    save!
-  end
+  # def cancel!
+  #   self.cancelled_at = Time.current
+  #   save!
+  # end
 
   private
 
