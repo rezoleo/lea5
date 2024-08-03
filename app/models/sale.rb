@@ -23,7 +23,8 @@ class Sale < ApplicationRecord
   def generate(duration:, seller:)
     return false if duration.to_i.negative?
 
-    generate_sales_subscription_offers duration.to_i
+    return false unless generate_sales_subscription_offers duration.to_i
+
     self.seller = seller
     create_associated_subscription duration.to_i if duration.to_i.positive?
     self.total_price = compute_total_price
@@ -71,7 +72,7 @@ class Sale < ApplicationRecord
         duration -= quantity * offer.duration
       end
     end
-    return unless duration.zero?
+    return if duration.zero?
 
     errors.add(:base, 'Subscription offers are not exhaustive!')
     false

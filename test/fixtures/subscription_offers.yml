@@ -2,8 +2,8 @@
 
 one:
   duration: 1
-  price: 1
+  price: 5
 
 two:
-  duration: 1
-  price: 1
+  duration: 12
+  price: 50
