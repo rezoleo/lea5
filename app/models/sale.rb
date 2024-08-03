@@ -27,7 +27,7 @@ class Sale < ApplicationRecord
     self.seller = seller
     create_associated_subscription duration.to_i if duration.to_i.positive?
     self.total_price = compute_total_price
-    verify if payment_method.auto_verify
+    verify if payment_method&.auto_verify
     generate_invoice
     true
   end

@@ -33,8 +33,16 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Sale was successfully created.', flash[:success]
   end
 
-  test 'should not create sale and redirect if sale is invalid' do
+  test 'should not create sale and redirect if duration is negative' do
     @sale_params[:duration] = -5
+    assert_no_difference 'Sale.count' do
+      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+    end
+    assert_response :unprocessable_entity
+  end
+
+  test 'should not create sale and redirect if sale is invalid' do
+    @sale_params[:payment_method_id] = PaymentMethod.last.id + 1
     assert_no_difference 'Sale.count' do
       post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
     end

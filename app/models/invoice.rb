@@ -36,7 +36,7 @@ class Invoice < ApplicationRecord
       client_name: sale.client.display_name,
       client_address: sale.client.display_address,
       payment_amount_cent: sale.verified_at.nil? ? 0 : sale.total_price,
-      payment_method: sale.payment_method.name,
+      payment_method: sale.payment_method&.name,
       payment_date: sale.verified_at,
       items: sales_itemized(sale)
     }.compact
