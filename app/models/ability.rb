@@ -14,7 +14,10 @@ class Ability
     end
 
     can [:read], Subscription, user: user
+    can [:read], Sale, user: user
+    can [:read], Refund, user: user
     can [:read], FreeAccess, user: user
+    can [:read], Invoice, user: user
 
     return unless user.admin?
 

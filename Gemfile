@@ -55,6 +55,9 @@ gem 'cancancan', '~> 3.6'
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Generate pdf files [https://github.com/gettalong/hexapdf]
+gem 'hexapdf', '~> 0.40.0'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem 'debug', platforms: [:mri, :mswin, :mswin64, :mingw, :x64_mingw]
