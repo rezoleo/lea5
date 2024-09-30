@@ -1,0 +1,39 @@
+.button {
+    border-radius: var(--rounded-lg);
+    letter-spacing: var(--spacing-lg);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    font-weight: var(--font-bold);
+    padding: var(--padding-xs) var(--padding-md);
+    margin-bottom: var(--padding-md);
+    display: flex;
+    align-items: center;
+}
+
+.button svg {
+    padding-left: var(--padding-sm);
+}
+
+
+
+/* Primary Button */
+.button-primary {
+    background-color: var(--primary-600);
+    color: var(--primary-50);
+    border: none;
+}
+
+.button-primary svg {
+    fill: var(--primary-300);
+}
+
+/* Secondary Button */
+.button-secondary {
+    background-color: transparent;
+    color: var(--primary-100);
+    border: 2px solid var(--primary-100);
+}
+
+.button-secondary svg {
+    fill: var(--primary-500);
+}

@@ -49,6 +49,8 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'cancancan', '~> 3.6'
 
+gem 'view_component', '~> 3.13'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 

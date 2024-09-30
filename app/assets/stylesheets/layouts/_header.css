@@ -28,28 +28,3 @@ nav a {
     font-weight: var(--font-bold);
     margin-right: calc(2 * var(--padding-md));
 }
-
-.login_button {
-    background-color: var(--primary-600);
-    color: var(--primary-200);
-    border-radius: var(--rounded-lg);
-    letter-spacing: var(--spacing-lg);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    border: none;
-    font-weight: var(--font-bold);
-    padding: var(--padding-xs) var(--padding-md);
-}
-
-.logout_button {
-    background-color: transparent;
-    color: var(--primary-200);
-    border-radius: var(--rounded-lg);
-    letter-spacing: var(--spacing-lg);
-    font-size: var(--text-sm);
-    text-transform: uppercase;
-    border: none;
-    box-shadow: inset 0px 0px 0px 2px var(--primary-200);
-    font-weight: var(--font-bold);
-    padding: var(--padding-xs) var(--padding-md);
-}
