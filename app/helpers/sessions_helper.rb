@@ -30,7 +30,7 @@ module SessionsHelper
   def log_in_api(bearer)
     reset_session # For security reasons, we clear the session data before login
     session[:api_key_id] = bearer.id
-    session[:expires_at] = Time.current + SESSION_DURATION_TIME
+    session[:expires_at] = Time.current
   end
 
   # TODO: also logout of sso

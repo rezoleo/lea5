@@ -3,7 +3,6 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get AUTH_CALLBACK_PATH, to: 'sessions#create', as: 'auth_callback'
-  get AUTH_API_PATH, to: 'sessions#create', as: 'auth_api'
   delete '/logout', to: 'sessions#destroy', as: 'logout'
   root 'static_pages#home'
 
@@ -15,6 +14,12 @@ Rails.application.routes.draw do
   end
 
   resources :api_keys
+
+  scope 'api' do
+    resources :users, controller: :users, as: 'api_user'
+    resources :api_keys, controller: :api_keys, as: 'api_api_keys'
+  end
+
   get '/search', as: 'search', to: 'search#search'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

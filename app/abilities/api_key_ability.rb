@@ -2,7 +2,9 @@
 
 class ApiKeyAbility
   include CanCan::Ability
-  def initialize(api_key) # rubocop:disable Lint/UnusedMethodArgument
+  def initialize(api_key)
+    return if api_key.blank?
+
     can :read, :all
   end
 end

@@ -43,13 +43,6 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal User.find_by(email: 'john@doe.com').id, current_user.id
   end
 
-  test 'should create a session with current_bearer' do
-    get '/auth/api', headers: { 'Authorization' => "Bearer #{@real_key}" }
-
-    assert_predicate self, :logged_in?
-    assert_equal ApiKey.find_by(bearer_name: 'FakeRadius').id, current_bearer.id
-  end
-
   test 'logout should redirect to root' do
     delete logout_path
 

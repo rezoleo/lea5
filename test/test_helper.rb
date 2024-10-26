@@ -57,12 +57,6 @@ module ActiveSupport
       sign_in
     end
 
-    # @param [ApiKey] bearer
-    # @param [String] key
-    def sign_in_as_api(key)
-      get '/auth/api', headers: { 'Authorization' => "Bearer #{key}" }
-    end
-
     # @param [User] user
     # @param [Array<String>] groups
     def setup_auth_conf_for(user, groups)

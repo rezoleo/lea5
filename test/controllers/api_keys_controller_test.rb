@@ -57,9 +57,4 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
     }
     assert_response :unprocessable_entity
   end
-
-  test 'should authorize api key authentication' do
-    get '/auth/api', headers: { 'Authorization' => "Bearer #{@real_key}" }
-    assert_response :success
-  end
 end
