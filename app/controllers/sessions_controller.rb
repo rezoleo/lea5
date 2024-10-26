@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SessionsController < ApplicationController
+  include ApiKeyAuthenticatable
   def create
     user = User.upsert_from_auth_hash(request.env['omniauth.auth'])
     log_in user

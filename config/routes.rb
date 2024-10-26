@@ -13,6 +13,14 @@ Rails.application.routes.draw do
     resources :free_accesses, shallow: true, except: [:index, :show]
   end
 
+  resources :api_keys
+
+  scope 'api' do
+    resources :users, controller: :users, as: 'api_users'
+    resources :api_keys, controller: :api_keys, as: 'api_api_keys'
+    resources :machines, controller: :machines, as: 'api_machines'
+  end
+
   get '/search', as: 'search', to: 'search#search'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
