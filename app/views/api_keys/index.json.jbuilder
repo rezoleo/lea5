@@ -2,4 +2,4 @@
 
 # locals: ()
 
-json.array! @api_keys
+json.array! @api_keys, :id, :bearer_name, :created_at, :updated_at

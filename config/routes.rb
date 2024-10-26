@@ -16,8 +16,9 @@ Rails.application.routes.draw do
   resources :api_keys
 
   scope 'api' do
-    resources :users, controller: :users, as: 'api_user'
+    resources :users, controller: :users, as: 'api_users'
     resources :api_keys, controller: :api_keys, as: 'api_api_keys'
+    resources :machines, controller: :machines, as: 'api_machines'
   end
 
   get '/search', as: 'search', to: 'search#search'
