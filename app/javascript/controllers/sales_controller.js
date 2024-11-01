@@ -3,21 +3,33 @@
 
 import { Controller } from "@hotwired/stimulus"
 
+const currencyFormatter = new Intl.NumberFormat("fr-FR", {
+  style: "currency",
+  currency: "EUR",
+})
+
 // Connects to data-controller="sales"
 export default class extends Controller {
-  static targets = ["articleTemplate", "articles", "totalPrice", "subPrice", "subscription"]
+  static targets = [
+    "articleTemplate",
+    "articles",
+    "totalPrice",
+    "subPrice",
+    "subscription",
+    "duration",
+  ]
+
+  static values = {
+    articles: Object,
+    subscriptions: Array,
+  }
 
   initialize() {
     this.nextId = 1;
   }
 
   connect() {
-    this.articles = {}
-    const articles = JSON.parse(this.element.dataset.articles)
-    articles.forEach(e => {
-      this.articles[e.id] = e.price
-    })
-    this.subscription_offers = JSON.parse(this.element.dataset.subscriptions)
+    this.updatePrice()
   }
 
   addArticle() {
@@ -35,37 +47,28 @@ export default class extends Controller {
    */
   removeArticle(event) {
     event.currentTarget.closest("div").remove()
-    this.updateTotalPrice()
+    this.updatePrice()
   }
 
-  updateTotalPrice() {
+  updatePrice() {
+    let subPrice = 0
     let price = 0
-    let articles = this.articlesTargets
-    articles.forEach(e => {
-      let id = Number.parseInt(e.querySelector('select').value)
-      let quantity = Number.parseInt(e.querySelector('input').value)
-      if (id && quantity) price += this.articles[id] * quantity
-    })
-    price += Number.parseFloat(this.subPriceTarget.textContent) * 100
-    this.totalPriceTarget.textContent = (price / 100).toFixed(2).toLocaleString()
-  }
 
-  /**
-   * @param event {Event}
-   */
-  updateSubPrice(event) {
-    let sub = Number.parseInt(event.currentTarget.value)
-    let price = 0
-    this.subscription_offers.forEach(e => {
-      let quantity = Math.floor(sub / e.duration)
-      sub -= quantity * e.duration
-      price += e.price * quantity
-    })
-    this.subPriceTarget.textContent = (price / 100).toFixed(2).toLocaleString()
-    this.updateTotalPrice()
-  }
+    let duration = Number.parseInt(this.durationTarget.value)
 
-  testUpdate() {
-    console.log("test")
+    this.subscriptionsValue.forEach(subscription => {
+      const quantity = Math.floor(duration / subscription.duration)
+      duration -= quantity * subscription.duration
+      subPrice += subscription.price * quantity
+    })
+    this.subPriceTarget.textContent = currencyFormatter.format(subPrice / 100)
+
+    this.articlesTargets.forEach(article => {
+      let id = Number.parseInt(article.querySelector('select').value, 10)
+      let quantity = Number.parseInt(article.querySelector('input').value, 10)
+      if (id && quantity) price += this.articlesValue[id] * quantity
+    })
+    price += subPrice
+    this.totalPriceTarget.textContent = currencyFormatter.format(price / 100)
   }
 }

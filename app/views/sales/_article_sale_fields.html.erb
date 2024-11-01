@@ -1,0 +1,15 @@
+<%# locals: (form:, articles:) %>
+
+<div data-sales-target="articles">
+  <%= form.label :article_id %>
+  <%= form.collection_select :article_id,
+                             articles, # collection
+                             :id, # prop/method to call for the select ID
+                             ->(article) { "#{article.name} (#{article.price.to_f / 100} €)"}, # prop/method to call for the select value
+                             { prompt: 'Select an article', required: true },
+                             { data: { action: "sales#updatePrice" } }
+  %>
+  <%= form.label :quantity %>
+  <%= form.number_field :quantity, step: 1, min: 0, value: form.object.quantity || 1, data: { action: "sales#updatePrice" } %>
+  <button data-action="sales#removeArticle:prevent">Remove article</button>
+</div>

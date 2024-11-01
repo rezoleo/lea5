@@ -35,13 +35,10 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'should generate json and id from sale' do
-    @invoice.generation_json = nil
-    @invoice.id = nil
+    invoice = Invoice.build_from_sale(@sale)
 
-    @invoice.generate_from(@sale)
-
-    assert_not_nil @invoice.generation_json
-    assert_not_nil @invoice.id
+    assert_not_nil invoice.generation_json
+    assert_not_nil invoice.id
   end
 
   test 'should create invoice with pdf' do

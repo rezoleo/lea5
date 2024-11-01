@@ -4,34 +4,49 @@
 
 <h1>Create new sale</h1>
 
-<%= form_with(model: [@owner, @sale], class: 'form', data: { controller: 'sales', articles: @articles, subscriptions: @subscription_offers }) do |f| %>
+<% if @subscription_offers.empty? %>
+  Warning: no subscription offers defined!
+<% end %>
+
+<%= form_with(
+      model: [@owner, @sale],
+      class: 'form',
+      data: {
+        controller: 'sales',
+        sales_articles_value: @articles.reduce({}) { |acc, curr| acc[curr[:id]] = curr[:price]; acc },
+        sales_subscriptions_value: @subscription_offers.map { |s| s.slice(:id, :duration, :price) }
+      }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
 
-  Total price : <span data-sales-target="totalPrice">0.00</span>
+  Total price: <span data-sales-target="totalPrice">0,00 €</span>
 
   <div data-sales-target="subscription">
     <%= f.label :duration %>
-    Sub price : <span data-sales-target="subPrice">0.00</span>
-    <%= f.number_field :duration, step: 1, min: 1, data: { action: 'change->sales#updateSubPrice' } %>
+    Sub price : <span data-sales-target="subPrice">0,00 €</span>
+    <%= f.number_field :duration,
+                       step: 1,
+                       min: 0,
+                       data: {
+                         sales_target: 'duration',
+                         action: 'sales#updatePrice'
+                       } %>
   </div>
+
+  <%= f.fields_for :articles_sales do |sale_form| %>
+    <%= render 'article_sale_fields', form: sale_form, articles: @articles %>
+  <% end %>
 
   <button id="add_article" data-action="sales#addArticle:prevent">Add article</button>
 
   <template data-sales-target="articleTemplate">
-    <div data-sales-target="articles">
-      <%= f.fields_for :articles_sales, @sale.articles_sales.new, child_index: 'NEW_ARTICLE' do |sale_form| %>
-        <%= sale_form.label :article_id %>
-        <%= sale_form.select :article_id, @articles.collect { |a| ["#{a.name} (#{a.price.to_f / 100} €)", a.id] }, { prompt: 'Select an article' }, { data: { action: 'sales#updateTotalPrice' } } %>
-        <%= sale_form.label :quantity %>
-        <%= sale_form.number_field :quantity, data: { action: 'change->sales#updateTotalPrice' } %>
-      <% end %>
-      <button data-action="sales#removeArticle:prevent">Remove article</button>
-    </div>
+    <%= f.fields_for :articles_sales, ArticlesSale.new, child_index: 'NEW_ARTICLE' do |sale_form| %>
+      <%= render 'article_sale_fields', form: sale_form, articles: @articles %>
+    <% end %>
   </template>
 
   <div>
     <%= f.label :payment_method_id %>
-    <%= f.select :payment_method_id, @payment_methods.collect { |p| [p.name, p.id] }, prompt: 'Select payment method' %>
+    <%= f.collection_select :payment_method_id, @payment_methods, :id, :name, prompt: 'Select payment method' %>
   </div>
 
   <div>
