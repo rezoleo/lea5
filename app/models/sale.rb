@@ -22,6 +22,7 @@ class Sale < ApplicationRecord
   validates :duration, numericality: { greater_than_or_equal_to: 0 }
   validate :not_empty_sale, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :exhaustive_subscription_offers, unless: ->(sale) { sale.errors.include?(:duration) }
+  validate :no_duplicate_article_sale
 
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
@@ -55,6 +56,21 @@ class Sale < ApplicationRecord
     return if remaining_duration == 0
 
     errors.add(:base, 'Subscription offers are not exhaustive!')
+  end
+
+  def no_duplicate_article_sale
+    # The unique constraint on ArticlesSales prevents us from duplicating articles in a single sale,
+    # but Rails doesn't rescue from hard DB integrity errors, so we need to validate the association
+    # in-memory before to show pretty errors.
+    # See https://github.com/rails/rails/issues/20676 that seems very related
+    duplicate_article_ids = articles_sales.map(&:article_id).tally.filter { |_, v| v > 1 }
+    return if duplicate_article_ids.empty?
+
+    articles_sales
+      .filter { |article_sale| article_sale.article_id.in? duplicate_article_ids }
+      .each { |article_sale| article_sale.errors.add(:article_id, :taken) }
+
+    errors.add(:base, 'Please merge the quantities of the same articles')
   end
 
   class << self

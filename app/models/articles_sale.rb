@@ -6,15 +6,8 @@ class ArticlesSale < ApplicationRecord
 
   validates :quantity, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
-  before_create :consolidate_duplication
-
-  private
-
-  def consolidate_duplication
-    duplicate = ArticlesSale.where(article_id: article_id, sale_id: sale_id).where.not(id: id).first
-    return unless duplicate
-
-    errors.add(:base, 'Please merge the quantities of the same articles !')
-    throw :abort
-  end
+  validates :article_id, uniqueness: {
+    scope: :sale_id,
+    message: 'can only be added once to a sale, please merge the quantities of the same articles'
+  }
 end
