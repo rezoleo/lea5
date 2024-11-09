@@ -3,13 +3,9 @@
 <div class="free-access">
   <span><%= time_with_relative_tag free_access.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag free_access.end_at %></span>
   <% if can?(:edit, free_access) %>
-    <%= button_to(edit_free_access_path(free_access), method: :get, 'aria-label': 'Edit this free access') do %>
-      <%= svg_icon_tag 'icon_edit' %>
-    <% end %>
+    <%= render(IconButtonComponent.new(path: edit_free_access_path(free_access), aria_label: 'Edit this free access', action: :edit))%>
   <% end %>
   <% if can?(:destroy, free_access) %>
-    <%= button_to(free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this free access') do %>
-      <%= svg_icon_tag 'icon_delete' %>
-    <% end %>
+    <%= render(IconButtonComponent.new(path: free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, action: :delete, aria_label: 'Delete this free access')) %>
   <% end %>
 </div>

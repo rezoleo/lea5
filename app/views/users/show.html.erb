@@ -19,7 +19,13 @@
           <h2>Personal Data</h2>
         </div>
 
-        <%= render "components/buttons/button_primary_edit", text: "edit", path: edit_user_path(@user), aria_label: "Edit your profile" %>
+        <%= render(ButtonComponent.new(
+          label: "Edit",
+          path: edit_user_path(@user),
+          aria_label: "Edit your profile",
+          action: :edit
+        )) %>
+
       </div>
 
       <div class="divider"></div>
@@ -51,7 +57,12 @@
 
         <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
         <% if can?(:create, @user.machines.new) %>
-          <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
+          <%= render(ButtonComponent.new(
+            label: "new machine",
+            path: new_user_machine_path(@user),
+            aria_label: "Add a new machine",
+            action: :add,
+          )) %>
         <% end %>
 
       </div>
@@ -77,10 +88,22 @@
         </div>
 
         <% if can?(:create, Subscription) %>
-          <%= render "components/buttons/button_primary_create", text: "new subscription", path: new_user_subscription_path(@user), aria_label: "Add a new subscription" %>
+          <%= render(ButtonComponent.new(
+            label: "new subscription",
+            path: new_user_subscription_path(@user),
+            aria_label: "Add a new subscription",
+            action: :add,
+          )) %>
         <% end %>
         <% if can?(:destroy, Subscription) && @user.current_subscription %>
-          <%= render "components/buttons/button_secondary_delete", text: "cancel last subscription", path: user_last_subscription_path(@user), aria_label: "Cancel last subscription" %>
+          <%= render(ButtonComponent.new(
+            label: "cancel last subscription",
+            path: user_last_subscription_path(@user),
+            aria_label: "Cancel last subscription",
+            action: :delete,
+            data: { turbo_confirm: "Are you sure ?" },
+            form: { data: { turbo_frame: dom_id(@user) } },
+          )) %>
         <% end %>
       </div>
 
@@ -105,7 +128,12 @@
         </div>
 
         <% if can?(:create, FreeAccess) %>
-          <%= render "components/buttons/button_primary_create", text: "new free access", path: new_user_free_access_path(@user), aria_label: "Add a new free access" %>
+          <%= render(ButtonComponent.new(
+            label: "new free access",
+            path: new_user_free_access_path(@user),
+            aria_label: "Add a new free access",
+            action: :add,
+          )) %>
         <% end %>
       </div>
 
