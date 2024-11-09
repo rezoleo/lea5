@@ -8,12 +8,11 @@
     margin-bottom: var(--padding-md);
     display: flex;
     align-items: center;
-}
 
-.button svg {
-    padding-left: var(--padding-sm);
+    svg {
+        padding-left: var(--padding-sm);
+    }
 }
-
 
 
 /* Primary Button */
@@ -21,10 +20,10 @@
     background-color: var(--primary-600);
     color: var(--primary-50);
     border: none;
-}
 
-.button-primary svg {
-    fill: var(--primary-300);
+    svg {
+        fill: var(--primary-300);
+    }
 }
 
 /* Secondary Button */
@@ -32,8 +31,19 @@
     background-color: transparent;
     color: var(--primary-100);
     border: 2px solid var(--primary-100);
+
+    svg {
+        fill: var(--primary-500);
+    }
 }
 
-.button-secondary svg {
-    fill: var(--primary-500);
+.icon_btn{
+    padding: 0.35em;
+    border-radius: 0.5em;
+    &:hover{
+        background-color: var(--primary-600);
+        svg{
+            fill: var(--primary-200);
+        }
+    }
 }
