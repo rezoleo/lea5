@@ -31,10 +31,10 @@ class Sale < ApplicationRecord
   def total_price
     total = 0
     articles_sales.each do |rec|
-      total += rec.quantity * Article.find(rec.article_id).price
+      total += rec.quantity * rec.article.price
     end
     sales_subscription_offers.each do |rec|
-      total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
+      total += rec.quantity * rec.subscription_offer.price
     end
     total
   end
