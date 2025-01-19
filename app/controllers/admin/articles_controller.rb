@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Admin
+  # Do NOT implement edit/update methods, we want to keep
+  # articles immutable.
+  # If you want to edit an article, create a new one and
+  # soft-delete the other.
   class ArticlesController < ApplicationController
     def new
       @article = Article.new
@@ -21,7 +25,10 @@ module Admin
     def destroy
       @article = Article.find(params[:id])
       authorize! :destroy, @article
-      @article.soft_delete unless @article.destroy
+      # Try to destroy (if there is no associated sale/refund),
+      # else soft-delete to keep current sales immutable (not
+      # change article price on past sales)
+      @article.destroy or @article.soft_delete
       redirect_to admin_path
     end
 

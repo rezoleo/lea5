@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Admin
+  # Do NOT implement edit/update methods, we want to keep
+  # subscription offers immutable.
+  # If you want to edit a subscription offer, create a new one and
+  # soft-delete the other.
   class SubscriptionOffersController < ApplicationController
     def new
       @subscription_offer = SubscriptionOffer.new
@@ -21,7 +25,10 @@ module Admin
     def destroy
       @subscription_offer = SubscriptionOffer.find(params[:id])
       authorize! :destroy, @subscription_offer
-      @subscription_offer.soft_delete unless @subscription_offer.destroy
+      # Try to destroy (if there is no associated sale/refund),
+      # else soft-delete to keep current sales immutable (not
+      # change subscriptions on past sales)
+      @subscription_offer.destroy or @subscription_offer.soft_delete
       redirect_to admin_path
     end
 
