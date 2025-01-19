@@ -1,0 +1,19 @@
+---
+fr:
+  number:
+    currency:
+      format:
+        # Delimits thousands (e.g. 1,000,000 is a million) (always in groups of three)
+        delimiter: " "
+        # Where is the currency sign? %u is the currency unit, %n is the number (default: $5.00)
+        format: "%n %u"
+        # Number of decimals, behind the separator (the number 1 with a precision of 2 gives: 1.00)
+        precision: 2
+        # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
+        separator: ","
+        # If set to true, precision will mean the number of significant digits instead
+        # of the number of decimal digits (1234 with precision 2 becomes 1200, 1.23543 becomes 1.2)
+        significant: false
+        # If set, the zeros after the decimal separator will always be stripped (e.g.: 1.200 will be 1.2)
+        strip_insignificant_zeros: false
+        unit: "€"
