@@ -90,6 +90,11 @@ class Sale < ApplicationRecord
   class << self
     private
 
+    # Find the best subscription offers for a given duration
+    # Example: if we ask for 14 months, with offers covering
+    # 12 months and 1 month, we return:
+    #   SalesSubscriptionOffer(12 months, quantity: 1)
+    #   SalesSubscriptionOffer(1 month, quantity: 2)
     # @param [Integer] duration
     # @return [Array<SalesSubscriptionOffer>]
     def generate_sales_subscription_offers(duration)
