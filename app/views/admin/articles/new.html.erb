@@ -8,11 +8,11 @@
   <%= render 'utils/error_messages', object: f.object %>
   <div>
     <%= f.label :name %>
-    <%= f.text_field :name %>
+    <%= f.text_field :name, required: true %>
   </div>
   <div>
     <%= f.label :price %>
-    <%= f.number_field :price %>
+    <%= f.number_field :price, min: 0, step: 0.01, required: true %>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>
