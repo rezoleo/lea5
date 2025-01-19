@@ -33,9 +33,7 @@ export default class extends Controller {
   }
 
   addArticle() {
-    const newArticle = this.articleTemplateTarget//.content.cloneNode(true)
-    // newArticle.getElementById("sale_article_id_new").id = `sale_article_id_${this.nextId}`
-    // newArticle.getElementById("sale_quantity_new").id = `sale_quantity_${this.nextId}`
+    const newArticle = this.articleTemplateTarget
     const content = newArticle.innerHTML.replace(/NEW_ARTICLE/g, this.nextId)
     let insertAfter = this.articlesTargets.length !== 0 ? this.articlesTargets : this.subscriptionTargets
     insertAfter.at(-1).insertAdjacentHTML("afterend", content)
