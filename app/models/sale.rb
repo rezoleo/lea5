@@ -16,6 +16,7 @@ class Sale < ApplicationRecord
   accepts_nested_attributes_for :articles_sales
 
   attribute :duration, :integer, default: 0
+  # Used to validate subscription offers exhaustiveness
   attr_accessor :remaining_duration
 
   validates :duration, numericality: { greater_than_or_equal_to: 0 }
@@ -43,8 +44,13 @@ class Sale < ApplicationRecord
   def self.build_with_invoice(attributes = {}, seller:)
     new(attributes) do |sale|
       sale.sales_subscription_offers = generate_sales_subscription_offers(sale.duration)
+      # Check if we have covered the entire subscription duration with subscription offers
+      # (e.g., if we offer 12 months and 6 months but the user asks for 4 months, we cannot
+      # cover the period and would have a non-zero remaining_duration, invalidated thanks
+      # to exhaustive_subscription_offers)
       cumulated_duration = sale.sales_subscription_offers.sum { |sso| sso.quantity * sso.subscription_offer.duration }
       sale.remaining_duration = sale.duration - cumulated_duration
+
       sale.seller = seller
       sale.subscription = sale.client.extend_subscription(duration: sale.duration)
       sale.verify if sale.payment_method&.auto_verify
@@ -87,7 +93,7 @@ class Sale < ApplicationRecord
     # @param [Integer] duration
     # @return [Array<SalesSubscriptionOffer>]
     def generate_sales_subscription_offers(duration)
-      return [] if duration < 0
+      return [] if duration <= 0
 
       subscription_offers = SubscriptionOffer.order(duration: :desc)
       sales_subscription_offers = []
