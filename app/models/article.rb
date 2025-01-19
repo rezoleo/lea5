@@ -8,7 +8,7 @@ class Article < ApplicationRecord
 
   validates :name, presence: true, allow_blank: false
   validates :price, presence: true, allow_blank: false,
-                    numericality: { greater_than_or_equal_to: 0, only_integer: true, message: 'Must be a positive
+                    numericality: { greater_than: 0, only_integer: true, message: 'Must be a positive
                      number. Maximum 2 numbers after comma' }
 
   default_scope { where(deleted_at: nil) }

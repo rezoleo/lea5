@@ -7,9 +7,9 @@ class SubscriptionOffer < ApplicationRecord
   has_many :refunds, through: :refunds_subscription_offers
 
   validates :duration, presence: true, allow_blank: false,
-                       numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+                       numericality: { only_integer: true, greater_than: 0 }
   validates :price, presence: true, allow_blank: false,
-                    numericality: { greater_than_or_equal_to: 0, only_integer: true, message: 'Must be a positive
+                    numericality: { greater_than: 0, only_integer: true, message: 'Must be a positive
                      number. Maximum 2 numbers after comma' }
 
   default_scope { where(deleted_at: nil) }
