@@ -50,25 +50,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "articles_refunds", force: :cascade do |t|
-    t.bigint "refund_id", null: false
+  create_table "articles_refunds", id: false, force: :cascade do |t|
     t.bigint "article_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["article_id"], name: "index_articles_refunds_on_article_id"
-    t.index ["refund_id"], name: "index_articles_refunds_on_refund_id"
+    t.bigint "refund_id", null: false
+    t.integer "quantity", null: false
   end
 
-  create_table "articles_sales", force: :cascade do |t|
-    t.bigint "sale_id", null: false
+  create_table "articles_sales", id: false, force: :cascade do |t|
     t.bigint "article_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.bigint "sale_id", null: false
+    t.integer "quantity", null: false
     t.index ["article_id", "sale_id"], name: "index_articles_sales_on_article_id_and_sale_id", unique: true
-    t.index ["article_id"], name: "index_articles_sales_on_article_id"
-    t.index ["sale_id"], name: "index_articles_sales_on_sale_id"
   end
 
   create_table "free_accesses", force: :cascade do |t|
@@ -130,14 +122,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
     t.index ["sale_id"], name: "index_refunds_on_sale_id"
   end
 
-  create_table "refunds_subscription_offers", force: :cascade do |t|
+  create_table "refunds_subscription_offers", id: false, force: :cascade do |t|
     t.bigint "refund_id", null: false
     t.bigint "subscription_offer_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["refund_id"], name: "index_refunds_subscription_offers_on_refund_id"
-    t.index ["subscription_offer_id"], name: "index_refunds_subscription_offers_on_subscription_offer_id"
+    t.integer "quantity", null: false
   end
 
   create_table "sales", force: :cascade do |t|
@@ -155,14 +143,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
     t.index ["seller_id"], name: "index_sales_on_seller_id"
   end
 
-  create_table "sales_subscription_offers", force: :cascade do |t|
+  create_table "sales_subscription_offers", id: false, force: :cascade do |t|
     t.bigint "sale_id", null: false
     t.bigint "subscription_offer_id", null: false
-    t.integer "quantity"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["sale_id"], name: "index_sales_subscription_offers_on_sale_id"
-    t.index ["subscription_offer_id"], name: "index_sales_subscription_offers_on_subscription_offer_id"
+    t.integer "quantity", null: false
   end
 
   create_table "settings", force: :cascade do |t|
