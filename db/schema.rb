@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -111,7 +111,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
     t.bigint "refund_method_id", null: false
     t.bigint "sale_id", null: false
     t.bigint "invoice_id", null: false
-    t.integer "total_price"
     t.string "reason"
     t.datetime "verified_at"
     t.datetime "created_at", null: false
@@ -133,7 +132,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_11_02_103028) do
     t.bigint "client_id", null: false
     t.bigint "payment_method_id", null: false
     t.bigint "invoice_id", null: false
-    t.integer "total_price"
     t.datetime "verified_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

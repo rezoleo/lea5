@@ -18,7 +18,6 @@ class Sale < ApplicationRecord
   attribute :duration, :integer, default: 0
   attr_accessor :remaining_duration
 
-  validates :total_price, presence: true
   validates :duration, numericality: { greater_than_or_equal_to: 0 }
   validate :not_empty_sale, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :exhaustive_subscription_offers, unless: ->(sale) { sale.errors.include?(:duration) }
@@ -26,6 +25,17 @@ class Sale < ApplicationRecord
 
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
+  end
+
+  def total_price
+    total = 0
+    articles_sales.each do |rec|
+      total += rec.quantity * Article.find(rec.article_id).price
+    end
+    sales_subscription_offers.each do |rec|
+      total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
+    end
+    total
   end
 
   # @param [Hash] attributes
@@ -37,8 +47,6 @@ class Sale < ApplicationRecord
       sale.remaining_duration = sale.duration - cumulated_duration
       sale.seller = seller
       sale.subscription = sale.client.extend_subscription(duration: sale.duration)
-      # TODO: I would like to delete this pre-computed field for now, it will simplify validation
-      sale.total_price = 0
       sale.verify if sale.payment_method&.auto_verify
       sale.invoice = Invoice.build_from_sale(sale)
     end
@@ -94,18 +102,6 @@ class Sale < ApplicationRecord
       end
 
       sales_subscription_offers
-    end
-
-    # @param [Sale] sale
-    def compute_total_price(sale)
-      total = 0
-      sale.articles_sales.each do |rec|
-        total += rec.quantity * Article.find(rec.article_id).price
-      end
-      sale.sales_subscription_offers.each do |rec|
-        total += rec.quantity * SubscriptionOffer.find(rec.subscription_offer.id).price
-      end
-      total
     end
   end
 end

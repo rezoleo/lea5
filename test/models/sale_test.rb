@@ -33,11 +33,6 @@ class SaleTest < ActiveSupport::TestCase
     assert_not_predicate @sale, :valid?
   end
 
-  test 'total_price should be present' do
-    @sale.total_price = nil
-    assert_not_predicate @sale, :valid?
-  end
-
   test 'destroy sale should destroy articles_sales' do
     assert_difference 'ArticlesSale.count', -1 do
       @sale.destroy

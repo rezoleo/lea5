@@ -5,7 +5,6 @@ one:
   refund_method: one
   sale: one
   invoice: one
-  total_price: 1
   reason: MyString
   verified_at: 2024-06-20 14:37:19
 
@@ -14,6 +13,5 @@ two:
   refund_method: two
   sale: two
   invoice: two
-  total_price: 1
   reason: MyString
   verified_at: 2024-06-20 14:37:19
