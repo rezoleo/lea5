@@ -74,7 +74,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.jsonb "generation_json"
+    t.jsonb "generation_json", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
