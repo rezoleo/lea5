@@ -14,4 +14,8 @@ class ApiKeysControllerApiKeyRight < ActionDispatch::IntegrationTest
     json = JSON(result)
     assert_not_empty json
   end
+
+  test 'should not be able to read api keys index if api key is wrong' do
+    get 'api/api_keys.json', headers: { 'Authorization' => "Bearer #{@real_key}x" }
+  end
 end

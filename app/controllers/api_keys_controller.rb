@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 class ApiKeysController < ApplicationController
-  include ApiKeyAuthenticatable
-  include SessionsHelper
-
   # Require token authentication for index
 
   def index

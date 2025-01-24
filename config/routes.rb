@@ -15,13 +15,12 @@ Rails.application.routes.draw do
 
   resources :api_keys
 
-  scope 'api' do
-    resources :users, controller: :users, as: 'api_users'
-    resources :api_keys, controller: :api_keys, as: 'api_api_keys'
-    resources :machines, controller: :machines, as: 'api_machines'
-  end
-
   get '/search', as: 'search', to: 'search#search'
+
+  get "#{API_PATH}/users", to: 'api_users#index'
+  get "#{API_PATH}/users/:id", to: 'api_users#show'
+  get "#{API_PATH}/machines/:id", to: 'api_machines#show'
+  get "#{API_PATH}/api_keys", to: 'api_api_keys#index'
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
