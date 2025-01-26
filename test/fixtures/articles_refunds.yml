@@ -4,8 +4,3 @@ ironman_cable:
   refund: ironman_cable_adapter_4_months
   article: cable
   quantity: 1
-
-ironman_adapter:
-  refund: ironman_cable_adapter_4_months
-  article: adapter
-  quantity: 1

@@ -1,11 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 ironman_cable:
-  sale: ironman_cable_adapter_6_months
+  sale: ironman_cable_6_months
   article: cable
   quantity: 1
 
-ironman_adapter:
-  sale: ironman_cable_adapter_6_months
-  article: adapter
-  quantity: 1
