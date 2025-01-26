@@ -4,8 +4,8 @@ require 'test_helper'
 
 class ArticlesSaleTest < ActiveSupport::TestCase
   def setup
-    @sale = sales(:one)
-    @article = articles(:one)
+    @sale = sales(:ironman_cable_adapter_6_months)
+    @article = articles(:cable)
   end
 
   test 'should throw an error if multiple articles_sale of the same article' do

@@ -1,7 +1,59 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  generation_json: 
+sale_ironman_cable_adapter_6_months:
+  generation_json:
+    items:
+      - quantity: 1
+        item_name: "Ethernet cable (2m)"
+        price_cents: 200
+      - quantity: 1
+        item_name: "Ethernet adapter"
+        price_cents: 1500
+      - quantity: 6
+        item_name: "Subscription - 1 month"
+        price_cents: 3000
+    sale_date: "2025-01-20"
+    invoice_id: 1
+    issue_date: "2025-01-20"
+    client_name: "Tony STARK"
+    payment_date: "2025-01-20T12:02:44.961Z"
+    client_address: "Appartement A200\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Credit card"
+    payment_amount_cent: 4700
 
-two:
-  generation_json: 
+sale_pepper_1_year:
+  generation_json:
+    items:
+      - quantity: 1
+        item_name: "Subscription - 12 months"
+        price_cents: 5000
+    sale_date: "2025-01-26"
+    invoice_id: 2
+    issue_date: "2025-01-26"
+    client_name: "Pepper POTTS"
+    payment_date: "2025-01-26T14:02:44.961Z"
+    client_address: "Appartement A201\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Cash"
+    payment_amount_cent: 5000
+
+# TODO: Verify this invoice fixture matches what we generate with refunds
+refund_ironman_cable_adapter_4_months:
+  generation_json:
+    items:
+      - quantity: 1
+        item_name: "Ethernet cable (2m)"
+        price_cents: 200
+      - quantity: 1
+        item_name: "Ethernet adapter"
+        price_cents: 1500
+      - quantity: 4
+        item_name: "Subscription - 1 month"
+        price_cents: 2000
+    sale_date: "2025-01-30"
+    invoice_id: 3
+    issue_date: "2025-01-30"
+    client_name: "Tony STARK"
+    payment_date: "2025-01-30T14:37:19.961Z"
+    client_address: "Appartement A200\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Cash"
+    payment_amount_cent: 3700

@@ -4,7 +4,7 @@ require 'test_helper'
 
 class PaymentMethodTest < ActiveSupport::TestCase
   def setup
-    @payment_method = payment_methods(:one)
+    @payment_method = payment_methods(:credit_card)
   end
 
   test 'should be valid' do

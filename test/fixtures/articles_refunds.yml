@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  refund: one
-  article: one
+ironman_cable:
+  refund: ironman_cable_adapter_4_months
+  article: cable
   quantity: 1
 
-two:
-  refund: two
-  article: two
+ironman_adapter:
+  refund: ironman_cable_adapter_4_months
+  article: adapter
   quantity: 1

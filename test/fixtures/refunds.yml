@@ -1,17 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+ironman_cable_adapter_4_months:
   refunder: ironman
-  refund_method: one
-  sale: one
-  invoice: one
-  reason: MyString
-  verified_at: 2024-06-20 14:37:19
-
-two:
-  refunder: pepper
-  refund_method: two
-  sale: two
-  invoice: two
-  reason: MyString
-  verified_at: 2024-06-20 14:37:19
+  refund_method: cash
+  sale: ironman_cable_adapter_6_months
+  invoice: refund_ironman_cable_adapter_4_months
+  reason: Leaving the residence
+  verified_at: 2025-01-30 14:37:19

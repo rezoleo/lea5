@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ArticleTest < ActiveSupport::TestCase
   def setup
-    @article = articles(:one)
+    @article = articles(:cable)
   end
 
   test 'should be valid' do

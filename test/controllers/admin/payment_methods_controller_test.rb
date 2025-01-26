@@ -5,7 +5,7 @@ require 'test_helper'
 module Admin
   class PaymentMethodsControllerTest < ActionDispatch::IntegrationTest
     def setup
-      @payment_method = payment_methods(:one)
+      @payment_method = payment_methods(:credit_card)
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']
     end

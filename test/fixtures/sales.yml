@@ -1,15 +1,15 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+ironman_cable_adapter_6_months:
   seller: pepper
   client: ironman
-  payment_method: one
-  invoice: one
-  verified_at: 2024-06-20 14:35:47
+  payment_method: credit_card
+  invoice: sale_ironman_cable_adapter_6_months
+  verified_at: 2025-01-20 12:02:44
 
-two:
+pepper_1_year:
   seller: ironman
   client: pepper
-  payment_method: two
-  invoice: two
-  verified_at: 2024-06-20 14:35:47
+  payment_method: cash
+  invoice: sale_pepper_1_year
+  verified_at: 2025-01-26 14:02:44

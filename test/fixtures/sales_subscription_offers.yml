@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  sale: one
-  subscription_offer: one
-  quantity: 1
+ironman_6_months:
+  sale: ironman_cable_adapter_6_months
+  subscription_offer: month
+  quantity: 6
 
-two:
-  sale: two
-  subscription_offer: two
+pepper_1_year:
+  sale: pepper_1_year
+  subscription_offer: year
   quantity: 1

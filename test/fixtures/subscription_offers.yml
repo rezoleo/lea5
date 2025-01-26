@@ -1,9 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+month:
   duration: 1
-  price: 5
+  price: 500
 
-two:
+year:
   duration: 12
-  price: 50
+  price: 5000

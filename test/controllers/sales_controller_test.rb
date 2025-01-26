@@ -6,8 +6,8 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
   def setup
     @user = users(:pepper)
     @admin = users(:ironman)
-    @payment_method = payment_methods(:one)
-    @article = articles(:one)
+    @payment_method = payment_methods(:credit_card)
+    @article = articles(:cable)
     @sale_params = {
       payment_method_id: @payment_method.id,
       duration: 30,

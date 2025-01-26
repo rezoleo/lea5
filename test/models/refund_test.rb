@@ -4,7 +4,7 @@ require 'test_helper'
 
 class RefundTest < ActiveSupport::TestCase
   def setup
-    @refund = refunds(:one)
+    @refund = refunds(:ironman_cable_adapter_4_months)
   end
 
   test 'destroy refund should destroy articles_refunds' do

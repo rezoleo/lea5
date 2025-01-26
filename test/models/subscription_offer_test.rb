@@ -4,7 +4,7 @@ require 'test_helper'
 
 class SubscriptionOfferTest < ActiveSupport::TestCase
   def setup
-    @subscription_offer = subscription_offers(:one)
+    @subscription_offer = subscription_offers(:month)
   end
 
   test 'should be valid' do

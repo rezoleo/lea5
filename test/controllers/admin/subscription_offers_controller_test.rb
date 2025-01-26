@@ -5,7 +5,7 @@ require 'test_helper'
 module Admin
   class SubscriptionOffersControllerTest < ActionDispatch::IntegrationTest
     def setup
-      @subscription_offer = subscription_offers(:one)
+      @subscription_offer = subscription_offers(:month)
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']
     end

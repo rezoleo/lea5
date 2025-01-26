@@ -4,9 +4,9 @@ require 'test_helper'
 
 class SaleTest < ActiveSupport::TestCase
   def setup
-    @sale = sales(:one)
-    @offer1 = subscription_offers(:one)
-    @offer12 = subscription_offers(:two)
+    @sale = sales(:ironman_cable_adapter_6_months)
+    @offer1 = subscription_offers(:month)
+    @offer12 = subscription_offers(:year)
   end
 
   test 'should be valid' do
