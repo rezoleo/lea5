@@ -6,7 +6,8 @@ class CreateSettings < ActiveRecord::Migration[7.1]
       t.string :key, null: false
       t.string :value, null: false
       t.timestamps
+
+      t.index :key, unique: true
     end
-    add_index :settings, :key, unique: true
   end
 end

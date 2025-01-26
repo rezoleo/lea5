@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,17 +50,20 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "articles_refunds", id: false, force: :cascade do |t|
+  create_table "articles_refunds", primary_key: ["article_id", "refund_id"], force: :cascade do |t|
     t.bigint "article_id", null: false
     t.bigint "refund_id", null: false
     t.integer "quantity", null: false
+    t.index ["article_id"], name: "index_articles_refunds_on_article_id"
+    t.index ["refund_id"], name: "index_articles_refunds_on_refund_id"
   end
 
-  create_table "articles_sales", id: false, force: :cascade do |t|
+  create_table "articles_sales", primary_key: ["article_id", "sale_id"], force: :cascade do |t|
     t.bigint "article_id", null: false
     t.bigint "sale_id", null: false
     t.integer "quantity", null: false
-    t.index ["article_id", "sale_id"], name: "index_articles_sales_on_article_id_and_sale_id", unique: true
+    t.index ["article_id"], name: "index_articles_sales_on_article_id"
+    t.index ["sale_id"], name: "index_articles_sales_on_sale_id"
   end
 
   create_table "free_accesses", force: :cascade do |t|
@@ -121,10 +124,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
     t.index ["sale_id"], name: "index_refunds_on_sale_id"
   end
 
-  create_table "refunds_subscription_offers", id: false, force: :cascade do |t|
+  create_table "refunds_subscription_offers", primary_key: ["refund_id", "subscription_offer_id"], force: :cascade do |t|
     t.bigint "refund_id", null: false
     t.bigint "subscription_offer_id", null: false
     t.integer "quantity", null: false
+    t.index ["refund_id"], name: "index_refunds_subscription_offers_on_refund_id"
+    t.index ["subscription_offer_id"], name: "index_refunds_subscription_offers_on_subscription_offer_id"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -141,10 +146,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_19_153242) do
     t.index ["seller_id"], name: "index_sales_on_seller_id"
   end
 
-  create_table "sales_subscription_offers", id: false, force: :cascade do |t|
+  create_table "sales_subscription_offers", primary_key: ["sale_id", "subscription_offer_id"], force: :cascade do |t|
     t.bigint "sale_id", null: false
     t.bigint "subscription_offer_id", null: false
     t.integer "quantity", null: false
+    t.index ["sale_id"], name: "index_sales_subscription_offers_on_sale_id"
+    t.index ["subscription_offer_id"], name: "index_sales_subscription_offers_on_subscription_offer_id"
   end
 
   create_table "settings", force: :cascade do |t|

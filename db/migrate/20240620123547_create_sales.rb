@@ -7,7 +7,6 @@ class CreateSales < ActiveRecord::Migration[7.0]
       t.references :client, null: false, foreign_key: { to_table: :users }
       t.references :payment_method, null: false, foreign_key: true
       t.references :invoice, null: false, foreign_key: true
-      t.integer :total_price
       t.datetime :verified_at
 
       t.timestamps
