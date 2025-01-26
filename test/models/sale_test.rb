@@ -5,6 +5,9 @@ require 'test_helper'
 class SaleTest < ActiveSupport::TestCase
   def setup
     @sale = sales(:ironman_cable_6_months)
+    @sale.duration = 6
+    @sale.remaining_duration = 0
+
     @offer1 = subscription_offers(:month)
     @offer12 = subscription_offers(:year)
   end
