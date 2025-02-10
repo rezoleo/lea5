@@ -5,3 +5,7 @@ ironman_cable:
   article: cable
   quantity: 1
 
+ironman_deleted_article:
+  sale: ironman_deleted_article
+  article: deleted_article
+  quantity: 1

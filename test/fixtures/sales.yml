@@ -13,3 +13,10 @@ pepper_1_year:
   payment_method: cash
   invoice: sale_pepper_1_year
   verified_at: 2025-01-26 14:02:44
+
+ironman_deleted_article:
+  seller: pepper
+  client: ironman
+  payment_method: credit_card
+  invoice: sale_ironman_deleted_article
+  verified_at: 2025-01-21 12:02:44

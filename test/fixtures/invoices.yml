@@ -51,3 +51,18 @@ refund_ironman_cable_4_months:
     client_address: "Appartement A200\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
     payment_method: "Cash"
     payment_amount_cent: 2200
+
+sale_ironman_deleted_article:
+  generation_json:
+    items:
+      - quantity: 1
+        item_name: "Deleted router"
+        price_cents: 2000
+    sale_date: "2025-01-21"
+    invoice_id: 3
+    issue_date: "2025-01-21"
+    client_name: "Tony STARK"
+    payment_date: "2025-01-21T12:02:44.961Z"
+    client_address: "Appartement A200\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Credit card"
+    payment_amount_cent: 2000
