@@ -4,12 +4,16 @@ require 'test_helper'
 
 class SaleTest < ActiveSupport::TestCase
   def setup
+    @user = users(:ironman)
     @sale = sales(:ironman_cable_6_months)
     @sale.duration = 6
     @sale.remaining_duration = 0
 
     @offer1 = subscription_offers(:month)
     @offer12 = subscription_offers(:year)
+
+    @payment_method = payment_methods(:credit_card)
+    @article = articles(:cable)
   end
 
   test 'should be valid' do
@@ -66,23 +70,48 @@ class SaleTest < ActiveSupport::TestCase
     assert_in_delta 3.days.ago, @sale.verified_at, 1.second
   end
 
-  test 'should return false if no subscription offer' do
-    Sale.destroy_all
-    SubscriptionOffer.destroy_all
-    assert_not @sale.send :generate_sales_subscription_offers, 30
-  end
-
-  test 'should return if not exhaustive' do
+  test 'subscription offers must be exhaustive' do
     Sale.destroy_all
     SubscriptionOffer.destroy_all
     SubscriptionOffer.create!(duration: 2, price: 50)
-    assert_not @sale.send :generate_sales_subscription_offers, 11
+    sale = Sale.build_with_invoice(
+      {
+        client: @user,
+        duration: 11,
+        payment_method: @payment_method
+      },
+      seller: @user
+    )
+    assert_predicate sale, :invalid?
+    assert sale.errors.added? :base, 'Subscription offers are not exhaustive!'
   end
 
   test 'should not present offer12' do
-    @sale.sales_subscription_offers.destroy_all
-    @sale.send :generate_sales_subscription_offers, 11
-    assert_equal 11, @sale.sales_subscription_offers.first.quantity
-    assert_equal @sale.sales_subscription_offers.last, @sale.sales_subscription_offers.first
+    sale = Sale.build_with_invoice(
+      {
+        client: @user,
+        duration: 11,
+        payment_method: @payment_method
+      },
+      seller: @user
+    )
+    assert_equal 11, sale.sales_subscription_offers.first.quantity
+    assert_equal 1, sale.sales_subscription_offers.length
+  end
+
+  test 'should preemptively reject duplicate article sales' do
+    sale_attributes = {
+      client: @user,
+      duration: 0,
+      payment_method: @payment_method,
+      articles_sales: [
+        ArticlesSale.new(article: @article, quantity: 1),
+        ArticlesSale.new(article: @article, quantity: 1) # Duplicated article
+      ]
+    }
+    sale = Sale.build_with_invoice(sale_attributes, seller: @user)
+
+    assert_predicate sale, :invalid?
+    assert sale.errors.added? :base, 'Please merge the quantities of the same articles'
   end
 end

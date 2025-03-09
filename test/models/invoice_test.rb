@@ -6,9 +6,7 @@ class InvoiceTest < ActiveSupport::TestCase
   def setup
     @client = users(:ironman)
     @sale = sales(:ironman_cable_6_months)
-    @sale.client = @client
     @invoice = invoices(:sale_ironman_cable_6_months)
-    @invoice.sale = @sale
   end
 
   test 'should be valid' do
@@ -20,7 +18,10 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'should generate correct hash' do
+    invoice = Invoice.build_from_sale(@sale)
+
     expected_hash = {
+      invoice_id: invoice.id,
       sale_date: Time.zone.today,
       issue_date: Time.zone.today,
       client_name: @sale.client.display_name,
@@ -28,10 +29,14 @@ class InvoiceTest < ActiveSupport::TestCase
       payment_amount_cent: @sale.verified_at.nil? ? 0 : @sale.total_price,
       payment_method: @sale.payment_method.name,
       payment_date: @sale.verified_at,
-      items: @invoice.send(:sales_itemized, @sale)
+      items: Invoice.send(:sales_items_to_h, @sale)
     }.compact
 
-    assert_equal @invoice.send(:generate_hash, @sale), expected_hash
+    # Round trip through JSON serialization
+    # The expected_hash has Date objects for sale/issue_date, but the generation_json property has its values
+    # converted by Rails to the types accepted by a JSON object (so the string representation of the date).
+    expected = JSON.parse(expected_hash.to_json)
+    assert_equal expected, invoice.generation_json
   end
 
   test 'should generate json and id from sale' do
@@ -42,21 +47,13 @@ class InvoiceTest < ActiveSupport::TestCase
   end
 
   test 'should create invoice with pdf' do
-    @invoice.generation_json = @invoice.send(:generate_hash, @sale).to_json
+    invoice = Invoice.build_from_sale(@sale)
 
     assert_difference('ActiveStorage::Attachment.count', 1) do
-      @invoice.send(:create_invoice)
-      @invoice.save!
+      invoice.save!
     end
 
-    assert_predicate @invoice.pdf, :attached?
-  end
-
-  test 'should set id if nil on create invoice' do
-    @invoice.generation_json = @invoice.send(:generate_hash, @sale).to_json
-    @invoice.id = nil
-    @invoice.send(:create_invoice)
-    assert_not_nil @invoice.id
+    assert_predicate invoice.pdf, :attached?
   end
 
   test 'should not destroy invoice if sale exists' do
