@@ -101,7 +101,7 @@ class InvoicePdfGenerator
     @composer.text(@input[:client_address], margin: margin_bottom(3))
   end
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/MethodLength
   def add_items_table
     header = lambda do |_tb|
       [
@@ -140,7 +140,7 @@ class InvoicePdfGenerator
 
     @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: header, margin: margin_bottom(2))
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/MethodLength
 
   def add_totals
     ht_s = "Somme totale hors taxes (en euros, HT) : #{format_cents(@total_price_in_cents)}"

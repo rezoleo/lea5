@@ -3,7 +3,6 @@
 require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
-  # rubocop:disable Metrics/AbcSize
   def setup
     @user = users(:pepper)
     @user_ability = Ability.new(@user)
@@ -18,7 +17,6 @@ class AbilityTest < ActiveSupport::TestCase
     @admin_subscription = @admin.subscriptions.first
     @admin_free_access = @admin.free_accesses.first
   end
-  # rubocop:enable Metrics/AbcSize
 
   test 'user can read themselves' do
     assert @user_ability.can?(:read, @user)

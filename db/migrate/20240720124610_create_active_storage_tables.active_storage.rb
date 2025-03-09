@@ -3,7 +3,6 @@
 # This migration comes from active_storage (originally 20170806125915)
 class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
   # rubocop:disable Metrics/MethodLength
-  # rubocop:disable Metrics/AbcSize
   def change
     # Use Active Record's configured type for primary and foreign keys
     primary_key_type, foreign_key_type = primary_and_foreign_key_types
@@ -51,7 +50,6 @@ class CreateActiveStorageTables < ActiveRecord::Migration[7.0]
     end
   end
   # rubocop:enable Metrics/MethodLength
-  # rubocop:enable Metrics/AbcSize
 
   private
 
