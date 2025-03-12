@@ -42,5 +42,13 @@ module Admin
       end
       assert_redirected_to admin_path
     end
+
+    test 'should hard_delete offer' do
+      offer = SubscriptionOffer.create!(duration: 1, price: 500)
+      assert_difference 'SubscriptionOffer.unscoped.count', -1 do
+        delete subscription_offer_path(offer)
+      end
+      assert_redirected_to admin_path
+    end
   end
 end

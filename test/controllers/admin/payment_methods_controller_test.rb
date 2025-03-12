@@ -42,5 +42,13 @@ module Admin
       end
       assert_redirected_to admin_path
     end
+
+    test 'should hard_delete payment_method' do
+      payment_method = PaymentMethod.create!(name: 'Unused payment_method that can be hard deleted', auto_verify: true)
+      assert_difference 'PaymentMethod.unscoped.count', -1 do
+        delete payment_method_path(payment_method)
+      end
+      assert_redirected_to admin_path
+    end
   end
 end
