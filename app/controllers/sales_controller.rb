@@ -5,10 +5,11 @@ class SalesController < ApplicationController
 
   def new
     @sale = @owner.sales_as_client.new
+    authorize! :new, @sale
+
     @articles = Article.all
     @subscription_offers = SubscriptionOffer.order(duration: :desc)
     @payment_methods = PaymentMethod.all
-    authorize! :new, @sale
   end
 
   def create
