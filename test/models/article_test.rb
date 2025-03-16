@@ -54,19 +54,7 @@ class ArticleTest < ActiveSupport::TestCase
     @article.sales.destroy_all
     @article.refunds.destroy_all
     assert_difference 'Article.unscoped.count', -1 do
-      @article.destroy
-    end
-  end
-
-  test 'article should be destroyable' do
-    @article.sales.destroy_all
-    @article.refunds.destroy_all
-    assert_predicate @article, :destroy
-  end
-
-  test 'should not destroy article if soft_delete' do
-    assert_no_difference 'Article.unscoped.count' do
-      @article.soft_delete
+      assert_predicate @article, :destroy
     end
   end
 

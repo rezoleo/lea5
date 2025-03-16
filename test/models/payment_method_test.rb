@@ -41,14 +41,8 @@ class PaymentMethodTest < ActiveSupport::TestCase
     @payment_method.sales.destroy_all
     @payment_method.refunds.destroy_all
     assert_difference 'PaymentMethod.unscoped.count', -1 do
-      @payment_method.destroy
+      assert_predicate @payment_method, :destroy
     end
-  end
-
-  test 'article should be destroyable' do
-    @payment_method.sales.destroy_all
-    @payment_method.refunds.destroy_all
-    assert_predicate @payment_method, :destroy
   end
 
   test 'payment_method should not destroy if dependant' do

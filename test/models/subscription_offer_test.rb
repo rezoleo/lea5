@@ -67,14 +67,8 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
     @subscription_offer.sales.destroy_all
     @subscription_offer.refunds.destroy_all
     assert_difference 'SubscriptionOffer.unscoped.count', -1 do
-      @subscription_offer.destroy
+      assert_predicate @subscription_offer, :destroy
     end
-  end
-
-  test 'offer should be destroyable' do
-    @subscription_offer.sales.destroy_all
-    @subscription_offer.refunds.destroy_all
-    assert_predicate @subscription_offer, :destroy
   end
 
   test 'offer should not destroy if dependant' do
