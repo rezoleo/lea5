@@ -13,6 +13,13 @@ class Sale < ApplicationRecord
   has_many :sales_subscription_offers, dependent: :destroy
   has_many :subscription_offers, through: :sales_subscription_offers
 
+  # In the form to create a new Sale, also accept fields to create an article_sale
+  # form >
+  #   sale[duration], sale[payment_method_id]...
+  #   sale[articles_sales_attributes][1][article_id], sale[articles_sales_attributes][1][quantity]...
+  #   sale[articles_sales_attributes][2][article_id], sale[articles_sales_attributes][2][quantity]...
+  # Sale.new(sale_params) => Sale(duration, payment_method) + ArticleSale(article, quantity)
+  # (but we use Sale.build_with_invoice instead of Sale.new/Sale.create)
   accepts_nested_attributes_for :articles_sales
 
   attribute :duration, :integer, default: 0
