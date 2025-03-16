@@ -30,7 +30,7 @@ class InvoiceLib
       @title = "Facture Rézoléo #{invoice_id}"
       @author = 'Association Rézoléo'
       @subject = "Facture #{invoice_id}"
-      @creation_date = Time.now # rubocop:disable Rails/TimeZone
+      @creation_date = Time.now.utc
     end
   end
 end

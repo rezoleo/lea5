@@ -4,6 +4,11 @@ require 'test_helper'
 
 class InvoicePdfGeneratorTest < ActiveSupport::TestCase
   def setup
+    super
+    # Freeze time during setup and not just around the test, because the
+    # InvoicePdfGenerator initialization captures the current time
+    freeze_time
+
     @id = '4269'
     input = {
       invoice_id: @id,
@@ -20,6 +25,11 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
       payment_method: 'Carte Bancaire'
     }
     @generator = InvoicePdfGenerator.new(input)
+  end
+
+  def teardown
+    unfreeze_time
+    super
   end
 
   test 'generate_pdf should return a StringIO object' do
@@ -83,7 +93,7 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_equal "Facture Rézoléo #{@id}", metadata[:Title]
     assert_equal 'Association Rézoléo', metadata[:Author]
     assert_equal "Facture #{@id}", metadata[:Subject]
-    assert_in_delta Time.now, metadata[:CreationDate], 5.minutes # rubocop:disable Rails/TimeZone
+    assert_equal Time.current.utc, metadata[:CreationDate]
   end
 
   class CollectTextProcessor < HexaPDF::Content::Processor
