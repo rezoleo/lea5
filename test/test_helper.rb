@@ -8,6 +8,12 @@ SimpleCov.start 'rails' do
   #       https://github.com/simplecov-ruby/simplecov/pull/1037
   enable_coverage_for_eval
 
+  # Add a tab in SimpleCov HTML report with ignored lines
+  # Source: https://github.com/simplecov-ruby/simplecov/issues/312
+  add_group 'Ignored Code' do |src_file|
+    File.readlines(src_file.filename).grep(/#{SimpleCov.nocov_token}/).any?
+  end
+
   if ENV['CI']
     require 'simplecov-cobertura'
     formatter SimpleCov::Formatter::CoberturaFormatter

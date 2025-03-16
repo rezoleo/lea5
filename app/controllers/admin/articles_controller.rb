@@ -11,6 +11,14 @@ module Admin
       authorize! :new, @article
     end
 
+    # Do NOT implement edit method, we want to keep articles immutable.
+    # If you want to edit an article, create a new one and soft-delete the other.
+    def edit
+      # :nocov:
+      raise
+      # :nocov:
+    end
+
     def create
       @article = Article.new(article_params)
       authorize! :create, @article
@@ -20,6 +28,14 @@ module Admin
       else
         render 'new', status: :unprocessable_entity
       end
+    end
+
+    # Do NOT implement update method, we want to keep articles immutable.
+    # If you want to edit an article, create a new one and soft-delete the other.
+    def update
+      # :nocov:
+      raise
+      # :nocov:
     end
 
     def destroy

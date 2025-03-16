@@ -11,6 +11,14 @@ module Admin
       authorize! :new, @subscription_offer
     end
 
+    # Do NOT implement edit method, we want to keep subscription offers immutable.
+    # If you want to edit an subscription offer, create a new one and soft-delete the other.
+    def edit
+      # :nocov:
+      raise
+      # :nocov:
+    end
+
     def create
       @subscription_offer = SubscriptionOffer.new(subscription_offer_params)
       authorize! :create, @subscription_offer
@@ -20,6 +28,14 @@ module Admin
       else
         render 'new', status: :unprocessable_entity
       end
+    end
+
+    # Do NOT implement update method, we want to keep subscription offers immutable.
+    # If you want to edit an subscription offer, create a new one and soft-delete the other.
+    def update
+      # :nocov:
+      raise
+      # :nocov:
     end
 
     def destroy

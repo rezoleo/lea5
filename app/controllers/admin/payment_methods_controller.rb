@@ -11,6 +11,14 @@ module Admin
       authorize! :new, @payment_method
     end
 
+    # Do NOT implement edit method, we want to keep payment methods immutable.
+    # If you want to edit an payment method, create a new one and soft-delete the other.
+    def edit
+      # :nocov:
+      raise
+      # :nocov:
+    end
+
     def create
       @payment_method = PaymentMethod.new(payment_method_params)
       authorize! :create, @payment_method
@@ -20,6 +28,14 @@ module Admin
       else
         render 'new', status: :unprocessable_entity
       end
+    end
+
+    # Do NOT implement update method, we want to keep payment methods immutable.
+    # If you want to edit an payment method, create a new one and soft-delete the other.
+    def update
+      # :nocov:
+      raise
+      # :nocov:
     end
 
     def destroy
