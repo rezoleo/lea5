@@ -27,8 +27,11 @@ class ArticleTest < ActiveSupport::TestCase
     assert_not_predicate @article, :valid?
   end
 
-  test 'price should be positive' do
+  test 'price should be strictly positive' do
     @article.price = -5
+    assert_not_predicate @article, :valid?
+
+    @article.price = 0
     assert_not_predicate @article, :valid?
   end
 

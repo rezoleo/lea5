@@ -22,8 +22,11 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
     assert_not_predicate @subscription_offer, :valid?
   end
 
-  test 'duration should be positive' do
+  test 'duration should be strictly positive' do
     @subscription_offer.duration = -5
+    assert_not_predicate @subscription_offer, :valid?
+
+    @subscription_offer.duration = 0
     assert_not_predicate @subscription_offer, :valid?
   end
 
@@ -37,8 +40,11 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
     assert_not_predicate @subscription_offer, :valid?
   end
 
-  test 'price should be positive' do
+  test 'price should be strictly positive' do
     @subscription_offer.price = -5
+    assert_not_predicate @subscription_offer, :valid?
+
+    @subscription_offer.price = 0
     assert_not_predicate @subscription_offer, :valid?
   end
 
