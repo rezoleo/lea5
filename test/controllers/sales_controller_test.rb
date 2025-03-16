@@ -40,6 +40,7 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
       post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
     end
     assert_response :unprocessable_entity
+    assert_template 'sales/new'
   end
 
   test 'should not create sale and redirect if sale is invalid' do
@@ -48,5 +49,16 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
       post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
     end
     assert_response :unprocessable_entity
+    assert_template 'sales/new'
+  end
+
+  test 'should not create sale and redirect if sale is empty' do
+    @sale_params[:duration] = 0
+    @sale_params.delete(:articles_sales_attributes)
+    assert_no_difference 'Sale.count' do
+      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+    end
+    assert_response :unprocessable_entity
+    assert_template 'sales/new'
   end
 end

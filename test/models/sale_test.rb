@@ -115,4 +115,16 @@ class SaleTest < ActiveSupport::TestCase
     assert_predicate sale, :invalid?
     assert sale.errors.added? :base, 'Please merge the quantities of the same articles'
   end
+
+  test 'should not be empty' do
+    sale_attributes = {
+      client: @user,
+      duration: 0,
+      payment_method: @payment_method
+    }
+    sale = Sale.build_with_invoice(sale_attributes, seller: @user)
+
+    assert_predicate sale, :invalid?
+    assert sale.errors.added? :base, 'Cannot create an empty sale, add at least an article or a subscription'
+  end
 end
