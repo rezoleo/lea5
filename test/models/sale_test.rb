@@ -60,15 +60,19 @@ class SaleTest < ActiveSupport::TestCase
   end
 
   test 'verify method should set the date if nil' do
+    freeze_time
+
     @sale.verified_at = nil
     @sale.verify
-    assert_in_delta Time.zone.now, @sale.verified_at, 1.second
+    assert_equal Time.zone.now, @sale.verified_at
   end
 
   test 'verify method should not change date is not nil' do
+    freeze_time
+
     @sale.verified_at = 3.days.ago
     @sale.verify
-    assert_in_delta 3.days.ago, @sale.verified_at, 1.second
+    assert_equal 3.days.ago, @sale.verified_at
   end
 
   test 'subscription offers must be exhaustive' do

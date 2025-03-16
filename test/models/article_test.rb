@@ -40,7 +40,7 @@ class ArticleTest < ActiveSupport::TestCase
     assert_no_difference 'Article.unscoped.count' do
       @article.soft_delete
     end
-    assert_not_predicate @article.deleted_at, :nil?
+    assert_not_nil @article.deleted_at
   end
 
   test 'soft_delete should not change deleted_at date' do

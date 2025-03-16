@@ -53,7 +53,7 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
     assert_no_difference 'SubscriptionOffer.unscoped.count' do
       @subscription_offer.soft_delete
     end
-    assert_not_predicate @subscription_offer.deleted_at, :nil?
+    assert_not_nil @subscription_offer.deleted_at
   end
 
   test 'soft_delete should not change deleted_at date' do
