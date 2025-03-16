@@ -76,7 +76,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.index ["user_id"], name: "index_free_accesses_on_user_id"
   end
 
-  create_table "invoices", force: :cascade do |t|
+  create_table "invoices", id: :bigint, default: nil, force: :cascade do |t|
     t.jsonb "generation_json", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
