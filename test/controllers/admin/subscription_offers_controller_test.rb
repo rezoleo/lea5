@@ -31,12 +31,6 @@ module Admin
       assert_template 'admin/subscription_offers/new'
     end
 
-    test 'should not destroy offer if soft_delete' do
-      assert_no_difference 'SubscriptionOffer.unscoped.count' do
-        @subscription_offer.soft_delete
-      end
-    end
-
     test 'should soft_delete offer' do
       assert_no_difference 'SubscriptionOffer.unscoped.count' do
         delete subscription_offer_path(@subscription_offer)

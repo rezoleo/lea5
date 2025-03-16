@@ -31,12 +31,6 @@ module Admin
       assert_template 'admin/payment_methods/new'
     end
 
-    test 'should not destroy payment_method if soft_delete' do
-      assert_no_difference 'PaymentMethod.unscoped.count' do
-        @payment_method.soft_delete
-      end
-    end
-
     test 'should soft_delete payment_method' do
       assert_no_difference 'PaymentMethod.unscoped.count' do
         delete payment_method_path(@payment_method)
