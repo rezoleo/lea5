@@ -5,6 +5,7 @@ require 'test_helper'
 module Admin
   class ArticlesControllerUserRightTest < ActionDispatch::IntegrationTest
     def setup
+      super
       @user = users(:pepper)
       sign_in_as @user
 

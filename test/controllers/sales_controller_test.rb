@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SalesControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @user = users(:pepper)
     @admin = users(:ironman)
     @payment_method = payment_methods(:credit_card)

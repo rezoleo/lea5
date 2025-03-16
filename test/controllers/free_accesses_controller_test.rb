@@ -4,6 +4,7 @@ require 'test_helper'
 
 class FreeAccessesControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @free_access = free_accesses(:one)
     @owner = @free_access.user
     sign_in_as @owner, ['rezoleo']

@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SaleTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:ironman)
     @sale = sales(:ironman_cable_6_months)
     @sale.duration = 6

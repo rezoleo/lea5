@@ -5,6 +5,7 @@ require 'test_helper'
 module Admin
   class DashboardControllerTest < ActionDispatch::IntegrationTest
     def setup
+      super
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']
     end

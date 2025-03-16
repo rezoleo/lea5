@@ -4,6 +4,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:ironman)
     @auth_hash = { provider: 'keycloak',
                    uid: '11111111-1111-1111-1111-111111111111',

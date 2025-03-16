@@ -4,6 +4,7 @@ require 'test_helper'
 
 class InvoiceTest < ActiveSupport::TestCase
   def setup
+    super
     @client = users(:ironman)
     @sale = sales(:ironman_cable_6_months)
     @invoice = invoices(:sale_ironman_cable_6_months)

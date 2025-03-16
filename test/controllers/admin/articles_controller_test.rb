@@ -5,6 +5,7 @@ require 'test_helper'
 module Admin
   class ArticlesControllerTest < ActionDispatch::IntegrationTest
     def setup
+      super
       @article = articles(:cable)
       @user = users(:ironman)
       sign_in_as @user, ['rezoleo']

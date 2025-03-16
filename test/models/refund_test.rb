@@ -4,6 +4,7 @@ require 'test_helper'
 
 class RefundTest < ActiveSupport::TestCase
   def setup
+    super
     @refund = refunds(:ironman_cable_adapter_4_months)
   end
 

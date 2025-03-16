@@ -4,6 +4,7 @@ require 'test_helper'
 
 class IpTest < ActiveSupport::TestCase
   def setup
+    super
     @machine = machines(:jarvis)
     @ip = @machine.build_ip(ip: '172.30.48.245')
   end

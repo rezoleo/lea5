@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SubscriptionOfferTest < ActiveSupport::TestCase
   def setup
+    super
     @subscription_offer = subscription_offers(:month)
   end
 

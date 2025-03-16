@@ -4,6 +4,7 @@ require 'test_helper'
 
 class UsersControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @user = users(:pepper)
 
     @admin = users(:ironman)

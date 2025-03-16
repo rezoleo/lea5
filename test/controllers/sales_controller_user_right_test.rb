@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SalesControllerUserRightTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @user = users(:pepper)
     sign_in_as @user
   end

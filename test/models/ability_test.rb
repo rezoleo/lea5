@@ -4,6 +4,7 @@ require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:pepper)
     @user_ability = Ability.new(@user)
     @user_machine = @user.machines.first

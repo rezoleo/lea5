@@ -4,6 +4,7 @@ require 'test_helper'
 
 class ArticleTest < ActiveSupport::TestCase
   def setup
+    super
     @article = articles(:cable)
   end
 

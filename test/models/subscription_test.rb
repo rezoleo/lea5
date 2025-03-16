@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SubscriptionTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:ironman)
     @subscription = subscriptions(:subscription1)
   end
