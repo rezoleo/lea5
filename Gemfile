@@ -88,7 +88,7 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara', '~> 3.40'
-  gem 'guard', '~> 2.18'
+  gem 'guard', '~> 2.19'
   gem 'guard-minitest', '~> 2.4'
   gem 'minitest', '~> 5.23'
   gem 'minitest-reporters', '~> 1.6'
