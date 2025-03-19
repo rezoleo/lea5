@@ -64,7 +64,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'brakeman', '~> 6.1'
+  gem 'brakeman', '~> 7.0'
   gem 'overcommit', '~> 0.67.1'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
