@@ -192,8 +192,8 @@ GEM
     matrix (0.4.2)
     method_source (1.1.0)
     mini_mime (1.1.5)
-    minitest (5.24.0)
-    minitest-reporters (1.6.1)
+    minitest (5.25.5)
+    minitest-reporters (1.7.1)
       ansi
       builder
       minitest (>= 5.0)
@@ -438,8 +438,8 @@ DEPENDENCIES
   importmap-rails (~> 1.2)
   ipaddress (~> 0.8.3)
   jbuilder (~> 2.12)
-  minitest (~> 5.23)
-  minitest-reporters (~> 1.6)
+  minitest (~> 5.25)
+  minitest-reporters (~> 1.7)
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth_openid_connect (~> 0.7.0)
