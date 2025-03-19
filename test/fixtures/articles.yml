@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+cable:
+  name: Ethernet cable (2m)
+  price: 200
+
+adapter:
+  name: Ethernet adapter
+  price: 1500
+
+deleted_article:
+  name: Deleted router
+  price: 2000
+  deleted_at: 2025-01-26 18:15:00

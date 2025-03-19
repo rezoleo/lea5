@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
                                           uid: '11111111-1111-1111-1111-111111111111',
                                           info: { first_name: 'John',
