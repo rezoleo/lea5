@@ -70,12 +70,12 @@ group :development do
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'rack-mini-profiler', '~> 3.3'
 
-  gem 'rubocop', '~> 1.64'
-  gem 'rubocop-capybara', '~> 2.20'
-  gem 'rubocop-i18n', '~> 3.0'
-  gem 'rubocop-minitest', '~> 0.35.0'
-  gem 'rubocop-performance', '~> 1.21'
-  gem 'rubocop-rails', '~> 2.25'
+  gem 'rubocop', '~> 1.74'
+  gem 'rubocop-capybara', '~> 2.22'
+  gem 'rubocop-i18n', '~> 3.2'
+  gem 'rubocop-minitest', '~> 0.37.1'
+  gem 'rubocop-performance', '~> 1.24'
+  gem 'rubocop-rails', '~> 2.30'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console', '~> 4.2'
 
