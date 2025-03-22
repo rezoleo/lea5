@@ -118,7 +118,7 @@ GEM
     drb (2.2.1)
     email_validator (2.2.4)
       activemodel
-    error_highlight (0.6.0)
+    error_highlight (0.7.0)
     erubi (1.13.0)
     faraday (2.9.1)
       faraday-net_http (>= 2.0, < 3.2)
