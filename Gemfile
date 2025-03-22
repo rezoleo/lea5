@@ -15,7 +15,7 @@ gem 'sprockets-rails', '~> 3.5'
 gem 'pg', '~> 1.5'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.4'
+gem 'puma', '~> 6.6'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails', '~> 1.2'
@@ -64,18 +64,18 @@ group :development, :test do
 end
 
 group :development do
-  gem 'brakeman', '~> 6.1'
-  gem 'overcommit', '~> 0.63.0'
+  gem 'brakeman', '~> 7.0'
+  gem 'overcommit', '~> 0.67.1'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'rack-mini-profiler', '~> 3.3'
 
-  gem 'rubocop', '~> 1.64'
-  gem 'rubocop-capybara', '~> 2.20'
-  gem 'rubocop-i18n', '~> 3.0'
-  gem 'rubocop-minitest', '~> 0.35.0'
-  gem 'rubocop-performance', '~> 1.21'
-  gem 'rubocop-rails', '~> 2.25'
+  gem 'rubocop', '~> 1.74'
+  gem 'rubocop-capybara', '~> 2.22'
+  gem 'rubocop-i18n', '~> 3.2'
+  gem 'rubocop-minitest', '~> 0.37.1'
+  gem 'rubocop-performance', '~> 1.24'
+  gem 'rubocop-rails', '~> 2.30'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console', '~> 4.2'
 
@@ -88,10 +88,10 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara', '~> 3.40'
-  gem 'guard', '~> 2.18'
+  gem 'guard', '~> 2.19'
   gem 'guard-minitest', '~> 2.4'
-  gem 'minitest', '~> 5.23'
-  gem 'minitest-reporters', '~> 1.6'
+  gem 'minitest', '~> 5.25'
+  gem 'minitest-reporters', '~> 1.7'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.22.0'
