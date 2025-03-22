@@ -75,8 +75,8 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     aes_key_wrap (1.1.0)
     ansi (1.5.0)
     ast (2.4.3)
@@ -146,7 +146,7 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
-    hashdiff (1.1.0)
+    hashdiff (1.1.2)
     hashie (5.0.0)
     hexapdf (0.40.0)
       cmdparse (~> 3.0, >= 3.0.3)
@@ -264,7 +264,7 @@ GEM
     psych (5.2.3)
       date
       stringio
-    public_suffix (5.0.5)
+    public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -422,7 +422,7 @@ GEM
       activesupport
       faraday (~> 2.0)
       faraday-follow_redirects
-    webmock (3.23.1)
+    webmock (3.25.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
