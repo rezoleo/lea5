@@ -56,7 +56,7 @@ gem 'cancancan', '~> 3.6'
 # gem "image_processing", "~> 1.2"
 
 # Generate pdf files [https://github.com/gettalong/hexapdf]
-gem 'hexapdf', '~> 0.40.0'
+gem 'hexapdf', '~> 0.47.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

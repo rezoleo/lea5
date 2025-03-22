@@ -148,7 +148,7 @@ GEM
       minitest (>= 3.0)
     hashdiff (1.1.2)
     hashie (5.0.0)
-    hexapdf (0.40.0)
+    hexapdf (0.47.0)
       cmdparse (~> 3.0, >= 3.0.3)
       geom2d (~> 0.4, >= 0.4.1)
       openssl (>= 2.2.1)
@@ -244,7 +244,7 @@ GEM
       tzinfo
       validate_url
       webfinger (~> 2.0)
-    openssl (3.2.0)
+    openssl (3.3.0)
     ostruct (0.6.1)
     overcommit (0.67.1)
       childprocess (>= 0.6.3, < 6)
@@ -447,7 +447,7 @@ DEPENDENCIES
   error_highlight (>= 0.4.0)
   guard (~> 2.19)
   guard-minitest (~> 2.4)
-  hexapdf (~> 0.40.0)
+  hexapdf (~> 0.47.0)
   importmap-rails (~> 1.2)
   ipaddress (~> 0.8.3)
   jbuilder (~> 2.12)
