@@ -81,6 +81,10 @@ module ActiveSupport
         delete logout_path
       elsif is_a? ApplicationSystemTestCase
         click_on 'Logout'
+        # `click_on` doesn't wait for whatever is run by the click to end,
+        # so we wait until the 'Login' button is visible (<=> we went through
+        # the logout process).
+        find_button 'Login'
       end
     end
 
@@ -91,8 +95,12 @@ module ActiveSupport
       if is_a? ActionDispatch::IntegrationTest
         get auth_callback_path
       elsif is_a? ApplicationSystemTestCase
-        visit users_path # We must first visit a page to click on the button
+        visit root_path # We must first visit a page to click on the button
         click_on 'Login'
+        # `click_on` doesn't wait for whatever is run by the click to end,
+        # so we wait until the 'Logout' button is visible (<=> we went through
+        # the login process).
+        find_button 'Logout'
       end
     end
   end
