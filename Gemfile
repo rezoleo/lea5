@@ -70,7 +70,7 @@ group :development do
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'rack-mini-profiler', '~> 3.3'
 
-  gem 'rubocop', '~> 1.74'
+  gem 'rubocop', '~> 1.75'
   gem 'rubocop-capybara', '~> 2.22'
   gem 'rubocop-i18n', '~> 3.2'
   gem 'rubocop-minitest', '~> 0.37.1'
