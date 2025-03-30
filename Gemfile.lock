@@ -119,7 +119,7 @@ GEM
     email_validator (2.2.4)
       activemodel
     error_highlight (0.7.0)
-    erubi (1.13.0)
+    erubi (1.13.1)
     faraday (2.12.2)
       faraday-net_http (>= 2.0, < 3.5)
       json
@@ -168,7 +168,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.12.0)
+    jbuilder (2.13.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     json (2.10.2)
@@ -185,7 +185,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
-    loofah (2.22.0)
+    loofah (2.24.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lumberjack (1.2.10)
@@ -219,7 +219,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.16.6-x86_64-linux)
+    nokogiri (1.18.6-x86_64-linux-gnu)
       racc (~> 1.4)
     notiffany (0.1.3)
       nenv (~> 0.1)
@@ -313,9 +313,9 @@ GEM
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.6.0)
+    rails-html-sanitizer (1.6.2)
       loofah (~> 2.21)
-      nokogiri (~> 1.14)
+      nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
     railties (7.1.3.4)
       actionpack (= 7.1.3.4)
       activesupport (= 7.1.3.4)
@@ -454,7 +454,7 @@ DEPENDENCIES
   hexapdf (~> 1.2.0)
   importmap-rails (~> 1.2)
   ipaddress (~> 0.8.3)
-  jbuilder (~> 2.12)
+  jbuilder (~> 2.13)
   minitest (~> 5.25)
   minitest-reporters (~> 1.7)
   omniauth (~> 2.1)
@@ -486,4 +486,4 @@ RUBY VERSION
    ruby 3.1.2p20
 
 BUNDLED WITH
-   2.3.7
+   2.6.6

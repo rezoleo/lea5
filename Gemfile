@@ -27,7 +27,7 @@ gem 'turbo-rails', '~> 2.0'
 gem 'stimulus-rails', '~> 1.3'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder', '~> 2.12'
+gem 'jbuilder', '~> 2.13'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
