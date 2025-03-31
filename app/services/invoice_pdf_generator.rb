@@ -220,12 +220,14 @@ class InvoicePdfGenerator
     end
 
     def config_font_style(font:)
-      style(:base, font: font, font_size: BASE_FONT_SIZE, line_spacing: 1.2)
-      style(:bold, font: [font, { variant: :bold }])
-      style(:header, font: [font, { variant: :bold }], font_size: BASE_FONT_SIZE * 7 / 6, text_align: :center)
-      style(:footer, font: font, font_size: BASE_FONT_SIZE / 2, text_align: :center)
-      style(:small, font: font, font_size: BASE_FONT_SIZE * 0.75)
-      style(:conditions, font: font, font_size: BASE_FONT_SIZE * 5 / 6, fill_color: '3C3C3C')
+      styles(
+        base: { font: font, font_size: BASE_FONT_SIZE, line_spacing: 1.2 },
+        bold: { font: [font, { variant: :bold }] },
+        header: { font: [font, { variant: :bold }], font_size: BASE_FONT_SIZE * 7 / 6, text_align: :center },
+        footer: { font: font, font_size: BASE_FONT_SIZE / 2, text_align: :center },
+        small: { font: font, font_size: BASE_FONT_SIZE * 0.75 },
+        conditions: { font: font, font_size: BASE_FONT_SIZE * 5 / 6, fill_color: '3C3C3C' }
+      )
     end
   end
 end

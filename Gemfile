@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.1.2'
+ruby '3.4.2'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.1.3', '>= 7.1.3.4'
@@ -27,7 +27,7 @@ gem 'turbo-rails', '~> 2.0'
 gem 'stimulus-rails', '~> 1.3'
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem 'jbuilder', '~> 2.12'
+gem 'jbuilder', '~> 2.13'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -44,7 +44,7 @@ gem 'bootsnap', require: false
 gem 'ipaddress', '~> 0.8.3'
 
 gem 'omniauth', '~> 2.1'
-gem 'omniauth_openid_connect', '~> 0.7.0'
+gem 'omniauth_openid_connect', '~> 0.8.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'cancancan', '~> 3.6'
@@ -56,7 +56,7 @@ gem 'cancancan', '~> 3.6'
 # gem "image_processing", "~> 1.2"
 
 # Generate pdf files [https://github.com/gettalong/hexapdf]
-gem 'hexapdf', '~> 0.40.0'
+gem 'hexapdf', '~> 1.2.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -70,7 +70,7 @@ group :development do
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'rack-mini-profiler', '~> 3.3'
 
-  gem 'rubocop', '~> 1.74'
+  gem 'rubocop', '~> 1.75'
   gem 'rubocop-capybara', '~> 2.22'
   gem 'rubocop-i18n', '~> 3.2'
   gem 'rubocop-minitest', '~> 0.37.1'
