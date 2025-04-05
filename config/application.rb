@@ -37,10 +37,5 @@ module Lea5
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
-    # Start Rails console in sandbox mode by default, to avoid accidental writing
-    # to the database. This configuration only affects the production environment,
-    # development or test are not affected.
-    config.sandbox_by_default = true
   end
 end
