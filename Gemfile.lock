@@ -116,7 +116,6 @@ GEM
     drb (2.2.1)
     email_validator (2.2.4)
       activemodel
-    error_highlight (0.7.0)
     erubi (1.13.1)
     faraday (2.12.2)
       faraday-net_http (>= 2.0, < 3.5)
@@ -449,7 +448,6 @@ DEPENDENCIES
   cancancan (~> 3.6)
   capybara (~> 3.40)
   debug
-  error_highlight (>= 0.4.0)
   guard (~> 2.19)
   guard-minitest (~> 2.4)
   hexapdf (~> 1.2.0)
@@ -522,7 +520,6 @@ CHECKSUMS
   docile (1.4.0) sha256=5f1734bde23721245c20c3d723e76c104208e1aa01277a69901ce770f0ebb8d3
   drb (2.2.1) sha256=e9d472bf785f558b96b25358bae115646da0dbfd45107ad858b0bc0d935cb340
   email_validator (2.2.4) sha256=5ab238095bec7aef9389f230e9e0c64c5081cdf91f19d6c5cecee0a93af20604
-  error_highlight (0.7.0) sha256=28e8f487c24ff28cb859e85d817a5a526a340ca7086ca3a961b7cf19f9f02915
   erubi (1.13.1) sha256=a082103b0885dbc5ecf1172fede897f9ebdb745a4b97a5e8dc63953db1ee4ad9
   faraday (2.12.2) sha256=157339c25c7b8bcb739f5cf1207cb0cefe8fa1c65027266bcbc34c90c84b9ad6
   faraday-follow_redirects (0.3.0) sha256=d92d975635e2c7fe525dd494fcd4b9bb7f0a4a0ec0d5f4c15c729530fdb807f9
@@ -646,9 +643,6 @@ CHECKSUMS
   websocket-extensions (0.1.5) sha256=1c6ba63092cda343eb53fc657110c71c754c56484aad42578495227d717a8241
   xpath (3.2.0) sha256=6dfda79d91bb3b949b947ecc5919f042ef2f399b904013eb3ef6d20dd3a4082e
   zeitwerk (2.7.2) sha256=842e067cb11eb923d747249badfb5fcdc9652d6f20a1f06453317920fdcd4673
-
-RUBY VERSION
-   ruby 3.4.2p28
 
 BUNDLED WITH
    2.6.6
