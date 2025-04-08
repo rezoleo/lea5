@@ -7,7 +7,8 @@ You can use the ["Upgrade to Rails 7.1" pull request][upgrade-7-1-pr] as an exam
 3. Run `bin/rails app:update`
    1. You can check the diff for each file that will be overwritten, or wait at the end and use git to check
    2. Make sure you fix Rubocop warnings before diffing, this will greatly reduce noise (Rails uses double quotes for strings, we mostly use single quotes)
-4. Read the new stuff in `config/initializers/new_framework_defaults_<Rails version>.rb`, to see if something will affect us
+4. Read the new stuff in `config/initializers/new_framework_defaults_<Rails version>.rb`, to see if something will affect us.
+   Once you're clear, change the default in `config/application.rb`.
 5. Read [Upgrading Rails][upgrading-rails] for general instructions
 6. Read the release notes for the specific Rails version (e.g. [Rails 7.1 release notes][rails-7.1-release-notes])
    1. Immediately upgrade our code patterns if you find some that could benefit from new Rails features
@@ -37,12 +38,14 @@ You can use the ["Upgrade to Rails 7.1" pull request][upgrade-7-1-pr] as an exam
       rf -rf tmp/cache/bootsnap/compile-cache-iseq/*
       # Compare apps
       delta <current lea5> <newly generated app>
-      difft <current lea5> <newly generated app> --color=always | less
+      difft <current lea5> <newly generated app> --skip-unchanged --sort-paths --color=always | less
       ```
+      You can also use [RailsDiff][railsdiff] for another view at the changes (but the above method is preferred).
 
 [git-delta]: https://github.com/dandavison/delta
 [difftastic]: https://difftastic.wilfred.me.uk/
 [rails-7.1-normalizes]: https://guides.rubyonrails.org/7_1_release_notes.html#add-activerecord-base-normalizes
 [rails-7.1-release-notes]: https://edgeguides.rubyonrails.org/7_1_release_notes.html
+[railsdiff]: https://railsdiff.org
 [upgrade-7-1-pr]: https://github.com/rezoleo/lea5/pull/463
 [upgrading-rails]: https://edgeguides.rubyonrails.org/upgrading_ruby_on_rails.html
