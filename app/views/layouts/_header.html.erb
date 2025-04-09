@@ -14,6 +14,11 @@
           <%= link_to "Api Keys", api_keys_url %>
         </li>
       <% end %>
+      <% if can?(:manage, :all) %>
+        <li>
+          <%= link_to "Admin", admin_path %>
+        </li>
+      <% end %>
     </ul>
   </nav>
 

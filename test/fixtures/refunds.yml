@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+ironman_cable_adapter_4_months:
+  refunder: ironman
+  refund_method: cash
+  sale: ironman_cable_6_months
+  invoice: refund_ironman_cable_4_months
+  reason: Leaving the residence
+  verified_at: 2025-01-30 14:37:19

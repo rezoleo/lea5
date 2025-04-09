@@ -4,9 +4,7 @@ require 'test_helper'
 
 class SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
-    @api_key = api_keys(:FakeRadius)
-    @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
-
+    super
     OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
                                           uid: '11111111-1111-1111-1111-111111111111',
                                           info: { first_name: 'John',

@@ -11,14 +11,15 @@
   </h1>
 
   <div class="container">
+    <% if can?(:create, Sale) %>
+      <%= render "components/buttons/button_primary_create", text: "Sell", path: new_user_sale_path(@user), aria_label: "Create a sell" %>
+    <% end %>
     <div class="card-details-container card-user card-details-user ">
       <div class="card card-details">
-
         <div class="card-title">
           <%= svg_icon_tag 'profile' %>
           <h2>Personal Data</h2>
         </div>
-
         <%= render "components/buttons/button_primary_edit", text: "edit", path: edit_user_path(@user), aria_label: "Edit your profile" %>
       </div>
 
@@ -75,13 +76,6 @@
           </svg>
           <h2>Subscriptions</h2>
         </div>
-
-        <% if can?(:create, Subscription) %>
-          <%= render "components/buttons/button_primary_create", text: "new subscription", path: new_user_subscription_path(@user), aria_label: "Add a new subscription" %>
-        <% end %>
-        <% if can?(:destroy, Subscription) && @user.current_subscription %>
-          <%= render "components/buttons/button_secondary_delete", text: "cancel last subscription", path: user_last_subscription_path(@user), aria_label: "Cancel last subscription" %>
-        <% end %>
       </div>
 
       <div class="divider"></div>

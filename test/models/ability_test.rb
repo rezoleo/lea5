@@ -3,8 +3,8 @@
 require 'test_helper'
 
 class AbilityTest < ActiveSupport::TestCase
-  # rubocop:disable Metrics/AbcSize
   def setup
+    super
     @user = users(:pepper)
     @user_ability = UserAbility.new(@user)
     @user_machine = @user.machines.first
@@ -21,7 +21,6 @@ class AbilityTest < ActiveSupport::TestCase
     @api_key = api_keys(:FakeRadius)
     @api_key_ability = ApiKeyAbility.new(@api_key)
   end
-  # rubocop:enable Metrics/AbcSize
 
   test 'user can read themselves' do
     assert @user_ability.can?(:read, @user)

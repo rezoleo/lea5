@@ -4,6 +4,7 @@ require 'application_system_test_case'
 
 class UsersTest < ApplicationSystemTestCase
   def setup
+    super
     @user = users(:ironman)
     sign_in_as @user
   end
