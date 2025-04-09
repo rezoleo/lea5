@@ -42,6 +42,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "api_keys", force: :cascade do |t|
+    t.string "bearer_name", null: false
+    t.string "api_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
+  end
+
   create_table "articles", force: :cascade do |t|
     t.string "name", null: false
     t.integer "price", null: false
@@ -64,14 +72,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.integer "quantity", null: false
     t.index ["article_id"], name: "index_articles_sales_on_article_id"
     t.index ["sale_id"], name: "index_articles_sales_on_sale_id"
-  end
-
-  create_table "api_keys", force: :cascade do |t|
-    t.string "bearer_name", null: false
-    t.string "api_key", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
   end
 
   create_table "free_accesses", force: :cascade do |t|
@@ -182,9 +182,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.datetime "start_at", null: false
-    t.datetime "end_at", null: false
+    t.datetime "start_at", precision: nil, null: false
+    t.datetime "end_at", precision: nil, null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
     t.index ["sale_id"], name: "index_subscriptions_on_sale_id"

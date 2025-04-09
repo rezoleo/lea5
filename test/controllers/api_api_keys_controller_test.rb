@@ -5,7 +5,7 @@ require 'test_helper'
 class ApiApiKeysControllerTest < ActionDispatch::IntegrationTest
   def setup
     @bearer = api_keys(:FakeRadius)
-    @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
+    @real_key = Rails.application.credentials.generated_key!
   end
 
   test 'api key bearers should be able to read api keys index' do

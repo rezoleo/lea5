@@ -9,10 +9,7 @@ module ApiKeyAuthenticatable
   attr_reader :current_api_key
 
   def authenticate_with_api_key
-    response = authenticate_or_request_with_http_token { |token, _options| authenticator(token) }
-    return response unless response == "HTTP Token: Access denied.\n"
-
-    nil
+    authenticate_with_http_token { |token, _options| authenticator(token) }
   end
 
   private

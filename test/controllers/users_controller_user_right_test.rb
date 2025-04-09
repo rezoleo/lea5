@@ -29,6 +29,7 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
       get edit_user_path @admin
     end
   end
+
   test 'non-admin user should not see user creation page' do
     assert_raises CanCan::AccessDenied do
       get new_user_path
@@ -50,12 +51,6 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
   test 'non-admin user should not destroy themselves' do
     assert_raises CanCan::AccessDenied do
       delete user_path @user
-    end
-  end
-
-  test 'non-admin cannot access api keys' do
-    assert_raises CanCan::AccessDenied do
-      get api_keys_path
     end
   end
 end

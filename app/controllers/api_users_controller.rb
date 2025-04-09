@@ -5,6 +5,7 @@ class ApiUsersController < ApiApplicationController
 
   def index
     @users = User.accessible_by(current_ability)
+    authorize! :index, @users
   end
 
   def show
