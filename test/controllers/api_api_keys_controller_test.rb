@@ -3,7 +3,20 @@
 require 'test_helper'
 
 class ApiApiKeysControllerTest < ActionDispatch::IntegrationTest
-  # test "the truth" do
-  #   assert true
-  # end
+  def setup
+    @bearer = api_keys(:FakeRadius)
+    @real_key = '5fcdb374f0a70e9ff0675a0ce4acbdf6d21225fe74483319c2766074732d6d80'
+  end
+
+  test 'api key bearers should be able to read api keys index' do
+    get "#{api_api_keys_path}.json", headers: { 'Authorization' => "Bearer #{@real_key}" }
+    assert_response :success
+    assert_equal ApiKey.count, response.parsed_body.size
+  end
+
+  test 'should not be able to read api keys index if api key is wrong' do
+    assert ActiveRecord::RecordNotFound do
+      get "#{api_api_keys_path}.json", headers: { 'Authorization' => "Bearer #{@real_key}x" }
+    end
+  end
 end

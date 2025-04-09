@@ -12,7 +12,11 @@ class ApiApplicationController < ActionController::Base # rubocop:disable Rails/
   private
 
   def api_auth
-    current_bearer = authenticate_or_request_with_http_token { |token, _options| authenticator(token) }
-    @current_bearer = ApiKey.find(current_bearer.id)
+    current_bearer = authenticate_with_api_key
+    @current_bearer = if current_bearer.nil?
+                        nil
+                      else
+                        ApiKey.find(current_bearer.id)
+                      end
   end
 end

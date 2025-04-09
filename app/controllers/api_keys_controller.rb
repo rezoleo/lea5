@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class ApiKeysController < ApplicationController
-  # Require token authentication for index
-
   def index
     @api_keys = ApiKey.accessible_by(current_ability)
     authorize! :index, @api_keys

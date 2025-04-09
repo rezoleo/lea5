@@ -6,7 +6,14 @@ A GET request must be made to the /api endpoint and the api key must be given in
 ## Example using curl
 
 ```
-curl GET http://lea5.fr/api/users.json -H 'Authorization: Bearer EnterApiKeyHere'
+curl http://lea5.fr/api/users.json -H 'Authorization: Bearer EnterApiKeyHere'
 ```
 
 You will get the related json
+
+## List of endpoints
+
+- /api/users.json : Get users index
+- /api/users/_n_.json : Get user with id _n_
+- /api/machines/_n_.json : Get machine with id _n_
+- /api/api_keys.json : Get api keys index

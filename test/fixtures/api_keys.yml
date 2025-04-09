@@ -2,3 +2,8 @@ FakeRadius:
   id: 1
   bearer_name: "FakeRadius"
   api_key: ed7ba36706197624e8e4c9f3007ac1caffe1b61fd8b9315ab4a9d4a81e30b440
+
+FakeDhcp:
+  id: 2
+  bearer_name: "FakeDhcp"
+  api_key: ed7ba36706197624e8e4c9f3007ac1caffe1b61fd8b9315ab4a9d4a81e30b441
