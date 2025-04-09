@@ -2,8 +2,11 @@
 
 class User < ApplicationRecord
   has_many :machines, dependent: :destroy
-  has_many :subscriptions, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
+  has_many :sales_as_client, class_name: 'Sale', foreign_key: 'client_id', dependent: :destroy, inverse_of: :client
+  has_many :sales_as_seller, class_name: 'Sale', foreign_key: 'seller_id', dependent: :nullify, inverse_of: :seller
+  has_many :refunds, foreign_key: 'refunder_id', dependent: :destroy, inverse_of: :refunder
+  has_many :subscriptions, through: :sales_as_client, dependent: :destroy
 
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :room, with: ->(room) { room.downcase.upcase_first }
@@ -18,6 +21,14 @@ class User < ApplicationRecord
 
   # @return [Array<String>]
   attr_accessor :groups
+
+  def display_name
+    "#{firstname.capitalize} #{lastname.upcase}"
+  end
+
+  def display_address
+    "Appartement #{room}\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+  end
 
   def current_subscription
     subscriptions.where(cancelled_at: nil).order(end_at: :desc).first
@@ -39,14 +50,10 @@ class User < ApplicationRecord
   # @param [Integer] duration subscription duration in months
   # @return [Subscription] the newly created subscription
   def extend_subscription(duration:)
+    return if duration <= 0
+
     start_at = subscription_expired? ? Time.current : subscription_expiration
     subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
-  end
-
-  def cancel_current_subscription!
-    current_subscription&.cancel!
-
-    save!
   end
 
   def self.upsert_from_auth_hash(auth_hash)

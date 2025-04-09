@@ -4,6 +4,7 @@ require 'test_helper'
 
 class LogoutTest < ActionDispatch::IntegrationTest
   def setup
+    super
     sign_in_as users(:ironman), ['rezoleo']
   end
 
