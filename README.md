@@ -5,8 +5,8 @@
 
 ## Requirements
 
-- Ruby version 3.1.2 (see [.ruby-version](.ruby-version))
-- PostgreSQL 12.4+
+- Ruby (see the version to install in [.ruby-version](.ruby-version))
+- PostgreSQL
 
 It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 
