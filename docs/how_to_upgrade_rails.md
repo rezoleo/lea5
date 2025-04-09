@@ -24,7 +24,7 @@ You can use the ["Upgrade to Rails 7.1" pull request][upgrade-7-1-pr] as an exam
       ```shell
       bundle add --group development rubocop rubocop-capybara rubocop-i18n rubocop-minitest rubocop-performance rubocop-rails
       cp .rubocop.yml <newly generated app>
-      bundle exec rubocop -A # In the new app
+      bin/rubocop -A # In the new app
       ```
    3. Compare files between the new app and Lea5 to see what would be added in a newly generated app (tip: use [Git-Delta][git-delta] or [Difftastic][difftastic] for smarter and nicer-looking diffs)
       ```shell
