@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.routes.draw do
+Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get AUTH_CALLBACK_PATH, to: 'sessions#create', as: 'auth_callback'
   delete '/logout', to: 'sessions#destroy', as: 'logout'
@@ -21,9 +21,9 @@ Rails.application.routes.draw do
     resources :payment_methods, only: [:new, :create, :destroy]
   end
 
-  resources :api_keys
-
   get '/search', as: 'search', to: 'search#search'
+
+  resources :api_keys
 
   scope API_PATH do
     resources :api_users, path: :users
