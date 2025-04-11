@@ -14,10 +14,14 @@ module SessionsHelper
   end
 
   def log_in(user)
+    # Keep redirect_url around when resetting the session
+    next_url = session[:redirect_url]
     reset_session # For security reasons, we clear the session data before login
     session[:user_id] = user.id
+    # TODO: Increase expires_at as the user stays active in the application
     session[:expires_at] = Time.current + SESSION_DURATION_TIME
     session[:groups] = user.groups
+    session[:redirect_url] = next_url if next_url
   end
 
   # TODO: also logout of sso

@@ -5,6 +5,10 @@ class SessionsController < ApplicationController
     user = User.upsert_from_auth_hash(request.env['omniauth.auth'])
     log_in user
     flash[:success] = 'You are now logged in!'
+    if session[:redirect_url]
+      redirect_to session.delete(:redirect_url)
+      return
+    end
     redirect_to user_path user
   end
 
