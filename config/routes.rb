@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.routes.draw do
+Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get AUTH_CALLBACK_PATH, to: 'sessions#create', as: 'auth_callback'
   delete '/logout', to: 'sessions#destroy', as: 'logout'
@@ -22,6 +22,14 @@ Rails.application.routes.draw do
   end
 
   get '/search', as: 'search', to: 'search#search'
+
+  resources :api_keys
+
+  scope API_PATH do
+    resources :api_users, path: :users
+    resources :api_machines, path: :machines
+    resources :api_api_keys, path: :api_keys
+  end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

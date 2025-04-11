@@ -14,8 +14,13 @@ class ApplicationController < ActionController::Base
   # [1]: https://github.com/rails/rails/pull/50505
 
   include SessionsHelper
+  include ApiKeyAuthenticatable
 
   before_action :still_authenticated?
+
+  def current_ability
+    @current_ability ||= UserAbility.new(current_user)
+  end
 
   private
 
