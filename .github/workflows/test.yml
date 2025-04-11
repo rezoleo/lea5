@@ -33,7 +33,7 @@ jobs:
           OVERCOMMIT_COLOR: "1"
 
       - name: Run RuboCop
-        run: bundle exec rubocop --parallel --format github
+        run: bin/rubocop --parallel --format github
 
       - name: Configure PostgreSQL authentication
         run: |
@@ -44,12 +44,29 @@ jobs:
       - name: Create PostgreSQL user and database
         run: cp ./.github/workflows/init_db.sql /tmp/ && sudo --user postgres psql --file /tmp/init_db.sql
       - name: Migrate database
-        run: bundle exec rails db:migrate RAILS_ENV=test
+        env:
+          RAILS_ENV: test
+        run: bin/rails db:test:prepare
 
       - name: Run tests
-        run: bundle exec rails test:all
+        env:
+          RAILS_ENV: test
+        run: bin/rails test:all
+
+      - name: Run system (end-to-end) tests
+        env:
+          RAILS_ENV: test
+        run: bin/rails test:system
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
           use_oidc: true
+
+      - name: Keep screenshots from failed system tests
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: screenshots
+          path: ${{ github.workspace }}/tmp/screenshots
+          if-no-files-found: ignore
