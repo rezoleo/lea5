@@ -44,6 +44,9 @@ jobs:
           sarif_file: brakeman.sarif.json
           category: brakeman
 
+      - name: Scan for security vulnerabilities in JavaScript dependencies
+        run: bin/importmap audit
+
       # Removed to prevent CodeQL to scan our dependencies code
       - name: Clean vendored Ruby deps
         run: rm -rf vendor/bundle
