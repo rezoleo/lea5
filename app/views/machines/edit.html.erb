@@ -1,4 +1,7 @@
+<%# locals: () -%>
+
 <% provide :button_text, "Edit" %>
 
 <h1>Edit the machine</h1>
-<%= render 'form' %>
+
+<%= render 'form', owner: @owner, machine: @machine %>

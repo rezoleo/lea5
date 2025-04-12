@@ -1,0 +1,20 @@
+<%# locals: () %>
+
+<% provide :button_text, "Create" %>
+
+<h1>Add a new subscription offer</h1>
+
+<%= form_with(model: @subscription_offer, class: 'form') do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <div>
+    <%= f.label :duration %>
+    <%= f.number_field :duration, min: 1, step: 1, required: true %>
+  </div>
+  <div>
+    <%= f.label :price %>
+    <%= f.number_field :price, min: 0, required: true %>
+  </div>
+  <div>
+    <%= f.submit yield(:button_text) %>
+  </div>
+<% end %>

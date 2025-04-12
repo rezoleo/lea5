@@ -8,6 +8,7 @@ class SyncAccountsTest < ActiveSupport::TestCase
   # https://blog.10pines.com/2019/01/14/testing-rake-tasks/
   # https://thoughtbot.com/blog/test-rake-tasks-like-a-boss
   def setup
+    super
     Rake.application.rake_require 'tasks/sync_accounts'
     Rake::Task.define_task(:environment)
     Rails.application.credentials.sso_id = '123456'

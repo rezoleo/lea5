@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+credit_card:
+  name: Credit card
+  auto_verify: true
+
+cash:
+  name: Cash
+  auto_verify: true
+
+bank_transfer:
+  name: Bank transfer
+  auto_verify: false

@@ -15,9 +15,20 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   #   driver_option.something
   # end
   # https://rubydoc.info/gems/actionpack/7.0.4/ActionDispatch/SystemTestCase
-  driven_by :selenium, using: DRIVER, screen_size: [1400, 1400] do |driver_option|
+  if ENV['CAPYBARA_SERVER_PORT']
+    served_by host: 'rails-app', port: ENV['CAPYBARA_SERVER_PORT']
+
+    capybara_options = {
+      browser: :remote,
+      url: "http://#{ENV.fetch('SELENIUM_HOST')}:4444"
+    }
+  else
+    capybara_options = {}
+  end
+  driven_by :selenium, using: DRIVER, screen_size: [1400, 1400], options: capybara_options do |driver_option|
     # https://www.selenium.dev/documentation/webdriver/browsers/firefox/#start-browser-in-a-specified-location
     driver_option.binary = ENV['DRIVER_BINARY'] if ENV['DRIVER_BINARY']
   end
+
   Capybara.enable_aria_label = true
 end

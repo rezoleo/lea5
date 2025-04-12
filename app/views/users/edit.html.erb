@@ -1,5 +1,7 @@
+<%# locals: () -%>
+
 <% provide :button_text, "Edit" %>
 
 <h1>Edit <%=@user.firstname %> <%=@user.lastname %></h1>
 
-<%= render 'form' %>
+<%= render 'form', user: @user %>

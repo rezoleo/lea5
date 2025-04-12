@@ -4,6 +4,7 @@ require 'test_helper'
 
 class SearchControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @admin = users(:ironman)
     @machine = machines(:jarvis)
     @ip = ips(:ip1)

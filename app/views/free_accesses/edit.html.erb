@@ -1,5 +1,7 @@
+<%# locals: () -%>
+
 <% provide :button_text, "Edit" %>
 
 <h1>Edit the free access</h1>
 
-<%= render 'form'%>
+<%= render 'form', owner: @owner, free_access: @free_access %>

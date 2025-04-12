@@ -4,6 +4,7 @@ require 'test_helper'
 
 class FreeAccessTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:ironman)
     @free_access = free_accesses(:one)
   end

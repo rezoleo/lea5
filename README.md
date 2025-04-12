@@ -5,8 +5,8 @@
 
 ## Requirements
 
-- Ruby version 3.1.2 (see [.ruby-version](.ruby-version))
-- PostgreSQL 12.4+
+- Ruby (see the version to install in [.ruby-version](.ruby-version))
+- PostgreSQL
 
 It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 
@@ -20,7 +20,7 @@ It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 4. Install dependencies with `bundle install`
 5. Initialize the database (users, databases) by running [`init_db.sql`](.github/workflows/init_db.sql): `sudo --user postgres psql < ./.github/workflows/init_db.sql`
 6. (Optional) Edit [`config/database.yml`](config/database.yml) if you chose a different password
-7. Install [Overcommit](https://github.com/sds/overcommit): `bundle exec overcommit --install`
+7. Install [Overcommit](https://github.com/sds/overcommit): `bin/overcommit --install`
 8. Add a `master.key` file in the `config` folder and add the key from vault
 
 ## Tests
@@ -43,7 +43,7 @@ else your shell will probably try to expand the brackets (see the examples above
 
 We use a bit of tooling around tests to help us and increase our confidence in our code:
 - [Minitest][minitest] and [minitest-reporters][minitest-reporters] are used to polish test outputs
-- [Guard][guard] is set up to run tests automatically on changes. You can start it with `bundle exec guard`
+- [Guard][guard] is set up to run tests automatically on changes. You can start it with `bin/guard`
 - Test coverage is done with [Simplecov][simplecov]. After running your tests, open `coverage/index.html` in the browser of your choice.
   For the tests to pass, there must be a minimum global coverage of 90% and 80% per branch and file.
 
@@ -54,7 +54,7 @@ We use a bit of tooling around tests to help us and increase our confidence in o
 
 ## Secrets
 
-We are using the secrets management provided by rails. The secrets are encrypted by a master key, and are stored in 
+We are using the secrets management provided by rails. The secrets are encrypted by a master key, and are stored in
 `config/credentials.yml.enc`.
 To edit the secrets, use the command `EDITOR="nano" rails credentials:edit` (if you don't have nano, use another editor).
 
@@ -87,20 +87,20 @@ application up and running.
 
 Things you may want to cover:
 
-- Ruby version
+* Ruby version
 
-- System dependencies
+* System dependencies
 
-- Configuration
+* Configuration
 
-- Database creation
+* Database creation
 
-- Database initialization
+* Database initialization
 
-- How to run the test suite
+* How to run the test suite
 
-- Services (job queues, cache servers, search engines, etc.)
+* Services (job queues, cache servers, search engines, etc.)
 
-- Deployment instructions
+* Deployment instructions
 
-- ...
+* ...

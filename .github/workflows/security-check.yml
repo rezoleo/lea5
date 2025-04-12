@@ -26,6 +26,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
+          rubygems: latest
         env:
           BUNDLE_FROZEN: "true"
 
@@ -42,6 +43,9 @@ jobs:
         with:
           sarif_file: brakeman.sarif.json
           category: brakeman
+
+      - name: Scan for security vulnerabilities in JavaScript dependencies
+        run: bin/importmap audit
 
       # Removed to prevent CodeQL to scan our dependencies code
       - name: Clean vendored Ruby deps

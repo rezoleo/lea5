@@ -1,0 +1,20 @@
+<%# locals: () %>
+
+<% provide :button_text, "Create" %>
+
+<h1>Add a new payment method</h1>
+
+<%= form_with(model: @payment_method, class: 'form') do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  <div>
+    <%= f.label :auto_verify %>
+    <%= f.check_box :auto_verify %>
+  </div>
+  <div>
+    <%= f.submit yield(:button_text) %>
+  </div>
+<% end %>

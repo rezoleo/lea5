@@ -4,6 +4,7 @@ require 'test_helper'
 
 class MachinesControllerTest < ActionDispatch::IntegrationTest
   def setup
+    super
     @machine = machines(:jarvis)
     @owner = @machine.user
     sign_in_as @owner

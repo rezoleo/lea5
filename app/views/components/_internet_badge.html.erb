@@ -1,3 +1,5 @@
+<%# locals: (user:) -%>
+
 <span class="internet-badge">
   <% if user.internet_expiration.nil? || user.internet_expiration < Time.current %>
     <%= svg_icon_tag 'cross' %>

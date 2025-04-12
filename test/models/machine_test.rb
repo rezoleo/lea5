@@ -4,6 +4,7 @@ require 'test_helper'
 
 class MachineTest < ActiveSupport::TestCase
   def setup
+    super
     @user = users(:ironman)
     @machine = @user.machines.first
   end

@@ -1,4 +1,6 @@
-<%= form_with(model: [@owner, @machine], class: 'form') do |f| %>
+<%# locals: (owner:, machine:) -%>
+
+<%= form_with(model: [owner, machine], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
   <div>
     <%= f.label :name %>

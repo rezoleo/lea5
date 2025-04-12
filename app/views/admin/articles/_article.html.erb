@@ -1,0 +1,11 @@
+<%# locals: (article:) %>
+
+<div class="article">
+  <span><%= article.name %></span>
+  <span><%= number_to_currency(article.price.to_f / 100, locale: :fr) %></span>
+  <% if can?(:destroy, article) %>
+    <%= button_to(article, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this article') do %>
+      <%= svg_icon_tag 'icon_delete' %>
+    <% end %>
+  <% end %>
+</div>
