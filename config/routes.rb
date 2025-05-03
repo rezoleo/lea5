@@ -25,10 +25,12 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
 
   resources :api_keys
 
-  scope API_PATH do
-    resources :api_users, path: :users
-    resources :api_machines, path: :machines
-    resources :api_api_keys, path: :api_keys
+  namespace :api do
+    defaults format: :json do
+      resources :users
+      resources :machines
+      resources :api_keys
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

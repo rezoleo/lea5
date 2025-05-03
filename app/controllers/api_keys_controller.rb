@@ -14,15 +14,11 @@ class ApiKeysController < ApplicationController
   def create
     @api_key = ApiKey.new(api_key_params)
     authorize! :create, @api_key
-    respond_to do |format|
-      if @api_key.save
-        format.html do
-          flash[:success] = "ApiKey added! It is #{@api_key.key}"
-          redirect_to api_keys_url
-        end
-      else
-        format.html { render 'new', status: :unprocessable_entity }
-      end
+    if @api_key.save
+      flash[:new_api_key] = "ApiKey a dded! It is #{@api_key.api_key}"
+      redirect_to api_keys_url
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
@@ -37,6 +33,6 @@ class ApiKeysController < ApplicationController
   private
 
   def api_key_params
-    params.require(:api_key).permit(:bearer_name)
+    params.require(:api_key).permit(:name)
   end
 end

@@ -1,4 +1,4 @@
 FakeRadius:
   id: 1
-  bearer_name: "FakeRadius"
-  api_key: <%= Rails.application.credentials.encrypted_key! %>
+  name: "FakeRadius"
+  api_key_digest: <%= Rails.application.credentials.encrypted_key! %>

@@ -26,7 +26,7 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
     assert_difference 'ApiKey.count', 1 do
       post api_keys_url(format: :html), params: {
         api_key: {
-          bearer_name: 'Ultron'
+          name: 'Ultron'
         }
       }
     end
@@ -42,18 +42,10 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
   test 'should re-render new if bearer is invalid' do
     post api_keys_url(format: :html), params: {
       api_key: {
-        bearer_name: ''
-      }
-    }
-    assert_template 'api_keys/new'
-  end
-
-  test 'should send error if bearer is invalid' do
-    post api_keys_url(format: :html), params: {
-      api_key: {
-        bearer_name: ''
+        name: ''
       }
     }
     assert_response :unprocessable_entity
+    assert_template 'api_keys/new'
   end
 end

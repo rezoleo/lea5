@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
   # [1]: https://github.com/rails/rails/pull/50505
 
   include SessionsHelper
-  include ApiKeyAuthenticatable
 
   before_action :still_authenticated?
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_03_143927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,11 +43,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
   end
 
   create_table "api_keys", force: :cascade do |t|
-    t.string "bearer_name", null: false
-    t.string "api_key", null: false
+    t.string "name", null: false
+    t.string "api_key_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["api_key"], name: "index_api_keys_on_api_key", unique: true
+    t.index ["api_key_digest"], name: "index_api_keys_on_api_key_digest", unique: true
   end
 
   create_table "articles", force: :cascade do |t|

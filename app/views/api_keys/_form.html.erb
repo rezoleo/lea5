@@ -2,8 +2,8 @@
 
 <%= form_with(model: @api_key, class: 'form') do |f| %>
   <div>
-    <%= f.label :bearer_name %>
-    <%= f.text_field :bearer_name, required: true %>
+    <%= f.label :name %>
+    <%= f.text_field :name, required: true %>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>

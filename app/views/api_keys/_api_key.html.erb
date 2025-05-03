@@ -1,7 +1,6 @@
 <%# locals: (api_key:) -%>
-
 <div class="api_key">
-    <span><%= api_key.bearer_name %></span>
+    <span><%= api_key.name %></span>
     <span><%=api_key.created_at %></span>
     <% if can?(:destroy, api_key) %>
       <%= button_to(api_key,method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this api key') do %>

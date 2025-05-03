@@ -18,7 +18,7 @@ class ApiKeysControllerUserRightTest < ActionDispatch::IntegrationTest
 
   test 'non-admin user should not create a new api key' do
     assert_raises CanCan::AccessDenied do
-      post api_keys_path, params: { api_key: { bearer_name: '' } }
+      post api_keys_path, params: { api_key: { name: '' } }
     end
   end
 
