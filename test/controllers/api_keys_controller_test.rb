@@ -39,7 +39,7 @@ class ApiKeysControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to api_keys_url
   end
 
-  test 'should re-render new if bearer is invalid' do
+  test 'should re-render new if api key name is invalid' do
     post api_keys_url(format: :html), params: {
       api_key: {
         name: ''

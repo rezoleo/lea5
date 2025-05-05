@@ -4,8 +4,6 @@ require 'test_helper'
 
 class ApiKeysUserRightTest < ActionDispatch::IntegrationTest
   def setup
-    @bearer = api_keys(:FakeRadius)
-    @real_key = Rails.application.credentials.generated_key!
     @machine = machines(:jarvis)
     @admin = users(:ironman)
     sign_in_as @admin

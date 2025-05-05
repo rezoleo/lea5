@@ -5,14 +5,12 @@ require 'test_helper'
 module Api
   class ApiMachinesControllerTest < ActionDispatch::IntegrationTest
     def setup
-      @bearer = api_keys(:FakeRadius)
-      @real_key = Rails.application.credentials.generated_key!
-
+      @original_key = 'Lea5_zUN4wsViWcg3UBLCMhCtqgQt'
       @machine = machines(:jarvis)
     end
 
-    test 'api key bearers should be able to read machine' do
-      get api_machine_url(@machine), headers: { 'Authorization' => "Bearer #{@real_key}" }
+    test 'should be able to read machine with api key' do
+      get api_machine_url(@machine), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
       @response = response.parsed_body
       assert_equal @machine.id, @response[:id]
@@ -22,7 +20,7 @@ module Api
     end
 
     test 'should not be able to read machine if api key is wrong' do
-      get api_machine_url(@machine), headers: { 'Authorization' => "Bearer #{@real_key}x" }
+      get api_machine_url(@machine), headers: { 'Authorization' => 'Bearer wrong_key' }
       assert_response(:unauthorized)
     end
   end

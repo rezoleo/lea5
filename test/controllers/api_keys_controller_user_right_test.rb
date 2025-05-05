@@ -4,7 +4,7 @@ require 'test_helper'
 
 class ApiKeysControllerUserRightTest < ActionDispatch::IntegrationTest
   def setup
-    @bearer = api_keys(:FakeRadius)
+    @api_key = api_keys(:FakeRadius)
 
     @user = users(:pepper)
     sign_in_as @user
@@ -30,7 +30,7 @@ class ApiKeysControllerUserRightTest < ActionDispatch::IntegrationTest
 
   test 'non-admin user should not be able to destroy an api key' do
     assert_raises CanCan::AccessDenied do
-      delete api_key_url(@bearer)
+      delete api_key_url(@api_key)
     end
   end
 end
