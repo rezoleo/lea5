@@ -9,7 +9,7 @@ sale_ironman_cable_6_months:
         price_cents: 200
       - quantity: 6
         item_name: "Subscription - 1 month"
-        price_cents: 3000
+        price_cents: 500
     sale_date: "2025-01-20"
     issue_date: "2025-01-20"
     client_name: "Tony STARK"
@@ -58,7 +58,7 @@ refund_ironman_cable_4_months:
         price_cents: 200
       - quantity: 4
         item_name: "Subscription - 1 month"
-        price_cents: 2000
+        price_cents: 500
     sale_date: "2025-01-30"
     issue_date: "2025-01-30"
     client_name: "Tony STARK"

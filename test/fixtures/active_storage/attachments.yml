@@ -1,0 +1,19 @@
+invoice1_pdf:
+  name: pdf
+  record: sale_ironman_cable_6_months (Invoice)
+  blob: invoice1_pdf_blob
+
+invoice2_pdf:
+  name: pdf
+  record: sale_pepper_1_year (Invoice)
+  blob: invoice2_pdf_blob
+
+invoice3_pdf:
+  name: pdf
+  record: refund_ironman_cable_4_months (Invoice)
+  blob: invoice3_pdf_blob
+
+invoice4_pdf:
+  name: pdf
+  record: sale_ironman_deleted_article (Invoice)
+  blob: invoice4_pdf_blob
