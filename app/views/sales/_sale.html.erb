@@ -1,19 +1,21 @@
 <%# locals: (sale:) -%>
 
 <div>
-    <%sale.articles.each do |article| %>
-        <p>Article : <%=article.name%></p>
-        <%article.articles_sales.each do |zebi| %>
-            <p>Prix : <%=article.price * zebi.quantity%></p>
-            <p>Quantité : <%=zebi.quantity%></p>
-            <p>Méthode de paiement : <%=sale.payment_method.name%></p>
-        <%end%>
+    <%sale.articles_sales.each do |article_sale| %>
+        <p>---------- <%=article_sale.article.name%> ----------</p>
+        <p>Price : <%=article_sale.article.price * article_sale.quantity%></p>
+        <p>Quantity : <%=article_sale.quantity%></p>
     <%end %>
-
+            
     <%if sale.subscription%>
-        <p>L'internet de ta mère</p>
-        <p>Début : <%=sale.subscription.start_at%></p>
-        <p>Fin : <%=sale.subscription.start_at%></p>
-        <p>Méthode de paiement : <%=sale.payment_method.name%></p>
+        <p>---------- Internet subscription ----------</p>
+        <p>Begin: <%=sale.subscription.start_at%></p>
+        <p>End: <%=sale.subscription.end_at%></p>
     <%end%>
+    
+    <p>--------</p>
+
+    <p>Payment method: <%=sale.payment_method.name%></p>
+    <%= link_to "Show invoice", sale.invoice.pdf%>
+
 </div>
