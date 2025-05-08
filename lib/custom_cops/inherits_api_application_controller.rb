@@ -2,6 +2,10 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # frozen_string_literal: true
 
+# The vast majority of this code has been taken from Lobsters Rails Project : https://github.com/lobsters/lobsters
+
+# :nocov:
+
 require 'active_support/core_ext/string' # String.underscore
 
 module CustomCops
@@ -44,3 +48,5 @@ module CustomCops
 end
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/PerceivedComplexity
+
+# :nocov:
