@@ -7,6 +7,7 @@
 # :nocov:
 
 require 'active_support/core_ext/string' # String.underscore
+require 'rubocop'
 
 module CustomCops
   class InheritsApiApplicationController < RuboCop::Cop::Base
