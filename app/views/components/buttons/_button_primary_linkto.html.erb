@@ -1,0 +1,6 @@
+<%# locals: (path:, text:, aria_label:) -%>
+
+<%= link_to path, class: "button-primary" ,'aria_label':aria_label do %>
+  <%= text %>
+  <%= yield %>
+<% end %>

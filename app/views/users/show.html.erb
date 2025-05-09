@@ -12,7 +12,7 @@
 
   <div class="container">
     <% if can?(:create, Sale) %>
-      <%= render "components/buttons/button_primary_create", text: "Sell", path: new_user_sale_path(@user), aria_label: "Create a sell" %>
+      <%= render "components/buttons/button_primary_create_linkto", text: "Sell", path: new_user_sale_path(@user), aria_label:"Sell" %>
     <% end %>
     <div class="card-details-container card-user card-details-user ">
       <div class="card card-details">
@@ -20,7 +20,7 @@
           <%= svg_icon_tag 'profile' %>
           <h2>Personal Data</h2>
         </div>
-        <%= render "components/buttons/button_primary_edit", text: "edit", path: edit_user_path(@user), aria_label: "Edit your profile" %>
+        <%= render "components/buttons/button_primary_edit_linkto", text: "edit", path: edit_user_path(@user),aria_label: "edit this user data"%>
       </div>
 
       <div class="divider"></div>
@@ -52,7 +52,7 @@
 
         <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
         <% if can?(:create, @user.machines.new) %>
-          <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
+          <%= render "components/buttons/button_primary_create_linkto",path:edit_user_path(@user), text:"Add",aria_label:"add a new a machine" %>
         <% end %>
 
       </div>
@@ -99,7 +99,7 @@
         </div>
 
         <% if can?(:create, FreeAccess) %>
-          <%= render "components/buttons/button_primary_create", text: "new free access", path: new_user_free_access_path(@user), aria_label: "Add a new free access" %>
+          <%= render "components/buttons/button_primary_create_linkto", text: "new free access", path: new_user_free_access_path(@user), aria_label: "Add a new free access" %>
         <% end %>
       </div>
 

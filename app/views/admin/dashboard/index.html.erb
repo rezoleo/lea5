@@ -5,18 +5,18 @@
 <% if can?(:read, Article) %>
   <h2>Articles</h2>
   <% if can?(:create, Article) %>
-    <%= button_to new_article_path, method: :get, class: 'button-primary' do %>
-      <%= 'Create article' %>
-      <%= svg_icon_tag 'icon_plus' %>
+      <%= link_to new_article_path, class:'button-primary' do%>
+        <%= 'Create Article'%>
+        <%= svg_icon_tag 'icon_plus'%>
+      <%end%>
     <% end %>
-  <% end %>
   <%= render(@articles) || "No articles" %>
 <% end %>
 
 <% if can?(:read, SubscriptionOffer) %>
   <h2>Subscription offers</h2>
   <% if can?(:create, SubscriptionOffer) %>
-    <%= button_to new_subscription_offer_path, method: :get, class: 'button-primary' do %>
+    <%= link_to new_subscription_offer_path, class: 'button-primary' do %>
       <%= 'Create Subscription Offer' %>
       <%= svg_icon_tag 'icon_plus' %>
     <% end %>
@@ -27,7 +27,7 @@
 <% if can?(:read, PaymentMethod) %>
   <h2>Payment Methods</h2>
   <% if can?(:create, PaymentMethod) %>
-    <%= button_to new_payment_method_path, method: :get, class: 'button-primary' do %>
+    <%= link_to new_payment_method_path, class: 'button-primary' do %>
       <%= 'Create Payment Method' %>
       <%= svg_icon_tag 'icon_plus' %>
     <% end %>
