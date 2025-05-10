@@ -111,7 +111,7 @@ class AbilityTest < ActiveSupport::TestCase
     assert @admin_ability.can?(:manage, :all)
   end
 
-  test 'api key bearer can read everything' do
+  test 'shoul be able to read everything with an api key' do
     assert @api_key_ability.can?(:read, :all)
   end
 end

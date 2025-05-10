@@ -13,7 +13,7 @@ You will get the related json
 
 ## List of endpoints
 
-- /api/users.json : Get users index
-- /api/users/_n_.json : Get user with id _n_
-- /api/machines/_n_.json : Get machine with id _n_
-- /api/api_keys.json : Get api keys index
+- /api/users : Get users index
+- /api/users/_n_ : Get user with id _n_
+- /api/machines/_n_ : Get machine with id _n_
+- /api/api_keys : Get api keys index

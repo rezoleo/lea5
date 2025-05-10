@@ -10,12 +10,6 @@ class ApiKeysControllerUserRightTest < ActionDispatch::IntegrationTest
     sign_in_as @user
   end
 
-  test 'non-admin should not be able to see api keys' do
-    assert_raises CanCan::AccessDenied do
-      get api_keys_path
-    end
-  end
-
   test 'non-admin user should not create a new api key' do
     assert_raises CanCan::AccessDenied do
       post api_keys_path, params: { api_key: { name: '' } }

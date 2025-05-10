@@ -10,22 +10,22 @@ class ApiKeysUserRightTest < ActionDispatch::IntegrationTest
   end
 
   test 'users should not be able to see api keys through api endpoint' do
-    get "#{api_api_keys_path}.json"
+    get api_api_keys_path
     assert_response(:unauthorized)
   end
 
   test 'users should not be able to see users index through api endpoint' do
-    get "#{api_users_path}.json"
+    get api_users_path
     assert_response(:unauthorized)
   end
 
   test 'users should not be able to see user through api endpoint' do
-    get "#{api_user_path(@admin)}.json"
+    get api_user_path(@admin)
     assert_response(:unauthorized)
   end
 
   test 'users should not be able to see machine through api endpoint' do
-    get "#{api_machine_url(@machine)}.json"
+    get api_machine_url(@machine)
     assert_response(:unauthorized)
   end
 end

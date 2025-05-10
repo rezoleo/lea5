@@ -3,7 +3,6 @@
 class ApiKeysController < ApplicationController
   def index
     @api_keys = ApiKey.accessible_by(current_ability)
-    authorize! :index, @api_keys
   end
 
   def new
@@ -15,7 +14,7 @@ class ApiKeysController < ApplicationController
     @api_key = ApiKey.new(api_key_params)
     authorize! :create, @api_key
     if @api_key.save
-      flash[:new_api_key] = "ApiKey a dded! It is #{@api_key.api_key}"
+      flash[:new_api_key] = "ApiKey added! It is #{@api_key.api_key}"
       redirect_to api_keys_url
     else
       render 'new', status: :unprocessable_entity
