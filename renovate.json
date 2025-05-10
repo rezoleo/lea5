@@ -2,6 +2,19 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "configMigration": true,
   "extends": [
-    "config:base"
-  ]
+    "config:best-practices"
+  ],
+  "dependencyDashboard": true,
+  "prHourlyLimit": 3,
+  "timezone": "Europe/Paris",
+  "packageRules": [
+    {
+      "description": "Schedule RuboCop updates on Friday nights and group with all its plugins",
+      "matchPackageNames": "rubocop**",
+      "matchDatasources": ["rubygems"],
+      "groupName": "rubocop packages",
+      "schedule": ["* 21-23 * * 5"]
+    }
+  ],
+  "osvVulnerabilityAlerts": true
 }
