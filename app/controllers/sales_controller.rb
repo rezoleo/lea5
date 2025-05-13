@@ -37,4 +37,8 @@ class SalesController < ApplicationController
   def sales_params
     params.require(:sale).permit(:duration, :payment_method_id, articles_sales_attributes: [:article_id, :quantity])
   end
+
+  def show_invoice
+    send_file(sale.invoice.pdf, type: 'application/pdf', disposition: 'inline')
+  end
 end
