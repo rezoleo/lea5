@@ -1,21 +1,23 @@
 <%# locals: (sale:) -%>
 
 <div>
+
     <%sale.articles_sales.each do |article_sale| %>
-        <p>---------- <%=article_sale.article.name%> ----------</p>
-        <p>Price : <%=article_sale.article.price * article_sale.quantity%></p>
-        <p>Quantity : <%=article_sale.quantity%></p>
+        <b><%= article_sale.article.name %></b>
+        <p>Price : <%= article_sale.article.price * article_sale.quantity %> | Quantity : <%= article_sale.quantity %></p>
     <%end %>
             
     <%if sale.subscription%>
-        <p>---------- Internet subscription ----------</p>
-        <p>Begin: <%=sale.subscription.start_at%></p>
-        <p>End: <%=sale.subscription.end_at%></p>
+        <b>Internet subscription</b>
+        <p>Begin: <%= sale.subscription.start_at %></p>
+        <p>End: <%= sale.subscription.end_at %></p>
     <%end%>
-    
-    <p>--------</p>
 
-    <p>Payment method: <%=sale.payment_method.name%></p>
-    <%= link_to "Show invoice", sale.invoice.pdf%>
+    <p>Payment method: <%= sale.payment_method.name %></p>
+    <%= link_to(sale.invoice.pdf, class: 'button-primary', download: true) do %>
+        <%= svg_icon_tag 'icon_pdf' %>
+        Download invoice
+    <% end %>
+
 
 </div>
