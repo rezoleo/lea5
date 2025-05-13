@@ -1,1 +1,15 @@
+.sale {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: calc(var(--padding-md)*2);
+}
 
+.sale span:first-child {
+    font-weight: var(--font-bold);
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sale .button-primary {
+    justify-self: start;
+}

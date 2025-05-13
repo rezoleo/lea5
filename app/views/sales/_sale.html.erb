@@ -1,22 +1,21 @@
 <%# locals: (sale:) -%>
 
-<div>
+<div class="sale">
 
     <%sale.articles_sales.each do |article_sale| %>
-        <b><%= article_sale.article.name %></b>
-        <p>Price : <%= article_sale.article.price * article_sale.quantity %> | Quantity : <%= article_sale.quantity %></p>
-    <%end %>
+        <b><%= article_sale.article.name %> <%if article_sale.quantity > 1 %> (x<%= article_sale.quantity %>) <% end %></b>
+        <p>Price : <%= number_to_currency(article_sale.article.price * article_sale.quantity / 100, locale: :fr) %> </p>
+    <% end %>
             
     <%if sale.subscription%>
         <b>Internet subscription</b>
-        <p>Begin: <%= sale.subscription.start_at %></p>
-        <p>End: <%= sale.subscription.end_at %></p>
-    <%end%>
+        <p><%= time_with_relative_tag sale.subscription.start_at %> - <%= time_with_relative_tag sale.subscription.end_at %> (<%= pluralize(sale.subscription.duration, "month") %>)</p>
+    <% end %>
 
     <p>Payment method: <%= sale.payment_method.name %></p>
     <%= link_to(sale.invoice.pdf, class: 'button-primary', download: true) do %>
+        Invoice
         <%= svg_icon_tag 'icon_pdf' %>
-        Download invoice
     <% end %>
 
 
