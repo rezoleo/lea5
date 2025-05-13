@@ -11,6 +11,7 @@
     margin-bottom: var(--padding-md);
     display: flex;
     align-items: center;
+    text-decoration: none;
 }
 
 .button-primary svg {
