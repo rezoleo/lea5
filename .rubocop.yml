@@ -5,6 +5,15 @@ plugins:
   - rubocop-performance
   - rubocop-rails
 
+# Inherits Api Application Controller
+require:
+  - ./lib/custom_cops/inherits_api_application_controller.rb
+
+CustomCops/InheritsApiApplicationController:
+  Description: |
+    Enforce ApiApplicationController usage for all controllers in the api namespace
+  Enabled: true
+
 AllCops:
   NewCops: enable
 

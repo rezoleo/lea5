@@ -17,6 +17,10 @@ class ApplicationController < ActionController::Base
 
   before_action :still_authenticated?
 
+  def current_ability
+    @current_ability ||= UserAbility.new(current_user)
+  end
+
   private
 
   def still_authenticated?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_03_143927) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,6 +40,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "api_key_digest", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_key_digest"], name: "index_api_keys_on_api_key_digest", unique: true
   end
 
   create_table "articles", force: :cascade do |t|
@@ -174,8 +182,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_20_124611) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "start_at", null: false
-    t.datetime "end_at", null: false
+    t.datetime "start_at", precision: nil, null: false
+    t.datetime "end_at", precision: nil, null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
     t.index ["sale_id"], name: "index_subscriptions_on_sale_id"

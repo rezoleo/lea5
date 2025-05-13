@@ -6,17 +6,20 @@ class AbilityTest < ActiveSupport::TestCase
   def setup
     super
     @user = users(:pepper)
-    @user_ability = Ability.new(@user)
+    @user_ability = UserAbility.new(@user)
     @user_machine = @user.machines.first
     @user_subscription = @user.subscriptions.first
     @user_free_access = @user.free_accesses.first
 
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
-    @admin_ability = Ability.new(@admin)
+    @admin_ability = UserAbility.new(@admin)
     @admin_machine = @admin.machines.first
     @admin_subscription = @admin.subscriptions.first
     @admin_free_access = @admin.free_accesses.first
+
+    @api_key = api_keys(:FakeRadius)
+    @api_key_ability = ApiKeyAbility.new(@api_key)
   end
 
   test 'user can read themselves' do
@@ -106,5 +109,9 @@ class AbilityTest < ActiveSupport::TestCase
 
   test 'admin can do everything' do
     assert @admin_ability.can?(:manage, :all)
+  end
+
+  test 'shoul be able to read everything with an api key' do
+    assert @api_key_ability.can?(:read, :all)
   end
 end
