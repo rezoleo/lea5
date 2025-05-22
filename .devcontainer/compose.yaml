@@ -23,17 +23,17 @@ services:
     - postgres
 
   selenium:
-    image: selenium/standalone-chromium
+    image: selenium/standalone-chromium@sha256:92c6f4114e40846c23d4027aef255d894fdc6725487bcc15c6e1f5bf936a2213
     restart: unless-stopped
 
   redis:
-    image: redis:7.2
+    image: redis:7.2@sha256:bb1b66279bfacf671eda2cc593258aa1cbc675c532ea243e74033c17f1fb4de2
     restart: unless-stopped
     volumes:
     - redis-data:/data
 
   postgres:
-    image: postgres:16.1
+    image: postgres:16.1@sha256:09f23e02d76670d3b346a3c00aa33a27cf57aab8341eedfcdaed41459d14f5c4
     restart: unless-stopped
     networks:
     - default

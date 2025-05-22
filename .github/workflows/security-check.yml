@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Setup Ruby
         # Install the version defined in .ruby-version
         uses: ruby/setup-ruby@v1
@@ -39,7 +39,7 @@ jobs:
         # Because of https://github.blog/changelog/2021-02-19-github-actions-workflows-triggered-by-dependabot-prs-will-run-with-read-only-permissions/,
         # we cannot upload the security scan on the "push" event of PRs opened by Dependabot, so we skip this step
         if: "!( github.actor == 'dependabot[bot]' && github.event_name == 'push')"
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           sarif_file: brakeman.sarif.json
           category: brakeman
@@ -52,7 +52,7 @@ jobs:
         run: rm -rf vendor/bundle
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
           # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
@@ -61,6 +61,6 @@ jobs:
           queries: security-extended
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           category: "codeql"
