@@ -92,8 +92,5 @@ class User < ApplicationRecord
     return unless wifi_password.nil?
 
     self.wifi_password = "rezoleo#{SecureRandom.alphanumeric(length)}"
-
-    # digest = CustomModules::Md4.hexdigest(@wifi_password.encode('UTF-16LE').bytes)
-    # self.ntlm_password = digest
   end
 end
