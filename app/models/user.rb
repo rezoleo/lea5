@@ -19,8 +19,10 @@ class User < ApplicationRecord
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
 
+  before_create :generate_ntlm_password
+
   # @return [Array<String>]
-  attr_accessor :groups
+  attr_accessor :groups, :ntlm_password
 
   def display_name
     "#{firstname.capitalize} #{lastname.upcase}"
@@ -68,7 +70,7 @@ class User < ApplicationRecord
   end
 
   def update_from_sso(firstname:, lastname:, email:, room:)
-    update(firstname:, lastname:, email:, room:)
+    update(firstname: firstname, lastname: lastname, email: email, room: room, ntlm_password: ntlm_password)
   end
 
   def admin?
@@ -81,5 +83,12 @@ class User < ApplicationRecord
 
   def subscription_expired?
     subscription_expiration.nil? || (subscription_expiration < Time.current)
+  end
+
+  def generate_ntlm_password(length = 10)
+    @ntlm_password = "rezoleo#{SecureRandom.alphanumeric(length)}"
+
+    digest = CustomModules::Md4.hexdigest(@ntlm_password.encode('UTF-16LE').bytes)
+    self.ntlm_password = digest
   end
 end
