@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_31_134340) do
+ActiveRecord::Schema[7.2].define(version: 2025_05_31_191938) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -197,11 +197,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_31_134340) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "keycloak_id"
-    t.string "ntlm_password", null: false
+    t.string "wifi_password", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["keycloak_id"], name: "index_users_on_keycloak_id", unique: true
-    t.index ["ntlm_password"], name: "index_users_on_ntlm_password", unique: true
     t.index ["room"], name: "index_users_on_room", unique: true
+    t.index ["wifi_password"], name: "index_users_on_wifi_password", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

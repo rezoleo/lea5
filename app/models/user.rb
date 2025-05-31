@@ -11,6 +11,8 @@ class User < ApplicationRecord
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :room, with: ->(room) { room.downcase.upcase_first }
 
+  encrypts :wifi_password
+
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/
@@ -18,11 +20,12 @@ class User < ApplicationRecord
   # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
+  validates :wifi_password, presence: true, allow_blank: false, uniqueness: true
 
-  before_create :generate_ntlm_password
+  before_validation :ensure_has_wifi_password
 
   # @return [Array<String>]
-  attr_accessor :groups, :ntlm_password
+  attr_accessor :groups
 
   def display_name
     "#{firstname.capitalize} #{lastname.upcase}"
@@ -70,7 +73,7 @@ class User < ApplicationRecord
   end
 
   def update_from_sso(firstname:, lastname:, email:, room:)
-    update(firstname: firstname, lastname: lastname, email: email, room: room, ntlm_password: ntlm_password)
+    update(firstname: firstname, lastname: lastname, email: email, room: room)
   end
 
   def admin?
@@ -85,10 +88,12 @@ class User < ApplicationRecord
     subscription_expiration.nil? || (subscription_expiration < Time.current)
   end
 
-  def generate_ntlm_password(length = 10)
-    @ntlm_password = "rezoleo#{SecureRandom.alphanumeric(length)}"
+  def ensure_has_wifi_password(length = 10)
+    return unless wifi_password.nil?
 
-    digest = CustomModules::Md4.hexdigest(@ntlm_password.encode('UTF-16LE').bytes)
-    self.ntlm_password = digest
+    self.wifi_password = "rezoleo#{SecureRandom.alphanumeric(length)}"
+
+    # digest = CustomModules::Md4.hexdigest(@wifi_password.encode('UTF-16LE').bytes)
+    # self.ntlm_password = digest
   end
 end
