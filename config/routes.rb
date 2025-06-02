@@ -3,6 +3,10 @@
 Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get AUTH_CALLBACK_PATH, to: 'sessions#create', as: 'auth_callback'
+  if Rails.env.development?
+    get '/auth/developer/callback', to: 'sessions#create_developer', as: 'auth_callback_developer'
+  end
+
   delete '/logout', to: 'sessions#destroy', as: 'logout'
   root 'static_pages#home'
 

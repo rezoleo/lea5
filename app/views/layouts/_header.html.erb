@@ -36,6 +36,15 @@
             'aria-label': "Log in",
             data: { turbo: false }
           ) %>
+      <% if Rails.env.development? %>
+        <%= button_to(
+              "Login (developer)",
+              "/auth/developer",
+              class: "login_button",
+              'aria-label': "Log in (developer)",
+              data: { turbo: false }
+            ) %>
+      <% end %>
     <% else %>
       <%= button_to(
             "Logout",
