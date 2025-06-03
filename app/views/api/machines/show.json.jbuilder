@@ -2,5 +2,5 @@
 
 # locals: ()
 
-json.partial! 'machines/machine', machine: @machine
-json.user @machine.user, partial: 'users/user', as: :user
+json.partial! 'api/machines/machine', machine: @machine
+json.user @machine.user, partial: 'api/users/user', as: :user

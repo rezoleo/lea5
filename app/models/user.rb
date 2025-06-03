@@ -82,6 +82,10 @@ class User < ApplicationRecord
     groups.include?('rezoleo')
   end
 
+  def pseudo
+    "#{firstname.delete('-')}-#{lastname.delete('-')}".downcase
+  end
+
   private
 
   def subscription_expired?
