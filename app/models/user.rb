@@ -21,8 +21,11 @@ class User < ApplicationRecord
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
   validates :wifi_password, presence: true, allow_blank: false, uniqueness: true
+  VALID_PSEUDO_REGEX = /\A[a-z0-9]+(-[a-z0-9]+)*\z/
+  validates :pseudo, presence: true, format: { with: VALID_PSEUDO_REGEX }, uniqueness: true, allow_blank: false
 
   before_validation :ensure_has_wifi_password
+  before_save :ensure_has_pseudo
 
   # @return [Array<String>]
   attr_accessor :groups
@@ -82,8 +85,12 @@ class User < ApplicationRecord
     groups.include?('rezoleo')
   end
 
-  def pseudo
-    "#{firstname.delete('-')}-#{lastname.delete('-')}".downcase
+  def ensure_has_pseudo
+    return unless pseudo.nil?
+
+    normalized_firstname = firstname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
+    normalized_lastname = lastname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
+    self.pseudo = "#{normalized_firstname}-#{normalized_lastname}".downcase
   end
 
   private
