@@ -7,5 +7,6 @@ class ApiKeyAbility
     return if api_key.blank?
 
     can :read, :all
+    can :create, Machine
   end
 end

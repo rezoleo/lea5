@@ -30,6 +30,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
       resources :users
       resources :machines
       resources :api_keys
+      post '/machines/create', to: 'machines#create', as: 'create'
     end
   end
 
