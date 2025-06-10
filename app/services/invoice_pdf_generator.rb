@@ -36,6 +36,8 @@ class InvoiceLib
 end
 
 class InvoicePdfGenerator
+  include ActionView::Helpers::TagHelper
+  include ActionView::Helpers::DateHelper
   BASE_FONT_SIZE = 12
 
   # @input should be a hash with the following keys:
@@ -166,7 +168,7 @@ class InvoicePdfGenerator
     left_to_pay_in_cents = @total_price_in_cents - payed_in_cents
 
     data = [[
-      table(@input[:payment_date] || '', style: :small),
+      table((Time.iso8601(@input[:payment_date])).strftime('%b %d, %Y') || '', style: :small),
       table(@input[:payment_method] || '', style: :small),
       table(format_cents(payed_in_cents), style: :small, text_align: :right),
       table(format_cents(left_to_pay_in_cents), style: :small, text_align: :right)
