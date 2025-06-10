@@ -17,7 +17,7 @@ module Api
       @machine = @owner.machines.new(machine_params)
       authorize! :create, @machine
       if @machine.save!
-        render json: 'show', status: :created, location: @machine
+        render json: @machine, status: :created
       else
         render json: @machine.errors, status: :unprocessable_entity
       end

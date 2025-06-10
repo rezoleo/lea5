@@ -102,6 +102,6 @@ class User < ApplicationRecord
   def ensure_has_wifi_password(length = 10)
     return unless wifi_password.nil?
 
-    self.wifi_password = "rezoleo#{SecureRandom.alphanumeric(length)}"
+    self.wifi_password = SecureRandom.alphanumeric(length)
   end
 end
