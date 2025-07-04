@@ -25,7 +25,7 @@ class User < ApplicationRecord
   validates :pseudo, presence: true, format: { with: VALID_PSEUDO_REGEX }, uniqueness: true, allow_blank: false
 
   before_validation :ensure_has_wifi_password
-  before_save :ensure_has_pseudo
+  before_validation :ensure_has_pseudo
 
   # @return [Array<String>]
   attr_accessor :groups
