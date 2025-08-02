@@ -8,7 +8,16 @@ ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
 require 'minitest/reporters'
-Minitest::Reporters.use! unless ENV['RM_INFO']
+# :nocov:
+if ENV['CI']
+  Minitest::Reporters.use! [
+    Minitest::Reporters::DefaultReporter.new(color: true),
+    Minitest::Reporters::JUnitReporter.new
+  ]
+else
+  Minitest::Reporters.use! unless ENV['RM_INFO']
+end
+# :nocov:
 
 require 'webmock/minitest'
 WebMock.disable_net_connect!(

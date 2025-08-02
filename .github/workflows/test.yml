@@ -66,3 +66,11 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+
+      - name: Upload test results to Codecov
+        uses: codecov/test-results-action@v1
+        if: ${{ !cancelled() }}
+        with:
+          use_oidc: true
+          disable_search: true
+          files: ./test/reports/TEST-*.xml
