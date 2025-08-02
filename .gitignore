@@ -1,6 +1,7 @@
 # Custom ignore rules
 /doc
 /.yardoc
+/test/reports/TEST-*.xml
 
 # See https://help.github.com/articles/ignoring-files for more about ignoring files.
 #
