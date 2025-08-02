@@ -1,27 +1,8 @@
 # frozen_string_literal: true
 
 require 'simplecov'
-SimpleCov.start 'rails' do
-  enable_coverage :branch
-
-  # TODO: Enable this after merging Ruby updates and adding tests to increase coverage
-  # enable_coverage_for_eval
-  # track_files 'app/views/**/*.erb'
-  # add_group 'Views', 'app/views'
-
-  # Add a tab in SimpleCov HTML report with ignored lines
-  # Source: https://github.com/simplecov-ruby/simplecov/issues/312
-  add_group 'Ignored Code' do |src_file|
-    File.readlines(src_file.filename).grep(/#{SimpleCov.nocov_token}/).any?
-  end
-
-  if ENV['CI']
-    require 'simplecov-cobertura'
-    formatter SimpleCov::Formatter::CoberturaFormatter
-  else
-    formatter SimpleCov::Formatter::HTMLFormatter
-  end
-end
+# SimpleCov configuration was moved to `.simplecov`
+# https://github.com/simplecov-ruby/simplecov#using-simplecov-for-centralized-config
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'

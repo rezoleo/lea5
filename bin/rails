@@ -1,4 +1,18 @@
 #!/usr/bin/env ruby
 APP_PATH = File.expand_path("../config/application", __dir__)
 require_relative "../config/boot"
+
+# Load Simplecov as early as possible, to ensure code coverage is correctly generated.
+# Rails discovers all test/**/*_test.rb files and loads them in order, this in turn loads
+# test_helper.rb, which finally requires simplecov.
+# However, at that point it is too late, as the first test has been required and its
+# coverage cannot be extracted.
+# By requiring simplecov just as we run the `rails test` command, we can instrument Ruby
+# before the first test is even loaded.
+# Inspired by https://github.com/simplecov-ruby/simplecov#getting-started where they suggest
+# editing `bin/rails`.
+if ARGV[0] == 't' || ARGV[0] == 'test' || ARGV[0]&.start_with?('test:')
+  require 'simplecov'
+end
+
 require "rails/commands"
