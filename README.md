@@ -30,7 +30,7 @@ The basic command to run tests is `rails test`.
 By default, "system" tests (end-to-end tests with a real browser) are not run with `rails test`. You need to
 run `rails test:system` to run them specifically, or `rails test:all`. System tests execute in a headless Chrome/Chromium
 browser (meaning the browser window will not appear), but you can select your browser of choice (Chrome, Firefox or
-Firefox Nightly) and configure the headless behaviour with the following commands:
+Firefox Nightly) and configure the headless behavior with the following commands:
 - `rails test:system:chrome`
 - `rails 'test:system:chrome[headless]'`
 - `rails test:system:firefox`
@@ -62,13 +62,21 @@ To edit the secrets, use the command `EDITOR="nano" rails credentials:edit` (if 
 
 See the [docs](docs) folder for the documentation.
 
-For now only the results of a [brainstorming session about our requirements][definition-des-besoins] is available.
-
-[<img alt="Requirements" src="docs/definition-des-besoins/Lea5-Definition-des-besoins.png" width="230" height="130">][definition-des-besoins]
+Some interesting documents:
+- the results of a [brainstorming session about our requirements][definition-des-besoins]
+  [<img alt="Requirements" src="docs/definition-des-besoins/Lea5-Definition-des-besoins.png" width="230" height="130">][definition-des-besoins]
+- [how some of the features work](./docs/features) (high-level overview)
+- [our guide on how to upgrade Rails](./docs/how_to_upgrade_rails.md)
 
 [definition-des-besoins]: docs/definition-des-besoins/README.md
 
 ## Tips
+### Use local login instead of SSO
+
+When developing Lea5, you might want to test the app with different user rights, or work offline/while the SSO is down.
+You can use the [local development login strategy](./docs/features/authentication.md#local-development-authentication).
+
+### Fix PostgreSQL collation version mismatch
 
 If you get the following errors from PostgreSQL after upgrading `glibc` or `icu`,
 you can run [`bin/reindex-db-after-collation-upgrade`](./bin/reindex-db-after-collation-upgrade)
@@ -82,7 +90,7 @@ or build PostgreSQL with the right library version.
 ## Inspirations
 
 - Our original project [Lea4][lea4]. We had to move to Re2o when we became independent and needed to manage subscriptions.
-- [Re2o][re2o], which we used for 4 years. Unfortunately it does too much, and is too complex to configure, use and maintain.
+- [Re2o][re2o], which we used for 4 years. Unfortunately, it does too much, and is too complex to configure, use and maintain.
 
 [lea4]: https://github.com/rezoleo/le4
 [re2o]: https://gitlab.federez.net/re2o/re2o
