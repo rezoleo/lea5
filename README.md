@@ -68,6 +68,17 @@ For now only the results of a [brainstorming session about our requirements][def
 
 [definition-des-besoins]: docs/definition-des-besoins/README.md
 
+## Tips
+
+If you get the following errors from PostgreSQL after upgrading `glibc` or `icu`,
+you can run [`bin/reindex-db-after-collation-upgrade`](./bin/reindex-db-after-collation-upgrade)
+```
+WARNING:  database "postgres" has a collation version mismatch
+DETAIL:  The database was created using collation version X.YY, but the operating system provides version X.ZZ.
+HINT:  Rebuild all objects in this database that use the default collation and run ALTER DATABASE postgres REFRESH COLLATION VERSION,
+or build PostgreSQL with the right library version.
+```
+
 ## Inspirations
 
 - Our original project [Lea4][lea4]. We had to move to Re2o when we became independent and needed to manage subscriptions.
