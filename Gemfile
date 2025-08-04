@@ -61,7 +61,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'overcommit', '~> 0.67.1'
+  gem 'overcommit', '~> 0.68'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   gem 'rack-mini-profiler', '~> 3.3'

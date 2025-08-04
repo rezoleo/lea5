@@ -245,7 +245,7 @@ GEM
       webfinger (~> 2.0)
     openssl (3.3.0)
     ostruct (0.6.1)
-    overcommit (0.67.1)
+    overcommit (0.68.0)
       childprocess (>= 0.6.3, < 6)
       iniparse (~> 1.4)
       rexml (>= 3.3.9)
@@ -459,7 +459,7 @@ DEPENDENCIES
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth_openid_connect (~> 0.8.0)
-  overcommit (~> 0.67.1)
+  overcommit (~> 0.68)
   pg (~> 1.6)
   puma (~> 6.6)
   rack-mini-profiler (~> 3.3)
@@ -572,7 +572,7 @@ CHECKSUMS
   openid_connect (2.3.1) sha256=5d808380cff80d78e3d3d54cfaebe2d6461d835c674faa29e2314a402c1b2182
   openssl (3.3.0) sha256=ff3a573fc97ab30f69483fddc80029f91669bf36532859bd182d1836f45aee79
   ostruct (0.6.1) sha256=09a3fb7ecc1fa4039f25418cc05ae9c82bd520472c5c6a6f515f03e4988cb817
-  overcommit (0.67.1) sha256=c71a842dd65f9fe6e4d288979f005af974ea4622126f276740ab0a8820b001c5
+  overcommit (0.68.0) sha256=bfbcd26388e024e10a3d720f03077bc9389fe7c3beac360263b6c77926bcc8d0
   parallel (1.26.3) sha256=d86babb7a2b814be9f4b81587bf0b6ce2da7d45969fab24d8ae4bf2bb4d4c7ef
   parser (3.3.7.3) sha256=5803acc132cf1155fac2656bf02d3fb9223dccd66f1aa538dac095b785fa4d64
   pg (1.6.1-x86_64-linux) sha256=6ac0d5c8efafc3f22a7eca2a264300037598fabe27a88e5029bc0e6d90caeb1f
