@@ -39,6 +39,11 @@
 /config/master.key
 /config/credentials/*.key
 
+# Ignore nix files
+.direnv
+gemset.nix
+shell.nix
+
 coverage
 .idea
 .generators

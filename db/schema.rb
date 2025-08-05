@@ -182,8 +182,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_06_03_202456) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "start_at", precision: nil, null: false
-    t.datetime "end_at", precision: nil, null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
     t.index ["sale_id"], name: "index_subscriptions_on_sale_id"

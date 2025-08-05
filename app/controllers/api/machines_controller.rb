@@ -6,7 +6,11 @@ module Api
     before_action :owner, only: [:create]
 
     def index
-      @machines = Machine.accessible_by(current_ability)
+      if params[:mac]
+        @machines = Machine.where(mac: params[:mac])
+      else
+        @machines = Machine.accessible_by(current_ability)
+      end
     end
 
     def show
