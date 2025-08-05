@@ -54,7 +54,7 @@ class InvoicePdfGenerator
   def initialize(input)
     @input = input
     @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
-    @total_price_in_cents = input[:items].sum { |it| it[:price_cents] * it[:quantity] }
+    @total_price_in_cents = input[:items].sum { it[:price_cents] * it[:quantity] }
     @composer = InvoiceComposer.new
     setup_document
   end
