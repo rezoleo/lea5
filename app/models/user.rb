@@ -87,6 +87,7 @@ class User < ApplicationRecord
 
   def ensure_has_pseudo
     return unless pseudo.nil?
+    return if firstname.blank? || lastname.blank?
 
     normalized_firstname = firstname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
     normalized_lastname = lastname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
