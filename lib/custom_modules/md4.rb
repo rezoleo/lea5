@@ -6,6 +6,8 @@
 # rubocop:disable Metrics/CyclomaticComplexity
 # frozen_string_literal: true
 
+# Source: https://rosettacode.org/wiki/MD4#Ruby
+
 module CustomModules
   class Md4
     def self.hexdigest(buffer, abcd = nil, length = nil)
