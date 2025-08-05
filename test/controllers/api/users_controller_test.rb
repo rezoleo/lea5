@@ -12,12 +12,16 @@ module Api
     test 'should be able to read user with api key' do
       get api_user_path(@user), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
-      @response = response.parsed_body
-      assert_equal @user.id, @response[:id]
-      assert_equal @user.firstname, @response[:firstname]
-      assert_equal @user.lastname, @response[:lastname]
-      assert_equal @user.email, @response[:email]
-      assert_equal @user.room, @response[:room]
+      @response_body = response.parsed_body
+      assert_equal @user.id, @response_body[:id]
+      assert_equal @user.firstname, @response_body[:firstname]
+      assert_equal @user.lastname, @response_body[:lastname]
+      assert_equal @user.email, @response_body[:email]
+      assert_equal @user.room, @response_body[:room]
+      assert_equal api_user_url(@user), @response_body[:url]
+      assert_equal @user.internet_expiration, @response_body[:internet_expiration]
+      assert_equal CustomModules::Md4.hexdigest(@user.wifi_password.encode('UTF-16LE').bytes),
+                   @response_body[:ntlm_password]
     end
 
     test 'should be able to read users index with api key' do
