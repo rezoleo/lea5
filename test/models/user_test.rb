@@ -106,6 +106,58 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  test 'pseudo should be generated from names if blank on save' do
+    @user.firstname = 'Paul'
+    @user.lastname = 'Marcel'
+    @user.pseudo = nil
+    @user.save
+    assert_equal 'paul-marcel', @user.pseudo
+  end
+
+  test "pseudo can't be empty" do
+    @user.pseudo = ' '
+    assert_not_predicate @user, :valid?
+  end
+
+  test 'pseudo should be unique' do
+    duplicate_user = @user.dup
+    @user.save
+    duplicate_user.pseudo = @user.pseudo.upcase
+    assert_not_predicate duplicate_user, :valid?
+  end
+
+  test 'pseudo should not be generated if already set' do
+    @user.firstname = 'Paul'
+    @user.lastname = 'Marcel'
+    @user.pseudo = 'custom-pseudo'
+    @user.save
+    assert_equal 'custom-pseudo', @user.pseudo
+  end
+
+  test 'wifi_password should be generated on save' do
+    @user.wifi_password = nil
+    @user.save
+    assert_not_nil @user.wifi_password
+  end
+
+  test 'wifi_password should not be generated if already set' do
+    @user.wifi_password = 'custom-password'
+    @user.save
+    assert_equal 'custom-password', @user.wifi_password
+  end
+
+  test "wifi_password can't be empty" do
+    @user.wifi_password = '    '
+    assert_not_predicate @user, :valid?
+  end
+
+  test 'wifi_password should be unique' do
+    duplicate_user = @user.dup
+    @user.save
+    duplicate_user.wifi_password = @user.wifi_password.upcase
+    assert_not_predicate duplicate_user, :valid?
+  end
+
   test 'should create new user from auth hash' do
     assert_difference 'User.count', 1 do
       created_user = User.upsert_from_auth_hash(@auth_hash)
