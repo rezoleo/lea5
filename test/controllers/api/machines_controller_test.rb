@@ -67,5 +67,12 @@ module Api
                               headers: { 'Authorization' => 'Bearer wrong_key' }
       assert_response(:unauthorized)
     end
+
+    test 'should not create machine with invalid params' do
+      user = users(:ironman)
+      post api_machines_path, params: { user_id: user.id, machine: { name: 'No Mac' } },
+                              headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :unprocessable_entity
+    end
   end
 end
