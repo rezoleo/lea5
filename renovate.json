@@ -14,6 +14,12 @@
       "matchDatasources": ["rubygems"],
       "groupName": "rubocop packages",
       "schedule": ["* 21-23 * * 5"]
+    },
+    {
+      "description": "Use a generic version tag for CodeQL, to automatically use the latest security queries; same thing for setup-ruby (override helpers:pinGitHubActionDigests)",
+      "matchManagers": ["github-actions"],
+      "matchPackageNames": ["github/codeql-action", "ruby/setup-ruby"],
+      "pinDigests": false
     }
   ],
   "osvVulnerabilityAlerts": true
