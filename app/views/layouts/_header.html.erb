@@ -10,11 +10,11 @@
         <li>
           <%= link_to "Users", users_path %>
         </li>
-        <li>
-          <%= link_to "Api Keys", api_keys_url %>
-        </li>
       <% end %>
       <% if can?(:manage, :all) %>
+        <li>
+          <%= link_to "Api Keys", api_keys_path %>
+        </li>
         <li>
           <%= link_to "Admin", admin_path %>
         </li>
