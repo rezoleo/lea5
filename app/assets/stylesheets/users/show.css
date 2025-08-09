@@ -149,3 +149,19 @@
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
 }
+
+.card-content-user-details {
+    display: flex;
+    align-items: center;
+}
+
+.card-content-user-details svg {
+    fill: var(--primary-500);
+    width: var(--text-md);
+}
+
+.card-content-user-details button {
+    display: flex;
+    margin-left: var(--padding-xs);
+    border-radius: 20%;
+}

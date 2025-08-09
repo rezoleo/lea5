@@ -37,7 +37,20 @@
         <% end %>
         <span><%= @user.room %></span>
         <span><%= pluralize(@machines.size, "machine") %></span>
-        <span>Wifi Password: <%= @user.wifi_password %></span>
+        <% if current_user == @user %>
+          <div class="card-content-user-details" data-controller="user">
+            <label>Wifi Password:</label>
+            <input type="password" data-user-target="wifiPassword" value="<%= @user.wifi_password %>" spellcheck="false" disabled>
+            <button data-action="click->user#togglePasswordVisibility">
+              <%= svg_icon_tag 'icon_eye', 'aria-label': "Hide Wifi Password", 'data-user-target':'eyeIcon', style: 'display: none' %>
+              <%= svg_icon_tag 'icon_eye_slash', 'aria-label': "Show Wifi Password", 'data-user-target':'eyeIcon', style: 'display: inline' %>
+            </button>
+            <button data-action="click->user#copyToClipboard">
+              <%= svg_icon_tag 'icon_clipboard', 'aria-label': "Copy Wifi Password" %>
+            </button>
+            
+          </div>
+        <% end %>
         <span>Pseudo : <%= @user.pseudo %>
       </div>
     </div>
