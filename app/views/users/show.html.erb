@@ -45,10 +45,12 @@
               <%= svg_icon_tag 'icon_eye', 'aria-label': "Hide Wifi Password", 'data-user-target':'eyeIcon', style: 'display: none' %>
               <%= svg_icon_tag 'icon_eye_slash', 'aria-label': "Show Wifi Password", 'data-user-target':'eyeIcon', style: 'display: inline' %>
             </button>
+            <div>
             <button data-action="click->user#copyToClipboard">
               <%= svg_icon_tag 'icon_clipboard', 'aria-label': "Copy Wifi Password" %>
             </button>
-            
+              <span class="copy-message" data-user-target="copyMessage">Copied !</span>
+            </div>
           </div>
         <% end %>
         <span>Pseudo : <%= @user.pseudo %>

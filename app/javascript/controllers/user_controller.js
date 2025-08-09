@@ -1,11 +1,17 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["wifiPassword", "eyeIcon"]
+  static targets = ["wifiPassword", "eyeIcon", "copyMessage"]
   copyToClipboard() {
   const text = this.wifiPasswordTarget.value;
+  const copyMessage = this.copyMessageTarget;
   navigator.clipboard.writeText(text);
-  console.log("Copied to clipboard:", text);
+  copyMessage.style.visibility = "visible";
+  copyMessage.style.opacity = 1;
+  setTimeout(() => {
+    copyMessage.style.visibility = "hidden";
+    copyMessage.style.opacity = 0;
+  }, 2000);
   }
 
   togglePasswordVisibility() {
