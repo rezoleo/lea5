@@ -166,6 +166,10 @@
     border-radius: 20%;
 }
 
+.card-content-user-details-password {
+   font-family: monospace;
+}
+
 .card-content-user-details .copy-message {
     position: absolute;
     font-size: var(--text-sm);
