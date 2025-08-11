@@ -8,12 +8,14 @@ namespace :test do
     # Parameters are positional, so calling `rails 'test:system:chrome[something]'` will define
     # args.headless == 'something'
     task :chrome, [:headless] => [:environment] do |_task, args|
+      # :nocov:
       ENV['DRIVER'] = if args.headless == 'headless'
                         'headless_chrome'
                       else
                         'chrome'
                       end
       Rake::Task['test:system'].invoke
+      # :nocov:
     end
 
     desc 'Run system tests with Firefox (can be run headless and/or use Firefox Nightly)'
@@ -25,6 +27,7 @@ namespace :test do
       # with whichever order or combination or arguments.
       # See https://ruby.github.io/rake/doc/rakefile_rdoc.html#label-Tasks+that+take+Variable-length+Parameters
       # @type [Array<String>] args_list
+      # :nocov:
       args_list = args.to_a
       ENV['DRIVER'] = if args_list.include? 'headless'
                         'headless_firefox'
@@ -33,6 +36,7 @@ namespace :test do
                       end
       ENV['DRIVER_BINARY'] = 'firefox-nightly' if args_list.include? 'nightly'
       Rake::Task['test:system'].invoke
+      # :nocov:
     end
   end
 end

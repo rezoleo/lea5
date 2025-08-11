@@ -9,7 +9,7 @@ gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
 gem 'sprockets-rails', '~> 3.5'
 
 # Use postgresql as the database for Active Record
-gem 'pg', '~> 1.5'
+gem 'pg', '~> 1.6'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 6.6'
@@ -50,7 +50,7 @@ gem 'cancancan', '~> 3.6'
 # gem "image_processing", "~> 1.2"
 
 # Generate pdf files [https://github.com/gettalong/hexapdf]
-gem 'hexapdf', '~> 1.2.0'
+gem 'hexapdf', '~> 1.4.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -61,17 +61,17 @@ group :development, :test do
 end
 
 group :development do
-  gem 'overcommit', '~> 0.67.1'
+  gem 'overcommit', '~> 0.68'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
-  gem 'rack-mini-profiler', '~> 3.3'
+  gem 'rack-mini-profiler', '~> 4.0'
 
-  gem 'rubocop', '~> 1.75'
+  gem 'rubocop', '~> 1.79'
   gem 'rubocop-capybara', '~> 2.22'
   gem 'rubocop-i18n', '~> 3.2'
-  gem 'rubocop-minitest', '~> 0.37.1'
-  gem 'rubocop-performance', '~> 1.24'
-  gem 'rubocop-rails', '~> 2.30'
+  gem 'rubocop-minitest', '~> 0.38'
+  gem 'rubocop-performance', '~> 1.25'
+  gem 'rubocop-rails', '~> 2.32'
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem 'web-console', '~> 4.2'
 end
@@ -85,7 +85,7 @@ group :test do
   gem 'minitest-reporters', '~> 1.7'
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
-  gem 'simplecov', '~> 0.22.0'
-  gem 'simplecov-cobertura', '~> 2.1'
+  gem 'simplecov', '~> 0.22.0', require: false
+  gem 'simplecov-cobertura', '~> 3.0', require: false
   gem 'webmock', '~> 3.23'
 end

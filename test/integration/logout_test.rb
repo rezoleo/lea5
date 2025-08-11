@@ -13,7 +13,7 @@ class LogoutTest < ActionDispatch::IntegrationTest
 
     sign_out
 
-    assert_not logged_in?
+    assert_not_predicate self, :logged_in?
   end
 
   test 'user should be logged out after certain time' do

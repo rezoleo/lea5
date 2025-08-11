@@ -5,7 +5,7 @@ module SessionsHelper
     return nil if session[:user_id].nil?
 
     @current_user ||= User.find(session[:user_id])
-    @current_user&.groups = session[:groups]
+    @current_user.groups = session[:groups]
     @current_user
   end
 

@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
       - name: Setup Ruby
         # Install the version defined in .ruby-version
         uses: ruby/setup-ruby@v1
