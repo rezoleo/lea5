@@ -74,5 +74,43 @@ module Api
                               headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :unprocessable_entity
     end
+
+    test 'should be able to create a machine if it is in the limit with api key' do
+      # Override to be configuration independent
+      old_value = Object.const_get(:USER_MACHINES_LIMIT)
+      silence_warnings do
+        Object.const_set(:USER_MACHINES_LIMIT, 1)
+      end
+      user = @machine.user
+      user.machines.destroy_all
+
+      machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
+      assert_difference 'Machine.count', 1 do
+        post api_machines_url, params: { user_id: user.id, machine: machine }, headers: { 'Authorization' => "Bearer #{@original_key}" }
+      end
+    ensure
+      silence_warnings do
+        Object.const_set(:USER_MACHINES_LIMIT, old_value)
+      end
+    end
+
+    test 'should not be able to create a machine if limit already reached with api key' do
+      # Override to be configuration independent
+      old_value = Object.const_get(:USER_MACHINES_LIMIT)
+      silence_warnings do
+        Object.const_set(:USER_MACHINES_LIMIT, 0)
+      end
+      user = @machine.user
+      user.machines.destroy_all
+
+      machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
+      assert_raises CanCan::AccessDenied do
+        post api_machines_url, params: { user_id: user.id, machine: machine }, headers: { 'Authorization' => "Bearer #{@original_key}" }
+      end
+    ensure
+      silence_warnings do
+        Object.const_set(:USER_MACHINES_LIMIT, old_value)
+      end
+    end
   end
 end
