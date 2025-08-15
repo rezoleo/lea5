@@ -86,7 +86,8 @@ module Api
 
       machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
       assert_difference 'Machine.count', 1 do
-        post api_machines_url, params: { user_id: user.id, machine: machine }, headers: { 'Authorization' => "Bearer #{@original_key}" }
+        post api_machines_url, params: { user_id: user.id, machine: machine },
+                               headers: { 'Authorization' => "Bearer #{@original_key}" }
       end
     ensure
       silence_warnings do
@@ -105,7 +106,8 @@ module Api
 
       machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
       assert_raises CanCan::AccessDenied do
-        post api_machines_url, params: { user_id: user.id, machine: machine }, headers: { 'Authorization' => "Bearer #{@original_key}" }
+        post api_machines_url, params: { user_id: user.id, machine: machine },
+                               headers: { 'Authorization' => "Bearer #{@original_key}" }
       end
     ensure
       silence_warnings do
