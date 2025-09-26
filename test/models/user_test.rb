@@ -11,7 +11,7 @@ class UserTest < ActiveSupport::TestCase
                    info: { first_name: 'John',
                            last_name: 'Doe',
                            email: 'john@doe.com' },
-                   extra: { raw_info: { room: 'F123' } } }
+                   extra: { raw_info: { room: 'F123', preferred_username: 'john-doe' } } }
   end
 
   test 'user is valid' do
@@ -106,32 +106,24 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
-  test 'pseudo should be generated from names if blank on save' do
-    @user.firstname = 'Paul'
-    @user.lastname = 'Marcel'
-    @user.pseudo = nil
-    @user.save
-    assert_equal 'paul-marcel', @user.pseudo
-  end
-
-  test "pseudo can't be empty" do
-    @user.pseudo = ' '
+  test "username can't be empty" do
+    @user.username = ' '
     assert_not_predicate @user, :valid?
   end
 
-  test 'pseudo should be unique' do
+  test 'username should be unique' do
     duplicate_user = @user.dup
     @user.save
-    duplicate_user.pseudo = @user.pseudo.upcase
+    duplicate_user.username = @user.username.upcase
     assert_not_predicate duplicate_user, :valid?
   end
 
-  test 'pseudo should not be generated if already set' do
+  test 'username should not be generated if already set' do
     @user.firstname = 'Paul'
     @user.lastname = 'Marcel'
-    @user.pseudo = 'custom-pseudo'
+    @user.username = 'custom-username'
     @user.save
-    assert_equal 'custom-pseudo', @user.pseudo
+    assert_equal 'custom-username', @user.username
   end
 
   test 'wifi_password should be generated on save' do

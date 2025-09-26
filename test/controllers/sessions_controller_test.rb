@@ -10,7 +10,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
                                           info: { first_name: 'John',
                                                   last_name: 'Doe',
                                                   email: 'john@doe.com' },
-                                          extra: { raw_info: { room: 'F123' } } })
+                                          extra: { raw_info: { room: 'F123', preferred_username: 'john-doe' } } })
   end
 
   test 'should create a new user if does not exist' do
@@ -20,7 +20,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should find user if already exists' do
-    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', room: 'F123',
+    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', room: 'F123', username: 'john-doe',
                 keycloak_id: '11111111-1111-1111-1111-111111111111')
 
     assert_difference 'User.count', 0 do

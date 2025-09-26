@@ -37,7 +37,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           firstname: 'patrick',
           lastname: 'bar',
           email: 'patrick@bar.com',
-          room: 'E124'
+          room: 'E124',
+          username: 'patrick-bar'
         }
       }
     end
@@ -61,7 +62,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         firstname: 'toto',
         lastname: 'titi',
         email: 'toto@titi.tu',
-        room: 'B231'
+        room: 'B231',
+        username: 'toto-titi'
       }
     }
     assert_redirected_to @user

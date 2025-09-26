@@ -41,7 +41,8 @@ def update_user(user, user_from_sso)
     firstname: user_from_sso['firstName'],
     lastname: user_from_sso['lastName'],
     email: user_from_sso['email'],
-    room: user_from_sso['attributes']['room'].first
+    room: user_from_sso['attributes']['room'].first,
+    username: user_from_sso['username']
   )
   if user.save
     puts "Updated #{user.email}"

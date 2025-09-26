@@ -7,7 +7,7 @@ ironman:
   room: "A200"
   keycloak_id: "12345678-1234-1234-1234-123456789abc"
   wifi_password: "12345"
-  pseudo: "ironman"
+  username: "ironman"
 
 pepper:
   firstname: "Pepper"
@@ -16,7 +16,7 @@ pepper:
   room: "A201"
   keycloak_id: "12345678-1234-1234-1234-123456789def"
   wifi_password: "123456"
-  pseudo: "pepper"
+  username: "pepper"
 
 spiderman:
   firstname: "Peter"
@@ -25,4 +25,4 @@ spiderman:
   room: "A202"
   keycloak_id: "12345678-1234-1234-1234-123456789ghi"
   wifi_password: "1234567"
-  pseudo: "spiderman"
+  username: "spiderman"

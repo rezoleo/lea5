@@ -11,6 +11,10 @@ class User < ApplicationRecord
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :room, with: ->(room) { room.downcase.upcase_first }
 
+  # Since the Radius MD4 hash is broken anyway (see: https://kanidm.github.io/kanidm/master/integrations/radius.html#cleartext-credential-storage)
+  # we choose to store the wifi_password encrypted using Rails built-in encryption.
+  # This way, we can still retrieve the original password when needed.
+  # It allows us to display it in the UI when users want to connect a new device.
   encrypts :wifi_password
 
   validates :firstname, presence: true, allow_blank: false
@@ -20,12 +24,10 @@ class User < ApplicationRecord
   # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
   validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
-  validates :wifi_password, presence: true, allow_blank: false, uniqueness: true
-  VALID_PSEUDO_REGEX = /\A[a-z0-9]+(-[a-z0-9]+)*\z/
-  validates :pseudo, presence: true, format: { with: VALID_PSEUDO_REGEX }, uniqueness: true, allow_blank: false
+  validates :wifi_password, presence: true, allow_blank: false
+  validates :username, presence: true, uniqueness: true, allow_blank: false
 
   before_validation :ensure_has_wifi_password
-  before_validation :ensure_has_pseudo
 
   # @return [Array<String>]
   attr_accessor :groups
@@ -69,29 +71,21 @@ class User < ApplicationRecord
     user.update_from_sso(firstname: auth_hash[:info][:first_name],
                          lastname: auth_hash[:info][:last_name],
                          email: auth_hash[:info][:email],
-                         room: auth_hash[:extra][:raw_info][:room])
+                         room: auth_hash[:extra][:raw_info][:room],
+                         username: auth_hash[:extra][:raw_info][:preferred_username])
     user.groups = auth_hash[:extra][:raw_info][:groups]
     user.save!
     user
   end
 
-  def update_from_sso(firstname:, lastname:, email:, room:)
-    update(firstname: firstname, lastname: lastname, email: email, room: room)
+  def update_from_sso(firstname:, lastname:, email:, room:, username:)
+    update(firstname: firstname, lastname: lastname, email: email, room: room, username: username)
   end
 
   def admin?
     return false if groups.nil?
 
     groups.include?('rezoleo')
-  end
-
-  def ensure_has_pseudo
-    return unless pseudo.nil?
-    return if firstname.blank? || lastname.blank?
-
-    normalized_firstname = firstname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
-    normalized_lastname = lastname.unicode_normalize(:nfkd).gsub(/[^\x00-\x7F]/, '').delete('-')
-    self.pseudo = "#{normalized_firstname}-#{normalized_lastname}".downcase
   end
 
   private
