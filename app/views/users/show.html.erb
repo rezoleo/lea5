@@ -38,22 +38,22 @@
         <span><%= @user.room %></span>
         <span><%= pluralize(@machines.size, "machine") %></span>
         <% if current_user == @user %>
-          <div class="card-content-user-details" data-controller="user">
+          <div class="card-content-user-details" data-controller="user" data-user-password-value="<%= @user.wifi_password %>">
             <label>Wifi Password:</label>
-            <input type="password" data-user-target="wifiPassword" class="card-content-user-details-password" value="<%= @user.wifi_password %>" spellcheck="false" disabled>
+            <p data-user-target="wifiPassword" class="card-content-user-details-password-hidden"> ****** </p>
             <button data-action="click->user#togglePasswordVisibility">
-              <%= svg_icon_tag 'icon_eye', 'aria-label': "Hide Wifi Password", 'data-user-target':'eyeIcon', style: 'display: none' %>
-              <%= svg_icon_tag 'icon_eye_slash', 'aria-label': "Show Wifi Password", 'data-user-target':'eyeIcon', style: 'display: inline' %>
+              <%= svg_icon_tag 'icon_eye', 'title': "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
+              <%= svg_icon_tag 'icon_eye_slash', 'title': "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
             </button>
             <div>
             <button data-action="click->user#copyToClipboard">
-              <%= svg_icon_tag 'icon_clipboard', 'aria-label': "Copy Wifi Password" %>
+              <%= svg_icon_tag 'icon_clipboard', 'title': "Copy Wifi Password" %>
             </button>
-              <span class="copy-message" data-user-target="copyMessage">Copied !</span>
+              <span data-user-target="copyMessage" class="copy-message-hidden">Password copied to clipboard !</span>
             </div>
           </div>
         <% end %>
-        <span>Username : <%= @user.username %>
+        <span>Wifi username : <%= @user.username %>
       </div>
     </div>
 

@@ -166,16 +166,53 @@
     border-radius: 20%;
 }
 
-.card-content-user-details-password {
-   font-family: monospace;
+.eye-visible {
+    display: inline;
 }
 
-.card-content-user-details .copy-message {
+.eye-hidden {
+    display: none;
+}
+
+.copy-message-hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.copy-message-visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.card-content-user-details-password-visible {
+   font-family: monospace;
+   border: 2px solid var(--gray-300);
+   min-width: 10em;
+}
+
+.card-content-user-details-password-hidden {
+   -webkit-text-security: square; /* you can use circle, square or disc */
+   font-family: "TextSecurity";
+   border: 2px solid var(--gray-300);
+   min-width: 10em;
+}
+
+.card-content-user-details .copy-message-hidden {
     position: absolute;
     font-size: var(--text-sm);
     font-weight: bold;
-    transition: all 0.1s;
+    transition: all 0.2s;
     opacity: 0;
 
     visibility: hidden;
+}
+
+.card-content-user-details .copy-message-visible {
+    position: absolute;
+    font-size: var(--text-sm);
+    font-weight: bold;
+    transition: all 0.2s;
+    opacity: 1;
+
+    visibility: visible;
 }
