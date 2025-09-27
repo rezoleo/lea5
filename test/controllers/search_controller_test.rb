@@ -61,7 +61,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       B8: 1,
       c9: 1,
       b8: 1,
-      'DE:1A:B3:17:95': 2,
+      'DE:1A:B3:17:95': 3,
       jarvis: 1
     }
 
