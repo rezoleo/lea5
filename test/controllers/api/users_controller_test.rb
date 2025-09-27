@@ -20,8 +20,10 @@ module Api
       assert_equal @user.room, @response_body[:room]
       assert_equal api_user_url(@user), @response_body[:url]
       assert_equal @user.internet_expiration, @response_body[:internet_expiration]
-      assert_equal CustomModules::Md4.hexdigest(@user.wifi_password.encode('UTF-16LE').bytes),
+      openssl_legacy_provider = OpenSSL::Provider.load('legacy')
+      assert_equal OpenSSL::Digest::MD4.hexdigest(@user.wifi_password.encode('utf-16le')),
                    @response_body[:ntlm_password]
+      openssl_legacy_provider.unload
     end
 
     test 'should be able to read users index with api key' do
