@@ -94,9 +94,9 @@ class User < ApplicationRecord
     subscription_expiration.nil? || (subscription_expiration < Time.current)
   end
 
-  def ensure_has_wifi_password()
+  def ensure_has_wifi_password
     return unless wifi_password.nil?
 
-    self.wifi_password = "#{SecureRandom::base58(6)}-#{SecureRandom::base58(6)}-#{SecureRandom::base58(6)}"
+    self.wifi_password = "#{SecureRandom.base58(6)}-#{SecureRandom.base58(6)}-#{SecureRandom.base58(6)}"
   end
 end

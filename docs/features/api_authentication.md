@@ -18,5 +18,6 @@ You will get the related json
 - GET /api/machines : Get machines index
 - GET /api/machines/_n_ : Get machine with id _n_
 - GET /api/machines?mac=_<mac>_ : Get machine with according to mac address
+- GET /api/machines?has_connection=_<whatever>_ : Filter only machines own by a user with a valid subscription (can be combined with other params)
 - GET /api/api_keys : Get api keys index
 - POST /api/machines data={"user_id": <user_id>, "machine": {"mac":<mac>,"name":<name>}}: Create a machine with given mac and name for user with the given user_id

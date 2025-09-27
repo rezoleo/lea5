@@ -8,6 +8,11 @@ module Api
     def index
       @machines = Machine.accessible_by(current_ability)
       @machines = @machines.where(mac: params[:mac]) if params[:mac].present?
+      return if params[:has_connection].blank?
+
+      @machines = @machines.select do |machine|
+        machine unless machine.user.internet_expiration.nil?
+      end
     end
 
     def show
