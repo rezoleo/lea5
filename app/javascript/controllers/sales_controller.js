@@ -25,7 +25,7 @@ export default class extends Controller {
   }
 
   initialize() {
-    this.nextId = 1;
+    this.nextId = 1
   }
 
   connect() {
@@ -35,7 +35,10 @@ export default class extends Controller {
   addArticle() {
     const newArticle = this.articleTemplateTarget
     const content = newArticle.innerHTML.replace(/NEW_ARTICLE/g, this.nextId)
-    let insertAfter = this.articlesTargets.length !== 0 ? this.articlesTargets : this.subscriptionTargets
+    let insertAfter =
+      this.articlesTargets.length !== 0
+        ? this.articlesTargets
+        : this.subscriptionTargets
     insertAfter.at(-1).insertAdjacentHTML("afterend", content)
     this.nextId++
   }
@@ -54,16 +57,16 @@ export default class extends Controller {
 
     let duration = Number.parseInt(this.durationTarget.value)
 
-    this.subscriptionsValue.forEach(subscription => {
+    this.subscriptionsValue.forEach((subscription) => {
       const quantity = Math.floor(duration / subscription.duration)
       duration -= quantity * subscription.duration
       subPrice += subscription.price * quantity
     })
     this.subPriceTarget.textContent = currencyFormatter.format(subPrice / 100)
 
-    this.articlesTargets.forEach(article => {
-      let id = Number.parseInt(article.querySelector('select').value, 10)
-      let quantity = Number.parseInt(article.querySelector('input').value, 10)
+    this.articlesTargets.forEach((article) => {
+      let id = Number.parseInt(article.querySelector("select").value, 10)
+      let quantity = Number.parseInt(article.querySelector("input").value, 10)
       if (id && quantity) price += this.articlesValue[id] * quantity
     })
     price += subPrice
