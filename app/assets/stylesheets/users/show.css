@@ -149,3 +149,29 @@
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
 }
+
+
+.card-sales{
+    grid-row: 5/6;
+    background-color: white;
+}
+
+.card-details-sales{
+    border-left: 0.4rem solid var(--primary-600);
+    background-color: white;
+}
+
+.card-content-sales{
+    flex: 2;
+    font-size: var(--text-md);
+    color: var(--gray-800);
+    font-weight: var(--font-medium);
+    grid-column: 2 / 3;
+    display: grid;
+    row-gap: var(--padding-md);
+}
+
+.card-content-sales > * + * {
+    border-top: solid var(--primary-200) 2px;
+    padding-top: var(--padding-md);
+}
