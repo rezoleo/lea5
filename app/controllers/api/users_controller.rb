@@ -7,7 +7,11 @@ module Api
     end
 
     def show
-      @user = User.find(params[:id])
+      begin
+        @user = User.find(params[:id])
+      rescue ActiveRecord::RecordNotFound
+        @user = User.find_by!(username: params[:id])
+      end
       authorize! :show, @user
       @machines = @user.machines.includes(:ip).order(created_at: :asc)
       openssl_legacy_provider = OpenSSL::Provider.load('legacy')

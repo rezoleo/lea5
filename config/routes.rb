@@ -30,7 +30,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
 
   namespace :api do
     defaults format: :json do
-      resources :users
+      resources :users, constraints: { id: %r{[^/]+} }
       resources :machines
       resources :api_keys
     end
