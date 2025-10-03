@@ -41,7 +41,7 @@ export default class extends Controller {
       )
       eyeIcon.classList.replace("eye-visible", "eye-hidden")
       eyeSlashIcon.classList.replace("eye-hidden", "eye-visible")
-      passwordField.textContent = "******"
+      passwordField.textContent = "********************"
     }
   }
 }

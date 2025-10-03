@@ -40,7 +40,7 @@
         <% if current_user == @user %>
           <div class="card-content-user-details" data-controller="user" data-user-password-value="<%= @user.wifi_password %>">
             <label>Wifi Password:</label>
-            <p data-user-target="wifiPassword" class="card-content-user-details-password-hidden"> ****** </p>
+            <p data-user-target="wifiPassword" class="card-content-user-details-password-hidden"> ******************** </p>
             <button data-action="click->user#togglePasswordVisibility">
               <%= svg_icon_tag 'icon_eye', 'title': "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
               <%= svg_icon_tag 'icon_eye_slash', 'title': "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
