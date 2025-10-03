@@ -196,11 +196,13 @@
     src:
       url("text-security-circle-compat.woff2") format("woff2")
   }
+  .text-security-fallback {
+    font-family: "TextSecurity";
+  }
 }
 
 .card-content-user-details-password-hidden {
    -webkit-text-security: square; /* you can use circle, square or disc */
-   font-family: "TextSecurity";
    border: 2px solid var(--gray-300);
    min-width: 10em;
 }
