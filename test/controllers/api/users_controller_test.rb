@@ -7,6 +7,7 @@ module Api
     def setup
       @original_key = 'Lea5_zUN4wsViWcg3UBLCMhCtqgQt'
       @user = users(:ironman)
+      @user_with_dot = users(:spiderman)
     end
 
     test 'should be able to read user with api key' do
@@ -50,6 +51,16 @@ module Api
     test 'should not be able to read user if api key is missing' do
       get api_user_path(@user)
       assert_response(:unauthorized)
+    end
+
+    test 'should be able to query user by username with api key' do
+      get api_user_path(@user.username), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :success
+    end
+
+    test 'should be able to query user by username with api key even if username contains a dot' do
+      get api_user_path(@user_with_dot.username), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :success
     end
   end
 end
