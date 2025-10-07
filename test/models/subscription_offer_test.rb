@@ -50,10 +50,14 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
 
   test 'offer should soft delete' do
     @subscription_offer.deleted_at = nil
-    assert_no_difference 'SubscriptionOffer.unscoped.count' do
+    assert_no_difference 'SubscriptionOffer.count' do
       @subscription_offer.soft_delete
     end
     assert_not_nil @subscription_offer.deleted_at
+  end
+
+  test 'only available subscriptions should be sellable' do
+    assert_equal 2, SubscriptionOffer.sellable.count
   end
 
   test 'soft_delete should not change deleted_at date' do
@@ -66,13 +70,13 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   test 'offer should be destroyed if no sales' do
     @subscription_offer.sales.destroy_all
     @subscription_offer.refunds.destroy_all
-    assert_difference 'SubscriptionOffer.unscoped.count', -1 do
+    assert_difference 'SubscriptionOffer.count', -1 do
       assert_predicate @subscription_offer, :destroy
     end
   end
 
   test 'offer should not destroy if dependant' do
-    assert_no_difference 'SubscriptionOffer.unscoped.count' do
+    assert_no_difference 'SubscriptionOffer.count' do
       assert_not_predicate @subscription_offer, :destroy
     end
 

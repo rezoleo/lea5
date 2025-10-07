@@ -7,7 +7,7 @@ class SalesController < ApplicationController
     @sale = @owner.sales_as_client.new
     authorize! :new, @sale
 
-    @articles = Article.all
+    @articles = Article.sellable.all
     @subscription_offers = SubscriptionOffer.order(duration: :desc)
     @payment_methods = PaymentMethod.all
   end

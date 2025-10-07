@@ -66,4 +66,8 @@ class ArticleTest < ActiveSupport::TestCase
     assert_predicate @article, :persisted?
     assert_includes @article.errors[:base], 'Cannot delete record because dependent articles sales exist'
   end
+
+  test 'only available articles should be sellable' do
+    assert_equal 2, Article.sellable.count
+  end
 end
