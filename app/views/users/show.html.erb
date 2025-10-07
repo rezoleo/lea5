@@ -40,20 +40,20 @@
         <% if current_user == @user %>
           <div class="card-content-user-details" data-controller="user" data-user-password-value="<%= @user.wifi_password %>">
             <label>Wifi Password:</label>
-            <p data-user-target="wifiPassword" class="card-content-user-details-password-hidden text-security-fallback"> ******************** </p>
+            <p data-user-target="wifiPassword" class="password text-security-fallback"> ******************** </p>
             <button data-action="click->user#togglePasswordVisibility">
-              <%= svg_icon_tag 'icon_eye', 'title': "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
-              <%= svg_icon_tag 'icon_eye_slash', 'title': "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
+              <%= svg_icon_tag 'icon_eye', title: "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
+              <%= svg_icon_tag 'icon_eye_slash', title: "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
             </button>
             <div>
             <button data-action="click->user#copyToClipboard">
-              <%= svg_icon_tag 'icon_clipboard', 'title': "Copy Wifi Password" %>
+              <%= svg_icon_tag 'icon_clipboard', title: "Copy Wifi Password" %>
             </button>
-              <span data-user-target="copyMessage" class="copy-message-hidden">Password copied to clipboard !</span>
+              <span data-user-target="copyMessage" class="copy-message">Password copied to clipboard !</span>
             </div>
           </div>
         <% end %>
-        <span>Wifi username : <%= @user.username %>
+        <span>Wifi username : <%= @user.username %></span>
       </div>
     </div>
 
