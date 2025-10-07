@@ -180,7 +180,7 @@
     @font-face {
         font-family: "TextSecurity";
         src:
-            url("text-security-circle-compat.woff2") format("woff2")
+            url("text-security-circle-compat.woff2") format("woff2") /*https://github.com/noppa/text-security/blob/master/LICENSE.txt*/
     }
 
     .text-security-fallback {
