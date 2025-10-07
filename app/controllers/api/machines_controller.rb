@@ -7,15 +7,17 @@ module Api
 
     def index
       @machines = Machine.accessible_by(current_ability)
-      @machines = @machines.where(mac: params[:mac]) if params[:mac].present?
       return if params[:has_connection].blank?
 
       @machines = @machines.select do |machine|
-        machine unless machine.user.internet_expiration.nil?
+        machine unless machine.user.internet_expiration.nil? || machine.user.internet_expiration < Time.current
       end
     end
 
     def show
+      return if params[:has_connection].blank?
+
+      @machine = nil if @machine.user.internet_expiration.nil? || @machine.user.internet_expiration < Time.current
       authorize! :show, @machine
     end
 
@@ -33,6 +35,8 @@ module Api
 
     def current_machine
       @machine = Machine.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
+      @machine = Machine.find_by!(mac: params[:id])
     end
 
     def machine_params
