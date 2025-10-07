@@ -3,7 +3,7 @@
 module Api
   class UsersController < ApiApplicationController
     def index
-      @users = User.accessible_by(current_ability)
+      @users = User.accessible_by(current_ability).includes(:valid_subscriptions_by_date, :free_accesses_by_date)
     end
 
     def show

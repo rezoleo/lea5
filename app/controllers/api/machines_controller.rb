@@ -9,7 +9,7 @@ module Api
       @machines = Machine.accessible_by(current_ability)
       return if params[:has_connection].blank?
 
-      @machines = @machines.select do |machine|
+      @machines = @machines.includes(user: [:subscriptions, :free_accesses]).select do |machine|
         machine unless machine.user.internet_expiration.nil? || machine.user.internet_expiration < Time.current
       end
     end
