@@ -17,7 +17,10 @@ module Api
     def show
       return if params[:has_connection].blank?
 
-      @machine = nil if @machine.user.internet_expiration.nil? || @machine.user.internet_expiration < Time.current
+      if @machine.user.internet_expiration.nil? || @machine.user.internet_expiration < Time.current
+        render json: { error: 'User internet access invalid' },
+               status: :forbidden
+      end
       authorize! :show, @machine
     end
 

@@ -51,27 +51,28 @@ module Api
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" }, params: { has_connection: '1' }
       assert_response :success
       response_body = response.parsed_body
-      assert_equal 2, response_body.size
+      assert_equal 1, response_body.size
     end
 
     test 'should be able to query machines by mac address with api key' do
-      get api_machines_path(mac: @machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
       response_body = response.parsed_body
-      assert_equal 1, response_body.size
-      assert_equal @machine.mac, response_body.first[:mac]
+      assert_equal @machine.id, response_body[:id]
+      assert_equal @machine.name, response_body[:name]
+      assert_equal @machine.mac, response_body[:mac]
+      assert_equal @machine.ip.ip.to_s, response_body[:ip]
+      assert_equal api_machine_url(@machine), response_body[:url]
     end
 
     test 'should return empty array when querying machines by unknown mac address with api key' do
-      get api_machines_path(mac: 'DE:1A:B3:17:95:FF'), headers: { 'Authorization' => "Bearer #{@original_key}" }
-      assert_response :success
-      response_body = response.parsed_body
-      assert_equal 0, response_body.size
+      get api_machine_url('DE:1A:B3:17:95:FF'), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :not_found
     end
 
     test 'should raise an error when querying machines by invalid mac address with api key' do
-      assert_raises ActionView::Template::Error do
-        get api_machines_path(mac: 'invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_raises ActiveRecord::StatementInvalid do
+        get api_machine_url('invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
       end
     end
 
@@ -86,17 +87,21 @@ module Api
     end
 
     test 'should be able to query if machines have internet access by mac address' do
-      get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { mac: @machine.mac, has_connection: '1' }
+      get api_machine_url(@machine2.mac), headers: { 'Authorization' => "Bearer #{@original_key}" },
+                                          params: { has_connection: '1' }
       assert_response :success
-      response_body = response.parsed_body
-      assert_equal 1, response_body.size
-      assert_equal @machine.mac, response_body.first[:mac]
-      get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { mac: @machine2.mac, has_connection: '1' }
+      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" },
+                                         params: { has_connection: '1' }
+      assert_response :forbidden
+    end
+
+    test 'should be able to query if machines have internet access by id' do
+      get api_machine_url(@machine2.id), headers: { 'Authorization' => "Bearer #{@original_key}" },
+                                         params: { has_connection: '1' }
       assert_response :success
-      response_body = response.parsed_body
-      assert_equal 0, response_body.size
+      get api_machine_url(@machine.id), headers: { 'Authorization' => "Bearer #{@original_key}" },
+                                        params: { has_connection: '1' }
+      assert_response :forbidden
     end
 
     test 'should be able to create a machine with api key' do

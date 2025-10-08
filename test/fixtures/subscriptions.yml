@@ -9,3 +9,8 @@ subscription2:
   start_at: 2023-01-07 12:00:00
   end_at: 2023-02-07 12:00:00
   sale: pepper_1_year
+
+subscription3:
+  start_at: 2099-01-15 12:00:00
+  end_at: 3000-02-15 12:00:00
+  sale: spiderman_1_year
