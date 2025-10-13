@@ -9,3 +9,8 @@ pepper_1_year:
   sale: pepper_1_year
   subscription_offer: year
   quantity: 1
+
+spiderman_1_year:
+  sale: spiderman_1_year
+  subscription_offer: year
+  quantity: 1

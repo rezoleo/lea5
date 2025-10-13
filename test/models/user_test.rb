@@ -11,7 +11,7 @@ class UserTest < ActiveSupport::TestCase
                    info: { first_name: 'John',
                            last_name: 'Doe',
                            email: 'john@doe.com' },
-                   extra: { raw_info: { room: 'F123' } } }
+                   extra: { raw_info: { room: 'F123', preferred_username: 'john-doe' } } }
   end
 
   test 'user is valid' do
@@ -104,6 +104,50 @@ class UserTest < ActiveSupport::TestCase
       @user.room = invalid_room
       assert_not_predicate @user, :valid?, "#{invalid_room} should be invalid"
     end
+  end
+
+  test "username can't be empty" do
+    @user.username = ' '
+    assert_not_predicate @user, :valid?
+  end
+
+  test 'username should be unique' do
+    duplicate_user = @user.dup
+    @user.save
+    duplicate_user.username = @user.username.upcase
+    assert_not_predicate duplicate_user, :valid?
+  end
+
+  test 'username should not be generated if already set' do
+    @user.firstname = 'Paul'
+    @user.lastname = 'Marcel'
+    @user.username = 'custom-username'
+    @user.save
+    assert_equal 'custom-username', @user.username
+  end
+
+  test 'wifi_password should be generated on save' do
+    @user.wifi_password = nil
+    @user.save
+    assert_not_nil @user.wifi_password
+  end
+
+  test 'wifi_password should not be generated if already set' do
+    @user.wifi_password = 'custom-password'
+    @user.save
+    assert_equal 'custom-password', @user.wifi_password
+  end
+
+  test "wifi_password can't be empty" do
+    @user.wifi_password = '    '
+    assert_not_predicate @user, :valid?
+  end
+
+  test 'wifi_password should be unique' do
+    duplicate_user = @user.dup
+    @user.save
+    duplicate_user.wifi_password = @user.wifi_password.upcase
+    assert_not_predicate duplicate_user, :valid?
   end
 
   test 'should create new user from auth hash' do

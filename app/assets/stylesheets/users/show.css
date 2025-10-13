@@ -97,7 +97,7 @@
     row-gap: var(--padding-md);
 }
 
-.card-content-machines > * + * {
+.card-content-machines>*+* {
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
 }
@@ -121,7 +121,7 @@
     row-gap: var(--padding-md);
 }
 
-.card-content-subscriptions > * + * {
+.card-content-subscriptions>*+* {
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
 }
@@ -145,7 +145,71 @@
     row-gap: var(--padding-md);
 }
 
-.card-content-free-accesses > * + * {
+.card-content-free-accesses>*+* {
     border-top: solid var(--primary-200) 2px;
     padding-top: var(--padding-md);
+}
+
+.card-content-user-details {
+    display: flex;
+    align-items: center;
+}
+
+.card-content-user-details svg {
+    fill: var(--primary-500);
+    width: var(--text-md);
+}
+
+.card-content-user-details button {
+    display: flex;
+    margin-left: var(--padding-xs);
+    border-radius: 20%;
+}
+
+.eye-visible {
+    display: inline;
+}
+
+.eye-hidden {
+    display: none;
+}
+
+@supports not (-webkit-text-security: square) {
+
+    /* keep this the same as the value used below */
+    @font-face {
+        font-family: "TextSecurity";
+        src:
+            url("text-security-circle-compat.woff2") format("woff2") /*https://github.com/noppa/text-security/blob/master/LICENSE.txt*/
+    }
+
+    .text-security-fallback {
+        font-family: "TextSecurity";
+    }
+}
+
+.card-content-user-details .password {
+    -webkit-text-security: square;
+    /* you can use circle, square or disc */
+    border: 2px solid var(--gray-300);
+    min-width: 10em;
+}
+
+.card-content-user-details .password.visible {
+    font-family: monospace;
+    -webkit-text-security: none;
+}
+
+.card-content-user-details .copy-message {
+    position: absolute;
+    font-size: var(--text-sm);
+    font-weight: bold;
+    transition: all 0.2s;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.card-content-user-details .copy-message.visible {
+    opacity: 1;
+    visibility: visible;
 }

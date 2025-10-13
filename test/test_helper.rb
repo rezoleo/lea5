@@ -64,13 +64,25 @@ module ActiveSupport
     # @param [User] user
     # @param [Array<String>] groups
     def setup_auth_conf_for(user, groups)
-      OmniAuth.config.add_mock(:keycloak, { provider: 'keycloak',
-                                            uid: user.keycloak_id,
-                                            info: { first_name: user.firstname,
-                                                    last_name: user.lastname,
-                                                    email: user.email },
-                                            extra: { raw_info: { room: user.room,
-                                                                 groups: groups } } })
+      OmniAuth.config.add_mock(
+        :keycloak,
+        {
+          provider: 'keycloak',
+          uid: user.keycloak_id,
+          info: {
+            first_name: user.firstname,
+            last_name: user.lastname,
+            email: user.email
+          },
+          extra: {
+            raw_info: {
+              room: user.room,
+              groups: groups,
+              preferred_username: "#{user.firstname}-#{user.lastname}"
+            }
+          }
+        }
+      )
     end
 
     # Depending on the test running, the methods are different to sign out

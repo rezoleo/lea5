@@ -3,7 +3,7 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
   if Rails.env.local?
     provider :developer, {
-      fields: [:first_name, :last_name, :email, :room, :groups]
+      fields: [:first_name, :last_name, :email, :room, :groups, :username]
     }
   end
 

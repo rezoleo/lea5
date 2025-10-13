@@ -32,6 +32,21 @@ sale_pepper_1_year:
     client_address: "Appartement A201\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
     payment_method: "Cash"
     payment_amount_cent: 5000
+  
+sale_spiderman_1_year:
+  generation_json:
+    items:
+      - quantity: 1
+        item_name: "Subscription - 12 months"
+        price_cents: 5000
+    sale_date: "2099-01-15"
+    invoice_id: 2
+    issue_date: "2099-01-15"
+    client_name: "Peter PARKER"
+    payment_date: "2099-01-15T12:00:00.000Z"
+    client_address: "Appartement A202\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Cash"
+    payment_amount_cent: 5000
 
 # TODO: Verify this invoice fixture matches what we generate with refunds
 refund_ironman_cable_4_months:

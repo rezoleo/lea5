@@ -22,34 +22,22 @@ class MachinesController < ApplicationController
   def create
     @machine = @owner.machines.new(machine_params)
     authorize! :create, @machine
-    respond_to do |format|
-      if @machine.save
-        format.html do
-          flash[:success] = 'Machine added!'
-          redirect_to @owner
-        end
-        format.json { render 'show', status: :created, location: @machine }
-      else
-        format.html { render 'new', status: :unprocessable_entity }
-        format.json { render json: @machine.errors, status: :unprocessable_entity }
-      end
+    if @machine.save
+      flash[:success] = 'Machine added!'
+      redirect_to @owner
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
   def update
     authorize! :update, @machine
     owner = @machine.user
-    respond_to do |format|
-      if @machine.update(machine_params)
-        format.html do
-          flash[:success] = 'Machine updated!'
-          redirect_to owner
-        end
-        format.json { render 'show', status: :ok, location: @machine }
-      else
-        format.html { render 'edit', status: :unprocessable_entity }
-        format.json { render json: @machine.errors, status: :unprocessable_entity }
-      end
+    if @machine.update(machine_params)
+      flash[:success] = 'Machine updated!'
+      redirect_to owner
+    else
+      render 'edit', status: :unprocessable_entity
     end
   end
 
@@ -57,13 +45,8 @@ class MachinesController < ApplicationController
     authorize! :destroy, @machine
     owner = @machine.user
     @machine.destroy
-    respond_to do |format|
-      format.html do
-        flash[:success] = 'Machine deleted!'
-        redirect_to owner
-      end
-      format.json { head :no_content }
-    end
+    flash[:success] = 'Machine deleted!'
+    redirect_to owner
   end
 
   private

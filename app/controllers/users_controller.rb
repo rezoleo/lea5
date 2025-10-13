@@ -28,34 +28,22 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     authorize! :create, @user
-    respond_to do |format|
-      if @user.save
-        format.html do
-          flash[:success] = 'User created!'
-          redirect_to @user
-        end
-        format.json { render 'show', status: :created, location: @user }
-      else
-        format.html { render 'new', status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.save
+      flash[:success] = 'User created!'
+      redirect_to @user
+    else
+      render 'new', status: :unprocessable_entity
     end
   end
 
   def update
     @user = User.find(params[:id])
     authorize! :update, @user
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html do
-          flash[:success] = 'User updated!'
-          redirect_to @user
-        end
-        format.json { render 'show', status: :ok, location: @user }
-      else
-        format.html { render 'edit', status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.update(user_params)
+      flash[:success] = 'User updated!'
+      redirect_to @user
+    else
+      render 'edit', status: :unprocessable_entity
     end
   end
 
@@ -63,18 +51,13 @@ class UsersController < ApplicationController
     @user = User.includes(machines: :ip).find(params[:id])
     authorize! :destroy, @user
     @user.destroy
-    respond_to do |format|
-      format.html do
-        flash[:success] = 'User deleted!'
-        redirect_to users_url
-      end
-      format.json { head :no_content }
-    end
+    flash[:success] = 'User deleted!'
+    redirect_to users_url
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :room)
+    params.require(:user).permit(:firstname, :lastname, :email, :room, :username)
   end
 end

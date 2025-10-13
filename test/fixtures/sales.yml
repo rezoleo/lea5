@@ -14,6 +14,13 @@ pepper_1_year:
   invoice: sale_pepper_1_year
   verified_at: 2025-01-26 14:02:44
 
+spiderman_1_year:
+  seller: ironman
+  client: spiderman
+  payment_method: cash
+  invoice: sale_spiderman_1_year
+  verified_at: 2099-01-26 14:02:44
+
 ironman_deleted_article:
   seller: pepper
   client: ironman

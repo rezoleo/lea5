@@ -10,9 +10,9 @@ module ApplicationHelper
     time_tag date_or_time, date_or_time.strftime('%b %d, %Y'), title: time_ago_in_words
   end
 
-  def svg_icon_tag(name)
+  def svg_icon_tag(name, **)
     icons_path = asset_path 'icons.svg'
-    tag.svg do
+    tag.svg(**) do
       tag.use(href: "#{icons_path}##{name}")
     end
   end

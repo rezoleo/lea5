@@ -6,6 +6,8 @@ ironman:
   email: "tony@avengers.com"
   room: "A200"
   keycloak_id: "12345678-1234-1234-1234-123456789abc"
+  wifi_password: "12345"
+  username: "ironman"
 
 pepper:
   firstname: "Pepper"
@@ -13,6 +15,8 @@ pepper:
   email: "pepper@potts.com"
   room: "A201"
   keycloak_id: "12345678-1234-1234-1234-123456789def"
+  wifi_password: "123456"
+  username: "pepper"
 
 spiderman:
   firstname: "Peter"
@@ -20,3 +24,5 @@ spiderman:
   email: "peterp@univ.edu"
   room: "A202"
   keycloak_id: "12345678-1234-1234-1234-123456789ghi"
+  wifi_password: "1234567"
+  username: "peter.parker"

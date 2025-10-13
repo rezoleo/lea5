@@ -2,4 +2,4 @@
 
 # locals: ()
 
-json.array! @users, partial: 'users/user', as: :user
+json.array! @users, partial: 'api/users/user', as: :user

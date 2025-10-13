@@ -37,7 +37,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           firstname: 'patrick',
           lastname: 'bar',
           email: 'patrick@bar.com',
-          room: 'E124'
+          room: 'E124',
+          username: 'patrick-bar'
         }
       }
     end
@@ -45,34 +46,9 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to user
   end
 
-  test 'should create a user and send user info if user is valid in json' do
-    assert_difference 'User.count', 1 do
-      post users_url(format: :json), params: {
-        user: {
-          firstname: 'patrick',
-          lastname: 'bar',
-          email: 'patrickbar@bar.com',
-          room: 'E125'
-        }
-      }
-    end
-    user = @response.parsed_body
-    assert_template('users/show')
-    assert_response(:created)
-    assert_equal 'patrick', user['firstname']
-    assert_equal 'bar', user['lastname']
-    assert_equal 'patrickbar@bar.com', user['email']
-    assert_equal 'E125', user['room']
-  end
-
   test 'should re-render new if user is invalid with html' do
     post users_path, params: { user: { firstname: 'Empty' } }
     assert_template 'users/new'
-  end
-
-  test 'should send errors if user is invalid with json' do
-    post users_url(format: :json), params: { user: { firstname: 'Empty' } }
-    assert_response(:unprocessable_entity)
   end
 
   test 'should render edit' do
@@ -86,28 +62,11 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         firstname: 'toto',
         lastname: 'titi',
         email: 'toto@titi.tu',
-        room: 'B231'
+        room: 'B231',
+        username: 'toto-titi'
       }
     }
     assert_redirected_to @user
-  end
-
-  test 'should redirect if updates are valid in json' do
-    patch user_url(@user, format: :json), params: {
-      user: {
-        firstname: 'toto',
-        lastname: 'titi',
-        email: 'tototiti@titi.tu',
-        room: 'B231'
-      }
-    }
-    assert_template 'users/show'
-    user = @response.parsed_body
-    assert_response(:ok)
-    assert_equal 'toto', user['firstname']
-    assert_equal 'titi', user['lastname']
-    assert_equal 'tototiti@titi.tu', user['email']
-    assert_equal 'B231', user['room']
   end
 
   test 'should re-render edit if updates are invalid with html' do
@@ -115,23 +74,10 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
-  test 'should send errors if updates are invalid with json' do
-    patch user_url(@user, format: :json),
-          params: { user: { email: 'Empty' } }
-    assert_response(:unprocessable_entity)
-  end
-
   test 'should destroy a user and redirect to users in html' do
     assert_difference 'User.count', -1 do
       delete user_url(@user, format: :html)
     end
     assert_redirected_to users_url
-  end
-
-  test 'should destroy a user and send a 204 in json' do
-    assert_difference 'User.count', -1 do
-      delete user_url(@user, format: :json)
-    end
-    assert_response :no_content
   end
 end

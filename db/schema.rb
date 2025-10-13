@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_03_143927) do
+ActiveRecord::Schema[7.2].define(version: 2025_09_26_200840) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -182,8 +182,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_03_143927) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "start_at", precision: nil, null: false
-    t.datetime "end_at", precision: nil, null: false
+    t.datetime "start_at", null: false
+    t.datetime "end_at", null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
     t.index ["sale_id"], name: "index_subscriptions_on_sale_id"
@@ -197,9 +197,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_03_143927) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "keycloak_id"
+    t.string "wifi_password", null: false
+    t.string "username", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["keycloak_id"], name: "index_users_on_keycloak_id", unique: true
     t.index ["room"], name: "index_users_on_room", unique: true
+    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["wifi_password"], name: "index_users_on_wifi_password"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

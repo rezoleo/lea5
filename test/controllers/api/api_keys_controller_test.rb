@@ -18,5 +18,10 @@ module Api
       get api_api_keys_path, headers: { 'Authorization' => 'Bearer wrongkey' }
       assert_response(:unauthorized)
     end
+
+    test 'should not be able to read api keys index if api key is missing' do
+      get api_api_keys_path
+      assert_response(:unauthorized)
+    end
   end
 end

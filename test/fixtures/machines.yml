@@ -9,3 +9,8 @@ friday:
   mac: "DE:1A:B3:17:95:B8"
   name: "friday"
   user: pepper
+
+ultron:
+  mac: "DE:1A:B3:17:95:A7"
+  name: "ultron"
+  user: spiderman
