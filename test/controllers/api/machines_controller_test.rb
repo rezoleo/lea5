@@ -19,6 +19,7 @@ module Api
       assert_equal @machine.mac, response_body[:mac]
       assert_equal @machine.ip.ip.to_s, response_body[:ip]
       assert_equal api_machine_url(@machine), response_body[:url]
+      assert_equal @machine.user.internet_expiration, response_body[:internet_expiration]
     end
 
     test 'should not be able to read machine if api key is wrong' do
@@ -63,6 +64,7 @@ module Api
       assert_equal @machine.mac, response_body[:mac]
       assert_equal @machine.ip.ip.to_s, response_body[:ip]
       assert_equal api_machine_url(@machine), response_body[:url]
+      assert_equal @machine.user.internet_expiration, response_body[:internet_expiration]
     end
 
     test 'should return empty array when querying machines by unknown mac address with api key' do
@@ -84,24 +86,6 @@ module Api
     test 'should not be able to query machines by mac address if api key is missing' do
       get api_machines_path(mac: @machine.mac)
       assert_response(:unauthorized)
-    end
-
-    test 'should be able to query if machines have internet access by mac address' do
-      get api_machine_url(@machine2.mac), headers: { 'Authorization' => "Bearer #{@original_key}" },
-                                          params: { has_connection: '1' }
-      assert_response :success
-      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" },
-                                         params: { has_connection: '1' }
-      assert_response :forbidden
-    end
-
-    test 'should be able to query if machines have internet access by id' do
-      get api_machine_url(@machine2.id), headers: { 'Authorization' => "Bearer #{@original_key}" },
-                                         params: { has_connection: '1' }
-      assert_response :success
-      get api_machine_url(@machine.id), headers: { 'Authorization' => "Bearer #{@original_key}" },
-                                        params: { has_connection: '1' }
-      assert_response :forbidden
     end
 
     test 'should be able to create a machine with api key' do

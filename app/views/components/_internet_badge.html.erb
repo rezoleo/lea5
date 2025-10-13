@@ -1,7 +1,7 @@
 <%# locals: (user:) -%>
 
 <span class="internet-badge">
-  <% if user.internet_expiration.nil? || user.internet_expiration < Time.current %>
+  <% if not user.internet_access? %>
     <%= svg_icon_tag 'cross' %>
     No Internet
   <% elsif user.internet_expiration < Time.current + 7.days %>

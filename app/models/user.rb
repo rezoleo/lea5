@@ -63,6 +63,10 @@ class User < ApplicationRecord
     [current_subscription&.end_at, current_free_access&.end_at].compact.max
   end
 
+  def internet_access?
+    internet_expiration.present? && internet_expiration > Time.current
+  end
+
   # @param [Integer] duration subscription duration in months
   # @return [Subscription] the newly created subscription
   def extend_subscription(duration:)

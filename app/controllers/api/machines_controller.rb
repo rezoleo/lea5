@@ -9,18 +9,12 @@ module Api
       @machines = Machine.accessible_by(current_ability)
       return if params[:has_connection].blank?
 
-      @machines = @machines.includes(user: [:subscriptions, :free_accesses]).select do |machine|
-        machine unless machine.user.internet_expiration.nil? || machine.user.internet_expiration < Time.current
+      @machines = @machines.includes(user: [:valid_subscriptions_by_date, :free_accesses_by_date]).select do |machine|
+        machine if machine.user.internet_access?
       end
     end
 
     def show
-      return if params[:has_connection].blank?
-
-      if @machine.user.internet_expiration.nil? || @machine.user.internet_expiration < Time.current
-        render json: { error: 'User internet access invalid' },
-               status: :forbidden
-      end
       authorize! :show, @machine
     end
 
