@@ -7,3 +7,18 @@ month:
 year:
   duration: 12
   price: 5000
+
+2_months:
+  duration: 2
+  price: 1600
+  deleted_at: 2025-01-01 00:00:00
+
+month_old:
+  duration: 1
+  price: 800
+  deleted_at: 2025-01-01 00:00:00
+
+year_old:
+  duration: 12
+  price: 8000
+  deleted_at: 2025-01-01 00:00:00

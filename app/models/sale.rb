@@ -107,7 +107,7 @@ class Sale < ApplicationRecord
     def generate_sales_subscription_offers(duration)
       return [] if duration <= 0
 
-      subscription_offers = SubscriptionOffer.order(duration: :desc)
+      subscription_offers = SubscriptionOffer.sellable.order(duration: :desc)
       sales_subscription_offers = []
       subscription_offers.each do |offer|
         break if duration == 0

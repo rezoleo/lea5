@@ -26,6 +26,14 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'form'
   end
 
+  test 'should only list sellable articles' do
+    get new_user_sale_path(user_id: @user.id)
+    assert_response :success
+    assert_template 'sales/new'
+    assert_select 'form'
+    assert_dom 'template select option', Article.sellable.count + 1 # to account for "Select an article"
+  end
+
   test 'should create sale and redirect if sale is valid' do
     assert_difference 'Sale.count', 1 do
       post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
