@@ -46,6 +46,8 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'cancancan', '~> 3.6'
 
+gem 'view_component', '~> 3.4'
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
@@ -61,6 +63,10 @@ group :development, :test do
 end
 
 group :development do
+  gem 'actioncable'
+  gem 'listen'
+  gem 'lookbook', '~> 2.3.13'
+
   gem 'overcommit', '~> 0.68'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
