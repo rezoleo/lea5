@@ -50,7 +50,7 @@ module ActiveSupport
     def setup
       super
       # Reset OmniAuth mocks to a clean state, to keep each test independent
-      OmniAuth.config.mock_auth[:keycloak] = nil
+      OmniAuth.config.mock_auth[:oidc] = nil
       OmniAuth.config.mock_auth[:developer] = nil
     end
 
@@ -65,10 +65,10 @@ module ActiveSupport
     # @param [Array<String>] groups
     def setup_auth_conf_for(user, groups)
       OmniAuth.config.add_mock(
-        :keycloak,
+        :oidc,
         {
-          provider: 'keycloak',
-          uid: user.keycloak_id,
+          provider: 'oidc',
+          uid: user.oidc_id,
           info: {
             first_name: user.firstname,
             last_name: user.lastname,

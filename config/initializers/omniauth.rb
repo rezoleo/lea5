@@ -11,10 +11,10 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   # https://github.com/omniauth/omniauth_openid_connect/pull/128#issuecomment-1307489483
   # https://oauth.net/2/pkce/
   provider :openid_connect, {
-    name: :keycloak,
+    name: :oidc,
     scope: [:openid, :email, :profile, :room, :roles],
     response_type: :code,
-    issuer: 'https://auth.rezoleo.fr/realms/rezoleo',
+    issuer: 'https://sso.rezoleo.fr',
     discovery: true,
     pkce: true,
     client_options: oidc_client_options
@@ -25,14 +25,12 @@ def oidc_client_options
   if Rails.env.production?
     {
       identifier: Rails.application.credentials.sso_id!,
-      secret: Rails.application.credentials.sso_secret!,
-      redirect_uri: "https://lea5.rezoleo.fr/#{AUTH_CALLBACK_PATH}"
+      redirect_uri: "https://lea5.rezoleo.fr#{AUTH_CALLBACK_PATH}"
     }
   elsif Rails.env.development?
     {
       identifier: Rails.application.credentials.sso_id!,
-      secret: Rails.application.credentials.sso_secret!,
-      redirect_uri: "http://127.0.0.1:3000/#{AUTH_CALLBACK_PATH}"
+      redirect_uri: "http://127.0.0.1:3000#{AUTH_CALLBACK_PATH}"
     }
   end
 end

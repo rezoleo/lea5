@@ -15,7 +15,6 @@ class SessionsController < ApplicationController
     ) do |u|
       u.firstname = auth_hash[:first_name]
       u.lastname = auth_hash[:last_name]
-      u.room = auth_hash[:room]
       u.username = auth_hash[:username]
     end
     user.groups = auth_hash[:groups].split(',')
