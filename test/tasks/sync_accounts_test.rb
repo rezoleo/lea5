@@ -37,19 +37,17 @@ class ZitadelStub
     profile: {
       givenName: 'Tony',
       familyName: 'Stark',
-      email: 'tony@avengers.com',
-      room: 'A200'
+      email: 'tony@avengers.com'
     }
   }.freeze
-  MOCK_ZITADEL_USER_BAD_ROOM = {
+  MOCK_ZITADEL_USER_BAD_EMAIL = {
     userId: '326906230427557669',
     state: 'USER_STATE_ACTIVE',
     username: 'peter.parker',
     profile: {
       givenName: 'Peter',
       familyName: 'Parker',
-      email: 'peterp@univ.edu',
-      room: 'BAD-ROOM'
+      email: 'peterp@univ'
     }
   }.freeze
 
@@ -60,7 +58,7 @@ class ZitadelStub
              body: { query: { offset: 0, limit: 500, asc: true } }.to_json
            )
            .to_return(status: 200,
-                      body: JSON.dump({ result: [MOCK_ZITADEL_USER_OK, MOCK_ZITADEL_USER_BAD_ROOM],
+                      body: JSON.dump({ result: [MOCK_ZITADEL_USER_OK, MOCK_ZITADEL_USER_BAD_EMAIL],
                                         details: { totalResult: 2 } }),
                       headers: { content_type: 'application/json' })
   end

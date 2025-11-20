@@ -7,7 +7,7 @@ class UserTest < ActiveSupport::TestCase
     super
     @user = users(:ironman)
     @auth_hash = { provider: 'oidc',
-                   uid: '11111111-1111-1111-1111-111111111111',
+                   uid: '111111111111111111',
                    info: { first_name: 'John',
                            last_name: 'Doe',
                            email: 'john@doe.com' },
@@ -164,12 +164,12 @@ class UserTest < ActiveSupport::TestCase
       assert_equal 'Doe', created_user.lastname
       assert_equal 'john@doe.com', created_user.email
       assert_nil created_user.room
-      assert_equal '11111111-1111-1111-1111-111111111111', created_user.oidc_id
+      assert_equal '111111111111111111', created_user.oidc_id
     end
   end
 
   test 'should return existing user from auth hash' do
-    @user.update(oidc_id: '11111111-1111-1111-1111-111111111111')
+    @user.update(oidc_id: '111111111111111111')
     @user.save
 
     assert_difference 'User.count', 0 do
@@ -179,7 +179,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should update existing user from auth hash' do
-    @user.update(oidc_id: '11111111-1111-1111-1111-111111111111')
+    @user.update(oidc_id: '111111111111111111')
     original_room = @user.room
     @user.save
 
@@ -190,7 +190,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'Doe', @user.lastname
     assert_equal 'john@doe.com', @user.email
     assert_equal original_room, @user.room
-    assert_equal '11111111-1111-1111-1111-111111111111', @user.oidc_id
+    assert_equal '111111111111111111', @user.oidc_id
   end
 
   test 'current_subscription is nil when user has no subscriptions' do

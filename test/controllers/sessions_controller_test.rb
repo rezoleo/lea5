@@ -6,7 +6,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   def setup
     super
     OmniAuth.config.add_mock(:oidc, { provider: 'oidc',
-                                      uid: '11111111-1111-1111-1111-111111111111',
+                                      uid: '111111111111111111',
                                       info: { first_name: 'John',
                                               last_name: 'Doe',
                                               email: 'john@doe.com' },
@@ -21,7 +21,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
   test 'should find user if already exists' do
     User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', room: 'F123', username: 'john-doe',
-                oidc_id: '11111111-1111-1111-1111-111111111111')
+                oidc_id: '111111111111111111')
 
     assert_difference 'User.count', 0 do
       get auth_callback_path
