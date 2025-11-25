@@ -12,7 +12,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   # https://oauth.net/2/pkce/
   provider :openid_connect, {
     name: :oidc,
-    scope: [:openid, :email, :profile, :room, :roles],
+    scope: [:openid, :email, :profile],
     response_type: :code,
     issuer: 'https://sso.rezoleo.fr',
     discovery: true,

@@ -83,7 +83,7 @@ class User < ApplicationRecord
                          lastname: auth_hash[:info][:last_name],
                          email: auth_hash[:info][:email],
                          username: auth_hash[:extra][:raw_info][:preferred_username])
-    user.groups = auth_hash[:extra][:raw_info][:groups]
+    user.groups = auth_hash[:extra][:raw_info]['roles-LEA5']
     user.save!
     user
   end

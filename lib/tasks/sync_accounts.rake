@@ -44,7 +44,7 @@ end
 def fetch_users_page(uri, access_token, offset, limit)
   req = Net::HTTP::Post.new(uri)
   req['Authorization'] = "Bearer #{access_token}"
-  req['Content-Type'] = 'application/json'
+  req.content_type = 'application/json'
   req.body = { query: { offset: offset, limit: limit, asc: true } }.to_json
 
   res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
