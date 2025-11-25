@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html lang="en" style="background-color: <%= params.dig(:lookbook, :display, :bg_color) || "white" %>">
+<head>
+  <title>Component Preview</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <%# Disable Turbo link prefetching: https://turbo.hotwired.dev/handbook/drive#prefetching-links-on-hover %>
+  <meta name="turbo-prefetch" content="false">
+
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
+
+<body style="padding: 20px">
+    <div style="
+    margin-left: auto;
+    margin-right: auto;
+    max-width: <%= params.dig(:lookbook, :display, :max_width) || "100%" %>
+  ">
+    <%= yield %> <!-- rendered preview will be injected here -->
+  </div>
+</body>
+</html>

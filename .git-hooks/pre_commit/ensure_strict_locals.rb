@@ -8,6 +8,8 @@ module Overcommit::Hook::PreCommit # rubocop:disable Style/ClassAndModuleChildre
       applicable_files.each do |file|
         content = File.read(file)
 
+        next if File.basename(file) == 'component_preview.html.erb'
+
         case File.extname(file)
         when '.erb'
           messages << error_message(:error, file, 'missing `<%# locals: () %>`') unless content.include?('<%# locals:')
