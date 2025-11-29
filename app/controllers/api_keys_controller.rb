@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Hello from demo
 class ApiKeysController < ApplicationController
   def index
     @api_keys = ApiKey.accessible_by(current_ability)
