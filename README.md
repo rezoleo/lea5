@@ -7,6 +7,7 @@
 
 - Ruby (see the version to install in [.ruby-version](.ruby-version))
 - PostgreSQL
+- Git
 
 It is recommended to use [rbenv][rbenv] to install a specific Ruby version.
 
