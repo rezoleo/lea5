@@ -15,7 +15,7 @@ class User < ApplicationRecord
   }, through: :sales_as_client, dependent: :destroy, class_name: 'Subscription', source: :subscription
 
   normalizes :email, with: ->(email) { email.strip.downcase }
-  normalizes :room, with: ->(room) { room.downcase.upcase_first }
+  normalizes :room, with: ->(room) { room&.downcase&.upcase_first }
 
   # Since the Radius MD4 hash is broken anyway (see: https://kanidm.github.io/kanidm/master/integrations/radius.html#cleartext-credential-storage)
   # we choose to store the wifi_password encrypted using Rails built-in encryption.
@@ -29,7 +29,7 @@ class User < ApplicationRecord
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
   # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
   VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
-  validates :room, presence: true, format: { with: VALID_ROOM_REGEX }, uniqueness: true
+  validates :room, format: { with: VALID_ROOM_REGEX }, uniqueness: true, allow_nil: true
   validates :wifi_password, presence: true, allow_blank: false
   validates :username, presence: true, uniqueness: true, allow_blank: false
 
@@ -43,7 +43,8 @@ class User < ApplicationRecord
   end
 
   def display_address
-    "Appartement #{room}\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    address = room.present? ? "Appartement #{room}\n" : ''
+    "#{address}Résidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
   end
 
   def current_subscription
@@ -81,15 +82,14 @@ class User < ApplicationRecord
     user.update_from_sso(firstname: auth_hash[:info][:first_name],
                          lastname: auth_hash[:info][:last_name],
                          email: auth_hash[:info][:email],
-                         room: auth_hash[:extra][:raw_info][:room],
                          username: auth_hash[:extra][:raw_info][:preferred_username])
-    user.groups = auth_hash[:extra][:raw_info][:groups]
+    user.groups = auth_hash[:extra][:raw_info]['roles-LEA5']
     user.save!
     user
   end
 
-  def update_from_sso(firstname:, lastname:, email:, room:, username:)
-    update(firstname: firstname, lastname: lastname, email: email, room: room, username: username)
+  def update_from_sso(firstname:, lastname:, email:, username:)
+    update(firstname: firstname, lastname: lastname, email: email, username: username)
   end
 
   def admin?

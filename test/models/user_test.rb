@@ -6,12 +6,12 @@ class UserTest < ActiveSupport::TestCase
   def setup
     super
     @user = users(:ironman)
-    @auth_hash = { provider: 'keycloak',
-                   uid: '11111111-1111-1111-1111-111111111111',
+    @auth_hash = { provider: 'oidc',
+                   uid: '111111111111111111',
                    info: { first_name: 'John',
                            last_name: 'Doe',
                            email: 'john@doe.com' },
-                   extra: { raw_info: { room: 'F123', preferred_username: 'john-doe' } } }
+                   extra: { raw_info: { preferred_username: 'john-doe' } } }
   end
 
   test 'user is valid' do
@@ -67,21 +67,28 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'paul.marcel@gmail.com', @user.email
   end
 
-  test "room can't be nil" do
+  test 'room can be nil' do
     @user.room = nil
-    assert_not_predicate @user, :valid?
+    assert_predicate @user, :valid?
   end
 
-  test "room can't be empty" do
-    @user.room = '    '
-    assert_not_predicate @user, :valid?
-  end
-
-  test 'room should be unique' do
+  test 'room should be unique when not nil' do
     duplicate_user = @user.dup
+    duplicate_user.email = 'different@email.com'
+    duplicate_user.username = 'different-username'
     @user.save
     duplicate_user.room.downcase!
     assert_not_predicate duplicate_user, :valid?
+  end
+
+  test 'multiple users can have nil room' do
+    @user.room = nil
+    another_user = @user.dup
+    another_user.email = 'different@email.com'
+    another_user.username = 'different-username'
+    another_user.room = nil
+    @user.save
+    assert_predicate another_user, :valid?
   end
 
   test 'room should be formatted on save' do
@@ -156,13 +163,13 @@ class UserTest < ActiveSupport::TestCase
       assert_equal 'John', created_user.firstname
       assert_equal 'Doe', created_user.lastname
       assert_equal 'john@doe.com', created_user.email
-      assert_equal 'F123', created_user.room
-      assert_equal '11111111-1111-1111-1111-111111111111', created_user.keycloak_id
+      assert_nil created_user.room
+      assert_equal '111111111111111111', created_user.oidc_id
     end
   end
 
   test 'should return existing user from auth hash' do
-    @user.update(keycloak_id: '11111111-1111-1111-1111-111111111111')
+    @user.update(oidc_id: '111111111111111111')
     @user.save
 
     assert_difference 'User.count', 0 do
@@ -172,7 +179,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should update existing user from auth hash' do
-    @user.update(keycloak_id: '11111111-1111-1111-1111-111111111111')
+    @user.update(oidc_id: '111111111111111111')
+    original_room = @user.room
     @user.save
 
     User.upsert_from_auth_hash(@auth_hash)
@@ -181,8 +189,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'John', @user.firstname
     assert_equal 'Doe', @user.lastname
     assert_equal 'john@doe.com', @user.email
-    assert_equal 'F123', @user.room
-    assert_equal '11111111-1111-1111-1111-111111111111', @user.keycloak_id
+    assert_equal original_room, @user.room
+    assert_equal '111111111111111111', @user.oidc_id
   end
 
   test 'current_subscription is nil when user has no subscriptions' do

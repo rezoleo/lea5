@@ -4,7 +4,7 @@
 API_PATH = 'api'
 
 # Path to login via SSO authentication
-AUTH_PATH = '/auth/keycloak'
+AUTH_PATH = '/auth/oidc'
 
 # Callback path from SSO authentication
 AUTH_CALLBACK_PATH = "#{AUTH_PATH}/callback".freeze
