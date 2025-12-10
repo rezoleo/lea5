@@ -17,10 +17,10 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
       client_name: users(:ironman).display_name,
       client_address: users(:ironman).display_address,
       items: [
-        { item_name: 'Article 1', price_cents: 1000, quantity: 2 },
-        { item_name: 'Article 2', price_cents: 500, quantity: 3 }
+        { item_name: 'Article 1', price: Money.new(1000, 'EUR'), quantity: 2 },
+        { item_name: 'Article 2', price: Money.new(500, 'EUR'), quantity: 3 }
       ],
-      payment_amount_cents: 2500,
+      payment_amount: Money.new(2500, 'EUR'),
       payment_date: '2024-07-21',
       payment_method: 'Carte Bancaire'
     }

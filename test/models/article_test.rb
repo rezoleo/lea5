@@ -18,20 +18,15 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test 'should not be valid without price' do
-    @article.price = nil
-    assert_not_predicate @article, :valid?
-  end
-
-  test 'price should be integer' do
-    @article.price = 10.56
+    @article.price_cents = nil
     assert_not_predicate @article, :valid?
   end
 
   test 'price should be strictly positive' do
-    @article.price = -5
+    @article.price_cents = -5
     assert_not_predicate @article, :valid?
 
-    @article.price = 0
+    @article.price_cents = 0
     assert_not_predicate @article, :valid?
   end
 

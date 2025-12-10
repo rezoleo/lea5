@@ -36,7 +36,7 @@ class Sale < ApplicationRecord
   end
 
   def total_price
-    total = 0
+    total = Money.new(0, 'EUR')
     articles_sales.each do |rec|
       total += rec.quantity * rec.article.price
     end

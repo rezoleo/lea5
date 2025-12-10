@@ -31,20 +31,15 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   end
 
   test 'should not be valid without price' do
-    @subscription_offer.price = nil
-    assert_not_predicate @subscription_offer, :valid?
-  end
-
-  test 'price should be integer' do
-    @subscription_offer.price = 10.56
+    @subscription_offer.price_cents = nil
     assert_not_predicate @subscription_offer, :valid?
   end
 
   test 'price should be strictly positive' do
-    @subscription_offer.price = -5
+    @subscription_offer.price_cents = -5
     assert_not_predicate @subscription_offer, :valid?
 
-    @subscription_offer.price = 0
+    @subscription_offer.price_cents = 0
     assert_not_predicate @subscription_offer, :valid?
   end
 

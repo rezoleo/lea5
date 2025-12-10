@@ -2,13 +2,13 @@
 
 cable:
   name: Ethernet cable (2m)
-  price: 200
+  price_cents: 200
 
 adapter:
   name: Ethernet adapter
-  price: 1500
+  price_cents: 1500
 
 deleted_article:
   name: Deleted router
-  price: 2000
+  price_cents: 2000
   deleted_at: 2025-01-26 18:15:00

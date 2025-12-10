@@ -6,11 +6,10 @@ class SubscriptionOffer < ApplicationRecord
   has_many :refunds_subscription_offers, dependent: :restrict_with_error
   has_many :refunds, through: :refunds_subscription_offers
 
+  monetize :price_cents, as: :price, allow_nil: false, numericality: { greater_than: 0 }
+
   validates :duration, presence: true, allow_blank: false,
                        numericality: { only_integer: true, greater_than: 0 }
-  validates :price, presence: true, allow_blank: false,
-                    numericality: { greater_than: 0, only_integer: true, message: 'Must be a positive
-                     number. Maximum 2 numbers after comma' }
 
   scope :sellable, -> { where(deleted_at: nil) }
 

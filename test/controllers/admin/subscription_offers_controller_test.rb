@@ -18,7 +18,7 @@ module Admin
 
     test 'should create offer' do
       assert_difference 'SubscriptionOffer.count', 1 do
-        post subscription_offers_path, params: { subscription_offer: { duration: 10, price: 1456 } }
+        post subscription_offers_path, params: { subscription_offer: { duration: 10, price: 14.56 } }
       end
       assert_redirected_to admin_path
     end
@@ -39,7 +39,7 @@ module Admin
     end
 
     test 'should hard_delete offer' do
-      offer = SubscriptionOffer.create!(duration: 1, price: 500)
+      offer = SubscriptionOffer.create!(duration: 1, price_cents: 500)
       assert_difference 'SubscriptionOffer.count', -1 do
         delete subscription_offer_path(offer)
       end

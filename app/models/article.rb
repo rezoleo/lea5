@@ -6,10 +6,9 @@ class Article < ApplicationRecord
   has_many :articles_refunds, dependent: :restrict_with_error
   has_many :refunds, through: :articles_refunds
 
+  monetize :price_cents, as: :price, allow_nil: false, numericality: { greater_than: 0 }
+
   validates :name, presence: true, allow_blank: false
-  validates :price, presence: true, allow_blank: false,
-                    numericality: { greater_than: 0, only_integer: true, message: 'Must be a positive
-                     number. Maximum 2 numbers after comma' }
 
   scope :sellable, -> { where(deleted_at: nil) }
 

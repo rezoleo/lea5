@@ -46,15 +46,15 @@ class InvoicePdfGenerator
   # - :client_address (String) - Address of the client
   # - :items (Array of Hashes) - List of items, each item being a hash with keys:
   #   - :item_name (String) - Name of the item
-  #   - :price_cents (Integer) - Price of the item in cents
+  #   - :price (Money) - Price of the item as a Money object
   #   - :quantity (Integer) - Quantity of the item
-  # - :payment_amount_cents (Integer, optional) - Amount already paid in cents
+  # - :payment_amount (Money, optional) - Amount already paid as a Money object
   # - :payment_date (String, optional) - Date of payment
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
     @input = input
     @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
-    @total_price_in_cents = input[:items].sum { it[:price_cents] * it[:quantity] }
+    @total_price = input[:items].sum { |item| to_money(item[:price]) * item[:quantity] }
     @composer = InvoiceComposer.new
     setup_document
   end
@@ -101,9 +101,15 @@ class InvoicePdfGenerator
     @composer.text(@input[:client_address], margin: margin_bottom(3))
   end
 
-  # rubocop:disable Metrics/MethodLength
   def add_items_table
-    header = lambda do |_tb|
+    data = @input[:items].each_with_index.map { |item, i| build_item_row(item, i + 1) }
+    data << build_total_row
+
+    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: items_table_header, margin: margin_bottom(2))
+  end
+
+  def items_table_header
+    lambda do |_tb|
       [
         { background_color: 'C0C0C0' },
         [
@@ -116,35 +122,32 @@ class InvoicePdfGenerator
         ]
       ]
     end
-
-    data = @input[:items].each_with_index.map do |item, i|
-      item_id = i + 1
-      item_name = item[:item_name]
-      price_in_cents = item[:price_cents]
-      quantity = item[:quantity]
-
-      [
-        item_id.to_s,
-        item_name,
-        table(format_cents(price_in_cents), text_align: :right),
-        table(quantity.to_s, text_align: :right),
-        table('0%', text_align: :right),
-        table(format_cents(price_in_cents * quantity), text_align: :right)
-      ]
-    end
-
-    data << [
-      { content: 'Total', col_span: 5 },
-      table(format_cents(@total_price_in_cents), text_align: :right)
-    ]
-
-    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: header, margin: margin_bottom(2))
   end
-  # rubocop:enable Metrics/MethodLength
+
+  def build_item_row(item, item_id)
+    price = to_money(item[:price])
+    quantity = item[:quantity]
+
+    [
+      item_id.to_s,
+      item[:item_name],
+      table(format_money(price), text_align: :right),
+      table(quantity.to_s, text_align: :right),
+      table('0%', text_align: :right),
+      table(format_money(price * quantity), text_align: :right)
+    ]
+  end
+
+  def build_total_row
+    [
+      { content: 'Total', col_span: 5 },
+      table(format_money(@total_price), text_align: :right)
+    ]
+  end
 
   def add_totals
-    ht_s = "Somme totale hors taxes (en euros, HT) : #{format_cents(@total_price_in_cents)}"
-    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{format_cents(@total_price_in_cents)}"
+    ht_s = "Somme totale hors taxes (en euros, HT) : #{format_money(@total_price)}"
+    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{format_money(@total_price)}"
 
     @composer.text(ht_s)
     @composer.text(ttc_s, margin: margin_bottom(1))
@@ -162,14 +165,14 @@ class InvoicePdfGenerator
        ]]
     end
 
-    payed_in_cents = @input[:payment_amount_cents] || 0
-    left_to_pay_in_cents = @total_price_in_cents - payed_in_cents
+    payment_amount = to_money(@input[:payment_amount] || Money.new(0, 'EUR'))
+    left_to_pay = @total_price - payment_amount
 
     data = [[
       table(@input[:payment_date] || '', style: :small),
       table(@input[:payment_method] || '', style: :small),
-      table(format_cents(payed_in_cents), style: :small, text_align: :right),
-      table(format_cents(left_to_pay_in_cents), style: :small, text_align: :right)
+      table(format_money(payment_amount), style: :small, text_align: :right),
+      table(format_money(left_to_pay), style: :small, text_align: :right)
     ]]
 
     @composer.table(data, column_widths: [-3, -5, -2, -2], header: header, width: 300)
@@ -179,8 +182,15 @@ class InvoicePdfGenerator
     [0, 0, lines * BASE_FONT_SIZE]
   end
 
-  def format_cents(cents)
-    "#{format('%.2f', cents.to_f / 100)}€"
+  def to_money(value)
+    return value if value.is_a?(Money)
+    return Money.new(value['cents'], value['currency_iso']) if value.is_a?(Hash)
+
+    value
+  end
+
+  def format_money(money)
+    money.format(format: '%n%u')
   end
 
   def table(text, style: :base, text_align: :left)

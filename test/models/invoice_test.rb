@@ -27,7 +27,7 @@ class InvoiceTest < ActiveSupport::TestCase
       issue_date: Time.zone.today,
       client_name: @sale.client.display_name,
       client_address: @sale.client.display_address,
-      payment_amount_cent: @sale.verified_at.nil? ? 0 : @sale.total_price,
+      payment_amount: @sale.verified_at.nil? ? Money.new(0, 'EUR') : @sale.total_price,
       payment_method: @sale.payment_method.name,
       payment_date: @sale.verified_at,
       items: Invoice.send(:sales_items_to_h, @sale)

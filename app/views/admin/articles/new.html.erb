@@ -11,8 +11,8 @@
     <%= f.text_field :name, required: true %>
   </div>
   <div>
-    <%= f.label :price %>
-    <%= f.number_field :price, min: 0, step: 0.01, required: true %>
+    <%= f.label :price, "Price (€)" %>
+    <%= f.number_field :price, min: 0, step: 0.01, required: true, placeholder: "0.00" %>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>

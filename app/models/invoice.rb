@@ -44,7 +44,7 @@ class Invoice < ApplicationRecord
         issue_date: Time.zone.today,
         client_name: sale.client.display_name,
         client_address: sale.client.display_address,
-        payment_amount_cent: sale.verified_at.nil? ? 0 : sale.total_price,
+        payment_amount: sale.verified_at.nil? ? Money.new(0, 'EUR') : sale.total_price,
         payment_method: sale.payment_method&.name,
         payment_date: sale.verified_at,
         items: sales_items_to_h(sale)
@@ -58,24 +58,24 @@ class Invoice < ApplicationRecord
     end
 
     # @param [Sale] sale
-    # @return [Array<Hash{Symbol=>String, Integer}>]
+    # @return [Array<Hash{Symbol=>String, Money}>]
     def sale_articles_to_h(sale)
       sale.articles_sales.map do |e|
         {
           item_name: e.article.name,
-          price_cents: e.article.price,
+          price: e.article.price,
           quantity: e.quantity
         }
       end
     end
 
     # @param [Sale] sale
-    # @return [Array<Hash{Symbol=>String, Integer}>]
+    # @return [Array<Hash{Symbol=>String, Money}>]
     def sale_subscription_offers_to_h(sale)
       sale.sales_subscription_offers.map do |e|
         {
           item_name: "Abonnement - #{e.subscription_offer.duration} mois",
-          price_cents: e.subscription_offer.price,
+          price: e.subscription_offer.price,
           quantity: e.quantity
         }
       end

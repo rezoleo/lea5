@@ -2,7 +2,7 @@
 
 <div class="subscription_offer">
   <span><%= pluralize(subscription_offer.duration, 'month') %></span>
-  <span><%= number_to_currency(subscription_offer.price.to_f / 100, locale: :fr) %></span>
+  <span><%= humanized_money_with_symbol(subscription_offer.price) %></span>
   <% if can?(:destroy, subscription_offer) %>
     <%= button_to(subscription_offer, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this subscription offer') do %>
       <%= svg_icon_tag 'icon_delete' %>

@@ -20,7 +20,7 @@ module Admin
 
     test 'non-admin user should not create a new article' do
       assert_raises CanCan::AccessDenied do
-        post articles_path params: { article: { name: 'New Article', price: 500 } }
+        post articles_path params: { article: { name: 'New Article', price: 5.00 } }
       end
     end
 

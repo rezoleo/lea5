@@ -5,7 +5,7 @@
   <%= form.collection_select :article_id,
                              articles, # collection
                              :id, # prop/method to call for the select ID
-                             ->(article) { "#{article.name} (#{number_to_currency(article.price.to_f / 100, locale: :fr)})"}, # prop/method to call for the select value
+                             ->(article) { "#{article.name} (#{humanized_money_with_symbol(article.price)})"}, # prop/method to call for the select value
                              { prompt: 'Select an article', required: true },
                              { data: { action: "sales#updatePrice" } }
   %>
