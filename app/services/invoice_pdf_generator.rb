@@ -165,7 +165,7 @@ class InvoicePdfGenerator
        ]]
     end
 
-    payment_amount = to_money(@input[:payment_amount] || Money.new(0, 'EUR'))
+    payment_amount = to_money(@input[:payment_amount] || Money.new(0, Money.default_currency))
     left_to_pay = @total_price - payment_amount
 
     data = [[
