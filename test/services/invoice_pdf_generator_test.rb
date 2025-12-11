@@ -96,6 +96,16 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_equal Time.current.utc, metadata[:CreationDate]
   end
 
+  test 'to_money should correctly parse Hash to Money' do
+    result = @generator.send(:to_money, { 'cents' => 1234, 'currency_iso' => 'EUR' })
+    assert_equal Money.new(1234, 'EUR'), result
+  end
+
+  test 'to_money should return value as-is when neither Money nor Hash' do
+    result = @generator.send(:to_money, 'some_string')
+    assert_equal 'some_string', result
+  end
+
   class CollectTextProcessor < HexaPDF::Content::Processor
     def initialize(page, content)
       super()

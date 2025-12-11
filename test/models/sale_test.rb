@@ -131,4 +131,9 @@ class SaleTest < ActiveSupport::TestCase
     assert_predicate sale, :invalid?
     assert sale.errors.added? :base, 'Cannot create an empty sale, add at least an article or a subscription'
   end
+
+  test 'total_price should calculate total from articles and subscription offers' do
+    expected_total = Money.new(3200, Money.default_currency)
+    assert_equal expected_total, @sale.total_price
+  end
 end
