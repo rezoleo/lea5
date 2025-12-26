@@ -5,8 +5,6 @@ class Invoice < ApplicationRecord
   has_one :sale, dependent: :restrict_with_exception
   has_one_attached :pdf
 
-  before_create :create_invoice
-
   # @return [User]
   def user
     sale.client
@@ -16,20 +14,29 @@ class Invoice < ApplicationRecord
   # @return [Invoice]
   def self.build_from_sale(sale)
     generation_json = generate_hash(sale)
-    invoice_id = Setting.next_invoice_id!
-    generation_json[:invoice_id] = invoice_id
 
     new do |invoice|
       invoice.generation_json = generation_json
-      invoice.id = invoice_id
     end
   end
 
-  private
+  # @return [Integer] the assigned invoice_id
+  def assign_invoice_id!
+    raise 'Invoice must be persisted before assigning invoice_id' unless persisted?
 
-  def create_invoice
-    pdf_stream = InvoicePdfGenerator.new(generation_json.deep_symbolize_keys).generate_pdf
-    pdf.attach(io: pdf_stream, filename: id, content_type: 'application/pdf')
+    new_invoice_id = Setting.next_invoice_id!
+    self.invoice_id = new_invoice_id
+    save!
+    new_invoice_id
+  end
+
+  def generate_pdf!
+    raise 'Invoice must have an invoice_id before generating PDF' if invoice_id.nil?
+    return if pdf.attached?
+
+    pdf_data = generation_json.deep_symbolize_keys.merge(invoice_id: invoice_id)
+    pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
+    pdf.attach(io: pdf_stream, filename: invoice_id.to_s, content_type: 'application/pdf')
   end
 
   class << self

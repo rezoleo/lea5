@@ -16,7 +16,7 @@ class SalesController < ApplicationController
     @sale = @owner.sales_as_client.build_with_invoice(sales_params, seller: current_user)
 
     authorize! :create, @sale
-    if @sale.save
+    if @sale.save_with_invoice
       flash[:success] = 'Sale was successfully created.'
       redirect_to @owner
     else

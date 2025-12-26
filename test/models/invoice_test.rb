@@ -22,7 +22,6 @@ class InvoiceTest < ActiveSupport::TestCase
     invoice = Invoice.build_from_sale(@sale)
 
     expected_hash = {
-      invoice_id: invoice.id,
       sale_date: Time.zone.today,
       issue_date: Time.zone.today,
       client_name: @sale.client.display_name,
@@ -40,18 +39,22 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal expected, invoice.generation_json
   end
 
-  test 'should generate json and id from sale' do
+  test 'should generate json from sale without invoice_id' do
     invoice = Invoice.build_from_sale(@sale)
 
     assert_not_nil invoice.generation_json
-    assert_not_nil invoice.id
+    assert_nil invoice.invoice_id
   end
 
-  test 'should create invoice with pdf' do
+  test 'should assign invoice_id and create invoice with pdf' do
     invoice = Invoice.build_from_sale(@sale)
+    invoice.save!
+    invoice.assign_invoice_id!
+
+    assert_not_nil invoice.invoice_id
 
     assert_difference('ActiveStorage::Attachment.count', 1) do
-      invoice.save!
+      invoice.generate_pdf!
     end
 
     assert_predicate invoice.pdf, :attached?
