@@ -92,3 +92,9 @@ group :test do
   gem 'simplecov-cobertura', '~> 3.0', require: false
   gem 'webmock', '~> 3.23'
 end
+
+gem 'chartkick', '~> 5.2'
+
+gem 'groupdate', '~> 6.7'
+
+gem 'csv', '~> 3.3'
