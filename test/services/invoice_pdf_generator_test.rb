@@ -97,7 +97,7 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
   end
 
   test 'to_money should correctly parse Hash to Money' do
-    result = @generator.send(:to_money, { 'cents' => 1234, 'currency_iso' => 'EUR' })
+    result = @generator.send(:to_money, { cents: 1234, currency_iso: 'EUR' })
     assert_equal Money.new(1234, 'EUR'), result
   end
 

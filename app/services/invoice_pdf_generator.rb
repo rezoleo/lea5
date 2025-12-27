@@ -184,7 +184,7 @@ class InvoicePdfGenerator
 
   def to_money(value)
     return value if value.is_a?(Money)
-    return Money.new(value['cents'], value['currency_iso']) if value.is_a?(Hash)
+    return Money.new(value[:cents], value[:currency_iso]) if value.is_a?(Hash)
 
     value
   end
