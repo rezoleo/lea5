@@ -6,7 +6,7 @@ class SubscriptionOffer < ApplicationRecord
   has_many :refunds_subscription_offers, dependent: :restrict_with_error
   has_many :refunds, through: :refunds_subscription_offers
 
-  monetize :price_cents, as: :price, allow_nil: false, numericality: { greater_than: 0 }
+  monetize :price_cents, numericality: { greater_than: 0 }
 
   validates :duration, presence: true, allow_blank: false,
                        numericality: { only_integer: true, greater_than: 0 }

@@ -68,20 +68,20 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_includes pdf_text, 'Article 2'
     assert_includes pdf_text, '2'
     assert_includes pdf_text, '3'
-    assert_includes pdf_text, '10.00€'
-    assert_includes pdf_text, '5.00€'
+    assert_includes pdf_text, '10,00 €'
+    assert_includes pdf_text, '5,00 €'
   end
 
   test 'generate_pdf should include total' do
     pdf = @generator.generate_pdf
     pdf_text = extract_text_from_pdf(pdf)
-    assert_includes pdf_text, '35.00€'
+    assert_includes pdf_text, '35,00 €'
   end
 
   test 'generate_pdf should include payment information' do
     pdf = @generator.generate_pdf
     pdf_text = extract_text_from_pdf(pdf)
-    assert_includes pdf_text, '25.00€'
+    assert_includes pdf_text, '25,00 €'
     assert_includes pdf_text, '2024-07-21'
     assert_includes pdf_text, 'Carte Bancaire'
   end
@@ -94,16 +94,6 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_equal 'Association Rézoléo', metadata[:Author]
     assert_equal "Facture #{@id}", metadata[:Subject]
     assert_equal Time.current.utc, metadata[:CreationDate]
-  end
-
-  test 'to_money should correctly parse Hash to Money' do
-    result = @generator.send(:to_money, { cents: 1234, currency_iso: 'EUR' })
-    assert_equal Money.new(1234, 'EUR'), result
-  end
-
-  test 'to_money should return value as-is when neither Money nor Hash' do
-    result = @generator.send(:to_money, 'some_string')
-    assert_equal 'some_string', result
   end
 
   class CollectTextProcessor < HexaPDF::Content::Processor

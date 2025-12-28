@@ -18,8 +18,9 @@ module Admin
 
     test 'should create article' do
       assert_difference 'Article.unscoped.count', 1 do
-        post articles_path, params: { article: { name: 'test_name', price: 14.56 } }
+        post articles_path, params: { article: { name: 'test_name', price: '14.56' } }
       end
+      assert_equal 1456, Article.unscoped.last.price_cents
       assert_redirected_to admin_path
     end
 

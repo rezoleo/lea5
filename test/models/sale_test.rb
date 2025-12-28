@@ -133,7 +133,7 @@ class SaleTest < ActiveSupport::TestCase
   end
 
   test 'total_price should calculate total from articles and subscription offers' do
-    expected_total = Money.new(3200, Money.default_currency)
+    expected_total = Money.new(3200, :eur)
     assert_equal expected_total, @sale.total_price
   end
 end

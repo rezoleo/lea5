@@ -46,15 +46,15 @@ class InvoicePdfGenerator
   # - :client_address (String) - Address of the client
   # - :items (Array of Hashes) - List of items, each item being a hash with keys:
   #   - :item_name (String) - Name of the item
-  #   - :price (Money) - Price of the item as a Money object
+  #   - :price (Money|Hash) - Price of the item as a Money object or its hash representation
   #   - :quantity (Integer) - Quantity of the item
-  # - :payment_amount (Money, optional) - Amount already paid as a Money object
+  # - :payment_amount (Money|Hash, optional) - Amount already paid as a Money object or its hash representation
   # - :payment_date (String, optional) - Date of payment
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
-    @input = input
-    @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
-    @total_price = input[:items].sum { |item| to_money(item[:price]) * item[:quantity] }
+    @input = normalize_input(input)
+    @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: @input[:invoice_id])
+    @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
     @composer = InvoiceComposer.new
     setup_document
   end
@@ -105,49 +105,48 @@ class InvoicePdfGenerator
     data = @input[:items].each_with_index.map { |item, i| build_item_row(item, i + 1) }
     data << build_total_row
 
-    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: items_table_header, margin: margin_bottom(2))
+    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: method(:items_table_header),
+                          margin: margin_bottom(2))
   end
 
-  def items_table_header
-    lambda do |_tb|
+  def items_table_header(_table)
+    [
+      { background_color: 'C0C0C0' },
       [
-        { background_color: 'C0C0C0' },
-        [
-          table('ID', style: :small),
-          table('Désignation article', style: :small),
-          table('Prix unit. HT', style: :small, text_align: :right),
-          table('Quantité', style: :small, text_align: :right),
-          table('TVA (1)', style: :small, text_align: :right),
-          table('Total TTC', style: :small, text_align: :right)
-        ]
+        table('ID', style: :small),
+        table('Désignation article', style: :small),
+        table('Prix unit. HT', style: :small, text_align: :right),
+        table('Quantité', style: :small, text_align: :right),
+        table('TVA (1)', style: :small, text_align: :right),
+        table('Total TTC', style: :small, text_align: :right)
       ]
-    end
+    ]
   end
 
   def build_item_row(item, item_id)
-    price = to_money(item[:price])
+    price = item[:price]
     quantity = item[:quantity]
 
     [
       item_id.to_s,
       item[:item_name],
-      table(format_money(price), text_align: :right),
+      table(price.format, text_align: :right),
       table(quantity.to_s, text_align: :right),
       table('0%', text_align: :right),
-      table(format_money(price * quantity), text_align: :right)
+      table((price * quantity).format, text_align: :right)
     ]
   end
 
   def build_total_row
     [
       { content: 'Total', col_span: 5 },
-      table(format_money(@total_price), text_align: :right)
+      table(@total_price.format, text_align: :right)
     ]
   end
 
   def add_totals
-    ht_s = "Somme totale hors taxes (en euros, HT) : #{format_money(@total_price)}"
-    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{format_money(@total_price)}"
+    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_price.format}"
+    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_price.format}"
 
     @composer.text(ht_s)
     @composer.text(ttc_s, margin: margin_bottom(1))
@@ -165,14 +164,14 @@ class InvoicePdfGenerator
        ]]
     end
 
-    payment_amount = to_money(@input[:payment_amount] || Money.new(0, Money.default_currency))
+    payment_amount = @input[:payment_amount]
     left_to_pay = @total_price - payment_amount
 
     data = [[
       table(@input[:payment_date] || '', style: :small),
       table(@input[:payment_method] || '', style: :small),
-      table(format_money(payment_amount), style: :small, text_align: :right),
-      table(format_money(left_to_pay), style: :small, text_align: :right)
+      table(payment_amount.format, style: :small, text_align: :right),
+      table(left_to_pay.format, style: :small, text_align: :right)
     ]]
 
     @composer.table(data, column_widths: [-3, -5, -2, -2], header: header, width: 300)
@@ -183,14 +182,24 @@ class InvoicePdfGenerator
   end
 
   def to_money(value)
-    return value if value.is_a?(Money)
-    return Money.new(value[:cents], value[:currency_iso]) if value.is_a?(Hash)
+    return Money.from_cents(value[:cents], value[:currency_iso]) if value.is_a?(Hash)
 
     value
   end
 
-  def format_money(money)
-    money.format(format: '%n%u')
+  def normalize_input(input)
+    {
+      **input,
+      items: input[:items].map { |item| normalize_item(item) },
+      payment_amount: to_money(input[:payment_amount]) || Money.new(0)
+    }
+  end
+
+  def normalize_item(item)
+    {
+      **item,
+      price: to_money(item[:price])
+    }
   end
 
   def table(text, style: :base, text_align: :left)

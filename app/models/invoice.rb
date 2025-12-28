@@ -44,7 +44,7 @@ class Invoice < ApplicationRecord
         issue_date: Time.zone.today,
         client_name: sale.client.display_name,
         client_address: sale.client.display_address,
-        payment_amount: sale.verified_at.nil? ? Money.new(0, Money.default_currency) : sale.total_price,
+        payment_amount: sale.verified_at.nil? ? Money.new(0) : sale.total_price,
         payment_method: sale.payment_method&.name,
         payment_date: sale.verified_at,
         items: sales_items_to_h(sale)

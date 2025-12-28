@@ -53,7 +53,7 @@ gem 'cancancan', '~> 3.6'
 gem 'hexapdf', '~> 1.4.0'
 
 # Money management [https://github.com/RubyMoney/money-rails]
-gem 'money-rails', '~> 1.15'
+gem 'money-rails', '~> 2.0.0'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
