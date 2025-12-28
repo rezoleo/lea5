@@ -46,15 +46,15 @@ class InvoicePdfGenerator
   # - :client_address (String) - Address of the client
   # - :items (Array of Hashes) - List of items, each item being a hash with keys:
   #   - :item_name (String) - Name of the item
-  #   - :price_cents (Integer) - Price of the item in cents
+  #   - :price (Money|Hash) - Price of the item as a Money object or its hash representation
   #   - :quantity (Integer) - Quantity of the item
-  # - :payment_amount_cents (Integer, optional) - Amount already paid in cents
+  # - :payment_amount (Money|Hash, optional) - Amount already paid as a Money object or its hash representation
   # - :payment_date (String, optional) - Date of payment
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
-    @input = input
-    @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: input[:invoice_id])
-    @total_price_in_cents = input[:items].sum { it[:price_cents] * it[:quantity] }
+    @input = normalize_input(input)
+    @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: @input[:invoice_id])
+    @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
     @composer = InvoiceComposer.new
     setup_document
   end
@@ -101,50 +101,52 @@ class InvoicePdfGenerator
     @composer.text(@input[:client_address], margin: margin_bottom(3))
   end
 
-  # rubocop:disable Metrics/MethodLength
   def add_items_table
-    header = lambda do |_tb|
-      [
-        { background_color: 'C0C0C0' },
-        [
-          table('ID', style: :small),
-          table('Désignation article', style: :small),
-          table('Prix unit. HT', style: :small, text_align: :right),
-          table('Quantité', style: :small, text_align: :right),
-          table('TVA (1)', style: :small, text_align: :right),
-          table('Total TTC', style: :small, text_align: :right)
-        ]
-      ]
-    end
+    data = @input[:items].each_with_index.map { |item, i| build_item_row(item, i + 1) }
+    data << build_total_row
 
-    data = @input[:items].each_with_index.map do |item, i|
-      item_id = i + 1
-      item_name = item[:item_name]
-      price_in_cents = item[:price_cents]
-      quantity = item[:quantity]
-
-      [
-        item_id.to_s,
-        item_name,
-        table(format_cents(price_in_cents), text_align: :right),
-        table(quantity.to_s, text_align: :right),
-        table('0%', text_align: :right),
-        table(format_cents(price_in_cents * quantity), text_align: :right)
-      ]
-    end
-
-    data << [
-      { content: 'Total', col_span: 5 },
-      table(format_cents(@total_price_in_cents), text_align: :right)
-    ]
-
-    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: header, margin: margin_bottom(2))
+    @composer.table(data, column_widths: [-1, -9, -3, -2, -2, -3], header: method(:items_table_header),
+                          margin: margin_bottom(2))
   end
-  # rubocop:enable Metrics/MethodLength
+
+  def items_table_header(_table)
+    [
+      { background_color: 'C0C0C0' },
+      [
+        table('ID', style: :small),
+        table('Désignation article', style: :small),
+        table('Prix unit. HT', style: :small, text_align: :right),
+        table('Quantité', style: :small, text_align: :right),
+        table('TVA (1)', style: :small, text_align: :right),
+        table('Total TTC', style: :small, text_align: :right)
+      ]
+    ]
+  end
+
+  def build_item_row(item, item_id)
+    price = item[:price]
+    quantity = item[:quantity]
+
+    [
+      item_id.to_s,
+      item[:item_name],
+      table(price.format, text_align: :right),
+      table(quantity.to_s, text_align: :right),
+      table('0%', text_align: :right),
+      table((price * quantity).format, text_align: :right)
+    ]
+  end
+
+  def build_total_row
+    [
+      { content: 'Total', col_span: 5 },
+      table(@total_price.format, text_align: :right)
+    ]
+  end
 
   def add_totals
-    ht_s = "Somme totale hors taxes (en euros, HT) : #{format_cents(@total_price_in_cents)}"
-    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{format_cents(@total_price_in_cents)}"
+    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_price.format}"
+    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_price.format}"
 
     @composer.text(ht_s)
     @composer.text(ttc_s, margin: margin_bottom(1))
@@ -162,14 +164,14 @@ class InvoicePdfGenerator
        ]]
     end
 
-    payed_in_cents = @input[:payment_amount_cents] || 0
-    left_to_pay_in_cents = @total_price_in_cents - payed_in_cents
+    payment_amount = @input[:payment_amount]
+    left_to_pay = @total_price - payment_amount
 
     data = [[
       table(@input[:payment_date] || '', style: :small),
       table(@input[:payment_method] || '', style: :small),
-      table(format_cents(payed_in_cents), style: :small, text_align: :right),
-      table(format_cents(left_to_pay_in_cents), style: :small, text_align: :right)
+      table(payment_amount.format, style: :small, text_align: :right),
+      table(left_to_pay.format, style: :small, text_align: :right)
     ]]
 
     @composer.table(data, column_widths: [-3, -5, -2, -2], header: header, width: 300)
@@ -179,8 +181,25 @@ class InvoicePdfGenerator
     [0, 0, lines * BASE_FONT_SIZE]
   end
 
-  def format_cents(cents)
-    "#{format('%.2f', cents.to_f / 100)}€"
+  def to_money(value)
+    return Money.from_cents(value[:cents], value[:currency_iso]) if value.is_a?(Hash)
+
+    value
+  end
+
+  def normalize_input(input)
+    {
+      **input,
+      items: input[:items].map { |item| normalize_item(item) },
+      payment_amount: to_money(input[:payment_amount]) || Money.new(0)
+    }
+  end
+
+  def normalize_item(item)
+    {
+      **item,
+      price: to_money(item[:price])
+    }
   end
 
   def table(text, style: :base, text_align: :left)

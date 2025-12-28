@@ -19,4 +19,9 @@ class RefundTest < ActiveSupport::TestCase
       @refund.destroy
     end
   end
+
+  test 'total_price should calculate refund total from articles and subscription offers' do
+    expected_total = Money.new(2200, :eur)
+    assert_equal expected_total, @refund.total_price
+  end
 end

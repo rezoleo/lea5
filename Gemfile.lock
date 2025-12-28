@@ -202,6 +202,16 @@ GEM
       builder
       minitest (>= 5.0)
       ruby-progressbar
+    monetize (2.0.0)
+      money (~> 7.0)
+    money (7.0.2)
+      bigdecimal
+      i18n (~> 1.9)
+    money-rails (2.0.0)
+      activesupport (>= 6.1)
+      monetize (~> 2.0)
+      money (~> 7.0)
+      railties (>= 6.1)
     msgpack (1.8.0)
     nenv (0.3.0)
     net-http (0.6.0)
@@ -459,6 +469,7 @@ DEPENDENCIES
   jbuilder (~> 2.13)
   minitest (~> 5.25)
   minitest-reporters (~> 1.7)
+  money-rails (~> 2.0.0)
   omniauth (~> 2.1)
   omniauth-rails_csrf_protection (~> 1.0)
   omniauth_openid_connect (~> 0.8.0)
@@ -560,6 +571,9 @@ CHECKSUMS
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   minitest (5.25.5) sha256=391b6c6cb43a4802bfb7c93af1ebe2ac66a210293f4a3fb7db36f2fc7dc2c756
   minitest-reporters (1.7.1) sha256=5060413a0c95b8c32fe73e0606f3631c173a884d7900e50013e15094eb50562c
+  monetize (2.0.0) sha256=152980cadff9fd11a95817d56e3d7d69b07998c4506f15d971edf05851f82aba
+  money (7.0.2) sha256=615c27c1fd1d190dceda5c5f4dd5af5f4d20f790ff3b62ea2fe2d96eb22e2c60
+  money-rails (2.0.0) sha256=104cad53ae3e9b959705e4f898c0b3e91792908c95e619e568ecd49d1a8a41d8
   msgpack (1.8.0) sha256=e64ce0212000d016809f5048b48eb3a65ffb169db22238fb4b72472fecb2d732
   nenv (0.3.0) sha256=d9de6d8fb7072228463bf61843159419c969edb34b3cef51832b516ae7972765
   net-http (0.6.0) sha256=9621b20c137898af9d890556848c93603716cab516dc2c89b01a38b894e259fb

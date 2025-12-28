@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_11_18_222525) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_10_123732) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,7 +52,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_18_222525) do
 
   create_table "articles", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "price", null: false
+    t.integer "price_cents", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -172,7 +172,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_18_222525) do
 
   create_table "subscription_offers", force: :cascade do |t|
     t.integer "duration", null: false
-    t.integer "price", null: false
+    t.integer "price_cents", null: false
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

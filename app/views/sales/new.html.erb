@@ -13,8 +13,8 @@
       class: 'form',
       data: {
         controller: 'sales',
-        sales_articles_value: @articles.reduce({}) { |acc, curr| acc[curr[:id]] = curr[:price]; acc },
-        sales_subscriptions_value: @subscription_offers.map { |s| s.slice(:id, :duration, :price) }
+        sales_articles_value: @articles.reduce({}) { |acc, curr| acc[curr[:id]] = curr.price.cents; acc },
+        sales_subscriptions_value: @subscription_offers.map { |s| { id: s.id, duration: s.duration, price: s.price.cents } }
       }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
 

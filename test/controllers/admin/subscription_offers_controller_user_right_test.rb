@@ -20,7 +20,7 @@ module Admin
 
     test 'non-admin user should not create a new subscription offer' do
       assert_raises CanCan::AccessDenied do
-        post subscription_offers_path params: { subscription_offer: { duration: 1, price: 500 } }
+        post subscription_offers_path params: { subscription_offer: { duration: 1, price: 5.00 } }
       end
     end
 

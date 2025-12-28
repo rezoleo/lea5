@@ -2,23 +2,23 @@
 
 month:
   duration: 1
-  price: 500
+  price_cents: 500
 
 year:
   duration: 12
-  price: 5000
+  price_cents: 5000
 
 2_months:
   duration: 2
-  price: 1600
+  price_cents: 1600
   deleted_at: 2025-01-01 00:00:00
 
 month_old:
   duration: 1
-  price: 800
+  price_cents: 800
   deleted_at: 2025-01-01 00:00:00
 
 year_old:
   duration: 12
-  price: 8000
+  price_cents: 8000
   deleted_at: 2025-01-01 00:00:00
