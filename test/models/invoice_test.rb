@@ -22,6 +22,7 @@ class InvoiceTest < ActiveSupport::TestCase
     invoice = Invoice.build_from_sale(@sale)
 
     expected_hash = {
+      version: 1,
       sale_date: Time.zone.today,
       issue_date: Time.zone.today,
       client_name: @sale.client.display_name,

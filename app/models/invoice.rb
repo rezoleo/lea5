@@ -47,6 +47,7 @@ class Invoice < ApplicationRecord
       {
         # Is it possible to use sale.created_at.to_date here?
         # The sale record has not yet been created so the value isn't populated.
+        version: 1, # invoice json version
         sale_date: Time.zone.today,
         issue_date: Time.zone.today,
         client_name: sale.client.display_name,
