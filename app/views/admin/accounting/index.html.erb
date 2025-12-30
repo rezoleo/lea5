@@ -282,7 +282,7 @@
             </tr>
             </thead>
             <tbody>
-            <% @sales_by_seller.each do |seller| %>
+            <% @sales_by_seller.first(8).each do |seller| %>
               <tr>
                 <td><%= seller[:name] %></td>
                 <td><%= number_with_delimiter(seller[:count]) %></td>
