@@ -123,15 +123,19 @@ class AccountingQuery
 
     avg_ltv = revenues.any? ? Money.new(revenues.values.sum / revenues.size) : Money.zero
 
-    top_customers = revenues
-                    .sort_by { |_client_id, total| -total }
-                    .first(10)
-                    .map do |client_id, total|
-      client = User.find(client_id)
+    top_customer_ids = revenues.sort_by { |_client_id, total| -total }.first(10).map(&:first)
+    clients = User.where(id: top_customer_ids).index_by(&:id)
+
+    transaction_counts = verified_sales
+                         .where(client_id: top_customer_ids)
+                         .group(:client_id)
+                         .count
+
+    top_customers = top_customer_ids.map do |client_id|
       {
-        name: client.display_name,
-        revenue: Money.new(total),
-        transaction_count: verified_sales.where(client_id: client_id).count
+        name: clients[client_id].display_name,
+        revenue: Money.new(revenues[client_id]),
+        transaction_count: transaction_counts[client_id] || 0
       }
     end
 
@@ -144,22 +148,25 @@ class AccountingQuery
   end
 
   def sales_by_seller
-    verified_sales
-      .joins(:seller)
-      .joins(articles_total_join)
-      .joins(subscriptions_total_join)
-      .group(:seller_id)
-      .select(
-        'sales.seller_id AS seller_id',
-        'COUNT(sales.id) AS count',
-        'SUM(COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)) AS revenue'
-      )
-      .order('revenue DESC')
-      .first(8)
-      .map do |r|
-      user = User.find(r.seller_id)
+    results = verified_sales
+              .joins(:seller)
+              .joins(articles_total_join)
+              .joins(subscriptions_total_join)
+              .group(:seller_id)
+              .select(
+                'sales.seller_id AS seller_id',
+                'COUNT(sales.id) AS count',
+                'SUM(COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)) AS revenue'
+              )
+              .order('revenue DESC')
+              .first(8)
+
+    seller_ids = results.map(&:seller_id)
+    sellers = User.where(id: seller_ids).index_by(&:id)
+
+    results.map do |r|
       {
-        name: user.display_name,
+        name: sellers[r.seller_id].display_name,
         count: r.count.to_i,
         revenue: Money.new(r.revenue)
       }
