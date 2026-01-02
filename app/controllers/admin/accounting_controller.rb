@@ -37,7 +37,9 @@ module Admin
     def recent_sales_list
       Sale.where(created_at: @start_date..@end_date)
           .where.not(verified_at: nil)
-          .includes(:client, :seller, :payment_method)
+          .includes(:client, :seller, :payment_method,
+                    :articles_sales, :sales_subscription_offers,
+                    articles: [], subscription_offers: [])
           .order(created_at: :desc)
           .limit(5)
           .map do |sale|
