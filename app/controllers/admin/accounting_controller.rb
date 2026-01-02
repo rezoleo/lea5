@@ -17,6 +17,14 @@ module Admin
       @recent_sales = recent_sales_list
     end
 
+    def export_csv
+      authorize! :manage, :all
+
+      send_data generate_csv_data,
+                filename: "rezoleo_accounting_export_#{@start_date.to_date}_#{@end_date.to_date}.csv",
+                type: 'text/csv'
+    end
+
     private
 
     def init_query
@@ -67,6 +75,45 @@ module Admin
         else
           [Time.zone.now.beginning_of_month, Time.zone.now.end_of_month]
         end
+    end
+
+    def generate_csv_data
+      CSV.generate(headers: true) do |csv|
+        csv << csv_headers
+
+        sql_query = Rails.root.join('app/queries/csv_export_query.sql').read
+        sanitized_query = ActiveRecord::Base.sanitize_sql_array([
+          sql_query,
+          { start_date: @start_date, end_date: @end_date }
+        ])
+
+        results = ActiveRecord::Base.connection.execute(sanitized_query)
+
+        results.each do |row|
+          csv << [
+            row['date'].to_datetime.strftime('%Y-%m-%d %H:%M'),
+            row['sale_id'],
+            row['client'],
+            row['seller'],
+            row['payment_method'],
+            row['item_type'],
+            row['item_name'],
+            row['quantity'],
+            format_cents(row['unit_price_cents']),
+            format_cents(row['line_total_cents']),
+            format_cents(row['sale_total_cents'])
+          ]
+        end
+      end
+    end
+
+    def csv_headers
+      ['Date', 'Sale ID', 'Client', 'Seller', 'Payment Method',
+       'Item Type', 'Item Name', 'Quantity', 'Unit Price', 'Line Total', 'Sale Total']
+    end
+
+    def format_cents(cents)
+      format('%.2f', cents.to_i / 100.0)
     end
   end
 end

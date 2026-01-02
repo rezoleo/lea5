@@ -216,7 +216,7 @@ class AccountingQuery
     period_length = @end_date - @start_date
 
     Sale
-      .where(created_at: (@start_date - period_length)..@start_date)
+      .where(created_at: (@start_date - period_length)...@start_date)
       .where.not(verified_at: nil)
       .joins(articles_total_join)
       .joins(subscriptions_total_join)
