@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-puts '🔥 Seeding heavy dataset...'
+Rails.logger.info 'Seeding heavy dataset...'
 
 NOW = Time.current
 
-CLIENT_COUNT    = 10_000
+CLIENT_COUNT    = 3_000
 SELLER_COUNT    = 30
 PAYMENT_METHODS = 4
 ARTICLES_COUNT  = 3
-SALES_COUNT     = 60_000
-
-# -------------------------------------------------
-# Helpers
-# -------------------------------------------------
+SALES_COUNT     = 10_000
 
 def random_date(range = 12.months)
   NOW - rand(range)
@@ -26,7 +22,7 @@ end
 # Users
 # -------------------------------------------------
 
-puts '👤 Creating users...'
+Rails.logger.info 'Creating users...'
 
 clients = Array.new(CLIENT_COUNT) do |i|
   {
@@ -62,7 +58,7 @@ seller_ids = User.order(:id).offset(CLIENT_COUNT).limit(SELLER_COUNT).pluck(:id)
 # Payment methods
 # -------------------------------------------------
 
-puts '💳 Creating payment methods...'
+Rails.logger.info 'Creating payment methods...'
 
 payment_methods = Array.new(PAYMENT_METHODS) do |i|
   {
@@ -80,12 +76,12 @@ payment_method_ids = PaymentMethod.pluck(:id)
 # Articles
 # -------------------------------------------------
 
-puts '📦 Creating articles...'
+Rails.logger.info 'Creating articles...'
 
 articles = Array.new(ARTICLES_COUNT) do |i|
   {
     name: "Article #{i}",
-    price_cents: rand(500..10_000),
+    price_cents: rand(100..5_000),
     created_at: NOW,
     updated_at: NOW
   }
@@ -98,16 +94,22 @@ article_ids = Article.pluck(:id)
 # Subscription offers
 # -------------------------------------------------
 
-puts '📆 Creating subscription offers...'
+Rails.logger.info 'Creating subscription offers...'
 
-subscription_offers = [1, 3, 6, 12, 18, 24].map do |months|
+subscription_offers = [
   {
-    duration: months,
-    price_cents: months * rand(800..1_500),
+    duration: 1,
+    price_cents: 500,
+    created_at: NOW,
+    updated_at: NOW
+  },
+  {
+    duration: 12,
+    price_cents: 5_000,
     created_at: NOW,
     updated_at: NOW
   }
-end
+]
 
 SubscriptionOffer.insert_all!(subscription_offers)
 subscription_offer_ids = SubscriptionOffer.pluck(:id)
@@ -121,7 +123,7 @@ def next_invoice_id
   @invoice_seq += 1
 end
 
-puts '🧾 Creating invoices...'
+Rails.logger.info 'Creating invoices...'
 
 invoices = Array.new(SALES_COUNT) do
   {
@@ -139,7 +141,7 @@ invoice_ids = Invoice.pluck(:id)
 # Sales
 # -------------------------------------------------
 
-puts '🛒 Creating sales...'
+Rails.logger.info 'Creating sales...'
 
 sales = Array.new(SALES_COUNT) do
   created_at = random_date
@@ -159,16 +161,16 @@ Sale.insert_all!(sales)
 sale_ids = Sale.pluck(:id)
 
 # -------------------------------------------------
-# Articles sales (FIXED)
+# Articles sales
 # -------------------------------------------------
 
-puts '📦 Linking articles to sales...'
+Rails.logger.info 'Linking articles to sales...'
 
 articles_sales = []
 
 sale_ids.each do |sale_id|
   article_ids
-    .sample(rand(1..ARTICLES_COUNT)) # 🔑 UNIQUES
+    .sample(rand(1..ARTICLES_COUNT))
     .each do |article_id|
     articles_sales << {
       sale_id: sale_id,
@@ -184,16 +186,16 @@ ArticlesSale.insert_all!(articles_sales)
 # Subscription sales
 # -------------------------------------------------
 
-puts '📆 Linking subscriptions to sales...'
+Rails.logger.info 'Linking subscriptions to sales...'
 
 subscriptions_sales = sale_ids.sample(SALES_COUNT / 2).map do |sale_id|
   {
     sale_id: sale_id,
     subscription_offer_id: subscription_offer_ids.sample,
-    quantity: 1
+    quantity: rand_quantity
   }
 end
 
 SalesSubscriptionOffer.insert_all!(subscriptions_sales)
 
-puts '✅ Heavy seed done!'
+Rails.logger.info 'Heavy seed done!'
