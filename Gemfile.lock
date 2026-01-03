@@ -133,8 +133,6 @@ GEM
     geom2d (0.4.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
-    groupdate (6.7.0)
-      activesupport (>= 7.1)
     guard (2.19.1)
       formatador (>= 0.2.4)
       listen (>= 2.7, < 4.0)
@@ -467,7 +465,6 @@ DEPENDENCIES
   chartkick (~> 5.2)
   csv (~> 3.3)
   debug
-  groupdate (~> 6.7)
   guard (~> 2.19)
   guard-minitest (~> 2.4)
   hexapdf (~> 1.4.0)
@@ -552,7 +549,6 @@ CHECKSUMS
   formatador (1.1.0) sha256=54e23e2af4d60bb9327c7fac62b29968e4cf28cee0111f726d0bdeadc85e06d0
   geom2d (0.4.1) sha256=ea0998ea90c4f2752e24fe13d85a4f89bee689d151316140ebcc6369bf634ed9
   globalid (1.2.1) sha256=70bf76711871f843dbba72beb8613229a49429d1866828476f9c9d6ccc327ce9
-  groupdate (6.7.0) sha256=beaa8d5bf3856814681914a1d4a20e77436a2214b85d0017dc2ea5c355fb6777
   guard (2.19.1) sha256=b8bc52694be3d8b26730280de7dcec7fe92ea1cff3414246fe96af3f23580f3d
   guard-compat (1.2.1) sha256=3ad21ab0070107f92edfd82610b5cdc2fb8e368851e72362ada9703443d646fe
   guard-minitest (2.4.6) sha256=d89e83d029447c13b191599085d24b6e2fe61e402d275e46491cd3e82f561572
