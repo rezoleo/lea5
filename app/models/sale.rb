@@ -65,6 +65,36 @@ class Sale < ApplicationRecord
     end
   end
 
+  def save_with_invoice
+    if invoice.nil?
+      valid?
+      return false
+    end
+
+    return false if invoice.invoice_id.present?
+
+    transaction do
+      return false unless invoice.valid?
+
+      invoice.save!
+
+      self.invoice_id = invoice.id
+      return false unless valid?
+
+      save!
+    end
+
+    transaction do
+      invoice.assign_invoice_id!
+    end
+
+    invoice.generate_pdf!
+    true
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base, e.message)
+    false
+  end
+
   private
 
   def not_empty_sale
