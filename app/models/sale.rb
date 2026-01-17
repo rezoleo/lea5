@@ -66,6 +66,7 @@ class Sale < ApplicationRecord
   end
 
   def save_with_invoice
+    # See https://github.com/rezoleo/lea5/issues/479
     if invoice.nil?
       valid?
       return false
@@ -73,6 +74,7 @@ class Sale < ApplicationRecord
 
     return false if invoice.invoice_id.present?
 
+    # Step 1 : Atomic save of Sale and Invoice
     transaction do
       return false unless invoice.valid?
 
@@ -84,10 +86,12 @@ class Sale < ApplicationRecord
       save!
     end
 
+    # Step 2 : Atomically increment the invoice_id
     transaction do
       invoice.assign_invoice_id!
     end
 
+    # Step 3 : Generate the PDF
     invoice.generate_pdf!
     true
   rescue ActiveRecord::RecordInvalid => e

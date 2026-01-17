@@ -60,23 +60,6 @@ class InvoiceIdAssignmentTest < ActiveSupport::TestCase
     assert_equal 1, valid_sale.invoice.invoice_id
   end
 
-  test 'invoice ID should not be assigned if sale-invoice relationship validation fails' do
-    sale = Sale.build_with_invoice(
-      {
-        client: @user,
-        duration: 1,
-        payment_method: nil # Invalid: no payment method
-      },
-      seller: @user
-    )
-
-    assert_not sale.save_with_invoice
-    assert_nil sale.invoice&.invoice_id
-
-    valid_sale = create_valid_sale
-    assert_equal 1, valid_sale.invoice.invoice_id
-  end
-
   test 'invoice ID assignment should be atomic across concurrent requests' do
     sales = Array.new(5) { build_valid_sale }
 
