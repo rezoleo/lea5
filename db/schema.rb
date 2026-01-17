@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
+ActiveRecord::Schema[7.2].define(version: 2026_01_03_170240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,4 +230,28 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   add_foreign_key "sales_subscription_offers", "sales"
   add_foreign_key "sales_subscription_offers", "subscription_offers"
   add_foreign_key "subscriptions", "sales"
+
+  create_view "sales_with_totals", sql_definition: <<-SQL
+      SELECT sales.id,
+      sales.created_at,
+      sales.updated_at,
+      sales.verified_at,
+      sales.client_id,
+      sales.seller_id,
+      sales.payment_method_id,
+      COALESCE(articles_totals.total, (0)::bigint) AS articles_total_cents,
+      COALESCE(subscriptions_totals.total, (0)::bigint) AS subscriptions_total_cents,
+      (COALESCE(articles_totals.total, (0)::bigint) + COALESCE(subscriptions_totals.total, (0)::bigint)) AS total_cents
+     FROM ((sales
+       LEFT JOIN ( SELECT articles_sales.sale_id,
+              sum((articles.price_cents * articles_sales.quantity)) AS total
+             FROM (articles_sales
+               JOIN articles ON ((articles.id = articles_sales.article_id)))
+            GROUP BY articles_sales.sale_id) articles_totals ON ((articles_totals.sale_id = sales.id)))
+       LEFT JOIN ( SELECT sales_subscription_offers.sale_id,
+              sum((subscription_offers.price_cents * sales_subscription_offers.quantity)) AS total
+             FROM (sales_subscription_offers
+               JOIN subscription_offers ON ((subscription_offers.id = sales_subscription_offers.subscription_offer_id)))
+            GROUP BY sales_subscription_offers.sale_id) subscriptions_totals ON ((subscriptions_totals.sale_id = sales.id)));
+  SQL
 end
