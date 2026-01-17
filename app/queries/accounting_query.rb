@@ -7,16 +7,13 @@ class AccountingQuery
   end
 
   def verified_sales
-    Sale
+    SalesWithTotal
       .where(created_at: @start_date..@end_date)
       .where.not(verified_at: nil)
   end
 
   def kpis
-    total_revenue_cents = verified_sales
-                          .joins(articles_total_join)
-                          .joins(subscriptions_total_join)
-                          .sum('COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)')
+    total_revenue_cents = verified_sales.sum(:total_cents)
 
     transaction_count = verified_sales.count
 
@@ -47,10 +44,8 @@ class AccountingQuery
 
   def revenue_by_date
     raw = verified_sales
-          .joins(articles_total_join)
-          .joins(subscriptions_total_join)
-          .group('DATE(sales.created_at)')
-          .sum('COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)')
+          .group('DATE(sales_with_totals.created_at)')
+          .sum(:total_cents)
 
     (@start_date.to_date..@end_date.to_date).index_with do |date|
       raw[date] ? raw[date] / 100.0 : 0.0
@@ -60,14 +55,12 @@ class AccountingQuery
   def payment_methods
     verified_sales
       .joins(:payment_method)
-      .joins(articles_total_join)
-      .joins(subscriptions_total_join)
       .group('payment_methods.id', 'payment_methods.name', 'payment_methods.auto_verify')
       .select(
         'payment_methods.name AS name',
         'payment_methods.auto_verify AS auto_verified',
-        'COUNT(sales.id) AS count',
-        'SUM(COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)) AS amount'
+        'COUNT(sales_with_totals.id) AS count',
+        'SUM(sales_with_totals.total_cents) AS amount'
       )
       .order('amount DESC')
       .map do |r|
@@ -108,18 +101,16 @@ class AccountingQuery
     total_customers = verified_sales.select(:client_id).distinct.count
 
     new_customers = User
-                    .joins(:sales)
-                    .where.not(sales: { verified_at: nil })
+                    .joins('INNER JOIN sales_with_totals ON sales_with_totals.client_id = users.id')
+                    .where.not(sales_with_totals: { verified_at: nil })
                     .group('users.id')
-                    .having('MIN(sales.created_at) >= ?', @start_date)
+                    .having('MIN(sales_with_totals.created_at) >= ?', @start_date)
                     .count
                     .size
 
     revenues = verified_sales
-               .joins(articles_total_join)
-               .joins(subscriptions_total_join)
                .group(:client_id)
-               .sum('COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)')
+               .sum(:total_cents)
 
     avg_ltv = revenues.any? ? Money.new(revenues.values.sum / revenues.size) : Money.zero
 
@@ -150,13 +141,11 @@ class AccountingQuery
   def sales_by_seller
     results = verified_sales
               .joins(:seller)
-              .joins(articles_total_join)
-              .joins(subscriptions_total_join)
               .group(:seller_id)
               .select(
-                'sales.seller_id AS seller_id',
-                'COUNT(sales.id) AS count',
-                'SUM(COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)) AS revenue'
+                'sales_with_totals.seller_id AS seller_id',
+                'COUNT(sales_with_totals.id) AS count',
+                'SUM(sales_with_totals.total_cents) AS revenue'
               )
               .order('revenue DESC')
               .first(8)
@@ -174,33 +163,6 @@ class AccountingQuery
   end
 
   private
-
-  def articles_total_join
-    <<~SQL.squish
-      LEFT JOIN (
-        SELECT
-          articles_sales.sale_id,
-          SUM(articles.price_cents * articles_sales.quantity) AS total
-        FROM articles_sales
-        JOIN articles ON articles.id = articles_sales.article_id
-        GROUP BY articles_sales.sale_id
-      ) articles_totals ON articles_totals.sale_id = sales.id
-    SQL
-  end
-
-  def subscriptions_total_join
-    <<~SQL.squish
-      LEFT JOIN (
-        SELECT
-          sales_subscription_offers.sale_id,
-          SUM(subscription_offers.price_cents * sales_subscription_offers.quantity) AS total
-        FROM sales_subscription_offers
-        JOIN subscription_offers
-          ON subscription_offers.id = sales_subscription_offers.subscription_offer_id
-        GROUP BY sales_subscription_offers.sale_id
-      ) subscriptions_totals ON subscriptions_totals.sale_id = sales.id
-    SQL
-  end
 
   def subscription_stats_sql
     row = SalesSubscriptionOffer
@@ -222,12 +184,10 @@ class AccountingQuery
   def previous_period_revenue
     period_length = @end_date - @start_date
 
-    Sale
+    SalesWithTotal
       .where(created_at: (@start_date - period_length)...@start_date)
       .where.not(verified_at: nil)
-      .joins(articles_total_join)
-      .joins(subscriptions_total_join)
-      .sum('COALESCE(articles_totals.total,0) + COALESCE(subscriptions_totals.total,0)')
+      .sum(:total_cents)
   end
 
   def article_items

@@ -61,6 +61,7 @@ gem 'pagy', '~> 43.6'
 # Accounting management
 gem 'chartkick', '~> 5.2'
 gem 'csv', '~> 3.3'
+gem 'scenic', '~> 1.8'
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
