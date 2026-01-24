@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddInvoiceIdColumnToInvoices < ActiveRecord::Migration[7.2]
+class AddNumberToInvoices < ActiveRecord::Migration[7.2]
   def up
     execute <<~SQL.squish
       CREATE SEQUENCE IF NOT EXISTS invoices_id_seq OWNED BY invoices.id;
@@ -14,20 +14,20 @@ class AddInvoiceIdColumnToInvoices < ActiveRecord::Migration[7.2]
       );
     SQL
 
-    add_column :invoices, :invoice_id, :bigint
+    add_column :invoices, :number, :bigint
 
     execute <<~SQL.squish
       UPDATE invoices
-      SET invoice_id = id
+      SET number = id
       WHERE id IS NOT NULL;
     SQL
 
-    add_index :invoices, :invoice_id, unique: true, where: 'invoice_id IS NOT NULL'
+    add_index :invoices, :number, unique: true, where: 'number IS NOT NULL'
   end
 
   def down
-    remove_index :invoices, :invoice_id
-    remove_column :invoices, :invoice_id
+    remove_index :invoices, :number
+    remove_column :invoices, :number
 
     execute <<~SQL.squish
       ALTER TABLE invoices

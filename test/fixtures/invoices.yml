@@ -10,7 +10,7 @@ sale_ironman_cable_6_months:
         item_name: "Subscription - 1 month"
         price_cents: 3000
     sale_date: "2025-01-20"
-    invoice_id: 1
+    number: 1
     issue_date: "2025-01-20"
     client_name: "Tony STARK"
     payment_date: "2025-01-20T12:02:44.961Z"
@@ -25,7 +25,7 @@ sale_pepper_1_year:
         item_name: "Subscription - 12 months"
         price_cents: 5000
     sale_date: "2025-01-26"
-    invoice_id: 2
+    number: 2
     issue_date: "2025-01-26"
     client_name: "Pepper POTTS"
     payment_date: "2025-01-26T14:02:44.961Z"
@@ -40,7 +40,7 @@ sale_spiderman_1_year:
         item_name: "Subscription - 12 months"
         price_cents: 5000
     sale_date: "2099-01-15"
-    invoice_id: 2
+    number: 2
     issue_date: "2099-01-15"
     client_name: "Peter PARKER"
     payment_date: "2099-01-15T12:00:00.000Z"
@@ -59,7 +59,7 @@ refund_ironman_cable_4_months:
         item_name: "Subscription - 1 month"
         price_cents: 2000
     sale_date: "2025-01-30"
-    invoice_id: 3
+    number: 3
     issue_date: "2025-01-30"
     client_name: "Tony STARK"
     payment_date: "2025-01-30T14:37:19.961Z"
@@ -74,7 +74,7 @@ sale_ironman_deleted_article:
         item_name: "Deleted router"
         price_cents: 2000
     sale_date: "2025-01-21"
-    invoice_id: 3
+    number: 3
     issue_date: "2025-01-21"
     client_name: "Tony STARK"
     payment_date: "2025-01-21T12:02:44.961Z"

@@ -26,10 +26,10 @@ class InvoiceLib
   class PDFMetadata
     attr_reader :title, :author, :subject, :creation_date
 
-    def initialize(invoice_id:)
-      @title = "Facture Rézoléo #{invoice_id}"
+    def initialize(number:)
+      @title = "Facture Rézoléo #{number}"
       @author = 'Association Rézoléo'
-      @subject = "Facture #{invoice_id}"
+      @subject = "Facture #{number}"
       @creation_date = Time.now.utc
     end
   end
@@ -39,7 +39,7 @@ class InvoicePdfGenerator
   BASE_FONT_SIZE = 12
 
   # @input should be a hash with the following keys:
-  # - :invoice_id (String) - ID of the invoice
+  # - :number (String) - number of the invoice
   # - :sale_date (String) - Date of sale
   # - :issue_date (String) - Date the invoice was issued
   # - :client_name (String) - Name of the client
@@ -53,7 +53,7 @@ class InvoicePdfGenerator
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
     @input = normalize_input(input)
-    @doc_metadata = InvoiceLib::PDFMetadata.new(invoice_id: @input[:invoice_id])
+    @doc_metadata = InvoiceLib::PDFMetadata.new(number: @input[:number])
     @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
     @composer = InvoiceComposer.new
     setup_document
@@ -85,7 +85,7 @@ class InvoicePdfGenerator
 
   def add_invoice_header
     invoice_header = <<~HEADER
-      Facture n°#{@input[:invoice_id]}
+      Facture n°#{@input[:number]}
       Date de vente : #{@input[:sale_date]}
       Date d'émission : #{@input[:issue_date]}
     HEADER

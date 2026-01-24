@@ -40,19 +40,18 @@ class InvoiceTest < ActiveSupport::TestCase
     assert_equal expected, invoice.generation_json
   end
 
-  test 'should generate json from sale without invoice_id' do
+  test 'should generate json from sale without number' do
     invoice = Invoice.build_from_sale(@sale)
 
     assert_not_nil invoice.generation_json
-    assert_nil invoice.invoice_id
+    assert_nil invoice.number
   end
 
-  test 'should assign invoice_id and create invoice with pdf' do
+  test 'should assign number and create invoice with pdf' do
     invoice = Invoice.build_from_sale(@sale)
     invoice.save!
-    invoice.assign_invoice_id!
 
-    assert_not_nil invoice.invoice_id
+    assert_not_nil invoice.number
 
     assert_difference('ActiveStorage::Attachment.count', 1) do
       invoice.generate_pdf!
