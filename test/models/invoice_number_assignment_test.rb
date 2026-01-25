@@ -24,7 +24,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
     sales = Array.new(5) { build_valid_sale }
 
     threads = sales.map do |sale|
-      Thread.new { sale.save_with_invoice }
+      Thread.new { sale.save }
     end
     threads.each(&:join)
 
@@ -41,7 +41,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
       raise StandardError, 'PDF generation error'
     end
 
-    assert_raises(StandardError) { sale.save_with_invoice }
+    assert_raises(StandardError) { sale.save }
 
     assert_equal 1, sale.invoice.number
 
@@ -50,7 +50,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'next_invoice_number! should initialize counter to 1 if setting does not exist' do
-    Setting.find_by(key: 'next_invoice_id')&.destroy
+    Setting.find_by(key: 'next_invoice_number')&.destroy
 
     result = Setting.next_invoice_number!
 
@@ -61,11 +61,11 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
 
   # :nocov:
   def reset_invoice_number_counter!
-    setting = Setting.find_by(key: 'next_invoice_id')
+    setting = Setting.find_by(key: 'next_invoice_number')
     if setting
       setting.update!(value: 1)
     else
-      Setting.create!(key: 'next_invoice_id', value: 1)
+      Setting.create!(key: 'next_invoice_number', value: 1)
     end
   end
   # :nocov:
@@ -83,7 +83,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
 
   def create_valid_sale
     sale = build_valid_sale
-    assert sale.save_with_invoice, "Sale should be valid: #{sale.errors.full_messages.join(', ')}"
+    assert sale.save, "Sale should be valid: #{sale.errors.full_messages.join(', ')}"
     sale
   end
 end

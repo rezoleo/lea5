@@ -65,19 +65,6 @@ class Sale < ApplicationRecord
     end
   end
 
-  def save_with_invoice
-    # See https://github.com/rezoleo/lea5/issues/479
-    # Save the sale and the invoice in a transaction
-    save!
-
-    # Generate the pdf afterward if everything went well
-    invoice.generate_pdf!
-    true
-  rescue ActiveRecord::RecordInvalid => e
-    errors.add(:base, e.message)
-    false
-  end
-
   private
 
   def not_empty_sale

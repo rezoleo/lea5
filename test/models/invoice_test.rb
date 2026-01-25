@@ -49,14 +49,11 @@ class InvoiceTest < ActiveSupport::TestCase
 
   test 'should assign number and create invoice with pdf' do
     invoice = Invoice.build_from_sale(@sale)
-    invoice.save!
-
-    assert_not_nil invoice.number
-
     assert_difference('ActiveStorage::Attachment.count', 1) do
-      invoice.generate_pdf!
+      invoice.save!
     end
 
+    assert_not_nil invoice.number
     assert_predicate invoice.pdf, :attached?
   end
 

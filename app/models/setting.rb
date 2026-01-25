@@ -5,7 +5,7 @@ class Setting < ApplicationRecord
   validates :value, presence: true
 
   def self.next_invoice_number!
-    record = Setting.lock.find_or_create_by!(key: 'next_invoice_id') do |setting|
+    record = Setting.lock.find_or_create_by!(key: 'next_invoice_number') do |setting|
       setting.value = 1
     end
     next_id = record.value.to_i

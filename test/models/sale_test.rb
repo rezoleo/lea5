@@ -137,7 +137,7 @@ class SaleTest < ActiveSupport::TestCase
     assert_equal expected_total, @sale.total_price
   end
 
-  test 'save_with_invoice should return false when invoice is nil' do
+  test 'save should return false when invoice is nil' do
     sale = Sale.new(
       client: @user,
       duration: 1,
@@ -145,7 +145,7 @@ class SaleTest < ActiveSupport::TestCase
     )
     assert_nil sale.invoice
 
-    result = sale.save_with_invoice
+    result = sale.save
 
     assert_not result
     assert_predicate sale, :invalid?

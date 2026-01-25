@@ -1,5 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-next_invoice_id:
-  key: "next_invoice_id"
+next_invoice_number:
+  key: "next_invoice_number"
   value: "1"

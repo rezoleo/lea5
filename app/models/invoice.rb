@@ -6,6 +6,7 @@ class Invoice < ApplicationRecord
   has_one_attached :pdf
 
   before_validation :assign_number!
+  after_create_commit :generate_pdf!
 
   # @return [User]
   def user
