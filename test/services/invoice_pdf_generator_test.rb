@@ -9,9 +9,9 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     # InvoicePdfGenerator initialization captures the current time
     freeze_time
 
-    @id = '4269'
+    @number = '4269'
     input = {
-      invoice_id: @id,
+      number: @number,
       sale_date: '2024-07-21',
       issue_date: '2024-07-22',
       client_name: users(:ironman).display_name,
@@ -90,9 +90,9 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     pdf = @generator.generate_pdf
     metadata = extract_metadata_from_pdf(pdf)
 
-    assert_equal "Facture Rézoléo #{@id}", metadata[:Title]
+    assert_equal "Facture Rézoléo #{@number}", metadata[:Title]
     assert_equal 'Association Rézoléo', metadata[:Author]
-    assert_equal "Facture #{@id}", metadata[:Subject]
+    assert_equal "Facture #{@number}", metadata[:Subject]
     assert_equal Time.current.utc, metadata[:CreationDate]
   end
 
