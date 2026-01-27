@@ -34,6 +34,16 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
     assert_equal expected_numbers, invoice_numbers, 'Invoice numbers should be sequential without gaps'
   end
 
+  test 'invoice numbers should have no gaps when invalid sale is between valid sales' do
+    sale1 = create_valid_sale
+    invalid_sale = build_invalid_sale
+    assert_not invalid_sale.save, 'Invalid sale should not save'
+    sale2 = create_valid_sale
+
+    assert_equal 1, sale1.invoice.number
+    assert_equal 2, sale2.invoice.number
+  end
+
   test 'invoice number should be assigned even if PDF generation fails' do
     sale = build_valid_sale
 
@@ -67,6 +77,8 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
     else
       Setting.create!(key: 'next_invoice_number', value: 1)
     end
+    Sale.destroy_all
+    Invoice.destroy_all
   end
   # :nocov:
 
@@ -85,5 +97,16 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
     sale = build_valid_sale
     assert sale.save, "Sale should be valid: #{sale.errors.full_messages.join(', ')}"
     sale
+  end
+
+  def build_invalid_sale
+    Sale.build_with_invoice(
+      {
+        client: @user,
+        duration: -1,
+        payment_method: @payment_method
+      },
+      seller: @user
+    )
   end
 end

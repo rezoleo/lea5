@@ -85,11 +85,11 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.bigint "number"
+    t.bigint "number", default: 0, null: false
     t.jsonb "generation_json", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["number"], name: "index_invoices_on_number", unique: true, where: "(number IS NOT NULL)"
+    t.index ["number"], name: "index_invoices_on_number", unique: true
   end
 
   create_table "ips", force: :cascade do |t|

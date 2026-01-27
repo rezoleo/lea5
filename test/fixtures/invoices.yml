@@ -1,6 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 sale_ironman_cable_6_months:
+  number: 1
   generation_json:
     items:
       - quantity: 1
@@ -10,7 +11,6 @@ sale_ironman_cable_6_months:
         item_name: "Subscription - 1 month"
         price_cents: 3000
     sale_date: "2025-01-20"
-    number: 1
     issue_date: "2025-01-20"
     client_name: "Tony STARK"
     payment_date: "2025-01-20T12:02:44.961Z"
@@ -19,13 +19,13 @@ sale_ironman_cable_6_months:
     payment_amount_cent: 3200
 
 sale_pepper_1_year:
+  number: 2
   generation_json:
     items:
       - quantity: 1
         item_name: "Subscription - 12 months"
         price_cents: 5000
     sale_date: "2025-01-26"
-    number: 2
     issue_date: "2025-01-26"
     client_name: "Pepper POTTS"
     payment_date: "2025-01-26T14:02:44.961Z"
@@ -34,13 +34,13 @@ sale_pepper_1_year:
     payment_amount_cent: 5000
   
 sale_spiderman_1_year:
+  number: 3
   generation_json:
     items:
       - quantity: 1
         item_name: "Subscription - 12 months"
         price_cents: 5000
     sale_date: "2099-01-15"
-    number: 2
     issue_date: "2099-01-15"
     client_name: "Peter PARKER"
     payment_date: "2099-01-15T12:00:00.000Z"
@@ -50,6 +50,7 @@ sale_spiderman_1_year:
 
 # TODO: Verify this invoice fixture matches what we generate with refunds
 refund_ironman_cable_4_months:
+  number: 4
   generation_json:
     items:
       - quantity: 1
@@ -59,7 +60,6 @@ refund_ironman_cable_4_months:
         item_name: "Subscription - 1 month"
         price_cents: 2000
     sale_date: "2025-01-30"
-    number: 3
     issue_date: "2025-01-30"
     client_name: "Tony STARK"
     payment_date: "2025-01-30T14:37:19.961Z"
@@ -68,13 +68,13 @@ refund_ironman_cable_4_months:
     payment_amount_cent: 2200
 
 sale_ironman_deleted_article:
+  number: 5
   generation_json:
     items:
       - quantity: 1
         item_name: "Deleted router"
         price_cents: 2000
     sale_date: "2025-01-21"
-    number: 3
     issue_date: "2025-01-21"
     client_name: "Tony STARK"
     payment_date: "2025-01-21T12:02:44.961Z"

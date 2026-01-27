@@ -14,15 +14,19 @@ class AddNumberToInvoices < ActiveRecord::Migration[7.2]
       );
     SQL
 
-    add_column :invoices, :number, :bigint
+    add_column :invoices, :number, :bigint, null: false, default: 0
 
     execute <<~SQL.squish
-      UPDATE invoices
-      SET number = id
-      WHERE id IS NOT NULL;
+      UPDATE invoices SET number = id
     SQL
 
-    add_index :invoices, :number, unique: true, where: 'number IS NOT NULL'
+    add_index :invoices, :number, unique: true
+
+    execute <<~SQL.squish
+      UPDATE settings
+      SET key = 'next_invoice_number'
+      WHERE key = 'next_invoice_id';
+    SQL
   end
 
   def down
@@ -33,6 +37,12 @@ class AddNumberToInvoices < ActiveRecord::Migration[7.2]
       ALTER TABLE invoices
         ALTER COLUMN id DROP DEFAULT;
       DROP SEQUENCE IF EXISTS invoices_id_seq;
+    SQL
+
+    execute <<~SQL.squish
+      UPDATE settings
+      SET key = 'next_invoice_id'
+      WHERE key = 'next_invoice_number';
     SQL
   end
 end

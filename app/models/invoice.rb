@@ -5,7 +5,9 @@ class Invoice < ApplicationRecord
   has_one :sale, dependent: :restrict_with_exception
   has_one_attached :pdf
 
-  before_validation :assign_number!
+  validates :number, presence: true, uniqueness: true, on: :update
+
+  before_create :assign_number!
   after_create_commit :generate_pdf!
 
   # @return [User]
@@ -25,7 +27,7 @@ class Invoice < ApplicationRecord
 
   # @return [Integer] the assigned invoice number
   def assign_number!
-    return number if number.present?
+    return number if number.present? && number.positive?
 
     new_invoice_number = Setting.next_invoice_number!
     self.number = new_invoice_number

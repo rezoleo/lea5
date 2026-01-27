@@ -2,4 +2,4 @@
 
 next_invoice_number:
   key: "next_invoice_number"
-  value: "1"
+  value: "6"
