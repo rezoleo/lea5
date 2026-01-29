@@ -8,7 +8,7 @@ sale_ironman_cable_6_months:
         price_cents: 200
       - quantity: 6
         item_name: "Subscription - 1 month"
-        price_cents: 3000
+        price_cents: 500
     sale_date: "2025-01-20"
     invoice_id: 1
     issue_date: "2025-01-20"
@@ -57,7 +57,7 @@ refund_ironman_cable_4_months:
         price_cents: 200
       - quantity: 4
         item_name: "Subscription - 1 month"
-        price_cents: 2000
+        price_cents: 500
     sale_date: "2025-01-30"
     invoice_id: 3
     issue_date: "2025-01-30"
@@ -74,7 +74,7 @@ sale_ironman_deleted_article:
         item_name: "Deleted router"
         price_cents: 2000
     sale_date: "2025-01-21"
-    invoice_id: 3
+    invoice_id: 4
     issue_date: "2025-01-21"
     client_name: "Tony STARK"
     payment_date: "2025-01-21T12:02:44.961Z"

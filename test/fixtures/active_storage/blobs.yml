@@ -1,0 +1,4 @@
+invoice1_pdf_blob: <%= ActiveStorage::FixtureSet.blob filename: "invoice_1.pdf", service_name: "test_fixtures" %>
+invoice2_pdf_blob: <%= ActiveStorage::FixtureSet.blob filename: "invoice_2.pdf", service_name: "test_fixtures" %>
+invoice3_pdf_blob: <%= ActiveStorage::FixtureSet.blob filename: "invoice_3.pdf", service_name: "test_fixtures" %>
+invoice4_pdf_blob: <%= ActiveStorage::FixtureSet.blob filename: "invoice_4.pdf", service_name: "test_fixtures" %>
