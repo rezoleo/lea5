@@ -44,7 +44,7 @@ class InvoiceTest < ActiveSupport::TestCase
     invoice = Invoice.build_from_sale(@sale)
 
     assert_not_nil invoice.generation_json
-    assert_equal 0, invoice.number
+    assert_nil invoice.number
   end
 
   test 'should assign number and create invoice with pdf' do

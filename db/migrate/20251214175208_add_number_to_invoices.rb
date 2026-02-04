@@ -8,18 +8,17 @@ class AddNumberToInvoices < ActiveRecord::Migration[7.2]
     SQL
 
     execute <<~SQL.squish
-      SELECT setval(
-        'invoices_id_seq',
-        COALESCE((SELECT MAX(id) FROM invoices), 0)
-      );
+      SELECT setval('invoices_id_seq', COALESCE((SELECT MAX(id) FROM invoices), 1));
     SQL
 
-    add_column :invoices, :number, :bigint, null: false, default: 0
+    # Create the column without the NOT NULL constraint, backfill values, then enable the constraint
+    add_column :invoices, :number, :bigint
 
     execute <<~SQL.squish
       UPDATE invoices SET number = id
     SQL
 
+    change_column_null :invoices, :number, false
     add_index :invoices, :number, unique: true
 
     execute <<~SQL.squish
