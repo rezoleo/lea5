@@ -25,6 +25,8 @@ class Invoice < ApplicationRecord
     end
   end
 
+  private
+
   # @return [Integer] the assigned invoice number
   def assign_number!
     return number if number.present?
@@ -40,7 +42,7 @@ class Invoice < ApplicationRecord
 
     pdf_data = generation_json.deep_symbolize_keys.merge(number: number)
     pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
-    pdf.attach(io: pdf_stream, filename: number.to_s, content_type: 'application/pdf')
+    pdf.attach(io: pdf_stream, filename: number, content_type: 'application/pdf')
   end
 
   class << self

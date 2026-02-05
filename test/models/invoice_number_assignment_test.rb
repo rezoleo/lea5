@@ -28,7 +28,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
     end
     threads.each(&:join)
 
-    invoice_numbers = sales.filter_map { |s| s.invoice&.number }.sort
+    invoice_numbers = sales.filter_map { |s| s.invoice.number }.sort
     expected_numbers = (1..5).to_a
 
     assert_equal expected_numbers, invoice_numbers, 'Invoice numbers should be sequential without gaps'
