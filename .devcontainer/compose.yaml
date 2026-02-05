@@ -33,7 +33,7 @@ services:
     - redis-data:/data
 
   postgres:
-    image: postgres:16.1
+    image: postgres:16.11@sha256:468e1f126ca5af849799cda06ac9b03d8090aae9fa5163408b3e8da44fad0702
     restart: unless-stopped
     networks:
     - default
