@@ -136,4 +136,18 @@ class SaleTest < ActiveSupport::TestCase
     expected_total = Money.new(3200, :eur)
     assert_equal expected_total, @sale.total_price
   end
+
+  test 'save should return false when invoice is nil' do
+    sale = Sale.new(
+      client: @user,
+      duration: 1,
+      payment_method: @payment_method
+    )
+    assert_nil sale.invoice
+
+    result = sale.save
+
+    assert_not result
+    assert_predicate sale, :invalid?
+  end
 end

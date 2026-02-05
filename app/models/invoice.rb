@@ -5,7 +5,10 @@ class Invoice < ApplicationRecord
   has_one :sale, dependent: :restrict_with_exception
   has_one_attached :pdf
 
-  before_create :create_invoice
+  validates :number, presence: true, uniqueness: true
+
+  before_validation :assign_number!
+  after_create_commit :generate_pdf!
 
   # @return [User]
   def user
@@ -16,20 +19,30 @@ class Invoice < ApplicationRecord
   # @return [Invoice]
   def self.build_from_sale(sale)
     generation_json = generate_hash(sale)
-    invoice_id = Setting.next_invoice_id!
-    generation_json[:invoice_id] = invoice_id
 
     new do |invoice|
       invoice.generation_json = generation_json
-      invoice.id = invoice_id
     end
   end
 
   private
 
-  def create_invoice
-    pdf_stream = InvoicePdfGenerator.new(generation_json.deep_symbolize_keys).generate_pdf
-    pdf.attach(io: pdf_stream, filename: id, content_type: 'application/pdf')
+  # @return [Integer] the assigned invoice number
+  def assign_number!
+    return number if number.present?
+
+    new_invoice_number = Setting.next_invoice_number!
+    self.number = new_invoice_number
+    new_invoice_number
+  end
+
+  def generate_pdf!
+    raise 'Invoice must have a number before generating PDF' if number.nil?
+    return if pdf.attached?
+
+    pdf_data = generation_json.deep_symbolize_keys.merge(number: number)
+    pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
+    pdf.attach(io: pdf_stream, filename: number, content_type: 'application/pdf')
   end
 
   class << self
@@ -40,6 +53,7 @@ class Invoice < ApplicationRecord
       {
         # Is it possible to use sale.created_at.to_date here?
         # The sale record has not yet been created so the value isn't populated.
+        version: 1, # invoice json version
         sale_date: Time.zone.today,
         issue_date: Time.zone.today,
         client_name: sale.client.display_name,

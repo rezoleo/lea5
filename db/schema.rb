@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_10_123732) do
+ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -84,10 +84,12 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_10_123732) do
     t.index ["user_id"], name: "index_free_accesses_on_user_id"
   end
 
-  create_table "invoices", id: :bigint, default: nil, force: :cascade do |t|
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "number", null: false
     t.jsonb "generation_json", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["number"], name: "index_invoices_on_number", unique: true
   end
 
   create_table "ips", force: :cascade do |t|
