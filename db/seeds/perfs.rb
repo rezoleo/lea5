@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Rails/SkipsModelValidations
 Rails.logger.info 'Seeding heavy dataset...'
 
 NOW = Time.current
@@ -199,3 +200,4 @@ end
 SalesSubscriptionOffer.insert_all!(subscriptions_sales)
 
 Rails.logger.info 'Heavy seed done!'
+# rubocop:enable Rails/SkipsModelValidations

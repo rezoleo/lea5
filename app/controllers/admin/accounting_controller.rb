@@ -54,6 +54,7 @@ module Admin
       end
     end
 
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
     def set_date_range
       @period = params[:period] || 'current_month'
 
@@ -78,14 +79,15 @@ module Admin
           [Time.zone.now.beginning_of_month, Time.zone.now.end_of_month]
         end
     end
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
 
+    # rubocop:disable Metrics/MethodLength
     def generate_csv_data
       CSV.generate(headers: true) do |csv|
         csv << csv_headers
 
-        sql_query = Rails.root.join('app/queries/csv_export_query.sql').read
         sanitized_query = ActiveRecord::Base.sanitize_sql_array([
-          sql_query,
+          Rails.root.join('app/queries/csv_export_query.sql').read,
           { start_date: @start_date, end_date: @end_date }
         ])
 
@@ -108,6 +110,7 @@ module Admin
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     def csv_headers
       ['Date', 'Sale ID', 'Client', 'Seller', 'Payment Method',

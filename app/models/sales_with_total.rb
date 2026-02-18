@@ -3,9 +3,8 @@
 class SalesWithTotal < ApplicationRecord
   self.primary_key = :id
 
-
-  belongs_to :client, class_name: 'User', foreign_key: :client_id
-  belongs_to :seller, class_name: 'User', foreign_key: :seller_id, optional: true
+  belongs_to :client, class_name: 'User'
+  belongs_to :seller, class_name: 'User', optional: true
   belongs_to :payment_method
   attribute :total_cents
 
