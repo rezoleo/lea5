@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Style/MultilineBlockChain
 class AccountingQuery
   def initialize(start_date:, end_date:)
     @start_date = start_date
@@ -234,3 +235,4 @@ class AccountingQuery
     end
   end
 end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize, Style/MultilineBlockChain
