@@ -190,9 +190,18 @@ class InvoicePdfGenerator
   def normalize_input(input)
     {
       **input,
+      sale_date: format_date(input[:sale_date]),
+      issue_date: format_date(input[:issue_date]),
+      payment_date: format_date(input[:payment_date]),
       items: input[:items].map { |item| normalize_item(item) },
       payment_amount: to_money(input[:payment_amount]) || Money.new(0)
     }
+  end
+
+  def format_date(value)
+    return '' if value.blank?
+
+    I18n.l(value.to_date, format: :invoice, locale: :fr)
   end
 
   def normalize_item(item)

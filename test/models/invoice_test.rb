@@ -55,6 +55,7 @@ class InvoiceTest < ActiveSupport::TestCase
 
     assert_not_nil invoice.number
     assert_predicate invoice.pdf, :attached?
+    assert_equal "facture-#{invoice.number}.pdf", invoice.pdf.filename.to_s
   end
 
   test 'should not destroy invoice if sale exists' do
