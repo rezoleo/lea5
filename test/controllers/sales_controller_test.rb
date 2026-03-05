@@ -20,14 +20,14 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should get new sale form' do
-    get new_user_sale_path(user_id: @user.id)
+    get new_user_sale_path(@user)
     assert_response :success
     assert_template 'sales/new'
     assert_select 'form'
   end
 
   test 'should only list sellable articles' do
-    get new_user_sale_path(user_id: @user.id)
+    get new_user_sale_path(@user)
     assert_response :success
     assert_template 'sales/new'
     assert_select 'form'
@@ -36,7 +36,7 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
 
   test 'should create sale and redirect if sale is valid' do
     assert_difference 'Sale.count', 1 do
-      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+      post user_sales_path(@user, format: :html), params: { sale: @sale_params }
     end
     assert_redirected_to @user
     assert_equal 'Sale was successfully created.', flash[:success]
@@ -45,7 +45,7 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
   test 'should not create sale and redirect if duration is negative' do
     @sale_params[:duration] = -5
     assert_no_difference 'Sale.count' do
-      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+      post user_sales_path(@user, format: :html), params: { sale: @sale_params }
     end
     assert_response :unprocessable_entity
     assert_template 'sales/new'
@@ -54,7 +54,7 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
   test 'should not create sale and redirect if sale is invalid' do
     @sale_params[:payment_method_id] = PaymentMethod.last.id + 1
     assert_no_difference 'Sale.count' do
-      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+      post user_sales_path(@user, format: :html), params: { sale: @sale_params }
     end
     assert_response :unprocessable_entity
     assert_template 'sales/new'
@@ -64,7 +64,7 @@ class SalesControllerTest < ActionDispatch::IntegrationTest
     @sale_params[:duration] = 0
     @sale_params.delete(:articles_sales_attributes)
     assert_no_difference 'Sale.count' do
-      post user_sales_path(user_id: @user.id, format: :html), params: { sale: @sale_params }
+      post user_sales_path(@user, format: :html), params: { sale: @sale_params }
     end
     assert_response :unprocessable_entity
     assert_template 'sales/new'

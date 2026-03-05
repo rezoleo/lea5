@@ -38,6 +38,11 @@ class User < ApplicationRecord
   # @return [Array<String>]
   attr_accessor :groups
 
+  # Customizes the url param
+  def to_param
+    username
+  end
+
   def display_name
     "#{firstname.capitalize} #{lastname.upcase}"
   end

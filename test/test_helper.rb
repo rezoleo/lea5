@@ -77,7 +77,7 @@ module ActiveSupport
           extra: {
             raw_info: {
               'roles-LEA5': groups,
-              preferred_username: "#{user.firstname}-#{user.lastname}"
+              preferred_username: user.username
             }
           }
         }
