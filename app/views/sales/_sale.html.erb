@@ -4,7 +4,7 @@
 
     <%sale.articles_sales.each do |article_sale| %>
         <b><%= article_sale.article.name %> <%if article_sale.quantity > 1 %> (x<%= article_sale.quantity %>) <% end %></b>
-        <p>Price : <%= number_to_currency(article_sale.article.price * article_sale.quantity / 100, locale: :fr) %> </p>
+        <p>Price: <%= (article_sale.article.price * article_sale.quantity).format %> </p>
     <% end %>
             
     <%if sale.subscription%>
