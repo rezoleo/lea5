@@ -15,6 +15,10 @@ class Invoice < ApplicationRecord
     sale.client
   end
 
+  def to_param
+    number.to_s
+  end
+
   # @param [Sale] sale
   # @return [Invoice]
   def self.build_from_sale(sale)

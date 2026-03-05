@@ -27,6 +27,9 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   get '/search', as: 'search', to: 'search#search'
 
   resources :api_keys
+  resources :invoices, only: [], param: :number do
+    get :download, on: :member
+  end
 
   namespace :api do
     defaults format: :json do

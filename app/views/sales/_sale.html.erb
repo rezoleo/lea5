@@ -13,7 +13,7 @@
     <% end %>
 
     <p>Payment method: <%= sale.payment_method.name %></p>
-    <%= link_to(sale.invoice.pdf, class: 'button-primary', download: true) do %>
+    <%= link_to(download_invoice_path(sale.invoice), class: 'button-primary') do %>
         Invoice
         <%= svg_icon_tag 'icon_pdf' %>
     <% end %>
