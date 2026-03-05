@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
     user = User.upsert_from_auth_hash(request.env['omniauth.auth'])
     log_in user
     flash[:success] = 'You are now logged in!'
-    redirect_to user_path user
+    redirect_to profile_path
   end
 
   def create_developer
@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
     user.groups = auth_hash[:groups].split(',')
     log_in user
     flash[:success] = 'You are now logged in (using developer method)!'
-    redirect_to user
+    redirect_to profile_path
   end
 
   def destroy

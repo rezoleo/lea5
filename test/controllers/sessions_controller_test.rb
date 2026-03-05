@@ -31,7 +31,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   test 'should redirect to user profile' do
     get auth_callback_path
 
-    assert_redirected_to user_path User.find_by(email: 'john@doe.com').id
+    assert_redirected_to profile_path
   end
 
   test 'should create a session with current_user' do
