@@ -1,5 +1,23 @@
 ---
 fr:
+  date:
+    formats:
+      invoice: "%-d %b %Y"
+    # TODO: install rails-i18n to avoid having to do this by hand (see: https://github.com/rezoleo/lea5/issues/481)
+    abbr_month_names:
+      - ~
+      - janv.
+      - févr.
+      - mars
+      - avr.
+      - mai
+      - juin
+      - juil.
+      - août
+      - sept.
+      - oct.
+      - nov.
+      - déc.
   number:
     currency:
       format:

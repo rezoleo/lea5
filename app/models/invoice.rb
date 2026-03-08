@@ -15,6 +15,10 @@ class Invoice < ApplicationRecord
     sale.client
   end
 
+  def to_param
+    number.to_s
+  end
+
   # @param [Sale] sale
   # @return [Invoice]
   def self.build_from_sale(sale)
@@ -42,7 +46,7 @@ class Invoice < ApplicationRecord
 
     pdf_data = generation_json.deep_symbolize_keys.merge(number: number)
     pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
-    pdf.attach(io: pdf_stream, filename: number, content_type: 'application/pdf')
+    pdf.attach(io: pdf_stream, filename: "facture-#{number}.pdf", content_type: 'application/pdf')
   end
 
   class << self
