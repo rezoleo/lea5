@@ -33,6 +33,10 @@ module ActiveSupport
     # https://github.com/simplecov-ruby/simplecov/issues/718#issuecomment-538201587
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+
+      # Give each parallel worker its own ActiveStorage directory
+      # https://edgeguides.rubyonrails.org/active_storage_overview.html#discarding-files-created-during-tests
+      ActiveStorage::Blob.service.root = "#{ActiveStorage::Blob.service.root}-#{worker}"
     end
 
     parallelize_teardown do |_worker|
@@ -41,6 +45,13 @@ module ActiveSupport
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
+
+    # Cleanup ActiveStorage files created during tests
+    # https://edgeguides.rubyonrails.org/active_storage_overview.html#discarding-files-created-during-tests
+    def after_teardown
+      super
+      FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+    end
 
     # Add more helper methods to be used by all tests here...
     include SessionsHelper
