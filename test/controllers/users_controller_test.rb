@@ -66,7 +66,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         username: 'toto-titi'
       }
     }
-    assert_redirected_to @user
+    assert_redirected_to @user.reload
   end
 
   test 'should re-render edit if updates are invalid with html' do
