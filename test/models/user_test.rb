@@ -77,7 +77,6 @@ class UserTest < ActiveSupport::TestCase
     duplicate_user.email = 'different@email.com'
     duplicate_user.username = 'different-username'
     @user.save
-    duplicate_user.room.downcase!
     assert_not_predicate duplicate_user, :valid?
   end
 
@@ -91,26 +90,14 @@ class UserTest < ActiveSupport::TestCase
     assert_predicate another_user, :valid?
   end
 
-  test 'room should be formatted on save' do
-    @user.room = 'a108B'
-    @user.save
-    assert_equal 'A108b', @user.room
-    # TODO: Add tests to check that we strip rooms, and that we keep uppercase on 'DF1'
+  test 'room must reference an existing room' do
+    @user.room = 'Z999'
+    assert_not_predicate @user, :valid?
   end
 
-  test 'room must be of a valid format' do
-    valid_rooms = ['A205', 'B134a', 'C001b', 'F313', 'D111b', 'E231a', 'DF1', 'DF2', 'DF3', 'DF4']
-    invalid_rooms = ['A2005', 'C404', 'D111c', 'B1', 'E22', 'G207']
-
-    valid_rooms.each do |valid_room|
-      @user.room = valid_room
-      assert_predicate @user, :valid?, "#{valid_room} should be valid"
-    end
-
-    invalid_rooms.each do |invalid_room|
-      @user.room = invalid_room
-      assert_not_predicate @user, :valid?, "#{invalid_room} should be invalid"
-    end
+  test 'room can reference a valid room from the rooms table' do
+    @user.room = rooms(:room_b231).number
+    assert_predicate @user, :valid?
   end
 
   test "username can't be empty" do

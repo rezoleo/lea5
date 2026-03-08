@@ -11,10 +11,11 @@
 #   end
 
 require_relative 'seeds/ips'
+require_relative 'seeds/rooms'
 
 User.create([{ firstname: 'Paul', lastname: 'Marcel', room: 'A123', email: 'paul.marcel@gmail.com',
                username: 'paulmarcel' },
-             { firstname: 'Gérard', lastname: 'Dupont', room: 'd145', email: 'xXgerardDUPONTXx@gmail.com',
+             { firstname: 'Gérard', lastname: 'Dupont', room: 'D145', email: 'xXgerardDUPONTXx@gmail.com',
                username: 'gerarddupont' }])
 
 User.first.machines.create({ mac: 'AA:AA:AA:AA:AA:AA', name: 'Powerful-Battery', ip: Ip.first })
