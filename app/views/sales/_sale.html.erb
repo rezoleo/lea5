@@ -3,7 +3,7 @@
 <div class="sale">
 
     <%sale.articles_sales.each do |article_sale| %>
-        <b><%= article_sale.article.name %> <%if article_sale.quantity > 1 %> (x<%= article_sale.quantity %>) <% end %></b>
+        <b><%= article_sale.article.name %> <%if article_sale.quantity > 1 %> (×<%= article_sale.quantity %>) <% end %></b>
         <p>Price: <%= (article_sale.article.price * article_sale.quantity).format %> </p>
     <% end %>
             

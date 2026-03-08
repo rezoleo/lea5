@@ -30,7 +30,7 @@ class InvoicesControllerUserRightTest < ActionDispatch::IntegrationTest
   test 'admin can download any invoice' do
     sign_in_as @admin, ['rezoleo']
 
-    get download_invoice_path(@other_invoice)
+    get download_invoice_path(@user_invoice)
 
     assert_response :redirect
   end
