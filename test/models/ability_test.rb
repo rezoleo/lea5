@@ -10,6 +10,10 @@ class AbilityTest < ActiveSupport::TestCase
     @user_machine = @user.machines.first
     @user_subscription = @user.subscriptions.first
     @user_free_access = @user.free_accesses.first
+    @user_sale = sales(:pepper_1_year)
+    @other_user_sale = sales(:ironman_cable_6_months)
+    @user_invoice = invoices(:sale_pepper_1_year)
+    @other_user_invoice = invoices(:sale_ironman_cable_6_months)
 
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
@@ -76,6 +80,16 @@ class AbilityTest < ActiveSupport::TestCase
   test 'user can read their subscription' do
     assert @user_ability.can?(:read, @user_subscription)
     assert @user_ability.cannot?(:read, @admin_subscription)
+  end
+
+  test 'user can read their sale but not others' do
+    assert @user_ability.can?(:read, @user_sale)
+    assert @user_ability.cannot?(:read, @other_user_sale)
+  end
+
+  test 'user can read their invoice but not others' do
+    assert @user_ability.can?(:read, @user_invoice)
+    assert @user_ability.cannot?(:read, @other_user_invoice)
   end
 
   test 'user cannot create a new subscription to themselves' do

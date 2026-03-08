@@ -48,8 +48,8 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     pdf = @generator.generate_pdf
     pdf_text = extract_text_from_pdf(pdf)
     assert_includes pdf_text, 'Facture Rézoléo'
-    assert_includes pdf_text, '2024-07-21'
-    assert_includes pdf_text, '2024-07-22'
+    assert_includes pdf_text, '21 juil. 2024'
+    assert_includes pdf_text, '22 juil. 2024'
   end
 
   test 'generate_pdf should include client information' do
@@ -82,7 +82,7 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     pdf = @generator.generate_pdf
     pdf_text = extract_text_from_pdf(pdf)
     assert_includes pdf_text, '25,00 €'
-    assert_includes pdf_text, '2024-07-21'
+    assert_includes pdf_text, '21 juil. 2024'
     assert_includes pdf_text, 'Carte Bancaire'
   end
 

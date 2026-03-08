@@ -11,9 +11,8 @@
   </h1>
 
   <div class="container">
-    <% if can?(:create, Sale) %>
-      <%= render "components/buttons/button_primary_create", text: "Sell", path: new_user_sale_path(@user), aria_label: "Create a sell" %>
-    <% end %>
+    
+
     <div class="card-details-container card-user card-details-user ">
       <div class="card card-details">
         <div class="card-title">
@@ -93,6 +92,7 @@
 
       <div class="divider"></div>
     </div>
+    
     <div class="card card-subscriptions card-content">
 
       <div class="card-content-subscriptions">
@@ -123,5 +123,27 @@
       </div>
 
     </div>
+  
+    <div class="card-details-container card-details-sales">
+      <div class="card card-details">
+
+        <div class="card-title">
+          <h2>Sales and invoices</h2>
+        </div>
+        <% if can?(:create, Sale) %>
+          <%= render "components/buttons/button_primary_create", text: "Sell", path: new_user_sale_path(@user), aria_label: "Create a sell" %>
+        <% end %>
+      </div>
+
+      <div class="divider"></div>
+    </div>
+    <div class="card card-sales card-content">
+
+      <div class="card-content-sales">
+        <%= render(@sales) || "No sales" %>
+      </div>
+
+    </div>  
+
   </div>
 </main>
