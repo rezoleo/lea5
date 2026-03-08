@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -142,6 +142,16 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.index ["subscription_offer_id"], name: "index_refunds_subscription_offers_on_subscription_offer_id"
   end
 
+  create_table "rooms", force: :cascade do |t|
+    t.string "number", limit: 6, null: false
+    t.string "group", limit: 6, null: false
+    t.string "building", limit: 1, null: false
+    t.integer "floor", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["number"], name: "index_rooms_on_number", unique: true
+  end
+
   create_table "sales", force: :cascade do |t|
     t.bigint "seller_id"
     t.bigint "client_id", null: false
@@ -230,4 +240,5 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   add_foreign_key "sales_subscription_offers", "sales"
   add_foreign_key "sales_subscription_offers", "subscription_offers"
   add_foreign_key "subscriptions", "sales"
+  add_foreign_key "users", "rooms", column: "room", primary_key: "number"
 end

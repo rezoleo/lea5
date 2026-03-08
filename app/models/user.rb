@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
+  belongs_to :room_record, class_name: 'Room', foreign_key: :room, primary_key: :number, inverse_of: :user,
+                           optional: true
   has_many :machines, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
   has_many :free_accesses_by_date, lambda {
@@ -15,7 +17,7 @@ class User < ApplicationRecord
   }, through: :sales_as_client, dependent: :destroy, class_name: 'Subscription', source: :subscription
 
   normalizes :email, with: ->(email) { email.strip.downcase }
-  normalizes :room, with: ->(room) { room&.downcase&.upcase_first }
+  normalizes :room, with: ->(room) { room&.upcase&.presence }
 
   # Since the Radius MD4 hash is broken anyway (see: https://kanidm.github.io/kanidm/master/integrations/radius.html#cleartext-credential-storage)
   # we choose to store the wifi_password encrypted using Rails built-in encryption.
@@ -27,13 +29,13 @@ class User < ApplicationRecord
   validates :lastname, presence: true, allow_blank: false
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/
   validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  # TODO: Make room regex case-sensitive once we fix support for 'DF1' with uppercase
-  VALID_ROOM_REGEX = /\A([A-F][0-3][0-9]{2}[a-b]?|DF[1-4])\z/i
-  validates :room, format: { with: VALID_ROOM_REGEX }, uniqueness: true, allow_nil: true
+  validates :room, uniqueness: true, allow_nil: true
+  validate :room_must_exist, if: -> { room.present? }
   validates :wifi_password, presence: true, allow_blank: false
   validates :username, presence: true, uniqueness: true, allow_blank: false
 
   before_validation :ensure_has_wifi_password
+  after_save :sync_room_to_sso, if: :saved_change_to_room?
 
   # @return [Array<String>]
   attr_accessor :groups
@@ -108,5 +110,13 @@ class User < ApplicationRecord
     return unless wifi_password.nil?
 
     self.wifi_password = "#{SecureRandom.base58(6)}-#{SecureRandom.base58(6)}-#{SecureRandom.base58(6)}"
+  end
+
+  def room_must_exist
+    errors.add(:room, 'must reference an existing room') unless Room.exists?(number: room)
+  end
+
+  def sync_room_to_sso
+    SsoMetadataService.sync_room(self)
   end
 end

@@ -20,8 +20,13 @@
   </div>
   <div>
     <%= f.label :room %>
-    <%= f.text_field :room, placeholder: 'A123b or DF1', minlength: 3, maxlength: 5,
-                     pattern: '([A-Fa-f][0-3][0-9]{2}[a-b]?|[Dd][Ff][1-4])' %>
+    <%= f.text_field :room, list: 'rooms-datalist', autocomplete: 'off',
+                            placeholder: 'ex : A105A', value: f.object.room %>
+    <datalist id="rooms-datalist">
+      <% Room.available_for(f.object).order(:number).each do |room| %>
+        <option value="<%= room.number %>"></option>
+      <% end %>
+    </datalist>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>
