@@ -1,0 +1,43 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+room_a105a:
+  number: "A105A"
+  group: "A105"
+  building: "A"
+  floor: 1
+
+room_a109a:
+  number: "A109A"
+  group: "A109"
+  building: "A"
+  floor: 1
+
+room_a201:
+  number: "A201"
+  group: "A201"
+  building: "A"
+  floor: 2
+
+room_b231:
+  number: "B231"
+  group: "B231"
+  building: "B"
+  floor: 2
+
+room_e124:
+  number: "E124"
+  group: "E124"
+  building: "E"
+  floor: 1
+
+room_f123:
+  number: "F123"
+  group: "F123"
+  building: "F"
+  floor: 1
+
+room_df1:
+  number: "DF1"
+  group: "DF"
+  building: "D"
+  floor: 0
