@@ -80,12 +80,12 @@ class RoomTest < ActiveSupport::TestCase
   end
 
   test 'has_one user association' do
-    room = rooms(:room_a200)
+    room = rooms(:room_a109a)
     assert_equal users(:ironman), room.user
   end
 
   test 'room with user cannot be destroyed' do
-    room = rooms(:room_a200)
+    room = rooms(:room_a109a)
     assert_not room.destroy
     assert_includes room.errors[:base], 'Cannot delete record because a dependent user exists'
   end

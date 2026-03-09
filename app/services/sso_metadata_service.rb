@@ -59,10 +59,10 @@ class SsoMetadataService
     res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
 
     unless res.is_a?(Net::HTTPSuccess)
-      Rails.logger.error("[SsoMetadataService] Failed to delete room for user #{user.oidc_id}: #{res.code} #{res.body}")
+      Rails.logger.error("[SSO] Failed to delete room for user #{user.oidc_id}: #{res.code} #{res.body}")
     end
   rescue StandardError => e
-    Rails.logger.error("[SsoMetadataService] Error deleting room for user #{user.oidc_id}: #{e.message}")
+    Rails.logger.error("[SSO] Error deleting room for user #{user.oidc_id}: #{e.message}")
   end
 
   def access_token
