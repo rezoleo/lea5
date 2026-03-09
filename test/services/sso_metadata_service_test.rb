@@ -48,9 +48,42 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     assert_requested(stub)
   end
 
-  test 'sync_room does not raise on HTTP failure' do
+  test 'sync_room does not raise on POST HTTP failure' do
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_return(status: 500, body: 'Internal Server Error')
+
+    assert_nothing_raised do
+      ProductionSsoService.new.sync_room(@user)
+    end
+  end
+
+  test 'sync_room does not raise on POST network exception' do
+    WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
+           .to_raise(Errno::ECONNREFUSED)
+
+    assert_nothing_raised do
+      ProductionSsoService.new.sync_room(@user)
+    end
+  end
+
+  test 'sync_room does not raise on DELETE HTTP failure' do
+    @user.room = nil
+
+    WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
+           .with(query: { 'keys[]' => 'room' })
+           .to_return(status: 500, body: 'Internal Server Error')
+
+    assert_nothing_raised do
+      ProductionSsoService.new.sync_room(@user)
+    end
+  end
+
+  test 'sync_room does not raise on DELETE network exception' do
+    @user.room = nil
+
+    WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
+           .with(query: { 'keys[]' => 'room' })
+           .to_raise(Errno::ECONNREFUSED)
 
     assert_nothing_raised do
       ProductionSsoService.new.sync_room(@user)
