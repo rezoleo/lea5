@@ -31,7 +31,7 @@ class SalesController < ApplicationController
   private
 
   def owner
-    @owner = User.find(params[:user_id])
+    @owner = User.find_by!(username: params[:user_username])
   end
 
   def sales_params

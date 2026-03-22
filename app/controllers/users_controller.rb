@@ -8,7 +8,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by!(username: params[:username])
     authorize! :show, @user
     @machines = @user.machines.includes(:ip).order(created_at: :asc)
     @subscriptions = @user.subscriptions.order(created_at: :desc)
@@ -21,8 +21,12 @@ class UsersController < ApplicationController
     authorize! :new, @user
   end
 
+  def profile
+    redirect_to current_user
+  end
+
   def edit
-    @user = User.find(params[:id])
+    @user = User.find_by!(username: params[:username])
     authorize! :edit, @user
   end
 
@@ -38,7 +42,7 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = User.find_by!(username: params[:username])
     authorize! :update, @user
     if @user.update(user_params)
       flash[:success] = 'User updated!'
@@ -49,7 +53,7 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    @user = User.includes(machines: :ip).find(params[:id])
+    @user = User.includes(machines: :ip).find_by!(username: params[:username])
     authorize! :destroy, @user
     @user.destroy
     flash[:success] = 'User deleted!'

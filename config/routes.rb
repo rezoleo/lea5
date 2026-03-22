@@ -9,7 +9,9 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   delete '/logout', to: 'sessions#destroy', as: 'logout'
   root 'static_pages#home'
 
-  resources :users do
+  get '/profile', to: 'users#profile', as: 'profile'
+
+  resources :users, param: :username do
     resources :machines, shallow: true, except: [:index]
     resources :sales, shallow: true, only: [:new, :create] do
       resources :refunds, shallow: true, only: [:new, :create]
@@ -36,7 +38,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
       # This allows using dots in the resource ID, which are normally used by Rails
       # to determine the format to return (e.g. GET /users/1.json)
       # https://guides.rubyonrails.org/routing.html#specifying-constraints-on-id
-      resources :users, constraints: { id: %r{[^/]+} }
+      resources :users, param: :username, constraints: { username: %r{[^/]+} }
       resources :machines, constraints: { id: %r{[^/]+} }
       resources :api_keys
     end
