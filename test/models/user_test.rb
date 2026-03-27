@@ -173,6 +173,28 @@ class UserTest < ActiveSupport::TestCase
     assert_equal '111111111111111111', @user.oidc_id
   end
 
+  test 'deactivate_from_sso should clear oidc_id without changing email or username' do
+    old_email = @user.email
+    old_username = @user.username
+    @user.update!(oidc_id: '111111111111111111')
+
+    @user.deactivate_from_sso
+    @user.reload
+
+    assert_nil @user.oidc_id
+    assert_equal old_email, @user.email
+    assert_equal old_username, @user.username
+  end
+
+  test 'deactivate_from_sso should do nothing when oidc_id is nil' do
+    @user.update!(oidc_id: nil)
+
+    @user.deactivate_from_sso
+    @user.reload
+
+    assert_nil @user.oidc_id
+  end
+
   test 'current_subscription is nil when user has no subscriptions' do
     @user.sales_as_client.destroy_all
     @user.subscriptions.destroy_all

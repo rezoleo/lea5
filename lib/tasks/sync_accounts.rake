@@ -8,12 +8,12 @@ namespace :lea5 do
   task sync_accounts: [:environment] do
     sso_users = retrieve_users_from_sso
 
-    User.find_each do |user|
+    User.where.not(oidc_id: nil).find_each do |user|
       user_from_sso = sso_users[user.oidc_id]
       if user_from_sso
         update_user(user, user_from_sso)
       else
-        destroy_user(user)
+        deactivate_user(user)
       end
     end
   end
@@ -68,12 +68,12 @@ def update_user(user, user_from_sso)
   end
 end
 
-def destroy_user(user)
-  if user.destroy
-    puts "Destroyed #{user.username}"
+def deactivate_user(user)
+  username = user.username
+  user.deactivate_from_sso
+  if user.save
+    puts "Deactivated #{username}"
   else
-    # :nocov:
-    puts "Error destroying user #{user.username}"
-    # :nocov:
+    puts "Error deactivating user #{username}"
   end
 end
