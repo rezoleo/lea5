@@ -1,0 +1,59 @@
+<%# locals: () -%>
+
+<main class="sso-user-search-page">
+  <h1>Create user from SSO</h1>
+
+  <%= render 'utils/error_messages', object: @user %>
+
+  <%= form_with url: new_from_sso_users_path, method: :get, class: 'form sso-user-search-form' do |f| %>
+    <div>
+      <%= f.label :query, 'Search in SSO' %>
+      <%= f.text_field :query, value: @query, required: true %>
+    </div>
+    <div>
+      <%= f.submit 'Search' %>
+    </div>
+  <% end %>
+
+  <% if @query.present? %>
+    <section class="sso-search-results">
+      <% if @sso_users.present? %>
+        <h2>SSO users</h2>
+
+        <ul class="sso-users-results">
+          <% @sso_users.each do |sso_user| %>
+            <% existing_user = @existing_users_by_oidc_id[sso_user[:oidc_id]] %>
+
+            <li class="sso-user-result">
+              <p class="sso-user-name"><%= "#{sso_user[:firstname]} #{sso_user[:lastname]}" %></p>
+              <p><%= sso_user[:email] %></p>
+              <p><%= sso_user[:username] %></p>
+
+              <% if existing_user %>
+                <p class="sso-existing-user">
+                  User already exists:
+                  <%= link_to existing_user.display_name, existing_user %>
+                </p>
+              <% else %>
+                <%= form_with url: create_from_sso_users_path, method: :post, class: 'form sso-create-form' do |f| %>
+                  <%= f.hidden_field :query, value: @query %>
+                  <%= f.hidden_field :oidc_id, value: sso_user[:oidc_id] %>
+                  <div>
+                    <%= f.label :room, 'Room (optional)' %>
+                    <%= f.text_field :room, placeholder: 'A123b or DF1', minlength: 3, maxlength: 5,
+                                     pattern: '([A-Fa-f][0-3][0-9]{2}[a-b]?|[Dd][Ff][1-4])' %>
+                  </div>
+                  <div>
+                    <%= f.submit 'Create user from SSO' %>
+                  </div>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="sso-results-empty">No SSO user found for "<%= @query %>".</p>
+      <% end %>
+    </section>
+  <% end %>
+</main>
