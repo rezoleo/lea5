@@ -41,7 +41,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     @user.room = nil
 
     stub = WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
-                  .with(query: { 'keys[]' => 'room' })
+                  .with(query: { 'keys' => 'room' })
                   .to_return(status: 200, body: '{"deletionDate":"2026-01-01T00:00:00Z"}')
 
     ProductionSsoService.new.sync_room(@user)
@@ -57,11 +57,11 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'sync_room does not raise on POST network exception' do
+  test 'sync_room raises on POST network exception' do
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_nothing_raised do
+    assert_raises(Errno::ECONNREFUSED) do
       ProductionSsoService.new.sync_room(@user)
     end
   end
@@ -70,7 +70,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     @user.room = nil
 
     WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
-           .with(query: { 'keys[]' => 'room' })
+           .with(query: { 'keys' => 'room' })
            .to_return(status: 500, body: 'Internal Server Error')
 
     assert_nothing_raised do
@@ -78,14 +78,26 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     end
   end
 
-  test 'sync_room does not raise on DELETE network exception' do
+  test 'sync_room raises on DELETE network exception' do
     @user.room = nil
 
     WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
-           .with(query: { 'keys[]' => 'room' })
+           .with(query: { 'keys' => 'room' })
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_nothing_raised do
+    assert_raises(Errno::ECONNREFUSED) do
+      ProductionSsoService.new.sync_room(@user)
+    end
+  end
+
+  test 'sync_room raises on timeout' do
+    @user.room = nil
+
+    WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
+           .with(query: { 'keys' => 'room' })
+           .to_raise(Net::ReadTimeout.new)
+
+    assert_raises(Net::ReadTimeout) do
       ProductionSsoService.new.sync_room(@user)
     end
   end

@@ -2,11 +2,11 @@
 
 class SsoMetadataService
   SSO_BASE_URL = 'https://sso.rezoleo.fr'
+  HTTP_OPEN_TIMEOUT_SECONDS = 5
+  HTTP_READ_TIMEOUT_SECONDS = 10
 
   # @param user [User]
-  def self.sync_room(user)
-    new.sync_room(user)
-  end
+  def self.sync_room(user) = new.sync_room(user)
 
   # @param user [User]
   def sync_room(user)
@@ -34,35 +34,66 @@ class SsoMetadataService
     end
   end
 
+  # Metadata values in Zitadel must be base64-encoded.
+  # See https://zitadel.com/docs/reference/api/user/zitadel.user.v2.UserService.SetUserMetadata
   def post_room_metadata(user)
     uri = URI("#{SSO_BASE_URL}/v2/users/#{user.oidc_id}/metadata")
-    req = Net::HTTP::Post.new(uri)
-    req['Authorization'] = "Bearer #{access_token}"
-    req.content_type = 'application/json'
-    req.body = { metadata: [{ key: 'room', value: Base64.strict_encode64(user.room) }] }.to_json
+    body = { metadata: [{ key: 'room', value: Base64.strict_encode64(user.room) }] }
 
-    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+    req = build_request(Net::HTTP::Post, uri, body:)
+    res = execute_request(user:, uri:, req:)
 
-    unless res.is_a?(Net::HTTPSuccess)
-      Rails.logger.error("[SSO] Failed to set room for user #{user.oidc_id}: #{res.code} #{res.body}")
-    end
-  rescue StandardError => e
-    Rails.logger.error("[SSO] Error setting room for user #{user.oidc_id}: #{e.message}")
+    return if res.is_a?(Net::HTTPSuccess)
+
+    log_failure(user, uri, req, res)
   end
 
   def delete_room_metadata(user)
     uri = URI("#{SSO_BASE_URL}/v2/users/#{user.oidc_id}/metadata")
-    uri.query = URI.encode_www_form([['keys[]', 'room']])
-    req = Net::HTTP::Delete.new(uri)
+    uri.query = URI.encode_www_form([['keys', 'room']])
+
+    req = build_request(Net::HTTP::Delete, uri)
+    res = execute_request(user:, uri:, req:)
+
+    return if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPNotFound) # NotFound => No existing metadata to delete
+
+    log_failure(user, uri, req, res)
+  end
+
+  def build_request(http_method, uri, body: nil)
+    req = http_method.new(uri)
     req['Authorization'] = "Bearer #{access_token}"
 
-    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(req) }
+    return req if body.nil?
 
-    unless res.is_a?(Net::HTTPSuccess)
-      Rails.logger.error("[SSO] Failed to delete room for user #{user.oidc_id}: #{res.code} #{res.body}")
+    req.content_type = 'application/json'
+    req.body = body.to_json
+    req
+  end
+
+  def execute_request(user:, uri:, req:)
+    Net::HTTP.start(
+      uri.hostname,
+      uri.port,
+      use_ssl: true,
+      open_timeout: HTTP_OPEN_TIMEOUT_SECONDS,
+      read_timeout: HTTP_READ_TIMEOUT_SECONDS
+    ) do |http|
+      http.request(req)
     end
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    Rails.logger.error("[SSO] Timeout for user #{user.oidc_id}: #{e.message}")
+    raise
   rescue StandardError => e
-    Rails.logger.error("[SSO] Error deleting room for user #{user.oidc_id}: #{e.message}")
+    Rails.logger.error("[SSO] Error syncing room for user #{user.oidc_id}: #{e.message}")
+    raise
+  end
+
+  def log_failure(user, uri, req, res)
+    Rails.logger.error(
+      "[SSO] Failed to sync room for user #{user.oidc_id} " \
+      "(#{req.method} #{uri}): #{res.code} #{res.body}"
+    )
   end
 
   def access_token

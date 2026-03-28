@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     super
     @user = users(:ironman)
@@ -98,6 +100,12 @@ class UserTest < ActiveSupport::TestCase
   test 'room can reference a valid room from the rooms table' do
     @user.room = rooms(:room_b231).number
     assert_predicate @user, :valid?
+  end
+
+  test 'changing room enqueues room sync job' do
+    assert_enqueued_with(job: SyncRoomToSsoJob, args: [@user.id]) do
+      @user.update!(room: rooms(:room_b231).number)
+    end
   end
 
   test "username can't be empty" do

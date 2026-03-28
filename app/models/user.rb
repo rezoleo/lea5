@@ -35,7 +35,7 @@ class User < ApplicationRecord
   validates :username, presence: true, uniqueness: true, allow_blank: false
 
   before_validation :ensure_has_wifi_password
-  after_save :sync_room_to_sso, if: :saved_change_to_room?
+  after_commit :enqueue_room_sync_to_sso, on: [:create, :update], if: :saved_change_to_room?
 
   # @return [Array<String>]
   attr_accessor :groups
@@ -121,7 +121,7 @@ class User < ApplicationRecord
     errors.add(:room, 'must reference an existing room') unless Room.exists?(number: room)
   end
 
-  def sync_room_to_sso
-    SsoMetadataService.sync_room(self)
+  def enqueue_room_sync_to_sso
+    SyncRoomToSsoJob.perform_later(id)
   end
 end
