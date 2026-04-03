@@ -7,24 +7,25 @@ class CreateRooms < ActiveRecord::Migration[7.2]
       t.string :group, limit: 6, null: false
       t.string :building, limit: 1, null: false
       t.integer :floor, null: false
+      t.references :user, foreign_key: true, index: { unique: true, where: 'user_id IS NOT NULL' }
 
       t.timestamps
     end
     add_index :rooms, :number, unique: true
+    add_index :rooms, :group
+    add_index :rooms, [:building, :floor]
 
-    # Nullify any user rooms that don't exist in the rooms table
+    # Migrate existing user.room data to rooms.user_id
     reversible do |dir|
       dir.up do
         execute <<~SQL.squish
-          UPDATE users SET room = NULL
-          WHERE room IS NOT NULL
-          AND room NOT IN (SELECT number FROM rooms)
+          UPDATE rooms SET user_id = users.id FROM users WHERE users.room = rooms.number
         SQL
       end
     end
 
+    # Remove the old room column from users
     remove_index :users, :room, name: 'index_users_on_room'
-    add_index :users, :room, unique: true, where: 'room IS NOT NULL', name: 'index_users_on_room'
-    add_foreign_key :users, :rooms, column: :room, primary_key: :number
+    remove_column :users, :room, :string
   end
 end

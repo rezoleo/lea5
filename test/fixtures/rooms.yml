@@ -11,12 +11,14 @@ room_a109a:
   group: "A109"
   building: "A"
   floor: 1
+  user: ironman
 
 room_a201:
   number: "A201"
   group: "A201"
   building: "A"
   floor: 2
+  user: pepper
 
 room_b231:
   number: "B231"

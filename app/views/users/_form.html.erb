@@ -20,8 +20,8 @@
   </div>
   <div>
     <%= f.label :room %>
-    <%= f.text_field :room, list: 'rooms-datalist', autocomplete: 'off',
-                            placeholder: 'ex : A105A', value: f.object.room %>
+    <%= f.text_field :room_number, list: 'rooms-datalist', autocomplete: 'off',
+                            placeholder: 'ex : A105A', value: f.object.room&.number %>
     <datalist id="rooms-datalist">
       <% Room.available_for(f.object).order(:number).each do |room| %>
         <option value="<%= room.number %>"></option>

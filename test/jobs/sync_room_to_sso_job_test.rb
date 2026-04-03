@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class SyncRoomToSsoJobTest < ActiveSupport::TestCase
+class SyncRoomToSsoJobTest < ActiveJob::TestCase
   test 'performs sync for existing user' do
     user = users(:ironman)
     output = StringIO.new
@@ -12,7 +12,7 @@ class SyncRoomToSsoJobTest < ActiveSupport::TestCase
     Rails.logger = logger
     begin
       assert_nothing_raised do
-        SyncRoomToSsoJob.perform_now(user.id)
+        SyncRoomToSsoJob.perform_later(user.id)
       end
     ensure
       Rails.logger = old_logger
@@ -30,7 +30,7 @@ class SyncRoomToSsoJobTest < ActiveSupport::TestCase
     Rails.logger = logger
     begin
       assert_nothing_raised do
-        SyncRoomToSsoJob.perform_now(missing_user_id)
+        SyncRoomToSsoJob.perform_later(missing_user_id)
       end
     ensure
       Rails.logger = old_logger

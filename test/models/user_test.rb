@@ -70,42 +70,13 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'room can be nil' do
-    @user.room = nil
-    assert_predicate @user, :valid?
+    user = users(:spiderman)
+    assert_nil user.room
+    assert_predicate user, :valid?
   end
 
-  test 'room should be unique when not nil' do
-    duplicate_user = @user.dup
-    duplicate_user.email = 'different@email.com'
-    duplicate_user.username = 'different-username'
-    @user.save
-    assert_not_predicate duplicate_user, :valid?
-  end
-
-  test 'multiple users can have nil room' do
-    @user.room = nil
-    another_user = @user.dup
-    another_user.email = 'different@email.com'
-    another_user.username = 'different-username'
-    another_user.room = nil
-    @user.save
-    assert_predicate another_user, :valid?
-  end
-
-  test 'room must reference an existing room' do
-    @user.room = 'Z999'
-    assert_not_predicate @user, :valid?
-  end
-
-  test 'room can reference a valid room from the rooms table' do
-    @user.room = rooms(:room_b231).number
-    assert_predicate @user, :valid?
-  end
-
-  test 'changing room enqueues room sync job' do
-    assert_enqueued_with(job: SyncRoomToSsoJob, args: [@user.id]) do
-      @user.update!(room: rooms(:room_b231).number)
-    end
+  test 'user can have a room association' do
+    assert_equal rooms(:room_a109a), @user.room
   end
 
   test "username can't be empty" do

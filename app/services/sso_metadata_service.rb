@@ -6,18 +6,17 @@ class SsoMetadataService
   HTTP_READ_TIMEOUT_SECONDS = 10
 
   # @param user [User]
-  def self.sync_room(user) = new.sync_room(user)
-
-  # @param user [User]
   def sync_room(user)
     return if user.oidc_id.blank?
 
+    room_number = user.room&.number
+
     unless production?
-      Rails.logger.info("[SSO] Dry-run: would sync room '#{user.room}' for user #{user.oidc_id}")
+      Rails.logger.info("[SSO] Dry-run: would sync room '#{room_number}' for user #{user.oidc_id}")
       return
     end
 
-    push_room_metadata(user)
+    push_room_metadata(user, room_number)
   end
 
   private
@@ -26,9 +25,9 @@ class SsoMetadataService
     Rails.env.production?
   end
 
-  def push_room_metadata(user)
-    if user.room.present?
-      post_room_metadata(user)
+  def push_room_metadata(user, room_number)
+    if room_number.present?
+      post_room_metadata(user, room_number)
     else
       delete_room_metadata(user)
     end
@@ -36,12 +35,12 @@ class SsoMetadataService
 
   # Metadata values in Zitadel must be base64-encoded.
   # See https://zitadel.com/docs/reference/api/user/zitadel.user.v2.UserService.SetUserMetadata
-  def post_room_metadata(user)
+  def post_room_metadata(user, room_number)
     uri = URI("#{SSO_BASE_URL}/v2/users/#{user.oidc_id}/metadata")
-    body = { metadata: [{ key: 'room', value: Base64.strict_encode64(user.room) }] }
+    body = { metadata: [{ key: 'room', value: Base64.strict_encode64(room_number) }] }
 
     req = build_request(Net::HTTP::Post, uri, body:)
-    res = execute_request(user:, uri:, req:)
+    res = execute_request(user:, req:)
 
     return if res.is_a?(Net::HTTPSuccess)
 
@@ -53,7 +52,7 @@ class SsoMetadataService
     uri.query = URI.encode_www_form([['keys', 'room']])
 
     req = build_request(Net::HTTP::Delete, uri)
-    res = execute_request(user:, uri:, req:)
+    res = execute_request(user:, req:)
 
     return if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPNotFound) # NotFound => No existing metadata to delete
 
@@ -71,10 +70,10 @@ class SsoMetadataService
     req
   end
 
-  def execute_request(user:, uri:, req:)
+  def execute_request(user:, req:)
     Net::HTTP.start(
-      uri.hostname,
-      uri.port,
+      req.uri.hostname,
+      req.uri.port,
       use_ssl: true,
       open_timeout: HTTP_OPEN_TIMEOUT_SECONDS,
       read_timeout: HTTP_READ_TIMEOUT_SECONDS

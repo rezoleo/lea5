@@ -18,7 +18,7 @@ module Api
       assert_equal @user.firstname, response_body[:firstname]
       assert_equal @user.lastname, response_body[:lastname]
       assert_equal @user.email, response_body[:email]
-      assert_equal @user.room, response_body[:room]
+      assert_equal @user.room&.number, response_body[:room]
       assert_equal api_user_url(@user), response_body[:url]
       assert_equal @user.internet_expiration, response_body[:internet_expiration]
       openssl_legacy_provider = OpenSSL::Provider.load('legacy')
