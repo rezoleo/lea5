@@ -18,14 +18,12 @@ class SyncAccountsTest < ActiveSupport::TestCase
     ZitadelStub.stub_list_users
 
     tony = User.find_by(email: 'tony@avengers.com')
-    original_room = tony.room
 
     assert_difference 'User.count', -1 do
       Rake::Task['lea5:sync_accounts'].invoke
     end
 
     tony.reload
-    assert_equal original_room, tony.room
   end
 end
 

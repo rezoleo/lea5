@@ -11,9 +11,7 @@ class SyncRoomToSsoJobTest < ActiveJob::TestCase
 
     Rails.logger = logger
     begin
-      assert_nothing_raised do
-        SyncRoomToSsoJob.perform_later(user.id)
-      end
+      SyncRoomToSsoJob.perform_now(user.id)
     ensure
       Rails.logger = old_logger
     end
@@ -30,7 +28,7 @@ class SyncRoomToSsoJobTest < ActiveJob::TestCase
     Rails.logger = logger
     begin
       assert_nothing_raised do
-        SyncRoomToSsoJob.perform_later(missing_user_id)
+        SyncRoomToSsoJob.perform_now(missing_user_id)
       end
     ensure
       Rails.logger = old_logger

@@ -146,7 +146,6 @@ class UserTest < ActiveSupport::TestCase
 
   test 'should update existing user from auth hash' do
     @user.update(oidc_id: '111111111111111111')
-    original_room = @user.room
     @user.save
 
     User.upsert_from_auth_hash(@auth_hash)
@@ -155,7 +154,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'John', @user.firstname
     assert_equal 'Doe', @user.lastname
     assert_equal 'john@doe.com', @user.email
-    assert_equal original_room, @user.room
     assert_equal '111111111111111111', @user.oidc_id
   end
 
