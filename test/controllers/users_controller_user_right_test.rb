@@ -15,7 +15,6 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
 
     get users_path
     assert_select 'a.user', count: 1
-    assert_select 'li', text: Regexp.new(@user.room)
   end
 
   test 'non-admin user should not see someone else in show' do

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,10 +85,10 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.bigint "number", null: false
     t.jsonb "generation_json", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "number", null: false
     t.index ["number"], name: "index_invoices_on_number", unique: true
   end
 
@@ -140,6 +140,18 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.integer "quantity", null: false
     t.index ["refund_id"], name: "index_refunds_subscription_offers_on_refund_id"
     t.index ["subscription_offer_id"], name: "index_refunds_subscription_offers_on_subscription_offer_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "number", limit: 6, null: false
+    t.string "group", limit: 6, null: false
+    t.string "building", limit: 1, null: false
+    t.integer "floor", null: false
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["number"], name: "index_rooms_on_number", unique: true
+    t.index ["user_id"], name: "index_rooms_on_user_id", unique: true, where: "(user_id IS NOT NULL)"
   end
 
   create_table "sales", force: :cascade do |t|
@@ -195,7 +207,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.string "firstname", null: false
     t.string "lastname", null: false
     t.string "email", null: false
-    t.string "room"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "oidc_id"
@@ -203,7 +214,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.string "username", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["oidc_id"], name: "index_users_on_oidc_id", unique: true
-    t.index ["room"], name: "index_users_on_room", unique: true, where: "(room IS NOT NULL)"
     t.index ["username"], name: "index_users_on_username", unique: true
     t.index ["wifi_password"], name: "index_users_on_wifi_password"
   end
@@ -223,6 +233,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
   add_foreign_key "refunds", "users", column: "refunder_id"
   add_foreign_key "refunds_subscription_offers", "refunds"
   add_foreign_key "refunds_subscription_offers", "subscription_offers"
+  add_foreign_key "rooms", "users"
   add_foreign_key "sales", "invoices"
   add_foreign_key "sales", "payment_methods"
   add_foreign_key "sales", "users", column: "client_id"

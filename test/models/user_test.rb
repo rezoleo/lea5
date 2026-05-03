@@ -3,6 +3,8 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  include ActiveJob::TestHelper
+
   def setup
     super
     @user = users(:ironman)
@@ -68,49 +70,18 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'room can be nil' do
-    @user.room = nil
-    assert_predicate @user, :valid?
+    user = users(:spiderman)
+    assert_nil user.room
+    assert_predicate user, :valid?
   end
 
-  test 'room should be unique when not nil' do
-    duplicate_user = @user.dup
-    duplicate_user.email = 'different@email.com'
-    duplicate_user.username = 'different-username'
-    @user.save
-    duplicate_user.room.downcase!
-    assert_not_predicate duplicate_user, :valid?
+  test 'user can have a room association' do
+    assert_equal rooms(:room_a109a), @user.room
   end
 
-  test 'multiple users can have nil room' do
-    @user.room = nil
-    another_user = @user.dup
-    another_user.email = 'different@email.com'
-    another_user.username = 'different-username'
-    another_user.room = nil
-    @user.save
-    assert_predicate another_user, :valid?
-  end
-
-  test 'room should be formatted on save' do
-    @user.room = 'a108B'
-    @user.save
-    assert_equal 'A108b', @user.room
-    # TODO: Add tests to check that we strip rooms, and that we keep uppercase on 'DF1'
-  end
-
-  test 'room must be of a valid format' do
-    valid_rooms = ['A205', 'B134a', 'C001b', 'F313', 'D111b', 'E231a', 'DF1', 'DF2', 'DF3', 'DF4']
-    invalid_rooms = ['A2005', 'C404', 'D111c', 'B1', 'E22', 'G207']
-
-    valid_rooms.each do |valid_room|
-      @user.room = valid_room
-      assert_predicate @user, :valid?, "#{valid_room} should be valid"
-    end
-
-    invalid_rooms.each do |invalid_room|
-      @user.room = invalid_room
-      assert_not_predicate @user, :valid?, "#{invalid_room} should be invalid"
-    end
+  test 'room must exist' do
+    @user.room_number = 'A999'
+    assert_not_predicate @user, :valid?
   end
 
   test "username can't be empty" do
@@ -180,7 +151,6 @@ class UserTest < ActiveSupport::TestCase
 
   test 'should update existing user from auth hash' do
     @user.update(oidc_id: '111111111111111111')
-    original_room = @user.room
     @user.save
 
     User.upsert_from_auth_hash(@auth_hash)
@@ -189,7 +159,6 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 'John', @user.firstname
     assert_equal 'Doe', @user.lastname
     assert_equal 'john@doe.com', @user.email
-    assert_equal original_room, @user.room
     assert_equal '111111111111111111', @user.oidc_id
   end
 
