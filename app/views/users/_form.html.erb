@@ -20,7 +20,7 @@
   </div>
   <div>
     <%= f.label :room %>
-    <%= f.collection_select :room, @rooms, :id, :number, prompt: 'Select room' %>
+    <%= f.collection_select :room_number, @rooms, :number, :number, { include_blank: 'No room' } %>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>

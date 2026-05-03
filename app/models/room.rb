@@ -15,7 +15,7 @@ class Room < ApplicationRecord
   after_commit :enqueue_room_sync_to_sso, on: [:create, :update], if: :saved_change_to_user_id?
 
   # Returns rooms available for assignment: unoccupied rooms + the room already assigned to the given user
-  scope :available_for, ->(user) { where(user_id: [nil, user.id]) }
+  scope :available_for, ->(user) { where(user_id: [nil, user.id]).order(:number) }
 
   private
 
