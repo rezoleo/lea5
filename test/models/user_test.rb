@@ -79,6 +79,11 @@ class UserTest < ActiveSupport::TestCase
     assert_equal rooms(:room_a109a), @user.room
   end
 
+  test 'room must exist' do
+    @user.room_number = 'A999'
+    assert_not_predicate @user, :valid?
+  end
+
   test "username can't be empty" do
     @user.username = ' '
     assert_not_predicate @user, :valid?
