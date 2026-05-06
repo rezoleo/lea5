@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis:7.2
+    image: redis:7.4@sha256:5a77f0f4698389019f828f6387049ce1d5adbea204e56422aa7720dab7034287
     restart: unless-stopped
     volumes:
     - redis-data:/data
