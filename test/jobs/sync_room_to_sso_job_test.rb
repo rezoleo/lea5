@@ -18,7 +18,7 @@ class SyncRoomToSsoJobTest < ActiveJob::TestCase
       Rails.logger = old_logger
     end
 
-    assert_includes output.string, '[SSO] Dry-run: would sync room'
+    assert_includes output.string, 'SSO dry-run: would sync room'
   end
 
   test 'does nothing when user does not exist' do

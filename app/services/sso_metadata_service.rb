@@ -5,6 +5,11 @@ class SsoMetadataService
   HTTP_OPEN_TIMEOUT_SECONDS = 5
   HTTP_READ_TIMEOUT_SECONDS = 10
 
+  class Error < StandardError; end
+  class HttpError < Error; end
+  class TimeoutError < Error; end
+  class RequestError < Error; end
+
   # @param user [User]
   def sync_room(user)
     return if user.oidc_id.blank?
@@ -12,7 +17,7 @@ class SsoMetadataService
     room_number = user.room&.number
 
     unless production?
-      Rails.logger.info("[SSO] Dry-run: would sync room '#{room_number}' for user #{user.oidc_id}")
+      Rails.logger.info("SSO dry-run: would sync room '#{room_number}' for user #{user.oidc_id}")
       return
     end
 
@@ -44,7 +49,7 @@ class SsoMetadataService
 
     return if res.is_a?(Net::HTTPSuccess)
 
-    log_failure(user, uri, req, res)
+    fail_with_response!(user, uri, req, res)
   end
 
   def delete_room_metadata(user)
@@ -56,7 +61,7 @@ class SsoMetadataService
 
     return if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPNotFound) # NotFound => No existing metadata to delete
 
-    log_failure(user, uri, req, res)
+    fail_with_response!(user, uri, req, res)
   end
 
   def build_request(http_method, uri, body: nil)
@@ -81,18 +86,13 @@ class SsoMetadataService
       http.request(req)
     end
   rescue Net::OpenTimeout, Net::ReadTimeout => e
-    Rails.logger.error("[SSO] Timeout for user #{user.oidc_id}: #{e.message}")
-    raise
+    raise TimeoutError, "Timeout for user #{user.oidc_id}: #{e.message}"
   rescue StandardError => e
-    Rails.logger.error("[SSO] Error syncing room for user #{user.oidc_id}: #{e.message}")
-    raise
+    raise RequestError, "Error syncing room for user #{user.oidc_id}: #{e.message}"
   end
 
-  def log_failure(user, uri, req, res)
-    Rails.logger.error(
-      "[SSO] Failed to sync room for user #{user.oidc_id} " \
-      "(#{req.method} #{uri}): #{res.code} #{res.body}"
-    )
+  def fail_with_response!(user, uri, req, res)
+    raise HttpError, "Failed to sync room for user #{user.oidc_id} (#{req.method} #{uri}): #{res.code} #{res.body}"
   end
 
   def access_token

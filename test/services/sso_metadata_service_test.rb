@@ -48,11 +48,11 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     assert_requested(stub)
   end
 
-  test 'sync_room does not raise on POST HTTP failure' do
+  test 'sync_room raises on POST HTTP failure' do
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_return(status: 500, body: 'Internal Server Error')
 
-    assert_nothing_raised do
+    assert_raises(SsoMetadataService::HttpError) do
       ProductionSsoService.new.sync_room(@user)
     end
   end
@@ -61,19 +61,19 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_raises(Errno::ECONNREFUSED) do
+    assert_raises(SsoMetadataService::RequestError) do
       ProductionSsoService.new.sync_room(@user)
     end
   end
 
-  test 'sync_room does not raise on DELETE HTTP failure' do
+  test 'sync_room raises on DELETE HTTP failure' do
     user = users(:spiderman) # User without a room
 
     WebMock.stub_request(:delete, "https://sso.rezoleo.fr/v2/users/#{user.oidc_id}/metadata")
            .with(query: { 'keys' => 'room' })
            .to_return(status: 500, body: 'Internal Server Error')
 
-    assert_nothing_raised do
+    assert_raises(SsoMetadataService::HttpError) do
       ProductionSsoService.new.sync_room(user)
     end
   end
@@ -85,7 +85,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
            .with(query: { 'keys' => 'room' })
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_raises(Errno::ECONNREFUSED) do
+    assert_raises(SsoMetadataService::RequestError) do
       ProductionSsoService.new.sync_room(user)
     end
   end
@@ -97,7 +97,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
            .with(query: { 'keys' => 'room' })
            .to_raise(Net::ReadTimeout.new)
 
-    assert_raises(Net::ReadTimeout) do
+    assert_raises(SsoMetadataService::TimeoutError) do
       ProductionSsoService.new.sync_room(user)
     end
   end
