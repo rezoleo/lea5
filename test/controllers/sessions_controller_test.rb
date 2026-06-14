@@ -20,7 +20,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should find user if already exists' do
-    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', room: 'F123', username: 'john-doe',
+    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', username: 'john-doe',
                 oidc_id: '111111111111111111')
 
     assert_difference 'User.count', 0 do

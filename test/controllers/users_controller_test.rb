@@ -22,7 +22,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get user_path @user
     assert_template 'users/show'
     assert_match @user.email, @response.body
-    assert_match @user.room, @response.body
+    assert_match @user.room.number, @response.body
   end
 
   test 'should get new' do
@@ -37,13 +37,14 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
           firstname: 'patrick',
           lastname: 'bar',
           email: 'patrick@bar.com',
-          room: 'E124',
-          username: 'patrick-bar'
+          username: 'patrick-bar',
+          room_number: 'E124'
         }
       }
     end
     user = User.find_by(email: 'patrick@bar.com')
     assert_redirected_to user
+    assert_equal 'E124', user.room.number
   end
 
   test 'should re-render new if user is invalid with html' do
@@ -62,11 +63,12 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
         firstname: 'toto',
         lastname: 'titi',
         email: 'toto@titi.tu',
-        room: 'B231',
-        username: 'toto-titi'
+        username: 'toto-titi',
+        room_number: 'B231'
       }
     }
     assert_redirected_to @user.reload
+    assert_equal 'B231', @user.room.number
   end
 
   test 'should re-render edit if updates are invalid with html' do

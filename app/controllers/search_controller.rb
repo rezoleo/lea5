@@ -7,8 +7,8 @@ class SearchController < ApplicationController
 
     return if @query.blank?
 
-    @users = User.accessible_by(current_ability).where(
-      'firstname ILIKE :search OR lastname ILIKE :search OR email ILIKE :search OR room ILIKE :search',
+    @users = User.accessible_by(current_ability).left_joins(:room).where(
+      'firstname ILIKE :search OR lastname ILIKE :search OR email ILIKE :search OR rooms.number ILIKE :search',
       search: "%#{User.sanitize_sql_like @query}%"
     )
     @machines = Machine.accessible_by(current_ability).where(

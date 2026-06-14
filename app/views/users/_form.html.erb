@@ -20,8 +20,7 @@
   </div>
   <div>
     <%= f.label :room %>
-    <%= f.text_field :room, placeholder: 'A123b or DF1', minlength: 3, maxlength: 5,
-                     pattern: '([A-Fa-f][0-3][0-9]{2}[a-b]?|[Dd][Ff][1-4])' %>
+    <%= f.collection_select :room_number, @rooms, :number, :number, { include_blank: 'No room' } %>
   </div>
   <div>
     <%= f.submit yield(:button_text) %>

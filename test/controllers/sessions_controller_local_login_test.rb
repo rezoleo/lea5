@@ -10,7 +10,6 @@ class SessionsControllerLocalLoginTest < ActionDispatch::IntegrationTest
                                            info: { first_name: 'John',
                                                    last_name: 'Doe',
                                                    email: 'john@doe.com',
-                                                   room: 'F123',
                                                    groups: 'rezoleo',
                                                    username: 'john-doe' } })
   end
@@ -22,7 +21,7 @@ class SessionsControllerLocalLoginTest < ActionDispatch::IntegrationTest
   end
 
   test 'should find user if already exists' do
-    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', room: 'F123', username: 'john-doe')
+    User.create(firstname: 'John', lastname: 'Doe', email: 'john@doe.com', username: 'john-doe')
 
     assert_difference 'User.count', 0 do
       get auth_callback_developer_path
