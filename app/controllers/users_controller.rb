@@ -39,7 +39,7 @@ class UsersController < ApplicationController
 
     @sso_users = zitadel_users_service.search(query: @query)
     load_existing_users_for(@sso_users)
-  rescue SsoUsersService::RequestError => e
+  rescue SsoHttpClient::RequestError => e
     @sso_users = []
     @user.errors.add(:base, "SSO search failed: #{e.message}")
   end
@@ -78,7 +78,7 @@ class UsersController < ApplicationController
     @sso_users = [sso_user]
     load_existing_users_for(@sso_users)
     render 'new_from_sso', status: :unprocessable_entity
-  rescue SsoUsersService::RequestError => e
+  rescue SsoHttpClient::RequestError => e
     render_sso_request_error(e)
   end
 
