@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class Room < ApplicationRecord
-  belongs_to :user, optional: true, inverse_of: :room
+  belongs_to :user, optional: true
 
   validates :number, presence: true, uniqueness: true, length: { maximum: 6 },
                      format: { with: /\A[A-Z0-9]+\z/, message: 'must be uppercase alphanumeric' }
-  # A room group represents the natural grouping of rooms. It can be the room number itself or a shared identifier
+  # A room group can be the room number itself or a shared identifier
+  # e.g. "A001" for "A001A" and "A001B", "ASSO" for "CLAP", "CAG" and "ALUMNI"
   validates :group, presence: true, length: { maximum: 6 },
                     format: { with: /\A[A-Z0-9]+\z/, message: 'must be uppercase alphanumeric' }
   validates :building, presence: true, inclusion: { in: ('A'..'F').to_a }

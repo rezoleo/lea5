@@ -12,9 +12,8 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
 
   test 'sync_room skips user without oidc_id' do
     @user.oidc_id = nil
-    assert_nothing_raised do
-      SsoMetadataService.new.sync_room(@user)
-    end
+    SsoMetadataService.new.sync_room(@user)
+    assert_nil @user.oidc_id
   end
 
   test 'sync_room does not call SSO in non-production' do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-  has_one :room, dependent: :nullify, inverse_of: :user
+  has_one :room, dependent: :nullify
   has_many :machines, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
   has_many :free_accesses_by_date, lambda {

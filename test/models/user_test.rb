@@ -3,8 +3,6 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  include ActiveJob::TestHelper
-
   def setup
     super
     @user = users(:ironman)
@@ -79,7 +77,20 @@ class UserTest < ActiveSupport::TestCase
     assert_equal rooms(:room_a109a), @user.room
   end
 
-  test 'room must exist' do
+  test 'destroying a user nullifies the associated room user_id' do
+    room = rooms(:room_a109a)
+    user = room.user
+
+    assert_difference 'User.count', -1 do
+      user.destroy!
+    end
+
+    room.reload
+    assert_nil room.user_id
+    assert Room.exists?(room.id)
+  end
+
+  test 'room number must exist' do
     @user.room_number = 'A999'
     assert_not_predicate @user, :valid?
   end

@@ -15,15 +15,6 @@ class CreateRooms < ActiveRecord::Migration[7.2]
     add_index :rooms, :group
     add_index :rooms, [:building, :floor]
 
-    # Migrate existing user.room data to rooms.user_id
-    reversible do |dir|
-      dir.up do
-        execute <<~SQL.squish
-          UPDATE rooms SET user_id = users.id FROM users WHERE users.room = rooms.number
-        SQL
-      end
-    end
-
     # Remove the old room column from users
     remove_index :users, :room, name: 'index_users_on_room'
     remove_column :users, :room, :string

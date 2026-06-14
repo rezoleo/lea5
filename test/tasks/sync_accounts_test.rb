@@ -18,12 +18,17 @@ class SyncAccountsTest < ActiveSupport::TestCase
     ZitadelStub.stub_list_users
 
     tony = User.find_by(email: 'tony@avengers.com')
+    peter = User.find_by(email: 'peterp@univ.edu')
 
     assert_difference 'User.count', -1 do
       Rake::Task['lea5:sync_accounts'].invoke
     end
 
     tony.reload
+    assert_equal 'Tony Jr', tony.firstname
+
+    peter.reload
+    assert_equal 'peterp@univ.edu', peter.email # invalid email doesn't get updated
   end
 end
 
@@ -33,7 +38,7 @@ class ZitadelStub
     state: 'USER_STATE_ACTIVE',
     username: 'ironman',
     profile: {
-      givenName: 'Tony',
+      givenName: 'Tony Jr',
       familyName: 'Stark',
       email: 'tony@avengers.com'
     }
@@ -41,7 +46,7 @@ class ZitadelStub
   MOCK_ZITADEL_USER_BAD_EMAIL = {
     userId: '326906230427557669',
     state: 'USER_STATE_ACTIVE',
-    username: 'peter.parker',
+    username: 'peter-parker',
     profile: {
       givenName: 'Peter',
       familyName: 'Parker',

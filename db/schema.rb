@@ -150,6 +150,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["building", "floor"], name: "index_rooms_on_building_and_floor"
+    t.index ["group"], name: "index_rooms_on_group"
     t.index ["number"], name: "index_rooms_on_number", unique: true
     t.index ["user_id"], name: "index_rooms_on_user_id", unique: true, where: "(user_id IS NOT NULL)"
   end
