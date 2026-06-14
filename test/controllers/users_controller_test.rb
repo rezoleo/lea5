@@ -52,7 +52,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     stub_find_user_by_id_request(oidc_id: oidc_id)
 
     assert_difference 'User.count', 1 do
-      post create_from_sso_users_path, params: { oidc_id: oidc_id, room: 'B231', query: 'tony' }
+      post create_from_sso_users_path, params: { oidc_id: oidc_id, room_number: 'B231', query: 'tony' }
     end
 
     created_user = User.find_by(oidc_id: oidc_id)
@@ -68,7 +68,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test 'should re-render sso page if selected sso user does not exist anymore' do
     stub_find_user_by_id_request(oidc_id: '999999999999999999', result: [])
 
-    post create_from_sso_users_path, params: { oidc_id: '999999999999999999', room: 'B231', query: 'tony' }
+    post create_from_sso_users_path, params: { oidc_id: '999999999999999999', room_number: 'B231', query: 'tony' }
 
     assert_response :unprocessable_entity
     assert_template 'users/new_from_sso'

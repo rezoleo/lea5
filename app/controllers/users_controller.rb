@@ -28,6 +28,7 @@ class UsersController < ApplicationController
 
   def new_from_sso
     @user = User.new
+    @rooms = Room.available_for(@user)
     authorize! :create, @user
     @query = params[:query].to_s.strip
     return if @query.blank?
@@ -59,6 +60,7 @@ class UsersController < ApplicationController
 
   def create_from_sso
     @user = User.new
+    @rooms = Room.available_for(@user)
     authorize! :create, @user
     @query = sso_user_params[:query].to_s.strip
     sso_user = zitadel_users_service.find_by_id(user_id: sso_user_params[:oidc_id])
@@ -66,6 +68,7 @@ class UsersController < ApplicationController
     return render_sso_user_not_found if sso_user.nil?
 
     @user = user_from_sso(sso_user)
+    @rooms = Room.available_for(@user)
     return on_sso_user_created if @user.save
 
     @sso_users = [sso_user]
@@ -102,7 +105,7 @@ class UsersController < ApplicationController
   end
 
   def sso_user_params
-    params.permit(:query, :oidc_id, :room)
+    params.permit(:query, :oidc_id, :room_number)
   end
 
   def zitadel_users_service
@@ -120,7 +123,7 @@ class UsersController < ApplicationController
       email: sso_user[:email],
       username: sso_user[:username],
       oidc_id: sso_user[:oidc_id],
-      room_number: sso_user_params[:room].presence
+      room_number: sso_user_params[:room_number].presence
     )
   end
 

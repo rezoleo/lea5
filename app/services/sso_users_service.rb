@@ -4,11 +4,16 @@ require 'json'
 require 'net/http'
 
 class SsoUsersService
-  class RequestError < StandardError; end
+  class Error < StandardError; end
+  class RequestError < Error; end
+  class HttpError < RequestError; end
+  class TimeoutError < RequestError; end
 
   LIST_USERS_URI = URI('https://sso.rezoleo.fr/v2/users')
   TEXT_QUERY_METHOD = 'TEXT_QUERY_METHOD_CONTAINS_IGNORE_CASE'
   SEARCH_LIMIT = 25
+  HTTP_OPEN_TIMEOUT_SECONDS = 5
+  HTTP_READ_TIMEOUT_SECONDS = 10
 
   def initialize(access_token: Rails.application.credentials.sso_lea5_pat!)
     @access_token = access_token
@@ -87,18 +92,37 @@ class SsoUsersService
   end
 
   def list_users(payload)
-    request = Net::HTTP::Post.new(LIST_USERS_URI)
-    request['Authorization'] = "Bearer #{@access_token}"
-    request.content_type = 'application/json'
-    request.body = payload.to_json
-    response = Net::HTTP.start(LIST_USERS_URI.hostname, LIST_USERS_URI.port, use_ssl: true) do |http|
-      http.request(request)
-    end
-    raise RequestError, "status #{response.code}" unless response.is_a?(Net::HTTPSuccess)
+    request = build_request(payload)
+    response = execute_request(request)
+    raise HttpError, "status #{response.code}" unless response.is_a?(Net::HTTPSuccess)
 
     JSON.parse(response.body)
   rescue JSON::ParserError => e
     raise RequestError, "invalid JSON response (#{e.message})"
+  end
+
+  def build_request(payload)
+    request = Net::HTTP::Post.new(LIST_USERS_URI)
+    request['Authorization'] = "Bearer #{@access_token}"
+    request.content_type = 'application/json'
+    request.body = payload.to_json
+    request
+  end
+
+  def execute_request(request)
+    Net::HTTP.start(
+      LIST_USERS_URI.hostname,
+      LIST_USERS_URI.port,
+      use_ssl: true,
+      open_timeout: HTTP_OPEN_TIMEOUT_SECONDS,
+      read_timeout: HTTP_READ_TIMEOUT_SECONDS
+    ) do |http|
+      http.request(request)
+    end
+  rescue Net::OpenTimeout, Net::ReadTimeout => e
+    raise TimeoutError, "timeout (#{e.message})"
+  rescue StandardError => e
+    raise RequestError, "request failed (#{e.message})"
   end
 
   def normalize_user(raw_user)
