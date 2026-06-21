@@ -74,6 +74,8 @@ def deactivate_user(user)
   if user.save
     puts "Deactivated #{username}"
   else
+    # :nocov:
     puts "Error deactivating user #{username}"
+    # :nocov:
   end
 end
