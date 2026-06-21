@@ -33,11 +33,10 @@ class UsersController < ApplicationController
     @query = params[:query].to_s.strip
     return if @query.blank?
 
-    @sso_users = zitadel_users_service.search(query: @query)
+    @sso_users = sso_users_service.search(query: @query)
     load_existing_users_for(@sso_users)
   rescue SsoHttpClient::RequestError => e
-    @sso_users = []
-    @user.errors.add(:base, "SSO search failed: #{e.message}")
+    render_sso_request_error(e)
   end
 
   def edit
@@ -63,7 +62,7 @@ class UsersController < ApplicationController
     @rooms = Room.available_for(@user)
     authorize! :create, @user
     @query = sso_user_params[:query].to_s.strip
-    sso_user = zitadel_users_service.find_by_id(user_id: sso_user_params[:oidc_id])
+    sso_user = sso_users_service.find_by_id(user_id: sso_user_params[:oidc_id])
 
     return render_sso_user_not_found if sso_user.nil?
 
@@ -108,8 +107,8 @@ class UsersController < ApplicationController
     params.permit(:query, :oidc_id, :room_number)
   end
 
-  def zitadel_users_service
-    @zitadel_users_service ||= SsoUsersService.new
+  def sso_users_service
+    @sso_users_service ||= SsoUsersService.new
   end
 
   def load_existing_users_for(sso_users)

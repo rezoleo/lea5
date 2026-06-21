@@ -60,7 +60,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Tony', created_user.firstname
     assert_equal 'Stark', created_user.lastname
     assert_equal 'tony.stark@avengers.com', created_user.email
-    assert_equal 'ironman.sso', created_user.username
+    assert_equal 'ironman-sso', created_user.username
     assert_equal 'B231', created_user.room.number
     assert_redirected_to created_user
   end
@@ -73,6 +73,41 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_template 'users/new_from_sso'
     assert_match 'could not be found', @response.body
+  end
+
+  test 'should handle SSO request error in new_from_sso' do
+    WebMock.stub_request(:post, SSO_URL).to_raise(SsoHttpClient::RequestError.new)
+
+    get new_from_sso_users_path, params: { query: 'tony' }
+
+    assert_response :unprocessable_entity
+    assert_template 'users/new_from_sso'
+    assert_match 'SSO request failed', @response.body
+  end
+
+  test 'should handle SSO request error in create_from_sso' do
+    WebMock.stub_request(:post, SSO_URL).to_raise(SsoHttpClient::RequestError.new)
+
+    post create_from_sso_users_path, params: { oidc_id: '123', room_number: 'B231', query: 'tony' }
+
+    assert_response :unprocessable_entity
+    assert_template 'users/new_from_sso'
+    assert_match 'SSO request failed', @response.body
+  end
+
+  test 'should re-render sso page if user build from SSO is invalid' do
+    oidc_id = '100000000000000001'
+    stub_find_user_by_id_request(oidc_id: oidc_id)
+
+    @user.update!(username: 'ironman-sso')
+
+    assert_no_difference 'User.count' do
+      post create_from_sso_users_path, params: { oidc_id: oidc_id, room_number: 'B231', query: 'tony' }
+    end
+
+    assert_response :unprocessable_entity
+    assert_template 'users/new_from_sso'
+    assert_match 'Username has already been taken', @response.body
   end
 
   test 'should create a user and redirect if user is valid in html' do
@@ -174,7 +209,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   def default_sso_user(oidc_id:)
     {
       userId: oidc_id,
-      username: 'ironman.sso',
+      username: 'ironman-sso',
       human: {
         profile: {
           givenName: 'Tony',
