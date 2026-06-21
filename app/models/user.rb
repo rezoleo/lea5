@@ -105,6 +105,14 @@ class User < ApplicationRecord
     @room_number = value&.upcase&.presence
   end
 
+  # When a user is deactivated from SSO, we don't want to automatically delete their account in our system.
+  # The legal deletion of lea5 users is handled separately from the SSO deactivation.
+  def deactivate_from_sso
+    return if oidc_id.nil?
+
+    update(oidc_id: nil)
+  end
+
   def admin?
     return false if groups.nil?
 
