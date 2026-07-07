@@ -147,6 +147,22 @@ class SaleTest < ActiveSupport::TestCase
     assert_equal [articles(:deleted_article).id], sale.refundable_article_sales.map(&:article_id)
   end
 
+  test 'create should snapshot total_cents from the line items' do
+    sale = Sale.build_with_invoice(
+      {
+        client: @user,
+        duration: 1,
+        payment_method: @payment_method,
+        articles_sales: [ArticlesSale.new(article: @article, quantity: 2)]
+      },
+      seller: @user
+    )
+
+    sale.save
+    assert_equal sale.total_price.cents, sale.total_cents
+    assert_equal sale.total_price.cents, sale.reload.total_cents
+  end
+
   test 'save should return false when invoice is nil' do
     sale = Sale.new(
       client: @user,

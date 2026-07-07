@@ -10,11 +10,6 @@ module Admin
 
       @kpis = @query.kpis
       @revenue_data = @query.revenue_by_date
-      @payment_methods_data = @query.payment_methods
-      @top_items_data = @query.top_items
-      @customer_metrics = @query.customer_metrics
-      @sales_by_seller = @query.sales_by_seller
-      @recent_sales = recent_sales_list
     end
 
     def export_csv
@@ -32,26 +27,6 @@ module Admin
         start_date: @start_date,
         end_date: @end_date
       )
-    end
-
-    def recent_sales_list
-      Sale.where(created_at: @start_date..@end_date)
-          .where.not(verified_at: nil)
-          .includes(:client, :seller, :payment_method,
-                    :articles_sales, :sales_subscription_offers,
-                    articles: [], subscription_offers: [])
-          .order(created_at: :desc)
-          .limit(5)
-          .map do |sale|
-        {
-          id: sale.id,
-          date: sale.created_at,
-          client: sale.client.display_name,
-          seller: sale.seller&.display_name || 'N/A',
-          payment_method: sale.payment_method.name,
-          total: sale.total_price
-        }
-      end
     end
 
     # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength

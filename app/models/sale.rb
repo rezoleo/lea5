@@ -31,6 +31,12 @@ class Sale < ApplicationRecord
   validate :exhaustive_subscription_offers, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :no_duplicate_article_sale
 
+  # Materialize the total into `total_cents` once, at creation, so set-based
+  # queries (dashboard aggregates, CSV, Metabase) can SUM a column instead of
+  # recomputing per row. Sales are immutable and prices never change in place,
+  # so the captured snapshot stays correct forever.
+  before_create :assign_total_cents
+
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
   end
@@ -74,6 +80,10 @@ class Sale < ApplicationRecord
   end
 
   private
+
+  def assign_total_cents
+    self.total_cents = total_price.cents
+  end
 
   def not_empty_sale
     return unless articles_sales.empty? && sales_subscription_offers.empty?
