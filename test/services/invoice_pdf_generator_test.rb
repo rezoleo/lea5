@@ -96,6 +96,32 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_equal Time.current.utc, metadata[:CreationDate]
   end
 
+  test 'generate_pdf renders a credit note for refunds' do
+    generator = InvoicePdfGenerator.new(
+      number: '4270',
+      type: 'credit_note',
+      original_invoice_number: 1234,
+      sale_date: '2024-07-22',
+      issue_date: '2024-07-22',
+      client_name: users(:ironman).display_name,
+      client_address: users(:ironman).display_address,
+      items: [{ item_name: 'Remboursement abonnement', price: Money.new(3000, 'EUR'), quantity: 1 }],
+      payment_amount: Money.new(3000, 'EUR'),
+      payment_date: '2024-07-22',
+      payment_method: 'Cash'
+    )
+    pdf = generator.generate_pdf
+
+    pdf_text = extract_text_from_pdf(pdf)
+    assert_includes pdf_text, 'Avoir Rézoléo'
+    assert_includes pdf_text, 'Avoir n°4270'
+    assert_includes pdf_text, "Facture d'origine n°1234"
+
+    metadata = extract_metadata_from_pdf(pdf)
+    assert_equal 'Avoir Rézoléo 4270', metadata[:Title]
+    assert_equal 'Avoir 4270', metadata[:Subject]
+  end
+
   class CollectTextProcessor < HexaPDF::Content::Processor
     def initialize(page, content)
       super()

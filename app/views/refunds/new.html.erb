@@ -1,0 +1,48 @@
+<%# locals: () -%>
+
+<main>
+  <h1 class="title">Refund sale for <%= @sale.client.display_name %></h1>
+
+  <%= form_with(url: sale_refunds_path(@sale), method: :post, class: 'form') do |f| %>
+    <%= render 'utils/error_messages', object: @refund %>
+
+    <fieldset>
+      <legend>Articles</legend>
+      <% if @refundable_article_sales.any? %>
+        <% @refundable_article_sales.each do |article_sale| %>
+          <div>
+            <%= check_box_tag 'refund[article_ids][]', article_sale.article_id, false,
+                              id: "refund_article_#{article_sale.article_id}" %>
+            <%= label_tag "refund_article_#{article_sale.article_id}",
+                          "#{article_sale.article.name} (×#{article_sale.quantity}) — " \
+                          "#{(article_sale.article.price * article_sale.quantity).format}" %>
+          </div>
+        <% end %>
+      <% else %>
+        <p>No refundable articles (already refunded or none on this sale).</p>
+      <% end %>
+    </fieldset>
+
+    <% if @subscription&.refundable? %>
+      <fieldset>
+        <legend>Subscription</legend>
+        <div>
+          <%= check_box_tag 'refund[refund_subscription]', '1', false, id: 'refund_refund_subscription' %>
+          <%= label_tag 'refund_refund_subscription',
+                        "Cut subscription now and credit #{@subscription.refund_amount.format}" %>
+        </div>
+      </fieldset>
+    <% end %>
+
+    <div>
+      <%= label_tag 'refund_refund_method_id', 'Refund method' %>
+      <%= select_tag 'refund[refund_method_id]',
+                     options_from_collection_for_select(@refund_methods, :id, :name),
+                     prompt: 'Select refund method' %>
+    </div>
+
+    <div>
+      <%= f.submit 'Create refund' %>
+    </div>
+  <% end %>
+</main>

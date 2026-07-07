@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-# It is recommended to instantiate a new invoice from a sale, using {Invoice.build_from_sale}
+# It is recommended to instantiate a new invoice from a sale, using {Invoice.build_from_sale},
+# or from a refund, using {Invoice.build_from_refund}.
 class Invoice < ApplicationRecord
   has_one :sale, dependent: :restrict_with_exception
+  has_one :refund, dependent: :restrict_with_exception
   has_one_attached :pdf
 
   validates :number, presence: true, uniqueness: true
@@ -10,9 +12,9 @@ class Invoice < ApplicationRecord
   before_validation :assign_number!
   after_create_commit :generate_pdf!
 
-  # @return [User]
+  # @return [User] the client this invoice (or credit note) concerns
   def user
-    sale.client
+    (sale || refund&.sale).client
   end
 
   def to_param
@@ -23,6 +25,17 @@ class Invoice < ApplicationRecord
   # @return [Invoice]
   def self.build_from_sale(sale)
     generation_json = generate_hash(sale)
+
+    new do |invoice|
+      invoice.generation_json = generation_json
+    end
+  end
+
+  # Builds a credit-note invoice for a refund.
+  # @param [Refund] refund
+  # @return [Invoice]
+  def self.build_from_refund(refund)
+    generation_json = generate_refund_hash(refund)
 
     new do |invoice|
       invoice.generation_json = generation_json
@@ -97,6 +110,42 @@ class Invoice < ApplicationRecord
           quantity: e.quantity
         }
       end
+    end
+
+    # @param [Refund] refund
+    def generate_refund_hash(refund)
+      {
+        version: 1,
+        type: 'credit_note',
+        original_invoice_number: refund.sale.invoice.number,
+        sale_date: Time.zone.today,
+        issue_date: Time.zone.today,
+        client_name: refund.sale.client.display_name,
+        client_address: refund.sale.client.display_address,
+        payment_amount: refund.credited_amount,
+        payment_method: refund.refund_method&.name,
+        payment_date: refund.cut_at,
+        items: refund_items_to_h(refund)
+      }.compact
+    end
+
+    # @param [Refund] refund
+    # @return [Array<Hash{Symbol=>String, Money, Integer}>]
+    def refund_items_to_h(refund)
+      items = refund.articles_refunds.map do |e|
+        {
+          item_name: e.article.name,
+          price: e.article.price,
+          quantity: e.quantity
+        }
+      end
+      return items unless refund.subscription_refunded?
+
+      items + [{
+        item_name: 'Remboursement abonnement',
+        price: refund.subscription_refund,
+        quantity: 1
+      }]
     end
   end
 end

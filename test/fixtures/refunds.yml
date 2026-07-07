@@ -7,3 +7,4 @@ ironman_cable_adapter_4_months:
   invoice: refund_ironman_cable_4_months
   reason: Leaving the residence
   verified_at: 2025-01-30 14:37:19
+  subscription_refund_cents: 2000

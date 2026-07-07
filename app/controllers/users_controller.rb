@@ -11,7 +11,9 @@ class UsersController < ApplicationController
     @machines = @user.machines.includes(:ip).order(created_at: :asc)
     @subscriptions = @user.subscriptions.order(created_at: :desc)
     @free_accesses = @user.free_accesses.order(created_at: :desc)
-    @sales = @user.sales_as_client.order(created_at: :desc)
+    @sales = @user.sales_as_client
+                  .includes(refunds: [:invoice, { articles_refunds: :article }])
+                  .order(created_at: :desc)
   end
 
   def new

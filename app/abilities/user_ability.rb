@@ -15,9 +15,10 @@ class UserAbility
 
     can [:read], Subscription, user: user
     can [:read], Sale, client: user
-    can [:read], Refund, user: user
+    can [:read], Refund, sale: { client: user }
     can [:read], FreeAccess, user: user
     can [:read], Invoice, sale: { client: user }
+    can [:read], Invoice, refund: { sale: { client: user } }
 
     return unless user.admin?
 
