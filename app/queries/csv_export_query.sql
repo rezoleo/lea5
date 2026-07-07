@@ -1,22 +1,6 @@
 WITH
--- Sales totals (articles + subscriptions)
-sale_totals AS (SELECT s.id                                          AS sale_id,
-                       COALESCE(a.total, 0) + COALESCE(sub.total, 0) AS sale_total_cents
-                FROM sales s
-                         LEFT JOIN (SELECT asu.sale_id,
-                                           SUM(asu.quantity * a.price_cents) AS total
-                                    FROM articles_sales asu
-                                             JOIN articles a ON a.id = asu.article_id
-                                    GROUP BY asu.sale_id) a ON a.sale_id = s.id
-                         LEFT JOIN (SELECT sso.sale_id,
-                                           SUM(sso.quantity * so.price_cents) AS total
-                                    FROM sales_subscription_offers sso
-                                             JOIN subscription_offers so ON so.id = sso.subscription_offer_id
-                                    GROUP BY sso.sale_id) sub ON sub.sale_id = s.id
-                WHERE s.verified_at IS NOT NULL
-                  AND s.created_at BETWEEN :start_date AND :end_date),
-
--- Sale lines (articles + subscriptions)
+-- Sale lines (articles + subscriptions). Sale totals come from the stored
+-- sales.total_cents snapshot.
 sale_lines AS (SELECT s.created_at                   AS date,
                       s.id                           AS sale_id,
                       c.username                     AS client,
@@ -27,9 +11,8 @@ sale_lines AS (SELECT s.created_at                   AS date,
                       asu.quantity                   AS quantity,
                       a.price_cents                  AS unit_price_cents,
                       (asu.quantity * a.price_cents) AS line_total_cents,
-                      st.sale_total_cents            AS sale_total_cents
+                      s.total_cents                  AS sale_total_cents
                FROM sales s
-                        JOIN sale_totals st ON st.sale_id = s.id
                         JOIN users c ON c.id = s.client_id
                         LEFT JOIN users sel ON sel.id = s.seller_id
                         JOIN payment_methods pm ON pm.id = s.payment_method_id
@@ -50,9 +33,8 @@ sale_lines AS (SELECT s.created_at                   AS date,
                       sso.quantity,
                       so.price_cents,
                       (sso.quantity * so.price_cents),
-                      st.sale_total_cents
+                      s.total_cents
                FROM sales s
-                        JOIN sale_totals st ON st.sale_id = s.id
                         JOIN users c ON c.id = s.client_id
                         LEFT JOIN users sel ON sel.id = s.seller_id
                         JOIN payment_methods pm ON pm.id = s.payment_method_id
