@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
+ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -129,6 +129,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "subscription_refund_cents"
+    t.bigint "amount_cents", default: 0, null: false
     t.index ["invoice_id"], name: "index_refunds_on_invoice_id"
     t.index ["refund_method_id"], name: "index_refunds_on_refund_method_id"
     t.index ["refunder_id"], name: "index_refunds_on_refunder_id"
@@ -157,6 +158,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_12_14_175208) do
     t.datetime "verified_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "amount_cents", default: 0, null: false
     t.index ["client_id"], name: "index_sales_on_client_id"
     t.index ["invoice_id"], name: "index_sales_on_invoice_id"
     t.index ["payment_method_id"], name: "index_sales_on_payment_method_id"

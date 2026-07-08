@@ -14,9 +14,9 @@ class RefundTest < ActiveSupport::TestCase
     end
   end
 
-  test 'credited_amount sums refunded articles and the stored subscription credit' do
-    # cable (2 €) + stored subscription credit (20 €)
-    assert_equal Money.new(2200, :eur), @refund.credited_amount
+  test 'amount sums refunded articles and the stored subscription credit' do
+    @refund.valid? # triggers the amount calculation
+    assert_equal Money.new(2200, :eur), @refund.amount
   end
 
   test 'create_with_credit_note refunds an article and generates a credit note' do
@@ -33,7 +33,7 @@ class RefundTest < ActiveSupport::TestCase
 
     assert_predicate refund, :persisted?
     assert_equal [article.id], refund.articles_refunds.map(&:article_id)
-    assert_equal Money.new(2000, :eur), refund.credited_amount
+    assert_equal Money.new(2000, :eur), refund.amount
     assert_equal 7, refund.invoice.number # next_invoice_number fixture
     assert_equal users(:ironman), refund.invoice.user
   end
@@ -52,7 +52,7 @@ class RefundTest < ActiveSupport::TestCase
 
     assert_predicate refund, :persisted?
     assert_predicate refund, :subscription_refunded?
-    assert_equal Money.new(5000, :eur), refund.credited_amount # nothing consumed yet => full refund
+    assert_equal Money.new(5000, :eur), refund.amount # nothing consumed yet => full refund
     assert_equal 5000, refund.subscription_refund_cents
     assert_not_nil subscription.reload.cancelled_at
     assert_not_predicate subscription, :refundable?

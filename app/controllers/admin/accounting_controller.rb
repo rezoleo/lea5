@@ -12,11 +12,11 @@ module Admin
       @revenue_data = @query.revenue_by_date
     end
 
-    def export_csv
+    def export
       authorize! :manage, :all
 
       send_data generate_csv_data,
-                filename: "rezoleo_accounting_export_#{@start_date.to_date}_#{@end_date.to_date}.csv",
+                filename: "rezoleo_export_#{@start_date.to_date}_#{@end_date.to_date}.csv",
                 type: 'text/csv'
     end
 
@@ -70,17 +70,18 @@ module Admin
 
         results.each do |row|
           csv << [
-            row['date'].to_datetime.strftime('%Y-%m-%d %H:%M'),
-            row['sale_id'],
+            format_date(row['date']),
+            row['invoice_number'],
+            row['transaction_type'],
+            row['transaction_id'],
             row['client'],
             row['seller'],
             row['payment_method'],
             row['item_type'],
             row['item_name'],
-            row['quantity'],
-            format_cents(row['unit_price_cents']),
-            format_cents(row['line_total_cents']),
-            format_cents(row['sale_total_cents'])
+            row['quantity'].to_i,
+            format_currency(row['unit_price_cents']),
+            format_currency(row['line_total_cents'])
           ]
         end
       end
@@ -88,12 +89,19 @@ module Admin
     # rubocop:enable Metrics/MethodLength
 
     def csv_headers
-      ['Date', 'Sale ID', 'Client', 'Seller', 'Payment Method',
-       'Item Type', 'Item Name', 'Quantity', 'Unit Price', 'Line Total', 'Sale Total']
+      [
+        'Date', 'Invoice Number', 'Transaction Type', 'Transaction ID',
+        'Client', 'Seller', 'Payment Method', 'Item Type',
+        'Item Name', 'Quantity', 'Unit Price', 'Line Total'
+      ]
     end
 
-    def format_cents(cents)
-      format('%.2f', cents.to_i / 100.0)
+    def format_date(date_value)
+      date_value.in_time_zone&.strftime('%Y-%m-%d %H:%M:%S %Z')
+    end
+
+    def format_currency(cents)
+      cents.to_i / 100.0
     end
   end
 end
