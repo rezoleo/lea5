@@ -11,6 +11,7 @@ class Refund < ApplicationRecord
 
   # Prorated credit for the cut subscription. NULL means no subscription was cut.
   monetize :subscription_refund_cents, allow_nil: true
+  monetize :amount_cents
 
   # Whether to cut the subscription, and the refund timestamp.
   attr_accessor :refund_subscription, :cut_at
@@ -18,17 +19,11 @@ class Refund < ApplicationRecord
   validate :not_empty_refund
   validate :subscription_must_be_refundable
 
+  before_validation :assign_amount
+
   # @return [Boolean] whether this refund cut the sale's subscription
   def subscription_refunded?
     subscription_refund_cents.present?
-  end
-
-  # @return [Money]
-  def credited_amount
-    total = Money.new(0)
-    articles_refunds.each { |rec| total += rec.quantity * rec.article.price }
-    total += subscription_refund if subscription_refunded?
-    total
   end
 
   # Builds (without saving) a refund and its credit-note invoice for the given sale.
@@ -77,6 +72,13 @@ class Refund < ApplicationRecord
   private_class_method :build_articles_refunds
 
   private
+
+  def assign_amount
+    articles_total = articles_refunds.to_a.sum { |rec| rec.quantity * rec.article.price }
+    subscription_total = subscription_refunded? ? subscription_refund : Money.new(0)
+
+    self.amount = articles_total + subscription_total
+  end
 
   def not_empty_refund
     return if articles_refunds.present? || subscription_refunded?

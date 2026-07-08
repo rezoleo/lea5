@@ -10,8 +10,7 @@ class InvoiceLib
 
   CONDITIONS = <<~CONDITIONS
     Conditions de règlement : Prix comptant sans escompte
-    Moyen de paiement : Chèque (ordre : Rézoléo), Espèces ou Virement
-    Conditions de vente : Prix de départ
+    Moyens de paiement autorisés : Chèque (ordre « Rézoléo »), Espèces ou Virement
 
     (1) TVA non applicable, article 293 B du CGI
   CONDITIONS
@@ -55,7 +54,7 @@ class InvoicePdfGenerator
   def initialize(input)
     @input = normalize_input(input)
     @doc_metadata = InvoiceLib::PDFMetadata.new(number: @input[:number], credit_note: credit_note?)
-    @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
+    @total_amount = @input[:items].sum { |item| item[:price] * item[:quantity] }
     @composer = InvoiceComposer.new(document_title: credit_note? ? 'Avoir Rézoléo' : 'Facture Rézoléo')
     setup_document
   end
@@ -157,13 +156,13 @@ class InvoicePdfGenerator
   def build_total_row
     [
       { content: 'Total', col_span: 5 },
-      table(@total_price.format, text_align: :right)
+      table(@total_amount.format, text_align: :right)
     ]
   end
 
   def add_totals
-    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_price.format}"
-    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_price.format}"
+    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_amount.format}"
+    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_amount.format}"
 
     @composer.text(ht_s)
     @composer.text(ttc_s, margin: margin_bottom(1))
@@ -182,7 +181,7 @@ class InvoicePdfGenerator
     end
 
     payment_amount = @input[:payment_amount]
-    left_to_pay = @total_price - payment_amount
+    left_to_pay = @total_amount - payment_amount
 
     data = [[
       table(@input[:payment_date] || '', style: :small),

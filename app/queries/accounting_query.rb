@@ -20,7 +20,7 @@ class AccountingQuery
   end
 
   def kpis
-    total_revenue_cents = verified_sales.sum(:total_cents)
+    total_revenue_cents = verified_sales.sum(:amount_cents)
 
     {
       total_revenue: Money.new(total_revenue_cents),
@@ -33,7 +33,7 @@ class AccountingQuery
   def revenue_by_date
     raw = verified_sales
           .group('DATE(sales.created_at)')
-          .sum(:total_cents)
+          .sum(:amount_cents)
 
     (@start_date.to_date..@end_date.to_date).index_with do |date|
       raw[date] ? raw[date] / 100.0 : 0.0
@@ -63,6 +63,6 @@ class AccountingQuery
     Sale
       .where(created_at: (@start_date - period_length)...@start_date)
       .where.not(verified_at: nil)
-      .sum(:total_cents)
+      .sum(:amount_cents)
   end
 end

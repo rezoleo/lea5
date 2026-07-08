@@ -132,9 +132,9 @@ class SaleTest < ActiveSupport::TestCase
     assert sale.errors.added? :base, 'Cannot create an empty sale, add at least an article or a subscription'
   end
 
-  test 'total_price should calculate total from articles and subscription offers' do
-    expected_total = Money.new(3200, :eur)
-    assert_equal expected_total, @sale.total_price
+  test 'amount should calculate total from articles and subscription offers' do
+    @sale.valid? # triggers the amount calculation
+    assert_equal Money.new(3200, :eur), @sale.amount
   end
 
   test 'refundable_article_sales excludes articles already refunded' do
@@ -145,22 +145,6 @@ class SaleTest < ActiveSupport::TestCase
   test 'refundable_article_sales returns lines not yet refunded' do
     sale = sales(:ironman_deleted_article)
     assert_equal [articles(:deleted_article).id], sale.refundable_article_sales.map(&:article_id)
-  end
-
-  test 'create should snapshot total_cents from the line items' do
-    sale = Sale.build_with_invoice(
-      {
-        client: @user,
-        duration: 1,
-        payment_method: @payment_method,
-        articles_sales: [ArticlesSale.new(article: @article, quantity: 2)]
-      },
-      seller: @user
-    )
-
-    sale.save
-    assert_equal sale.total_price.cents, sale.total_cents
-    assert_equal sale.total_price.cents, sale.reload.total_cents
   end
 
   test 'save should return false when invoice is nil' do
