@@ -72,10 +72,9 @@ module Api
       assert_response :not_found
     end
 
-    test 'should raise an error when querying machines by invalid mac address with api key' do
-      assert_raises ActiveRecord::StatementInvalid do
-        get api_machine_url('invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
-      end
+    test 'should return bad request when querying machines by invalid mac address with api key' do
+      get api_machine_url('invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :bad_request
     end
 
     test 'should not be able to query machines by mac address if api key is wrong' do
@@ -147,12 +146,12 @@ module Api
       end
       user = @machine.user
       user.machines.destroy_all
-
       machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
-      assert_raises CanCan::AccessDenied do
-        post api_machines_url, params: { user_id: user.id, machine: machine },
-                               headers: { 'Authorization' => "Bearer #{@original_key}" }
-      end
+
+      post api_machines_url, params: { user_id: user.id, machine: machine },
+                             headers: { 'Authorization' => "Bearer #{@original_key}" }
+
+      assert_response :forbidden
     ensure
       silence_warnings do
         Object.const_set(:USER_MACHINES_LIMIT, old_value)

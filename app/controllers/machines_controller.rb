@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class MachinesController < ApplicationController
-  protect_from_forgery unless: -> { request.format.json? }
-
   before_action :owner, only: [:create, :new]
   before_action :current_machine, only: [:show, :edit, :update, :destroy]
 

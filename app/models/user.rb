@@ -25,8 +25,7 @@ class User < ApplicationRecord
 
   validates :firstname, presence: true, allow_blank: false
   validates :lastname, presence: true, allow_blank: false
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/
-  validates :email, presence: true, format: { with: VALID_EMAIL_REGEX }, uniqueness: true
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }, uniqueness: true
   validates :wifi_password, presence: true, allow_blank: false
   validates :username, presence: true, uniqueness: true, allow_blank: false
   validate :room_number_must_exist
@@ -74,12 +73,19 @@ class User < ApplicationRecord
   end
 
   # @param [Integer] duration subscription duration in months
-  # @return [Subscription] the newly created subscription
+  # @return [Subscription, nil] an unsaved subscription record or nil when duration <= 0
   def extend_subscription(duration:)
     return if duration <= 0
 
     start_at = subscription_expired? ? Time.current : subscription_expiration
     subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
+  end
+
+  # NTLM (MD4) hash of the Wi-Fi password used by FreeRADIUS. Requires the legacy
+  # provider loaded in config/initializers/openssl_legacy.rb.
+  # @return [String]
+  def ntlm_password
+    OpenSSL::Digest::MD4.hexdigest(wifi_password.encode('utf-16le'))
   end
 
   def self.upsert_from_auth_hash(auth_hash)

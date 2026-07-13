@@ -9,9 +9,9 @@ module Api
       @machines = Machine.accessible_by(current_ability)
       return if params[:has_connection].blank?
 
-      @machines = @machines.includes(user: [:valid_subscriptions_by_date, :free_accesses_by_date]).select do |machine|
-        machine if machine.user.internet_access?
-      end
+      @machines = @machines
+                  .includes(user: [:valid_subscriptions_by_date, :free_accesses_by_date])
+                  .select { |machine| machine.user.internet_access? }
     end
 
     def show

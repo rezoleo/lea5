@@ -8,7 +8,7 @@ class ApiKeyAbility
 
     can :read, :all
     can [:create], Machine do |machine|
-      machine.user.machines.size <= USER_MACHINES_LIMIT
+      machine.user.machines.count < USER_MACHINES_LIMIT
     end
   end
 end
