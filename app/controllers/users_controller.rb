@@ -4,16 +4,18 @@ class UsersController < ApplicationController
   protect_from_forgery unless: -> { request.format.json? }
 
   def index
-    @users = User.accessible_by(current_ability)
+    @users = User.accessible_by(current_ability).includes(:room, :valid_subscriptions_by_date, :free_accesses_by_date)
   end
 
   def show
-    @user = User.find_by!(username: params[:username])
+    @user = User.includes(:room, :sales_as_client, :valid_subscriptions_by_date,
+                          :free_accesses_by_date).find_by!(username: params[:username])
     authorize! :show, @user
-    @machines = @user.machines.includes(:ip).order(created_at: :asc)
-    @subscriptions = @user.subscriptions.order(created_at: :desc)
-    @free_accesses = @user.free_accesses.order(created_at: :desc)
-    @sales = @user.sales_as_client.order(created_at: :desc)
+    @machines = @user.machines.includes(:ip).order(created_at: :asc).load
+    @subscriptions = @user.subscriptions.order(created_at: :desc).load
+    @free_accesses = @user.free_accesses_by_date.load
+    @sales = @user.sales_as_client.includes(:articles, :subscription, :subscription_offers, :invoice,
+                                            :payment_method).order(created_at: :desc).load
   end
 
   def new
