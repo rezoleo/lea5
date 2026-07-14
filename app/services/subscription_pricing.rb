@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Decomposes and prices subscription durations using a greedy, largest-offer-first
-# pass over the currently *sellable* offers.
+# pass over the sellable offers at a given time.
 #
 # - {.basket_for} mirrors sale creation: it greedily covers as much of the requested
 #   duration as possible and leaves any remainder uncovered (the caller validates
@@ -13,12 +13,13 @@ class SubscriptionPricing
   class NoSellableOfferError < StandardError; end
 
   # @param months [Integer]
-  # @return [Array<SalesSubscriptionOffer>] greedy decomposition; remainder left uncovered
-  def self.basket_for(months)
+  # @param at [TimeWithZone] the historical time to fetch the offers for
+  # @return [Array<SalesSubscriptionOffer>]
+  def self.basket_for(months, at: Time.current)
     return [] if months <= 0
 
     remaining = months
-    sellable_offers.each_with_object([]) do |offer, basket|
+    available_offers(at).each_with_object([]) do |offer, basket|
       quantity = remaining / offer.duration
       next unless quantity.positive?
 
@@ -28,11 +29,12 @@ class SubscriptionPricing
   end
 
   # @param months [Integer]
-  # @return [Money] price to cover at least +months+, rounding any remainder up
-  def self.cost_for(months)
+  # @param at [TimeWithZone] the historical time to fetch the offers for
+  # @return [Money] price to cover at least the number of months, rounding any remainder up
+  def self.cost_for(months, at: Time.current)
     return Money.new(0) if months <= 0
 
-    offers = sellable_offers
+    offers = available_offers(at)
     raise NoSellableOfferError, 'No sellable subscription offer to price a refund' if offers.empty?
 
     remaining = months
@@ -48,10 +50,15 @@ class SubscriptionPricing
     cost + rounded_up_remainder(offers, remaining)
   end
 
-  def self.sellable_offers
-    SubscriptionOffer.sellable.order(duration: :desc).to_a
+  # Fetches offers that were active at the given timestamp.
+  def self.available_offers(at)
+    SubscriptionOffer
+      .where(created_at: ..at)
+      .where('deleted_at IS NULL OR deleted_at > ?', at)
+      .order(duration: :desc)
+      .to_a
   end
-  private_class_method :sellable_offers
+  private_class_method :available_offers
 
   # Cover a leftover duration with the smallest-duration offer, rounding up.
   def self.rounded_up_remainder(offers, remaining)

@@ -51,4 +51,14 @@ class SubscriptionPricingTest < ActiveSupport::TestCase
       SubscriptionPricing.cost_for(1)
     end
   end
+
+  test 'cost_for uses historical prices based on at parameter' do
+    historical_time = Time.utc(2024, 6, 1)
+
+    assert_equal Money.new(800, :eur), SubscriptionPricing.cost_for(1, at: historical_time)
+    assert_equal Money.new(500, :eur), SubscriptionPricing.cost_for(1)
+
+    assert_equal Money.new(9600, :eur), SubscriptionPricing.cost_for(14, at: historical_time)
+    assert_equal Money.new(6000, :eur), SubscriptionPricing.cost_for(14)
+  end
 end
