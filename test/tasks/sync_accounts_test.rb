@@ -19,8 +19,9 @@ class SyncAccountsTest < ActiveSupport::TestCase
 
     tony = User.find_by(email: 'tony@avengers.com')
     peter = User.find_by(email: 'peterp@univ.edu')
+    pepper = User.find_by(email: 'pepper@potts.com')
 
-    assert_difference 'User.count', -1 do
+    assert_no_difference 'User.count' do
       Rake::Task['lea5:sync_accounts'].invoke
     end
 
@@ -29,6 +30,9 @@ class SyncAccountsTest < ActiveSupport::TestCase
 
     peter.reload
     assert_equal 'peterp@univ.edu', peter.email # invalid email doesn't get updated
+
+    pepper.reload
+    assert_nil pepper.oidc_id
   end
 end
 
