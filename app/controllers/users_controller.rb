@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  protect_from_forgery unless: -> { request.format.json? }
-
   def index
     @users = User.accessible_by(current_ability)
   end

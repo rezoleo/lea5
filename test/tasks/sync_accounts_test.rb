@@ -50,7 +50,7 @@ class ZitadelStub
     profile: {
       givenName: 'Peter',
       familyName: 'Parker',
-      email: 'peterp@univ'
+      email: 'peterp@univ@'
     }
   }.freeze
 

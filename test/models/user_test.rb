@@ -40,9 +40,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'email must be of a valid format' do
-    valid_emails = ['users@example.com', 'USER@foo.COM', 'A_US_ER@foo.bar.org', 'first.last@foo.jp', 'alice+bob@baz.cn']
-    invalid_emails = ['user@example,com', 'user_at_foo.org', 'user.name@example',
-                      'foo@bar_baz.com', 'foo@bar+baz.com', 'foo@bar..com', '    ']
+    valid_emails = ['users@example.com', 'USER@foo.COM', 'A_US_ER@foo.bar.org', 'first.last@foo.jp',
+                    'alice+bob@baz.cn', 'user.name@example']
+    invalid_emails = ['user@example,com', 'user_at_foo.org', 'foo@bar_baz.com', 'foo@bar+baz.com', 'foo@bar..com',
+                      '    ']
 
     valid_emails.each do |valid_email|
       @user.email = valid_email
@@ -137,6 +138,10 @@ class UserTest < ActiveSupport::TestCase
     @user.save
     duplicate_user.wifi_password = @user.wifi_password.upcase
     assert_not_predicate duplicate_user, :valid?
+  end
+
+  test 'ntlm_password returns expected md4 hash' do
+    assert_equal '7a21990fcd3d759941e45c490f143d5f', @user.ntlm_password
   end
 
   test 'should create new user from auth hash' do
