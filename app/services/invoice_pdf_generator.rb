@@ -26,10 +26,11 @@ class InvoiceLib
   class PDFMetadata
     attr_reader :title, :author, :subject, :creation_date
 
-    def initialize(number:)
-      @title = "Facture Rézoléo #{number}"
+    def initialize(number:, credit_note: false)
+      document_name = credit_note ? 'Avoir' : 'Facture'
+      @title = "#{document_name} Rézoléo #{number}"
       @author = 'Association Rézoléo'
-      @subject = "Facture #{number}"
+      @subject = "#{document_name} #{number}"
       @creation_date = Time.now.utc
     end
   end
@@ -53,9 +54,9 @@ class InvoicePdfGenerator
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
     @input = normalize_input(input)
-    @doc_metadata = InvoiceLib::PDFMetadata.new(number: @input[:number])
+    @doc_metadata = InvoiceLib::PDFMetadata.new(number: @input[:number], credit_note: credit_note?)
     @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
-    @composer = InvoiceComposer.new
+    @composer = InvoiceComposer.new(document_title: credit_note? ? 'Avoir Rézoléo' : 'Facture Rézoléo')
     setup_document
   end
 
@@ -76,6 +77,10 @@ class InvoicePdfGenerator
 
   private
 
+  def credit_note?
+    @input[:type] == 'credit_note'
+  end
+
   def setup_document
     @composer.document.metadata.title(@doc_metadata.title)
     @composer.document.metadata.author(@doc_metadata.author)
@@ -84,15 +89,27 @@ class InvoicePdfGenerator
   end
 
   def add_invoice_header
-    invoice_header = <<~HEADER
+    @composer.text(invoice_header, style: :base, text_align: :center, margin: margin_bottom(2))
+    @composer.text('Association Rézoléo', style: :bold, margin: margin_bottom(1))
+    @composer.text(InvoiceLib::INFO_REZOLEO, margin: margin_bottom(2))
+  end
+
+  def invoice_header
+    return credit_note_header if credit_note?
+
+    <<~HEADER
       Facture n°#{@input[:number]}
       Date de vente : #{@input[:sale_date]}
       Date d'émission : #{@input[:issue_date]}
     HEADER
+  end
 
-    @composer.text(invoice_header, style: :base, text_align: :center, margin: margin_bottom(2))
-    @composer.text('Association Rézoléo (Trésorerie)', style: :bold, margin: margin_bottom(1))
-    @composer.text(InvoiceLib::INFO_REZOLEO, margin: margin_bottom(2))
+  def credit_note_header
+    <<~HEADER
+      Avoir n°#{@input[:number]}
+      Facture d'origine n°#{@input[:original_invoice_number]}
+      Date d'émission : #{@input[:issue_date]}
+    HEADER
   end
 
   def add_client_info
@@ -216,8 +233,9 @@ class InvoicePdfGenerator
   end
 
   class InvoiceComposer < HexaPDF::Composer
-    def initialize(page_size: :A4, page_orientation: :portrait, margin: 36)
-      super
+    def initialize(page_size: :A4, page_orientation: :portrait, margin: 36, document_title: 'Facture Rézoléo')
+      @document_title = document_title
+      super(page_size: page_size, page_orientation: page_orientation, margin: margin)
 
       document.task(:pdfa)
     end
@@ -232,7 +250,7 @@ class InvoicePdfGenerator
       config_font_style(font: 'DejaVu Sans')
 
       image(Rails.root.join('app/assets/images/rezoleo_logo.png').to_s, width: 75, position: :float, mask_mode: :none)
-      text('Facture Rézoléo', style: :header, margin: [0, 0, 2 * BASE_FONT_SIZE])
+      text(@document_title, style: :header, margin: [0, 0, 2 * BASE_FONT_SIZE])
       text(InvoiceLib::FOOTER, style: :footer, position: [0, 0])
     end
 

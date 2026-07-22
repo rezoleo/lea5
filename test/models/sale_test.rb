@@ -137,6 +137,16 @@ class SaleTest < ActiveSupport::TestCase
     assert_equal expected_total, @sale.total_price
   end
 
+  test 'refundable_article_sales excludes articles already refunded' do
+    # The cable line of this sale is already covered by the refund fixture.
+    assert_empty @sale.refundable_article_sales
+  end
+
+  test 'refundable_article_sales returns lines not yet refunded' do
+    sale = sales(:ironman_deleted_article)
+    assert_equal [articles(:deleted_article).id], sale.refundable_article_sales.map(&:article_id)
+  end
+
   test 'save should return false when invoice is nil' do
     sale = Sale.new(
       client: @user,
