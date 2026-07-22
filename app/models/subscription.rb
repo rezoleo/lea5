@@ -16,11 +16,13 @@ class Subscription < ApplicationRecord
     cancelled_at.nil? && end_at > Time.current
   end
 
-  # Number of months started since the purchase, as of as_of.
+  # Number of months started for more than 1 week since the purchase, as of as_of.
   # Months are measured as elapsed duration from start_at:
   # any partial month counts as a started month.
   # @return [Integer]
   def consumed_months(as_of: Time.current)
+    as_of -= 1.week # Grace period of 1 week to allow for full refunds within a week of a started month
+
     return 0 if as_of <= start_at
 
     # Find the smallest number of months needed to reach or exceed the target date

@@ -56,19 +56,16 @@ class SubscriptionTest < ActiveSupport::TestCase
     assert_equal 0, subscription.consumed_months(as_of: Time.zone.local(2023, 1, 1, 12))
   end
 
-  test 'consumed_months rounds a started month up' do
+  test 'consumed_months respects the 7-day grace period' do
     subscription = Subscription.new(start_at: Time.zone.local(2023, 1, 1, 12))
 
-    assert_equal 1, subscription.consumed_months(as_of: Time.zone.local(2023, 1, 1, 12, 0, 1))
-    assert_equal 1, subscription.consumed_months(as_of: Time.zone.local(2023, 1, 15, 12))
-  end
+    # First month: fully refundable during the first week
+    assert_equal 0, subscription.consumed_months(as_of: Time.zone.local(2023, 1, 8, 11, 59, 59))
+    assert_equal 1, subscription.consumed_months(as_of: Time.zone.local(2023, 1, 8, 12, 0, 1))
 
-  test 'consumed_months counts an exact month boundary as the lower value' do
-    subscription = Subscription.new(start_at: Time.zone.local(2023, 1, 1, 12))
-
-    assert_equal 1, subscription.consumed_months(as_of: Time.zone.local(2023, 2, 1, 12))
-    assert_equal 2, subscription.consumed_months(as_of: Time.zone.local(2023, 3, 1, 12))
-    assert_equal 2, subscription.consumed_months(as_of: Time.zone.local(2023, 2, 1, 12, 0, 1))
+    # Second month: another one-week grace period
+    assert_equal 1, subscription.consumed_months(as_of: Time.zone.local(2023, 2, 8, 11, 59, 59))
+    assert_equal 2, subscription.consumed_months(as_of: Time.zone.local(2023, 2, 8, 12, 0, 1))
   end
 
   test 'paid sums the price of the subscription offers in the sale' do
@@ -85,8 +82,8 @@ class SubscriptionTest < ActiveSupport::TestCase
   test 'refund_amount is paid minus the cost of consumed months' do
     subscription = subscriptions(:subscription2) # paid 50 €, starts 2023-01-07
 
-    # 3 months + 1 day -> 4 consumed months -> 4 × 5 € = 20 € consumed -> 30 € refunded
-    assert_equal Money.new(3000, :eur), subscription.refund_amount(as_of: Time.zone.local(2023, 4, 8, 12))
+    # 3 months + 8 days -> 4 consumed months -> 4 × 5 € = 20 € consumed -> 30 € refunded
+    assert_equal Money.new(3000, :eur), subscription.refund_amount(as_of: Time.zone.local(2023, 4, 15, 12))
   end
 
   test 'refund_amount is floored at zero when consumed cost exceeds what was paid' do
