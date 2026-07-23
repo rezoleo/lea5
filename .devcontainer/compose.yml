@@ -17,7 +17,7 @@ services:
     # Uncomment the next line to use a non-root user for all processes.
     # user: vscode
     # If running in rootless with podman **It does not work with docker**
-    # userns_mode: "keep-id:uid=1000,gid=1000"
+    userns_mode: "keep-id:uid=1000,gid=1000"
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
@@ -36,6 +36,7 @@ services:
     - default
     volumes:
     - postgres-data:/var/lib/postgresql/data
+    - ../.github/workflows/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
     ports:
       - "5432:5432"
     environment:
