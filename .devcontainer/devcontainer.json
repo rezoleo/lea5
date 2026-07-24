@@ -16,7 +16,8 @@
   "containerEnv": {
     "CAPYBARA_SERVER_PORT": "45678",
     "SELENIUM_HOST": "selenium",
-    "DB_HOST": "postgres"
+    "DB_HOST": "postgres",
+    "OPENSSL_MODULES": "/usr/lib/x86_64-linux-gnu/ossl-modules/"
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
@@ -29,5 +30,5 @@
   // "remoteUser": "root",
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "bin/setup"
+  "postCreateCommand": "sudo sed -i -e '/\\[default_sect\\]/{N;/\\[default_sect\\]\\n# activate = 1/{s/# activate = 1/activate = 1/;a\\\n[legacy_sect]\\\nactivate = 1\n}}' -e '/default = default_sect/a\\\nlegacy = legacy_sect' /etc/ssl/openssl.cnf; bin/setup",
 }
