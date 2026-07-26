@@ -34,7 +34,7 @@ class RefundTest < ActiveSupport::TestCase
     assert_predicate refund, :persisted?
     assert_equal [article.id], refund.articles_refunds.map(&:article_id)
     assert_equal Money.new(2000, :eur), refund.credited_amount
-    assert_equal 6, refund.invoice.number # next_invoice_number fixture
+    assert_equal 7, refund.invoice.number # next_invoice_number fixture
     assert_equal users(:ironman), refund.invoice.user
   end
 

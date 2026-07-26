@@ -8,3 +8,12 @@ ironman_cable_adapter_4_months:
   reason: Leaving the residence
   verified_at: 2025-01-30 14:37:19
   subscription_refund_cents: 2000
+
+pepper_1_year_refund:
+  refunder: ironman
+  refund_method: cash
+  sale: pepper_1_year
+  invoice: refund_pepper_1_year
+  reason: Test refund
+  verified_at: 2025-02-01 10:00:00
+  subscription_refund_cents: 1000

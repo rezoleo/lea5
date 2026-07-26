@@ -5,6 +5,14 @@ require 'test_helper'
 class AbilityTest < ActiveSupport::TestCase
   def setup
     super
+    setup_user_fixtures
+    setup_admin_fixtures
+
+    @api_key = api_keys(:FakeRadius)
+    @api_key_ability = ApiKeyAbility.new(@api_key)
+  end
+
+  def setup_user_fixtures
     @user = users(:pepper)
     @user_ability = UserAbility.new(@user)
     @user_machine = @user.machines.first
@@ -14,16 +22,19 @@ class AbilityTest < ActiveSupport::TestCase
     @other_user_sale = sales(:ironman_cable_6_months)
     @user_invoice = invoices(:sale_pepper_1_year)
     @other_user_invoice = invoices(:sale_ironman_cable_6_months)
+    @user_refund = refunds(:pepper_1_year_refund)
+    @other_user_refund = refunds(:ironman_cable_adapter_4_months)
+    @user_refund_invoice = invoices(:refund_pepper_1_year)
+    @other_user_refund_invoice = invoices(:refund_ironman_cable_4_months)
+  end
 
+  def setup_admin_fixtures
     @admin = users(:ironman)
     @admin.groups = ['rezoleo'] # runtime value, cannot be set in fixture
     @admin_ability = UserAbility.new(@admin)
     @admin_machine = @admin.machines.first
     @admin_subscription = @admin.subscriptions.first
     @admin_free_access = @admin.free_accesses.first
-
-    @api_key = api_keys(:FakeRadius)
-    @api_key_ability = ApiKeyAbility.new(@api_key)
   end
 
   test 'user can read themselves' do
@@ -90,6 +101,16 @@ class AbilityTest < ActiveSupport::TestCase
   test 'user can read their invoice but not others' do
     assert @user_ability.can?(:read, @user_invoice)
     assert @user_ability.cannot?(:read, @other_user_invoice)
+  end
+
+  test 'user can read their refund but not others' do
+    assert @user_ability.can?(:read, @user_refund)
+    assert @user_ability.cannot?(:read, @other_user_refund)
+  end
+
+  test 'user can read their refund credit-note invoice but not others' do
+    assert @user_ability.can?(:read, @user_refund_invoice)
+    assert @user_ability.cannot?(:read, @other_user_refund_invoice)
   end
 
   test 'user cannot create a new subscription to themselves' do
