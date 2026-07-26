@@ -75,7 +75,6 @@ class Invoice < ApplicationRecord
         issue_date: Time.zone.today,
         client_name: sale.client.display_name,
         client_address: sale.client.display_address,
-        payment_amount: sale.verified_at.nil? ? Money.new(0) : sale.amount,
         payment_method: sale.payment_method&.name,
         payment_date: sale.verified_at,
         items: sales_items_to_h(sale)
@@ -122,7 +121,6 @@ class Invoice < ApplicationRecord
         issue_date: Time.zone.today,
         client_name: refund.sale.client.display_name,
         client_address: refund.sale.client.display_address,
-        payment_amount: refund.amount,
         payment_method: refund.refund_method&.name,
         payment_date: refund.cut_at,
         items: refund_items_to_h(refund)
