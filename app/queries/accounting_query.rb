@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Lightweight figures for the in-app accounting "glance" page: a few headline
-# KPIs and a revenue-over-time series. Reads the stored `sales.total_cents`
+# KPIs and a revenue-over-time series. Reads the stored `sales.amount_cents`
 # snapshot, so no per-sale total is recomputed here.
 #
 # Deep / exploratory analytics (payment methods, top items, customer LTV, seller
