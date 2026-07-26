@@ -15,7 +15,7 @@
     <p>Reason: <%= refund.reason %></p>
   <% end %>
 
-  <p>Credited: <%= refund.credited_amount.format %></p>
+  <p>Credited: <%= refund.amount.format %></p>
 
   <%= link_to(download_invoice_path(refund.invoice), class: 'button-primary') do %>
     Credit note
