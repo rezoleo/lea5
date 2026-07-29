@@ -2,7 +2,9 @@
 
 class UsersController < ApplicationController
   def index
-    @users = User.accessible_by(current_ability).includes(:room, :valid_subscriptions_by_date, :free_accesses_by_date)
+    @pagy, @users = pagy(User.accessible_by(current_ability)
+                             .includes(:room, :valid_subscriptions_by_date, :free_accesses_by_date)
+                             .order(:lastname, :firstname, :id))
   end
 
   def show

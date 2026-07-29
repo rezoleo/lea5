@@ -1,22 +1,29 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+
 class SearchController < ApplicationController
-  VALID_IP_REGEX = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/i
   def search
     @query = params[:q]
-
     return if @query.blank?
 
-    @users = User.accessible_by(current_ability).left_joins(:room).where(
-      'firstname ILIKE :search OR lastname ILIKE :search OR email ILIKE :search OR rooms.number ILIKE :search',
-      search: "%#{User.sanitize_sql_like @query}%"
-    )
-    @machines = Machine.accessible_by(current_ability).where(
-      'name ILIKE :search OR CAST(mac as varchar) ILIKE :search',
-      search: "%#{Machine.sanitize_sql_like @query}%"
-    )
-    return unless @query.match?(VALID_IP_REGEX)
+    users = User.accessible_by(current_ability).search_by(@query).order(:lastname, :firstname, :id)
 
-    @ip = Ip.accessible_by(current_ability).where(ip: @query).where.not(machine: nil).includes(:machine).first
+    machines = Machine.accessible_by(current_ability).search_by(@query).order(:name, :id)
+
+    @pagy_users, @users = pagy(users, page_key: 'users_page')
+    @pagy_machines, @machines = pagy(machines, page_key: 'machines_page')
+
+    return unless valid_ip?(@query)
+
+    @ip = Ip.accessible_by(current_ability).includes(:machine).where.not(machine_id: nil).find_by(ip: @query)
+  end
+
+  private
+
+  def valid_ip?(string)
+    IPAddr.new(string).ipv4?
+  rescue IPAddr::InvalidAddressError
+    false
   end
 end

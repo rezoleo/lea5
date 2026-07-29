@@ -3,6 +3,9 @@
 module Api
   class ApiApplicationController < ActionController::API
     include ActionController::HttpAuthentication::Token::ControllerMethods
+    include Pagy::Method
+
+    LIMIT_MAX = 999
 
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     rescue_from ActiveRecord::StatementInvalid, with: :render_bad_request
@@ -15,6 +18,15 @@ module Api
     end
 
     private
+
+    def paginate(scope)
+      return scope if params[:page].blank? && params[:limit].blank?
+
+      # Passing :max_limit enables `?limit=`, and it caps what the client can ask for.
+      pagy, records = pagy(scope, max_limit: LIMIT_MAX)
+      response.headers.merge!(pagy.headers_hash)
+      records
+    end
 
     def api_auth
       @current_api_key = authenticate_with_http_token do |token, _options|

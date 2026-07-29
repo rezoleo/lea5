@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   # Everything else is either not needed or can gracefully degrade in browsers without support.
   # [1]: https://github.com/rails/rails/pull/50505
 
+  include Pagy::Method
   include SessionsHelper
 
   before_action :still_authenticated?
