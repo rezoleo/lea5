@@ -2,19 +2,17 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Add a new payment method</h1>
+<div class="flex items-center gap-2">
+  <%= render "components/back_link", to: admin_path %>
+  <h1>Add a new payment method</h1>
+</div>
 
 <%= form_with(model: @payment_method, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  <div>
-    <%= f.label :auto_verify %>
+  <%= f.field :name %>
+  <label class="label gap-2">
     <%= f.check_box :auto_verify %>
-  </div>
-  <div>
-    <%= f.submit yield(:button_text) %>
-  </div>
+    Auto verify
+  </label>
+  <%= f.submit yield(:button_text) %>
 <% end %>

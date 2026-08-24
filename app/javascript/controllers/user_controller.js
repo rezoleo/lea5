@@ -4,31 +4,33 @@ export default class extends Controller {
   static targets = ["wifiPassword", "eyeIcon", "copyMessage"]
   static values = { password: String }
 
+  connect() {
+    // Browsers blank out <input type="password"> values when a page is restored
+    // from the back/forward cache, so put it back from the value we kept in the DOM.
+    this.restorePassword = ({ persisted }) => {
+      if (persisted) this.wifiPasswordTarget.value = this.passwordValue
+    }
+    window.addEventListener("pageshow", this.restorePassword)
+  }
+
+  disconnect() {
+    window.removeEventListener("pageshow", this.restorePassword)
+  }
+
   copyToClipboard() {
-    const text = this.passwordValue
     const copyMessage = this.copyMessageTarget
-    navigator.clipboard.writeText(text)
-    copyMessage.classList.add("visible")
+    navigator.clipboard.writeText(this.passwordValue)
+    copyMessage.classList.remove("hidden")
     setTimeout(() => {
-      copyMessage.classList.remove("visible")
+      copyMessage.classList.add("hidden")
     }, 2000)
   }
 
-  togglePasswordVisibility() {
+  togglePasswordVisibility(event) {
     const passwordField = this.wifiPasswordTarget
-    const eyeIcon = this.eyeIconTargets[0]
-    const eyeSlashIcon = this.eyeIconTargets[1]
-
-    if (passwordField.classList.contains("visible")) {
-      passwordField.classList.remove("visible")
-      passwordField.textContent = "********************"
-      eyeIcon.classList.replace("eye-visible", "eye-hidden")
-      eyeSlashIcon.classList.replace("eye-hidden", "eye-visible")
-    } else {
-      passwordField.classList.add("visible")
-      passwordField.textContent = this.passwordValue
-      eyeIcon.classList.replace("eye-hidden", "eye-visible")
-      eyeSlashIcon.classList.replace("eye-visible", "eye-hidden")
-    }
+    const revealing = passwordField.type === "password"
+    passwordField.type = revealing ? "text" : "password"
+    this.eyeIconTargets.forEach((icon) => icon.classList.toggle("hidden"))
+    event.currentTarget.setAttribute("aria-label", revealing ? "Hide wifi password" : "Show wifi password")
   }
 }

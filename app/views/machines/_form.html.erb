@@ -2,15 +2,7 @@
 
 <%= form_with(model: [owner, machine], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name, required: true %>
-  </div>
-  <div>
-    <%= f.label :mac %>
-    <%= f.text_field :mac, required: true %>
-  </div>
-  <div>
-    <%= f.submit yield(:button_text) %>
-  </div>
+  <%= f.field :name, required: true %>
+  <%= f.field :mac, required: true %>
+  <%= f.submit yield(:button_text) %>
 <% end %>

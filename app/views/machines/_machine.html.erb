@@ -1,17 +1,19 @@
 <%# locals: (machine:) -%>
 
-<div class="machine">
-  <span><%= machine.name %></span>
-  <span><%= machine.mac.upcase %></span>
-  <span><%= machine.ip.ip %></span>
-  <% if can?(:edit, machine) %>
-    <%= button_to(edit_machine_path(machine), method: :get, 'aria-label': 'Edit this machine') do %>
-      <%= svg_icon_tag 'icon_edit' %>
+<li class="machine flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+  <span class="font-medium"><%= machine.name %></span>
+  <span class="font-mono text-sm opacity-60"><%= machine.mac.upcase %></span>
+  <span class="font-mono text-sm opacity-60"><%= machine.ip.ip %></span>
+  <div class="ms-auto flex items-center gap-1">
+    <% if can?(:edit, machine) %>
+      <%= link_to edit_machine_path(machine), class: "btn btn-square btn-ghost btn-sm", 'aria-label': 'Edit this machine' do %>
+        <%= svg_icon_tag 'icon_edit' %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% if can?(:destroy, machine) %>
-    <%= button_to(machine, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this machine') do %>
-      <%= svg_icon_tag 'icon_delete' %>
+    <% if can?(:destroy, machine) %>
+      <%= button_to(machine, method: :delete, class: "btn btn-square btn-ghost btn-sm", data: { turbo_confirm: "Are you sure?" }, 'aria-label': 'Delete this machine') do %>
+        <%= svg_icon_tag 'icon_delete' %>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+</li>

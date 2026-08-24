@@ -1,15 +1,18 @@
 <%# locals: (free_access:) -%>
 
-<div class="free-access">
+<li class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
   <span><%= time_with_relative_tag free_access.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag free_access.end_at %></span>
-  <% if can?(:edit, free_access) %>
-    <%= button_to(edit_free_access_path(free_access), method: :get, 'aria-label': 'Edit this free access') do %>
-      <%= svg_icon_tag 'icon_edit' %>
+  <span class="opacity-60"><%= free_access.reason %></span>
+  <div class="ms-auto flex items-center gap-1">
+    <% if can?(:edit, free_access) %>
+      <%= link_to edit_free_access_path(free_access), class: "btn btn-square btn-ghost btn-sm", 'aria-label': 'Edit this free access' do %>
+        <%= svg_icon_tag 'icon_edit' %>
+      <% end %>
     <% end %>
-  <% end %>
-  <% if can?(:destroy, free_access) %>
-    <%= button_to(free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this free access') do %>
-      <%= svg_icon_tag 'icon_delete' %>
+    <% if can?(:destroy, free_access) %>
+      <%= button_to(free_access, method: :delete, class: "btn btn-square btn-ghost btn-sm", data: { turbo_confirm: "Are you sure?" }, 'aria-label': 'Delete this free access') do %>
+        <%= svg_icon_tag 'icon_delete' %>
+      <% end %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+</li>

@@ -1,13 +1,11 @@
 <%# locals: (subscription:) -%>
 
-<div class="subscription">
-  <span>
-    <span class="<%= class_names({ subscription_cancelled: subscription.cancelled_at }) %>">
-      <%= time_with_relative_tag subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag subscription.end_at %>
-    </span>
-    <span>(<%= pluralize(subscription.duration, "month") %>)</span>
+<li class="flex flex-wrap items-baseline justify-between gap-x-4 px-4 py-3">
+  <span class="<%= class_names('line-through opacity-60' => subscription.cancelled_at) %>">
+    <%= time_with_relative_tag subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag subscription.end_at %>
+    <span class="opacity-60">(<%= pluralize(subscription.duration, "month") %>)</span>
   </span>
   <% unless subscription.cancelled_at.nil? %>
-    <span>Cancelled at: <%= time_with_relative_tag subscription.cancelled_at %></span>
+    <span class="text-sm opacity-60">Cancelled <%= time_with_relative_tag subscription.cancelled_at %></span>
   <% end %>
-</div>
+</li>

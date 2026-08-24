@@ -6,11 +6,6 @@
 
 <%= form_with(model: [@owner, @subscription], class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :duration %>
-    <%= f.number_field :duration, required: true, min: 1, step: 1 %>
-  </div>
-  <div>
-    <%= f.submit yield(:button_text) %>
-  </div>
+  <%= f.field :duration, :number_field, required: true, min: 1, step: 1 %>
+  <%= f.submit yield(:button_text) %>
 <% end %>

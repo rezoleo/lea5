@@ -2,6 +2,9 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Users#new</h1>
+<div class="flex items-center gap-2">
+  <%= render "components/back_link", to: users_path %>
+  <h1>Add a new user</h1>
+</div>
 
 <%= render 'form', user: @user %>

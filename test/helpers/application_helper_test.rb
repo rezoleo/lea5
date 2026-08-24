@@ -15,6 +15,7 @@ class ApplicationHelperTest < ActionView::TestCase
   end
 
   test 'svg_icon_tag' do
-    assert_dom_equal '<svg><use href="/icons.svg#icon_plus" /></svg>', svg_icon_tag('icon_plus')
+    assert_dom_equal '<svg class="size-[1.25em] shrink-0 fill-current"><use href="/icons.svg#icon_plus" /></svg>',
+                     svg_icon_tag('icon_plus')
   end
 end

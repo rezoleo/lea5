@@ -44,3 +44,7 @@ coverage
 .idea
 .generators
 .rakeTasks
+
+# Compiled by tailwindcss-rails; source lives in app/assets/tailwind.
+/app/assets/builds/*
+!/app/assets/builds/.keep

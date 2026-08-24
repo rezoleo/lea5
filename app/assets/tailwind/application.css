@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+/* Templates and helpers that can emit utility classes. */
+@source "../../views";
+@source "../../helpers";
+@source "../../javascript";
+
+/* daisyUI is vendored as a standalone bundle so the build stays Node-free. */
+@plugin "../../../vendor/daisyui/daisyui.js";
+
+/* Rezoleo light theme: crimson and plum taken from the logo, on neutral surfaces. */
+@plugin "../../../vendor/daisyui/daisyui-theme.js" {
+  name: "rezoleo";
+  default: true;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(97.6% 0.001 286.4);
+  --color-base-300: oklch(93.5% 0.004 286.3);
+  --color-base-content: oklch(26.1% 0.024 267.1);
+
+  --color-primary: oklch(46.5% 0.176 11.8);
+  --color-primary-content: oklch(100% 0 0);
+  --color-secondary: oklch(27% 0.082 301.7);
+  --color-secondary-content: oklch(100% 0 0);
+  --color-accent: oklch(41.1% 0.154 11.3);
+  --color-accent-content: oklch(100% 0 0);
+  --color-neutral: oklch(27% 0.082 301.7);
+  --color-neutral-content: oklch(100% 0 0);
+
+  --color-info: oklch(58.8% 0.139 242);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(62.7% 0.17 149.2);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(66.6% 0.157 58.3);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(57.7% 0.215 27.3);
+  --color-error-content: oklch(100% 0 0);
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Same palette on a plum-tinted dark ground; crimson is lightened to stay readable. */
+@plugin "../../../vendor/daisyui/daisyui-theme.js" {
+  name: "rezoleo-dark";
+  prefersdark: true;
+  color-scheme: dark;
+
+  --color-base-100: oklch(22.6% 0.016 307.7);
+  --color-base-200: oklch(19% 0.015 310.6);
+  --color-base-300: oklch(27.8% 0.019 307.7);
+  --color-base-content: oklch(92.5% 0.007 304.2);
+
+  --color-primary: oklch(62% 0.193 8.4);
+  --color-primary-content: oklch(24.8% 0.081 8.9);
+  --color-secondary: oklch(75.7% 0.058 305.9);
+  --color-secondary-content: oklch(19% 0.015 310.6);
+  --color-accent: oklch(62% 0.193 8.4);
+  --color-accent-content: oklch(24.8% 0.081 8.9);
+  --color-neutral: oklch(27.8% 0.019 307.7);
+  --color-neutral-content: oklch(92.5% 0.007 304.2);
+
+  --color-info: oklch(58.8% 0.139 242);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(62.7% 0.17 149.2);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(66.6% 0.157 58.3);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(57.7% 0.215 27.3);
+  --color-error-content: oklch(100% 0 0);
+
+  --radius-selector: 0.375rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+/* Headings are styled once instead of on every page. */
+@layer base {
+  h1 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+
+  h2 {
+    @apply text-lg font-semibold;
+  }
+}
+
+/* The two shapes every page is built from. Everything else is utility classes. */
+@layer components {
+  /* A titled surface: page sections, lists, dashboards. */
+  .panel {
+    @apply card overflow-hidden border border-base-300 bg-base-100;
+  }
+
+  /* A card of stacked fields; DaisyFormBuilder#field supplies the rows. */
+  .form {
+    @apply grid max-w-md gap-4 rounded-box border border-base-300 bg-base-100 p-6;
+  }
+
+  /* Pagy renders plain <a> tags for components/pagination and doesn't accept
+     per-link classes, so style them here off the attributes it does emit. */
+  .pagy {
+    @apply flex flex-wrap items-center justify-center gap-1 border-t border-base-300 p-4 text-sm;
+  }
+
+  .pagy a {
+    @apply btn btn-ghost btn-sm;
+  }
+
+  .pagy a[aria-label] {
+    @apply px-3 text-xs font-semibold tracking-wide uppercase;
+  }
+
+  .pagy a[aria-current] {
+    @apply btn-primary;
+  }
+
+  .pagy a[aria-disabled] {
+    @apply pointer-events-none opacity-40;
+  }
+}

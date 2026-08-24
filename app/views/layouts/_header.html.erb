@@ -1,62 +1,22 @@
 <%# locals: () -%>
 
-<header>
-  <nav>
-    <ul>
-      <li>
-        <%= link_to "Lea5", root_path, class: "logo" %>
-      </li>
+<header class="sticky top-0 z-30 border-b border-base-300 bg-base-100">
+  <div class="mx-auto flex max-w-5xl flex-wrap items-center gap-2 p-2 sm:px-6">
+    <%= link_to root_path, class: "btn btn-ghost gap-2 px-2 text-base" do %>
+      <%= image_tag "rezoleo_logo.png", alt: "", class: "size-6" %>
+      Lea5
+    <% end %>
+    <nav class="flex flex-1 flex-wrap items-center gap-1">
       <% if logged_in? %>
-        <li>
-          <%= link_to "My Profile", profile_path %>
-        </li>
-        <li>
-          <%= link_to "Users", users_path %>
-        </li>
+        <%= link_to "My profile", profile_path, class: "btn btn-ghost btn-sm" %>
+        <%= link_to "Users", users_path, class: "btn btn-ghost btn-sm" %>
       <% end %>
       <% if can?(:manage, :all) %>
-        <li>
-          <%= link_to "Api Keys", api_keys_path %>
-        </li>
-        <li>
-          <%= link_to "Admin", admin_path %>
-        </li>
+        <%= link_to "Api keys", api_keys_path, class: "btn btn-ghost btn-sm" %>
+        <%= link_to "Admin", admin_path, class: "btn btn-ghost btn-sm" %>
       <% end %>
-    </ul>
-  </nav>
-
-  <div>
+    </nav>
     <%= render "search/search-bar" %>
-  </div>
-
-  <div>
-    <% if not logged_in? %>
-      <%= button_to(
-            "Login",
-            AUTH_PATH,
-            method: :post,
-            class: "login_button",
-            'aria-label': "Log in",
-            data: { turbo: false }
-          ) %>
-      <% if Rails.env.development? %>
-        <%= button_to(
-              "Login (developer)",
-              "/auth/developer",
-              class: "login_button",
-              'aria-label': "Log in (developer)",
-              data: { turbo: false }
-            ) %>
-      <% end %>
-    <% else %>
-      <%= button_to(
-            "Logout",
-            logout_path,
-            method: :delete,
-            class: "logout_button",
-            'aria-label': "Log out",
-            data: { turbo: false }
-          ) %>
-    <% end %>
+    <%= render "layouts/auth_buttons" %>
   </div>
 </header>

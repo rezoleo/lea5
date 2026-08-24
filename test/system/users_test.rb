@@ -113,6 +113,7 @@ class UsersTest < ApplicationSystemTestCase
 
     sign_out
 
-    assert_selector 'h1', count: 0
+    assert_current_path root_path
+    assert_button 'Log in'
   end
 end

@@ -2,6 +2,9 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Add a new machine</h1>
+<div class="flex items-center gap-2">
+  <%= render "components/back_link", to: user_path(@owner) %>
+  <h1>Add a new machine</h1>
+</div>
 
 <%= render 'form', owner: @owner, machine: @machine %>

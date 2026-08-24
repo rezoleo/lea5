@@ -30,6 +30,9 @@ module Lea5
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: ['assets', 'tasks'])
 
+    # Every form gets the daisyUI-aware builder, so views never repeat control classes.
+    config.action_view.default_form_builder = 'DaisyFormBuilder'
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

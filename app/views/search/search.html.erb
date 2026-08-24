@@ -1,25 +1,19 @@
 <%# locals: () -%>
 
-<div class="search-body">
-    <h1 class="title">Results for "<%= @query %>"</h1>
-
-    <% if @users.present? %>
-        <h2>Results among users:</h2>
-    <% end %>
-    <%= render partial: "search/user", collection: @users %>
-    <% if @pagy_users %>
-        <%= render 'components/pagination', pagy: @pagy_users %>
-    <% end %>
-
-    <% if @machines.present? || @ip.present? %>
-        <h2>Results among machines:</h2>
-    <% end %>
-    <%= render partial: "search/machine", collection: @machines %>
-    <% if @pagy_machines %>
-        <%= render 'components/pagination', pagy: @pagy_machines %>
-    <% end %>
-
-    <% if @ip.present? %>
-        <%= render partial: "search/machine", locals: {machine: @ip.machine} %>
-    <% end %>
-</div>
+<%# A search that looks like an IP address also matches the machine holding it. %>
+<% machines = (Array(@machines) + Array(@ip&.machine)).uniq %>
+<h1>Results for "<%= @query %>"</h1>
+<section class="panel">
+  <%= render "components/card_header", title: "Users" %>
+  <%= render "components/list", items: Array(@users), empty: "No matching users" %>
+  <% if @pagy_users %>
+    <%= render "components/pagination", pagy: @pagy_users %>
+  <% end %>
+</section>
+<section class="panel">
+  <%= render "components/card_header", title: "Machines" %>
+  <%= render "components/list", items: machines, empty: "No matching machines" %>
+  <% if @pagy_machines %>
+    <%= render "components/pagination", pagy: @pagy_machines %>
+  <% end %>
+</section>

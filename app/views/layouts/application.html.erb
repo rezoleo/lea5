@@ -14,27 +14,26 @@
   <%= yield :head %>
 
   <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" href="/icon.png" type="image/png">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icon.png">
-  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   <%= javascript_importmap_tags %>
 </head>
 
-<body>
+<body class="min-h-dvh bg-base-200 text-base-content">
 <%= render 'layouts/header' %>
 
-<% flash.each do |message_type, message| %>
-  <%= tag.div class: "alert alert-#{message_type}" do %>
-    <% if message_type == 'success' %>
-      <%= svg_icon_tag 'check' %>
-    <% else %>
-      <%= svg_icon_tag 'cross' %>
+<main class="mx-auto grid w-full max-w-5xl gap-6 p-4 sm:p-6">
+  <% flash.each do |message_type, message| %>
+    <% style = flash_style(message_type) %>
+    <%= tag.div class: "alert #{style[:class]}", role: "status" do %>
+      <%= svg_icon_tag style[:icon] %>
+      <span><%= message %></span>
     <% end %>
-    <%= message %>
   <% end %>
-<% end %>
 
-<%= yield %>
+  <%= yield %>
+</main>
 </body>
 </html>

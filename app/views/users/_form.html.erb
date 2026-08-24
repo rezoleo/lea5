@@ -2,24 +2,10 @@
 
 <%= form_with(model: user, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :firstname %>
-    <%= f.text_field :firstname, required: true %>
-  </div>
-  <div>
-    <%= f.label :lastname %>
-    <%= f.text_field :lastname, required: true %>
-  </div>
-  <div>
-    <%= f.label :username %>
-    <%= f.text_field :username, required: true %>
-  </div>
-  <div>
-    <%= f.label :email %>
-    <%= f.email_field :email, required: true %>
-  </div>
+  <%= f.field :firstname, required: true %>
+  <%= f.field :lastname, required: true %>
+  <%= f.field :username, required: true %>
+  <%= f.field :email, :email_field, required: true %>
   <%= render 'room_field', f: f %>
-  <div>
-    <%= f.submit yield(:button_text) %>
-  </div>
+  <%= f.submit yield(:button_text) %>
 <% end %>

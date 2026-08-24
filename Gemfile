@@ -8,6 +8,9 @@ gem 'rails', '~> 8.1.4.1'
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem 'propshaft', '~> 1.3'
 
+# Tailwind CSS, bundled as a standalone binary (no Node) [https://github.com/rails/tailwindcss-rails]
+gem 'tailwindcss-rails', '~> 4.6'
+
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.6'
 

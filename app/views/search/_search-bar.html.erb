@@ -1,10 +1,12 @@
 <%# locals: () -%>
 
-<%= form_with(url: search_path, method: :get) do |f| %>
-    <div>
-        <%= f.text_field :q, required: true, placeholder: 'Type your search here...'%>
-    </div>
-    <%= f.button "search", name: nil do%>
-        <%= svg_icon_tag "icon_search" %>
-    <% end %>
+<%= form_with(url: search_path, method: :get, class: "join") do |f| %>
+  <%= f.text_field :q,
+                   required: true,
+                   placeholder: "Search users and machines",
+                   class: "input input-sm join-item w-44",
+                   'aria-label': "Search" %>
+  <%= f.button name: nil, class: "btn btn-sm join-item", 'aria-label': "Search" do %>
+    <%= svg_icon_tag "icon_search" %>
+  <% end %>
 <% end %>

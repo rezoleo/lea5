@@ -1,0 +1,32 @@
+<%# locals: () -%>
+
+<div class="flex items-center gap-2">
+  <% if not logged_in? %>
+    <%= button_to(
+          "Login",
+          AUTH_PATH,
+          method: :post,
+          class: "btn btn-primary btn-sm",
+          'aria-label': "Log in",
+          data: { turbo: false }
+        ) %>
+    <% if Rails.env.development? %>
+      <%= button_to(
+            "Login (developer)",
+            "/auth/developer",
+            class: "btn btn-outline btn-sm",
+            'aria-label': "Log in (developer)",
+            data: { turbo: false }
+          ) %>
+    <% end %>
+  <% else %>
+    <%= button_to(
+          "Logout",
+          logout_path,
+          method: :delete,
+          class: "btn btn-outline btn-sm",
+          'aria-label': "Log out",
+          data: { turbo: false }
+        ) %>
+  <% end %>
+</div>

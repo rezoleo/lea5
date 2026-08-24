@@ -2,6 +2,9 @@
 
 <% provide :button_text, "Edit" %>
 
-<h1>Edit the free access</h1>
+<div class="flex items-center gap-2">
+  <%= render "components/back_link", to: user_path(@free_access.user) %>
+  <h1>Edit the free access</h1>
+</div>
 
 <%= render 'form', owner: @owner, free_access: @free_access %>
