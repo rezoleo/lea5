@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_24_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,18 +128,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
     t.datetime "verified_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "subscription_refund_cents"
     t.index ["invoice_id"], name: "index_refunds_on_invoice_id"
     t.index ["refund_method_id"], name: "index_refunds_on_refund_method_id"
     t.index ["refunder_id"], name: "index_refunds_on_refunder_id"
     t.index ["sale_id"], name: "index_refunds_on_sale_id"
-  end
-
-  create_table "refunds_subscription_offers", primary_key: ["refund_id", "subscription_offer_id"], force: :cascade do |t|
-    t.bigint "refund_id", null: false
-    t.bigint "subscription_offer_id", null: false
-    t.integer "quantity", null: false
-    t.index ["refund_id"], name: "index_refunds_subscription_offers_on_refund_id"
-    t.index ["subscription_offer_id"], name: "index_refunds_subscription_offers_on_subscription_offer_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -232,9 +225,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_07_123053) do
   add_foreign_key "refunds", "invoices"
   add_foreign_key "refunds", "payment_methods", column: "refund_method_id"
   add_foreign_key "refunds", "sales"
-  add_foreign_key "refunds", "users", column: "refunder_id"
-  add_foreign_key "refunds_subscription_offers", "refunds"
-  add_foreign_key "refunds_subscription_offers", "subscription_offers"
+  add_foreign_key "refunds", "users", column: "refunder_id", on_delete: :nullify
   add_foreign_key "rooms", "users"
   add_foreign_key "sales", "invoices"
   add_foreign_key "sales", "payment_methods"

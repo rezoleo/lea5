@@ -64,7 +64,6 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
 
   test 'offer should be destroyed if no sales' do
     @subscription_offer.sales.destroy_all
-    @subscription_offer.refunds.destroy_all
     assert_difference 'SubscriptionOffer.count', -1 do
       assert_predicate @subscription_offer, :destroy
     end

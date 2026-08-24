@@ -1,0 +1,24 @@
+<%# locals: (refund:) -%>
+
+<div class="refund">
+  <b>Refund</b>
+
+  <% refund.articles_refunds.each do |article_refund| %>
+    <p><%= article_refund.article.name %><% if article_refund.quantity > 1 %> (×<%= article_refund.quantity %>)<% end %></p>
+  <% end %>
+
+  <% if refund.subscription_refunded? %>
+    <p>Subscription cut</p>
+  <% end %>
+
+  <% if refund.reason.present? %>
+    <p>Reason: <%= refund.reason %></p>
+  <% end %>
+
+  <p>Credited: <%= refund.credited_amount.format %></p>
+
+  <%= link_to(download_invoice_path(refund.invoice), class: 'button-primary') do %>
+    Credit note
+    <%= svg_icon_tag 'icon_pdf' %>
+  <% end %>
+</div>

@@ -81,3 +81,20 @@ sale_ironman_deleted_article:
     client_address: "Appartement A200\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
     payment_method: "Credit card"
     payment_amount_cent: 2000
+
+refund_pepper_1_year:
+  number: 6
+  generation_json:
+    type: "credit_note"
+    original_invoice_number: 2
+    items:
+      - quantity: 1
+        item_name: "Remboursement abonnement"
+        price_cents: 1000
+    sale_date: "2025-02-01"
+    issue_date: "2025-02-01"
+    client_name: "Pepper POTTS"
+    payment_date: "2025-02-01T10:00:00.000Z"
+    client_address: "Appartement A201\nRésidence Léonard de Vinci\nAvenue Paul Langevin\n59650 Villeneuve-d'Ascq"
+    payment_method: "Cash"
+    payment_amount_cent: 1000

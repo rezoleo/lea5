@@ -18,5 +18,10 @@
         <%= svg_icon_tag 'icon_pdf' %>
     <% end %>
 
+    <% if can?(:create, Refund) %>
+        <%= link_to 'Refund', new_sale_refund_path(sale), class: 'button-secondary' %>
+    <% end %>
+
+    <%= render sale.refunds %>
 
 </div>

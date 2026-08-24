@@ -46,11 +46,19 @@ class Sale < ApplicationRecord
     total
   end
 
+  # Article lines of this sale that have not yet been covered by a previous refund.
+  # An article can be refunded at most once (it appears at most once per sale).
+  # @return [ActiveRecord::Relation<ArticlesSale>]
+  def refundable_article_sales
+    already_refunded = ArticlesRefund.joins(:refund).where(refunds: { sale_id: id }).select(:article_id)
+    articles_sales.where.not(article_id: already_refunded)
+  end
+
   # @param [Hash] attributes
   # @param [User] seller
   def self.build_with_invoice(attributes = {}, seller:)
     new(attributes) do |sale|
-      sale.sales_subscription_offers = generate_sales_subscription_offers(sale.duration)
+      sale.sales_subscription_offers = SubscriptionPricing.basket_for(sale.duration)
       # Check if we have covered the entire subscription duration with subscription offers
       # (e.g., if we offer 12 months and 6 months but the user asks for 4 months, we cannot
       # cover the period and would have a non-zero remaining_duration, invalidated thanks
@@ -92,34 +100,5 @@ class Sale < ApplicationRecord
       .each { |article_sale| article_sale.errors.add(:article_id, :taken) }
 
     errors.add(:base, 'Please merge the quantities of the same articles')
-  end
-
-  class << self
-    private
-
-    # Find the best subscription offers for a given duration
-    # Example: if we ask for 14 months, with offers covering
-    # 12 months and 1 month, we return:
-    #   SalesSubscriptionOffer(12 months, quantity: 1)
-    #   SalesSubscriptionOffer(1 month, quantity: 2)
-    # @param [Integer] duration
-    # @return [Array<SalesSubscriptionOffer>]
-    def generate_sales_subscription_offers(duration)
-      return [] if duration <= 0
-
-      subscription_offers = SubscriptionOffer.sellable.order(duration: :desc)
-      sales_subscription_offers = []
-      subscription_offers.each do |offer|
-        break if duration == 0
-
-        quantity = duration / offer.duration
-        if quantity > 0
-          sales_subscription_offers << SalesSubscriptionOffer.new(subscription_offer_id: offer.id, quantity: quantity)
-          duration -= quantity * offer.duration
-        end
-      end
-
-      sales_subscription_offers
-    end
   end
 end
