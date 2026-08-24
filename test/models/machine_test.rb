@@ -106,4 +106,19 @@ class MachineTest < ActiveSupport::TestCase
     @machine.destroy
     assert_nil ip.machine_id
   end
+
+  test 'with_internet_access selects the machines whose owner has internet access' do
+    expected = Machine.all.to_a.select { |machine| machine.user.internet_access? }.map(&:id).sort
+
+    assert_equal expected, Machine.with_internet_access.pluck(:id).sort
+  end
+
+  test 'with_internet_access follows the owner losing access' do
+    machine = machines(:ultron)
+    assert_includes Machine.with_internet_access, machine
+
+    subscriptions(:subscription3).update!(cancelled_at: Time.current)
+
+    assert_not_includes Machine.with_internet_access, machine
+  end
 end

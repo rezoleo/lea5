@@ -7,9 +7,13 @@ class SearchController < ApplicationController
     @query = params[:q]
     return if @query.blank?
 
-    users = User.accessible_by(current_ability).search_by(@query).order(:lastname, :firstname, :id)
+    users = User.accessible_by(current_ability).search_by(@query)
+                .includes(:valid_subscriptions_by_date, :free_accesses_by_date)
+                .order(:lastname, :firstname, :id)
 
-    machines = Machine.accessible_by(current_ability).search_by(@query).order(:name, :id)
+    machines = Machine.accessible_by(current_ability).search_by(@query)
+                      .includes(:ip)
+                      .order(:name, :id)
 
     @pagy_users, @users = pagy(users, page_key: 'users_page')
     @pagy_machines, @machines = pagy(machines, page_key: 'machines_page')
