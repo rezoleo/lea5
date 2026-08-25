@@ -5,11 +5,12 @@ module Api
     include ActionController::HttpAuthentication::Token::ControllerMethods
     include Pagy::Method
 
-    LIMIT_MAX = 999
+    LIMIT_MAX = 200
 
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
     rescue_from ActiveRecord::StatementInvalid, with: :render_bad_request
     rescue_from CanCan::AccessDenied, with: :render_forbidden
+    rescue_from Pagy::OptionError, with: :render_bad_request
 
     before_action :api_auth
 
