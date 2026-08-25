@@ -50,7 +50,7 @@ module Api
 
     test 'should be able to read machines with internet access with api key' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { has_connection_filter: '1' }
+                             params: { with_internet_access: '1' }
       assert_response :success
       response_body = response.parsed_body
       assert_equal 1, response_body.size
@@ -175,7 +175,7 @@ module Api
 
     test 'should filter on internet access before paginating' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { has_connection_filter: '1', limit: 10 }
+                             params: { with_internet_access: '1', limit: 10 }
       assert_response :success
       assert_equal 1, response.parsed_body.size
       assert_equal '1', response.headers['total-count']
@@ -184,22 +184,22 @@ module Api
 
     test 'should count only matching machines when filtering and paginating' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { has_connection_filter: '1', limit: 1, page: 1 }
+                             params: { with_internet_access: '1', limit: 1, page: 1 }
       assert_response :success
       assert_equal [@machine2.id], response.parsed_body.pluck(:id)
       assert_equal '1', response.headers['total-pages']
     end
 
-    test 'should keep has_connection_filter in the link header' do
+    test 'should keep with_internet_access in the link header' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { has_connection_filter: '1', limit: 1 }
+                             params: { with_internet_access: '1', limit: 1 }
 
-      assert_match(/has_connection_filter=1/, response.headers['link'])
+      assert_match(/with_internet_access=1/, response.headers['link'])
     end
 
-    test 'should not filter when has_connection_filter is 0' do
+    test 'should not filter when with_internet_access is 0' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
-                             params: { has_connection_filter: '0' }
+                             params: { with_internet_access: '0' }
       assert_response :success
       assert_equal Machine.count, response.parsed_body.size
     end

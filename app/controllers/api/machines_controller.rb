@@ -9,7 +9,7 @@ module Api
       machines = Machine.accessible_by(current_ability)
                         .includes(:ip, user: [:valid_subscriptions_by_date, :free_accesses_by_date])
                         .order(:id)
-      machines = machines.with_internet_access if ActiveModel::Type::Boolean.new.cast(params[:has_connection_filter])
+      machines = machines.with_internet_access if ActiveModel::Type::Boolean.new.cast(params[:with_internet_access])
 
       @machines = paginate(machines)
     end
