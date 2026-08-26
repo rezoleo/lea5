@@ -46,19 +46,40 @@ class AccountingQueryTest < ActiveSupport::TestCase
     assert_equal 13, @query.kpis[:total_months_sold]
   end
 
-  test 'kpis growth_rate compares revenue against the equally-sized previous period' do
+  test 'kpis growth_rate compares revenue against the same window a year earlier' do
     create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 15),
                 article_line: { article: articles(:cable), quantity: 5 })
-    create_sale(client: users(:ironman), created_at: Time.zone.local(2029, 12, 15),
+    create_sale(client: users(:ironman), created_at: Time.zone.local(2029, 1, 15),
                 article_line: { article: articles(:cable), quantity: 1 })
+    create_sale(client: users(:spiderman), created_at: Time.zone.local(2029, 12, 15),
+                article_line: { article: articles(:adapter), quantity: 1 })
 
     assert_in_delta(400.0, @query.kpis[:growth_rate])
   end
 
-  test 'kpis growth_rate is zero when the previous period has no revenue' do
+  test 'kpis growth_rate nets refunds out of the comparison window too' do
+    create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 15),
+                article_line: { article: articles(:cable), quantity: 5 })
+    sale = create_sale(client: users(:ironman), created_at: Time.zone.local(2029, 1, 15),
+                       article_line: { article: articles(:adapter), quantity: 1 })
+    refund_sale(sale, created_at: Time.zone.local(2029, 1, 20), article: articles(:adapter))
+
+    assert_nil @query.kpis[:growth_rate]
+  end
+
+  test 'kpis growth_rate is nil when the same window last year has no revenue' do
     create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 15))
 
-    assert_equal 0, @query.kpis[:growth_rate]
+    assert_nil @query.kpis[:growth_rate]
+  end
+
+  test 'kpis growth_rate is nil for a window longer than a year' do
+    query = AccountingQuery.new(start_date: Time.zone.local(2029, 1, 1),
+                                end_date: Time.zone.local(2030, 6, 30, 23, 59, 59))
+    create_sale(client: users(:pepper), created_at: Time.zone.local(2029, 6, 15))
+    create_sale(client: users(:ironman), created_at: Time.zone.local(2030, 1, 15))
+
+    assert_nil query.kpis[:growth_rate]
   end
 
   test 'revenue_by_date buckets verified revenue per day and fills empty days with zero' do
@@ -78,6 +99,72 @@ class AccountingQueryTest < ActiveSupport::TestCase
     assert_in_delta(15.0, data[Date.new(2030, 1, 3)])
   end
 
+  test 'kpis subtracts refunds made within the date range from the revenue' do
+    create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 15),
+                article_line: { article: articles(:cable), quantity: 2 })
+    sale = create_sale(client: users(:ironman), created_at: Time.zone.local(2030, 1, 20),
+                       article_line: { article: articles(:adapter), quantity: 1 })
+    refund_sale(sale, created_at: Time.zone.local(2030, 1, 25), article: articles(:adapter))
+
+    kpis = @query.kpis
+
+    assert_equal Money.new(400), kpis[:total_revenue]
+    assert_equal 2, kpis[:transaction_count]
+  end
+
+  test 'kpis ignores refunds made outside the date range' do
+    sale = create_sale(client: users(:ironman), created_at: Time.zone.local(2030, 1, 20),
+                       article_line: { article: articles(:adapter), quantity: 1 })
+    refund_sale(sale, created_at: Time.zone.local(2030, 2, 5), article: articles(:adapter))
+
+    assert_equal Money.new(1500), @query.kpis[:total_revenue]
+  end
+
+  test 'revenue_by_date subtracts refunds on the day they were made' do
+    query = AccountingQuery.new(start_date: Time.zone.local(2030, 1, 1),
+                                end_date: Time.zone.local(2030, 1, 3, 23, 59, 59))
+    sale = create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 1, 10),
+                       article_line: { article: articles(:cable), quantity: 1 })
+    refund_sale(sale, created_at: Time.zone.local(2030, 1, 3), article: articles(:cable))
+
+    data = query.revenue_by_date
+
+    assert_in_delta(2.0, data[Date.new(2030, 1, 1)])
+    assert_in_delta(-2.0, data[Date.new(2030, 1, 3)])
+  end
+
+  test 'revenue_by_date buckets by week when the range is longer than two months' do
+    query = AccountingQuery.new(start_date: Time.zone.local(2030, 1, 1),
+                                end_date: Time.zone.local(2030, 6, 30, 23, 59, 59))
+    create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 2),
+                article_line: { article: articles(:cable), quantity: 1 })
+    create_sale(client: users(:ironman), created_at: Time.zone.local(2030, 1, 3),
+                article_line: { article: articles(:cable), quantity: 1 })
+
+    data = query.revenue_by_date
+
+    assert_equal Date.new(2029, 12, 31), data.keys.first # Monday of the first week
+    assert_equal 26, data.size
+    assert_in_delta(4.0, data[Date.new(2029, 12, 31)])
+    assert_in_delta(0.0, data[Date.new(2030, 1, 7)])
+  end
+
+  test 'revenue_by_date buckets by month when the range spans more than two years' do
+    query = AccountingQuery.new(start_date: Time.zone.local(2030, 1, 10),
+                                end_date: Time.zone.local(2033, 1, 1, 23, 59, 59))
+    create_sale(client: users(:pepper), created_at: Time.zone.local(2030, 1, 15),
+                article_line: { article: articles(:cable), quantity: 1 })
+    create_sale(client: users(:ironman), created_at: Time.zone.local(2030, 1, 20),
+                article_line: { article: articles(:cable), quantity: 1 })
+
+    data = query.revenue_by_date
+
+    assert_equal Date.new(2030, 1, 1), data.keys.first
+    assert_equal 37, data.size
+    assert_in_delta(4.0, data[Date.new(2030, 1, 1)])
+    assert_in_delta(0.0, data[Date.new(2030, 2, 1)])
+  end
+
   private
 
   def create_sale(client:, created_at:, payment_method: payment_methods(:cash), duration: 0, article_line: {})
@@ -94,6 +181,17 @@ class AccountingQueryTest < ActiveSupport::TestCase
       sale = Sale.build_with_invoice(attributes, seller: client)
       sale.save!
       sale
+    end
+  end
+
+  def refund_sale(sale, created_at:, article:)
+    travel_to(created_at) do
+      refund = Refund.create_with_credit_note(
+        sale: sale, refund_method: payment_methods(:cash), refunder: sale.client,
+        refund_scope: { article_ids: [article.id] }
+      )
+      assert_predicate refund, :persisted?
+      refund
     end
   end
 end
