@@ -21,6 +21,8 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
 
   scope module: :admin do
     get '/admin', as: 'admin', to: 'dashboard#index'
+    get '/admin/accounting', as: 'admin_accounting', to: 'accounting#index'
+    get '/admin/accounting/export', as: 'export_csv_admin_accounting', to: 'accounting#export'
     resources :articles, only: [:new, :create, :destroy]
     resources :subscription_offers, only: [:new, :create, :destroy]
     resources :payment_methods, only: [:new, :create, :destroy]

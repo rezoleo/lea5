@@ -1,0 +1,159 @@
+/* Accounting glance dashboard. Uses the shared design tokens (theme/constants.css). */
+
+.accounting-dashboard {
+  padding: var(--padding-md) 0;
+  width: 100%;
+}
+
+.accounting-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--padding-md);
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--padding-md);
+  flex-wrap: wrap;
+  gap: var(--padding-md);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.period-selector {
+  display: flex;
+  gap: var(--padding-md);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.period-form {
+  display: flex;
+  gap: var(--padding-xs);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.period-select,
+.date-input {
+  padding: var(--padding-xs);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--rounded-lg);
+  font-size: var(--text-md);
+}
+
+.custom-date-inputs {
+  display: flex;
+  gap: var(--padding-xs);
+  align-items: center;
+}
+
+.date-range {
+  color: var(--gray-500);
+  margin-bottom: var(--padding-md);
+  font-size: var(--text-sm);
+}
+
+/* KPI cards */
+.kpi-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--padding-md);
+  margin-bottom: var(--padding-md);
+}
+
+.kpi-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--rounded-lg);
+  padding: var(--padding-md);
+}
+
+.kpi-label {
+  font-size: var(--text-sm);
+  color: var(--gray-500);
+  margin-bottom: var(--spacing-lg);
+  text-transform: uppercase;
+  letter-spacing: var(--spacing-lg);
+}
+
+.kpi-value {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  color: var(--gray-900);
+}
+
+.kpi-change {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  margin-top: var(--spacing-lg);
+}
+
+.kpi-change.positive {
+  color: var(--green-700);
+}
+
+.kpi-change.negative {
+  color: var(--red-700);
+}
+
+.kpi-meta {
+  color: var(--gray-400);
+  font-weight: var(--font-light);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+/* Sections */
+.dashboard-section {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--rounded-lg);
+  padding: var(--padding-md);
+  margin-bottom: var(--padding-md);
+}
+
+.dashboard-section.full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dashboard-section h2 {
+  margin-top: 0;
+  margin-bottom: var(--padding-md);
+}
+
+/* Chart */
+.chart-container {
+  min-height: 300px;
+  max-height: 400px;
+  position: relative;
+}
+
+.chart-container canvas {
+  max-height: 400px !important;
+}
+
+.bi-note {
+  color: var(--gray-500);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 768px) {
+  .kpi-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .period-selector {
+    width: 100%;
+  }
+}
