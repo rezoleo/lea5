@@ -15,5 +15,11 @@ module Admin
         get admin_accounting_path
       end
     end
+
+    test 'non-admin user is denied before the date parameters are parsed' do
+      assert_raises CanCan::AccessDenied do
+        get admin_accounting_path, params: { period: 'custom', start_date: 'notadate' }
+      end
+    end
   end
 end

@@ -2,25 +2,26 @@
 
 module Admin
   class AccountingController < ApplicationController
+    before_action :authorize_accounting
     before_action :set_date_range
     before_action :init_query
 
     def index
-      authorize! :manage, :all
-
       @kpis = @query.kpis
       @revenue_data = @query.revenue_by_date
     end
 
     def export
-      authorize! :manage, :all
-
       send_data generate_csv_data,
                 filename: "rezoleo_export_#{@start_date.to_date}_#{@end_date.to_date}.csv",
                 type: 'text/csv'
     end
 
     private
+
+    def authorize_accounting
+      authorize! :manage, :all
+    end
 
     def init_query
       @query = AccountingQuery.new(
@@ -29,7 +30,7 @@ module Admin
       )
     end
 
-    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     def set_date_range
       @period = params[:period] || 'current_month'
 
@@ -40,21 +41,40 @@ module Admin
         when 'last_30_days'
           [30.days.ago.beginning_of_day, Time.zone.now.end_of_day]
         when 'current_year'
-          [Time.zone.now.beginning_of_year, Time.zone.now.end_of_year]
+          # Ongoing periods stop at "now", not at the end of the calendar year: a window
+          # running into the future gets compared against a *complete* previous period,
+          # which reads as a large negative growth rate early on.
+          [Time.zone.now.beginning_of_year, Time.zone.now]
         when 'last_year'
           [1.year.ago.beginning_of_year, 1.year.ago.end_of_year]
         when 'all_time'
-          [Sale.minimum(:created_at) || Time.zone.now, Time.zone.now]
+          [first_recorded_at, Time.zone.now]
         when 'custom'
-          [
-            params[:start_date].present? ? Time.zone.parse(params[:start_date]) : Time.zone.now.beginning_of_month,
-            params[:end_date].present? ? Time.zone.parse(params[:end_date]) : Time.zone.now.end_of_month
-          ]
-        else
-          [Time.zone.now.beginning_of_month, Time.zone.now.end_of_month]
+          custom_date_range
+        else # current_month
+          [Time.zone.now.beginning_of_month, Time.zone.now]
         end
     end
-    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity
+
+    def first_recorded_at
+      [Sale.minimum(:created_at), Refund.minimum(:created_at)].compact.min || Time.zone.now
+    end
+
+    def custom_date_range
+      [
+        parse_date(params[:start_date], Time.zone.now.beginning_of_month).beginning_of_day,
+        parse_date(params[:end_date], Time.zone.now.end_of_month).end_of_day
+      ]
+    end
+
+    def parse_date(value, default)
+      return default if value.blank?
+
+      Time.zone.parse(value.to_s) || default
+    rescue ArgumentError, TypeError
+      default
+    end
 
     # rubocop:disable Metrics/MethodLength
     def generate_csv_data
