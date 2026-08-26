@@ -41,9 +41,6 @@ module Admin
         when 'last_30_days'
           [30.days.ago.beginning_of_day, Time.zone.now.end_of_day]
         when 'current_year'
-          # Ongoing periods stop at "now", not at the end of the calendar year: a window
-          # running into the future gets compared against a *complete* previous period,
-          # which reads as a large negative growth rate early on.
           [Time.zone.now.beginning_of_year, Time.zone.now]
         when 'last_year'
           [1.year.ago.beginning_of_year, 1.year.ago.end_of_year]
@@ -72,7 +69,7 @@ module Admin
       return default if value.blank?
 
       Time.zone.parse(value.to_s) || default
-    rescue ArgumentError, TypeError
+    rescue ArgumentError
       default
     end
 

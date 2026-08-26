@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-# Lightweight figures for the in-app accounting "glance" page: a few headline
-# KPIs and a revenue-over-time series. Reads the stored `sales.amount_cents` and
-# `refunds.amount_cents` snapshots, so no per-sale total is recomputed here.
-#
-# Deep / exploratory analytics (payment methods, top items, customer LTV, seller
-# breakdowns, line-item & refund exports) deliberately do NOT live here — they
-# are built as Metabase questions. See docs/accounting-bi.md.
+# Lightweight figures for the in-app accounting page.
 class AccountingQuery
   DAY_BUCKET_MAX_SPAN = 62
   WEEK_BUCKET_MAX_SPAN = 731
