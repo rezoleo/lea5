@@ -1,0 +1,45 @@
+.sso-user-search-page {
+    width: 60%;
+    margin-top: var(--padding-md);
+}
+
+.sso-search-results {
+    margin-top: var(--padding-sm);
+}
+
+.sso-users-results {
+    list-style: none;
+    margin-top: var(--padding-md);
+    display: grid;
+    row-gap: var(--padding-md);
+}
+
+.sso-user-result {
+    border: 2px solid var(--primary-200);
+    border-radius: var(--rounded-lg);
+    background-color: var(--white);
+    padding: var(--padding-md);
+}
+
+.sso-user-result > * + * {
+    margin-top: var(--padding-xs);
+}
+
+.sso-user-name {
+    font-size: var(--text-md);
+    font-weight: var(--font-bold);
+    color: var(--gray-800);
+}
+
+.sso-existing-user {
+    color: var(--gray-700);
+}
+
+.sso-create-form {
+    margin-top: var(--padding-xs);
+}
+
+.sso-results-empty {
+    margin-top: var(--padding-sm);
+    color: var(--gray-700);
+}

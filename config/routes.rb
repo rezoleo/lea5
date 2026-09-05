@@ -12,6 +12,10 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   get '/profile', to: 'users#profile', as: 'profile'
 
   resources :users, param: :username do
+    collection do
+      get :new_from_sso
+      post :create_from_sso
+    end
     resources :machines, shallow: true, except: [:index]
     resources :sales, shallow: true, only: [:new, :create] do
       resources :refunds, shallow: true, only: [:new, :create]

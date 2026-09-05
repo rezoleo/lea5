@@ -52,7 +52,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_return(status: 500, body: 'Internal Server Error')
 
-    assert_raises(SsoMetadataService::HttpError) do
+    assert_raises(SsoHttpClient::HttpError) do
       ProductionSsoService.new.sync_room(@user)
     end
   end
@@ -61,7 +61,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
     WebMock.stub_request(:post, "https://sso.rezoleo.fr/v2/users/#{@user.oidc_id}/metadata")
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_raises(SsoMetadataService::RequestError) do
+    assert_raises(SsoHttpClient::RequestError) do
       ProductionSsoService.new.sync_room(@user)
     end
   end
@@ -73,7 +73,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
            .with(query: { 'keys' => 'room' })
            .to_return(status: 500, body: 'Internal Server Error')
 
-    assert_raises(SsoMetadataService::HttpError) do
+    assert_raises(SsoHttpClient::HttpError) do
       ProductionSsoService.new.sync_room(user)
     end
   end
@@ -85,7 +85,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
            .with(query: { 'keys' => 'room' })
            .to_raise(Errno::ECONNREFUSED)
 
-    assert_raises(SsoMetadataService::RequestError) do
+    assert_raises(SsoHttpClient::RequestError) do
       ProductionSsoService.new.sync_room(user)
     end
   end
@@ -97,7 +97,7 @@ class SsoMetadataServiceTest < ActiveSupport::TestCase
            .with(query: { 'keys' => 'room' })
            .to_raise(Net::ReadTimeout.new)
 
-    assert_raises(SsoMetadataService::TimeoutError) do
+    assert_raises(SsoHttpClient::TimeoutError) do
       ProductionSsoService.new.sync_room(user)
     end
   end

@@ -2,6 +2,10 @@
 
 <h1>Users</h1>
 
+<% if can?(:create, User) %>
+  <%= render "components/buttons/button_primary_create", text: "new user from SSO", path: new_from_sso_users_path, aria_label: "Create a user from SSO" %>
+<% end %>
+
 <ul class="users">
   <%= render @users %>
 </ul>
