@@ -6,12 +6,12 @@ module Api
     before_action :owner, only: [:create]
 
     def index
-      @machines = Machine.accessible_by(current_ability)
-      return if params[:has_connection].blank?
+      machines = Machine.accessible_by(current_ability)
+                        .includes(:ip, user: [:valid_subscriptions_by_date, :free_accesses_by_date])
+                        .order(:id)
+      machines = machines.with_internet_access if ActiveModel::Type::Boolean.new.cast(params[:with_internet_access])
 
-      @machines = @machines
-                  .includes(user: [:valid_subscriptions_by_date, :free_accesses_by_date])
-                  .select { |machine| machine.user.internet_access? }
+      @machines = paginate(machines)
     end
 
     def show
