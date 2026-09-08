@@ -7,11 +7,17 @@
         <h2>Results among users:</h2>
     <% end %>
     <%= render partial: "search/user", collection: @users %>
+    <% if @pagy_users %>
+        <%= render 'components/pagination', pagy: @pagy_users %>
+    <% end %>
 
     <% if @machines.present? || @ip.present? %>
         <h2>Results among machines:</h2>
     <% end %>
     <%= render partial: "search/machine", collection: @machines %>
+    <% if @pagy_machines %>
+        <%= render 'components/pagination', pagy: @pagy_machines %>
+    <% end %>
 
     <% if @ip.present? %>
         <%= render partial: "search/machine", locals: {machine: @ip.machine} %>

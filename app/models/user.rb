@@ -37,6 +37,25 @@ class User < ApplicationRecord
   # @return [Array<String>]
   attr_accessor :groups
 
+  scope :with_internet_access, lambda {
+    now = Time.current
+    with_subscription = User.joins(:subscriptions)
+                            .where(subscriptions: { cancelled_at: nil })
+                            .where('subscriptions.end_at > ?', now)
+                            .select(:id)
+    with_free_access = User.joins(:free_accesses)
+                           .where('free_accesses.end_at > ?', now)
+                           .select(:id)
+    where(id: with_subscription).or(where(id: with_free_access))
+  }
+
+  scope :search_by, lambda { |query|
+    includes(:room).references(:rooms).where(
+      'firstname ILIKE :search OR lastname ILIKE :search OR email ILIKE :search OR rooms.number ILIKE :search',
+      search: "%#{sanitize_sql_like(query)}%"
+    )
+  }
+
   # Customizes the url param
   def to_param
     username

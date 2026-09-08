@@ -94,4 +94,57 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       assert_dom '.machine-search', { count: 1, text: /.*#{Regexp.escape(query)}.*/ }
     end
   end
+
+  test 'should paginate user results' do
+    limit = Pagy::OPTIONS[:limit]
+    # Two full pages plus a partial one, whatever the configured limit is.
+    create_matching_users((limit * 2) + 1)
+
+    get search_path, params: { q: 'Paginated' }
+    assert_dom '.user', count: limit
+
+    get search_path, params: { q: 'Paginated', users_page: 3 }
+    assert_dom '.user', count: 1
+  end
+
+  test 'should paginate each result list independently' do
+    limit = Pagy::OPTIONS[:limit]
+    create_matching_users((limit * 2) + 1)
+
+    # Paging the users list must not affect the machines list, and vice versa.
+    get search_path, params: { q: 'Paginated', users_page: 3 }
+    assert_response :success
+    assert_dom '.user', count: 1
+
+    get search_path, params: { q: 'Paginated', machines_page: 2 }
+    assert_response :success
+    assert_dom '.user', count: limit
+  end
+
+  test 'should keep the query when linking to another page' do
+    create_matching_users((Pagy::OPTIONS[:limit] * 2) + 1)
+
+    get search_path, params: { q: 'Paginated' }
+    assert_dom '.pagination a[href*=?]', 'q=Paginated'
+    assert_dom '.pagination a[href*=?]', 'users_page='
+  end
+
+  test 'should not paginate search results that fit on a single page' do
+    get search_path, params: { q: 'Tony' }
+    assert_dom '.pagination', count: 0
+  end
+
+  private
+
+  def create_matching_users(count)
+    count.times do |i|
+      User.create!(
+        firstname: 'Search',
+        lastname: format('Paginated%03d', i),
+        email: "search#{i}@paginated.com",
+        username: "search-#{i}",
+        wifi_password: 'password'
+      )
+    end
+  end
 end

@@ -13,6 +13,15 @@ class Machine < ApplicationRecord
                   uniqueness: { unless: ->(machine) { machine.errors.include?(:mac) } }
   validates :ip, presence: true
 
+  scope :with_internet_access, -> { where(user: User.with_internet_access) }
+
+  scope :search_by, lambda { |query|
+    where(
+      'name ILIKE :search OR CAST(mac AS VARCHAR) ILIKE :search',
+      search: "%#{sanitize_sql_like(query)}%"
+    )
+  }
+
   private
 
   def set_ip

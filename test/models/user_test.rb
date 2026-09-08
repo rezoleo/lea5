@@ -357,4 +357,60 @@ class UserTest < ActiveSupport::TestCase
 
     assert_nil @user.internet_expiration
   end
+
+  test 'with_internet_access matches internet_access? with only expired fixtures' do
+    subscriptions(:subscription3).update!(start_at: 2.years.ago, end_at: 1.year.ago)
+
+    assert_empty User.with_internet_access
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access includes a user with a live subscription' do
+    assert_includes User.with_internet_access, users(:spiderman)
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access excludes a user whose live subscription is cancelled' do
+    subscriptions(:subscription3).update!(cancelled_at: Time.current)
+
+    assert_not_includes User.with_internet_access, users(:spiderman)
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access includes a user with only a live free access' do
+    free_accesses(:one).update!(end_at: 1.year.from_now)
+
+    assert_includes User.with_internet_access, @user
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access includes a user with a live free access and a cancelled subscription' do
+    subscriptions(:subscription1).update!(end_at: 1.year.from_now, cancelled_at: Time.current)
+    free_accesses(:one).update!(end_at: 1.year.from_now)
+
+    assert_includes User.with_internet_access, @user
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access excludes a user whose subscription and free access have both expired' do
+    assert_not_includes User.with_internet_access, @user
+    assert_internet_access_parity
+  end
+
+  test 'with_internet_access treats an expiration in the past second as expired' do
+    subscriptions(:subscription1).update!(end_at: 1.second.ago)
+
+    assert_not_includes User.with_internet_access, @user
+    assert_internet_access_parity
+  end
+
+  private
+
+  # Assert the SQL scope selects exactly the users that the Ruby predicate accepts.
+  def assert_internet_access_parity
+    expected = User.all.to_a.select(&:internet_access?).map(&:id).sort
+    actual = User.with_internet_access.pluck(:id).sort
+
+    assert_equal expected, actual, 'with_internet_access disagrees with internet_access?'
+  end
 end

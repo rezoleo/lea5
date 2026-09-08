@@ -82,4 +82,59 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to users_url
   end
+
+  test 'should paginate index' do
+    limit = Pagy::OPTIONS[:limit]
+    # Two full pages plus a partial one, whatever the configured limit is.
+    create_extra_users((limit * 2) + 1 - User.count)
+
+    get users_path
+    assert_dom '.user', count: limit
+    assert_dom '.pagination'
+
+    get users_path, params: { page: 2 }
+    assert_dom '.user', count: limit
+
+    get users_path, params: { page: 3 }
+    assert_dom '.user', count: 1
+  end
+
+  test 'should not paginate index when results fit on a single page' do
+    User.where.not(id: @admin.id).find_each(&:destroy)
+
+    get users_path
+    assert_dom '.user', count: 1
+    assert_dom '.pagination', count: 0
+  end
+
+  test 'should render an empty page for an out of range page number' do
+    get users_path, params: { page: 9999 }
+    assert_response :success
+    assert_dom '.user', count: 0
+  end
+
+  test 'should not repeat users across pages' do
+    create_extra_users(Pagy::OPTIONS[:limit] * 2)
+
+    get users_path
+    first_page = css_select('.user').map(&:to_s)
+    get users_path, params: { page: 2 }
+    second_page = css_select('.user').map(&:to_s)
+
+    assert_empty first_page & second_page
+  end
+
+  private
+
+  def create_extra_users(count)
+    count.times do |i|
+      User.create!(
+        firstname: "Extra#{i}",
+        lastname: format('Paginated%03d', i),
+        email: "extra#{i}@paginated.com",
+        username: "extra-#{i}",
+        wifi_password: 'password'
+      )
+    end
+  end
 end
