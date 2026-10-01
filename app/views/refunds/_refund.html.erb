@@ -1,29 +1,38 @@
 <%# locals: (refund:) -%>
 
-<li class="grid gap-2 border-t border-base-300 px-4 py-3">
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4">
-    <span class="font-semibold">
-      <%= refund.credited_amount.format %> Refunded
-      <span class="opacity-60 font-normal"><%= time_with_relative_tag refund.created_at %></span>
-    </span>
-    <%= link_to download_invoice_path(refund.invoice), class: "btn btn-ghost btn-sm gap-1" do %>
+<li class="grid gap-1">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <div>
+      <span class="font-semibold">Refunded on <%= time_with_relative_tag refund.created_at %></span>
+      <span class="text-sm opacity-60">via <%= refund.refund_method.name %></span>
+    </div>
+    <%= link_to download_invoice_path(refund.invoice), class: "btn btn-outline btn-sm w-32" do %>
       <%= svg_icon_tag 'icon_pdf' %>
       Credit note
     <% end %>
   </div>
 
-  <ul class="grid gap-1 text-sm opacity-60">
+  <ul class="grid gap-1">
     <% refund.articles_refunds.each do |article_refund| %>
-      <li>
-        <%= article_refund.article.name %>
-        <% if article_refund.quantity > 1 %>×<%= article_refund.quantity %><% end %>
+      <li class="flex items-baseline justify-between gap-x-4">
+        <span>
+          <%= article_refund.article.name %>
+          <% if article_refund.quantity > 1 %>
+            <span class="opacity-60">×<%= article_refund.quantity %></span>
+          <% end %>
+        </span>
+        <span class="shrink-0">&minus;<%= (article_refund.article.price * article_refund.quantity).format %></span>
       </li>
     <% end %>
     <% if refund.subscription_refunded? %>
-      <li>Subscription cut</li>
-    <% end %>
-    <% if refund.reason.present? %>
-      <li>Reason: <%= refund.reason %></li>
+      <li class="flex items-baseline justify-between gap-x-4">
+        <span>Subscription ended early</span>
+        <span class="shrink-0">&minus;<%= refund.subscription_refund.format %></span>
+      </li>
     <% end %>
   </ul>
+
+  <% if refund.reason.present? %>
+    <p class="text-sm opacity-60">Reason: <%= refund.reason %></p>
+  <% end %>
 </li>

@@ -1,8 +1,8 @@
-<%# locals: (title:, link_text: nil, link_path: nil, link_label: nil) -%>
+<%# locals: (title:, count: nil, link_text: nil, link_path: nil, link_label: nil) -%>
 
 <div class="flex flex-wrap items-center justify-between gap-2 border-b border-base-300 px-4 py-3">
-  <h2><%= title %></h2>
+  <h2><%= title %><% if count %> <span class="font-normal opacity-50"><%= count %></span><% end %></h2>
   <% if link_text %>
-    <%= link_to link_text, link_path, class: "btn btn-primary btn-sm", 'aria-label': link_label %>
+    <%= link_to link_text, link_path, class: "btn btn-soft btn-primary btn-sm", 'aria-label': link_label %>
   <% end %>
 </div>

@@ -1,11 +1,12 @@
 <%# locals: (user:) -%>
 
-<% if not user.internet_access? %>
+<% case user.internet_status %>
+<% when :none %>
   <span class="badge badge-error badge-soft gap-1">
     <%= svg_icon_tag 'cross' %>
     No internet
   </span>
-<% elsif user.internet_expiration < Time.current + 7.days %>
+<% when :expiring %>
   <span class="badge badge-warning badge-soft gap-1">
     <%= svg_icon_tag 'icon_internet' %>
     Internet expires soon

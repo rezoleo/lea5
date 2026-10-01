@@ -7,9 +7,14 @@ module ApplicationHelper
     'error' => { class: 'alert-error', icon: 'cross' }
   }.freeze
   DEFAULT_FLASH_STYLE = { class: 'alert-info', icon: 'check' }.freeze
+  NAV_LINK_CLASS = 'btn btn-ghost btn-sm shrink-0 aria-[current=page]:bg-base-200 aria-[current=page]:text-primary'
 
   def flash_style(type)
     FLASH_STYLES.fetch(type.to_s, DEFAULT_FLASH_STYLE)
+  end
+
+  def nav_link(text, path)
+    link_to text, path, class: NAV_LINK_CLASS, 'aria-current': ('page' if current_page?(path))
   end
 
   def time_with_relative_tag(date_or_time)

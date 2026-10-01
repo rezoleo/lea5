@@ -17,6 +17,12 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
     assert_select 'a.user', count: 1
   end
 
+  test 'non-admin user should not get the user list or search in the header' do
+    get user_path @user
+    assert_select "header a[href='#{users_path}']", count: 0
+    assert_select "header form[action='#{search_path}']", count: 0
+  end
+
   test 'non-admin user should not see someone else in show' do
     assert_raises CanCan::AccessDenied do
       get user_path @admin

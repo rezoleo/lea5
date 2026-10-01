@@ -12,24 +12,24 @@
     <span class="label">Articles</span>
     <% if @refundable_article_sales.any? %>
       <% @refundable_article_sales.each do |article_sale| %>
-        <label class="label gap-2">
+        <label class="flex cursor-pointer items-center gap-3">
           <%= check_box_tag 'refund[article_ids][]', article_sale.article_id, false,
                             id: "refund_article_#{article_sale.article_id}", class: 'checkbox' %>
-          <%= "#{article_sale.article.name} (×#{article_sale.quantity}) — " \
-              "#{(article_sale.article.price * article_sale.quantity).format}" %>
+          <span><%= article_sale.article.name %> <span class="opacity-60">×<%= article_sale.quantity %></span></span>
+          <span class="ms-auto font-medium"><%= (article_sale.article.price * article_sale.quantity).format %></span>
         </label>
       <% end %>
     <% else %>
-      <p class="text-sm opacity-60">No refundable articles (already refunded or none on this sale).</p>
+      <p class="text-sm opacity-60">Every article on this sale has already been refunded.</p>
     <% end %>
   </div>
 
   <% if @subscription&.refundable? %>
     <div class="grid gap-1.5">
       <span class="label">Subscription</span>
-      <label class="label gap-2">
+      <label class="flex cursor-pointer items-center gap-3">
         <%= check_box_tag 'refund[refund_subscription]', '1', false, id: 'refund_refund_subscription', class: 'checkbox' %>
-        Cut subscription now and credit <%= @subscription.refund_amount.format %>
+        End the subscription today and credit <%= @subscription.refund_amount.format %>
       </label>
     </div>
   <% end %>

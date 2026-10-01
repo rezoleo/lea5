@@ -1,12 +1,12 @@
 <%# locals: () -%>
 
-<h1>Api keys</h1>
+<h1>API keys</h1>
 
 <section class="panel">
   <%= render "components/card_header",
-             title: "Api keys",
-             link_text: ("New api key" if can?(:create, ApiKey)),
+             title: "API keys",
+             link_text: ("New API key" if can?(:create, ApiKey)),
              link_path: new_api_key_path,
-             link_label: "Add a new api key" %>
-  <%= render "components/list", items: @api_keys, empty: "No api keys" %>
+             link_label: "Add a new API key" %>
+  <%= render "components/list", items: @api_keys, empty: "No API keys" %>
 </section>

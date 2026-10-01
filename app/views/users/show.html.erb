@@ -1,50 +1,67 @@
 <%# locals: () -%>
 
-<div class="flex flex-wrap items-center justify-between gap-3">
-  <div class="flex flex-wrap items-center gap-3">
-    <h1>
-      <% if current_user == @user %>
-        My Profile
-      <% else %>
-        Profile of <%= "#{@user.firstname} #{@user.lastname}" %>
+<div class="grid gap-1">
+  <h1><%= @user.firstname %> <%= @user.lastname %></h1>
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+    <span class="opacity-70"><%= @user.username %></span>
+    <span class="opacity-70"><%= @user.email %></span>
+    <%# The room is the only thing staff can change on a user, so its action sits right beside it. %>
+    <span class="flex items-center gap-2">
+      <span class="opacity-70"><%= @user.room ? "Room #{@user.room.number}" : "No room" %></span>
+      <% if can?(:update, @user) %>
+        <%= link_to "Move", edit_user_path(@user), class: "btn btn-outline btn-xs", 'aria-label': "Move this user" %>
       <% end %>
-    </h1>
-    <%= render "components/internet_badge", user: @user %>
+    </span>
   </div>
-  <% if can?(:update, @user) %>
-    <%= link_to "Move", edit_user_path(@user), class: "btn btn-primary btn-sm", 'aria-label': "Move this user" %>
-  <% end %>
 </div>
 
+<% status = @user.internet_status %>
 <section class="panel">
-  <%= render "components/card_header", title: "Personal data" %>
-  <dl class="grid gap-x-8 gap-y-4 p-4 sm:grid-cols-2">
-    <%= render "components/detail", term: "Name", value: "#{@user.firstname} #{@user.lastname}" %>
-    <%= render "components/detail", term: "Username", value: @user.username %>
-    <%= render "components/detail", term: "Email", value: @user.email %>
-    <%= render "components/detail", term: "Room", value: @user.room&.number || "No room" %>
-    <%= render "components/detail", term: "Machines", value: pluralize(@machines.size, "machine") %>
-    <%= render "components/detail",
-               term: "Internet",
-               value: @user.internet_expiration ? safe_join(["Until ", time_with_relative_tag(@user.internet_expiration)]) : "No internet" %>
-  </dl>
-</section>
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-base-300 px-4 py-3">
+    <div class="flex flex-wrap items-center gap-2">
+      <h2>Access</h2>
+      <%= render "components/internet_badge", user: @user %>
+    </div>
+    <% if can?(:create, Sale) %>
+      <%= link_to new_user_sale_path(@user),
+                  class: class_names("btn btn-primary btn-sm", "btn-soft" => status == :active) do %>
+        <%= svg_icon_tag 'icon_calendar_plus' %>
+        <% if status != :none %>
+          Extend
+        <% elsif @user.internet_expiration %>
+          Renew
+        <% else %>
+          Subscribe
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
 
-<% if current_user == @user %>
-  <section class="panel">
-    <%= render "components/card_header", title: "Wifi" %>
-    <dl class="grid gap-x-8 gap-y-4 p-4 sm:grid-cols-2"
-        data-controller="user"
-        data-user-password-value="<%= @user.wifi_password %>">
-      <%= render "components/detail", term: "Username", value: @user.username %>
-      <div class="grid content-start gap-0.5">
-        <dt class="text-sm opacity-60">Password</dt>
-        <dd class="flex items-center gap-1">
+  <div class="flex flex-wrap items-start gap-x-8 gap-y-5 p-4">
+    <div class="self-center">
+      <% if status != :none %>
+        <p class="text-lg font-semibold">Until <%= time_with_relative_tag(@user.internet_expiration) %></p>
+        <p class="text-sm opacity-60">Ends in <%= time_ago_in_words(@user.internet_expiration) %></p>
+      <% elsif @user.internet_expiration %>
+        <p class="text-lg font-semibold">Ended <%= time_with_relative_tag(@user.internet_expiration) %></p>
+        <p class="text-sm opacity-60"><%= time_ago_in_words(@user.internet_expiration).upcase_first %> ago</p>
+      <% else %>
+        <p class="text-lg font-semibold">Never subscribed</p>
+      <% end %>
+    </div>
+
+    <% if current_user == @user %>
+      <dl class="grid content-start gap-0.5 sm:ms-auto"
+           data-controller="user"
+           data-user-password-value="<%= @user.wifi_password %>">
+        <dt class="text-sm opacity-60">Wi-Fi password</dt>
+        <dd class="flex flex-wrap items-center gap-1">
           <input type="password"
-                 disabled
+                 readonly
                  value="<%= @user.wifi_password %>"
                  data-user-target="wifiPassword"
-                 class="min-w-40 rounded-field border border-base-300 px-3 py-1 text-base-content" />
+                 aria-label="Wi-Fi password"
+                 class="input input-sm w-52 font-mono" />
           <button type="button"
                   class="btn btn-square btn-ghost btn-sm"
                   data-action="user#togglePasswordVisibility"
@@ -55,20 +72,22 @@
           <button type="button"
                   class="btn btn-square btn-ghost btn-sm"
                   data-action="user#copyToClipboard"
-                  aria-label="Copy wifi password">
+                  aria-label="Copy Wi-Fi password">
             <%= svg_icon_tag 'icon_clipboard' %>
           </button>
-          <span data-user-target="copyMessage" class="hidden text-sm text-success">Copied</span>
+          <span data-user-target="copyMessage" class="hidden text-sm text-success" role="status">Copied</span>
         </dd>
-      </div>
-    </dl>
-  </section>
-<% end %>
+        <dd class="text-sm opacity-60">Sign in to the Wi-Fi as <span class="font-medium"><%= @user.username %></span></dd>
+      </dl>
+    <% end %>
+  </div>
+</section>
 
 <section class="panel">
   <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
   <%= render "components/card_header",
              title: "Machines",
+             count: "#{@machines.size} of #{USER_MACHINES_LIMIT}",
              link_text: ("New machine" if can?(:create, @user.machines.new)),
              link_path: new_user_machine_path(@user),
              link_label: "Add a new machine" %>
@@ -92,14 +111,19 @@
 <section class="panel">
   <%= render "components/card_header",
              title: "Sales and invoices",
-             link_text: ("Sell" if can?(:create, Sale)),
+             link_text: ("New sale" if can?(:create, Sale)),
              link_path: new_user_sale_path(@user),
-             link_label: "Create a sell" %>
+             link_label: "Create a sale" %>
   <%= render "components/list", items: @sales, empty: "No sales" %>
   <% if @sales.any? %>
-    <div class="flex items-baseline justify-between gap-x-4 border-t border-base-300 px-4 py-3 font-semibold">
-      <span>Total</span>
-      <span><%= @sales.sum(&:total_price).format %></span>
-    </div>
+    <% paid = @sales.sum(&:total_price) %>
+    <% refunded = @sales.flat_map(&:refunds).sum(Money.new(0), &:credited_amount) %>
+    <dl class="grid gap-1 border-t border-base-300 px-4 py-3">
+      <% if refunded.positive? %>
+        <div class="flex justify-between gap-x-4 opacity-60"><dt>Paid</dt><dd><%= paid.format %></dd></div>
+        <div class="flex justify-between gap-x-4 opacity-60"><dt>Refunded</dt><dd>&minus;<%= refunded.format %></dd></div>
+      <% end %>
+      <div class="flex justify-between gap-x-4 font-semibold"><dt>Total</dt><dd><%= (paid - refunded).format %></dd></div>
+    </dl>
   <% end %>
 </section>

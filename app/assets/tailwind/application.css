@@ -88,6 +88,11 @@
 
 /* Headings are styled once instead of on every page. */
 @layer base {
+  /* Prices, dates, MACs and IPs line up in columns. */
+  body {
+    font-variant-numeric: tabular-nums;
+  }
+
   h1 {
     @apply text-2xl font-semibold tracking-tight;
   }
@@ -120,7 +125,7 @@
   }
 
   .pagy a[aria-label] {
-    @apply px-3 text-xs font-semibold tracking-wide uppercase;
+    @apply px-3;
   }
 
   .pagy a[aria-current] {

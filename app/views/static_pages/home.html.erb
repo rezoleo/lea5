@@ -9,6 +9,6 @@
   <% if logged_in? %>
     <%= link_to "Go to my profile", profile_path, class: "btn btn-primary" %>
   <% else %>
-    <p class="text-sm opacity-60">Log in from the top bar to manage your account.</p>
+    <%= button_to "Log in with your Rezoleo account", AUTH_PATH, method: :post, class: "btn btn-primary", data: { turbo: false } %>
   <% end %>
 </div>

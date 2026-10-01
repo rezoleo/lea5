@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     @free_accesses = @user.free_accesses_by_date.load
     @sales = @user.sales_as_client
                   .includes(:articles, :subscription, :subscription_offers, :invoice, :payment_method)
-                  .includes(refunds: [:invoice, { articles_refunds: :article }])
+                  .includes(refunds: [:invoice, :refund_method, { articles_refunds: :article }])
                   .order(created_at: :desc).load
   end
 

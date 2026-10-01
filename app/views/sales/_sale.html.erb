@@ -1,47 +1,62 @@
 <%# locals: (sale:) -%>
 
-<li class="grid gap-2 px-4 py-3">
-  <div class="flex flex-wrap items-baseline justify-between gap-x-4">
-    <span>
+<% lines = sale.articles_sales.size + (sale.subscription ? 1 : 0) %>
+<li class="grid gap-3 px-4 py-4">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <div>
       <span class="font-semibold"><%= time_with_relative_tag sale.created_at %></span>
-      <span class="opacity-60">Paid with <%= sale.payment_method.name %></span>
-    </span>
-    <div class="flex items-center gap-1">
-      <%= link_to download_invoice_path(sale.invoice), class: "btn btn-ghost btn-sm gap-1" do %>
+      <span class="text-sm opacity-60">Paid with <%= sale.payment_method.name %></span>
+    </div>
+    <div class="flex items-center gap-2">
+      <% if can?(:create, Refund) %>
+        <%= link_to new_sale_refund_path(sale), class: "btn btn-square btn-ghost btn-sm", title: "Refund", 'aria-label': "Refund this sale" do %>
+          <%= svg_icon_tag 'icon_refund' %>
+        <% end %>
+      <% end %>
+      <%# Same fixed width as the credit note button, so the two line up. %>
+      <%= link_to download_invoice_path(sale.invoice), class: "btn btn-outline btn-sm w-32" do %>
         <%= svg_icon_tag 'icon_pdf' %>
         Invoice
-      <% end %>
-      <% if can?(:create, Refund) %>
-        <%= link_to "Refund", new_sale_refund_path(sale), class: "btn btn-ghost btn-sm" %>
       <% end %>
     </div>
   </div>
 
   <ul class="grid gap-1">
     <% sale.articles_sales.each do |article_sale| %>
-      <li class="flex flex-wrap items-baseline justify-between gap-x-4">
+      <li class="flex items-baseline justify-between gap-x-4">
         <span>
           <%= article_sale.article.name %>
           <% if article_sale.quantity > 1 %>
             <span class="opacity-60">×<%= article_sale.quantity %></span>
           <% end %>
         </span>
-        <span class="font-medium"><%= (article_sale.article.price * article_sale.quantity).format %></span>
+        <span class="shrink-0"><%= (article_sale.article.price * article_sale.quantity).format %></span>
       </li>
     <% end %>
 
     <% if sale.subscription %>
-      <li class="flex flex-wrap items-baseline justify-between gap-x-4">
+      <li class="flex items-baseline justify-between gap-x-4">
         <span>
           <%= pluralize(sale.subscription.duration, "month") %> Internet subscription
           <span class="opacity-60">
             <%= time_with_relative_tag sale.subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag sale.subscription.end_at %>
           </span>
         </span>
-        <span class="font-medium"><%= sale.subscription_price.format %></span>
+        <span class="shrink-0"><%= sale.subscription_price.format %></span>
+      </li>
+    <% end %>
+
+    <% if lines > 1 %>
+      <li class="flex items-baseline justify-between gap-x-4 font-semibold">
+        <span>Total</span>
+        <span class="shrink-0"><%= sale.total_price.format %></span>
       </li>
     <% end %>
   </ul>
 
-  <%= render sale.refunds %>
+  <% if sale.refunds.any? %>
+    <ul class="grid gap-3 border-s-2 border-secondary/60 ps-4">
+      <%= render sale.refunds %>
+    </ul>
+  <% end %>
 </li>

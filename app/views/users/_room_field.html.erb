@@ -1,13 +1,13 @@
 <%# locals: (f:) -%>
 
-<div>
+<div class="grid gap-1.5">
   <%= f.label :room_number, 'Room' %>
   <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, f.object) },
                           { include_blank: 'No room' } %>
 </div>
 <% if f.object.errors.of_kind?(:room_number, :occupied) %>
-  <div>
-    <%= f.check_box :room_override %>
-    <%= f.label :room_override, "Unassign the current occupant of #{f.object.room_number}" %>
-  </div>
+  <%= f.label :room_override, class: "flex cursor-pointer items-start gap-3 rounded-box border border-warning bg-warning/10 p-3" do %>
+    <%= f.check_box :room_override, class: "checkbox checkbox-warning" %>
+    <span>Unassign the current occupant of <%= f.object.room_number %></span>
+  <% end %>
 <% end %>
