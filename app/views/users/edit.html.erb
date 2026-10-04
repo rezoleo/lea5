@@ -1,7 +1,11 @@
 <%# locals: () -%>
 
-<% provide :button_text, "Edit" %>
+<h1>Move <%= @user.firstname %> <%= @user.lastname %></h1>
 
-<h1>Edit <%=@user.firstname %> <%=@user.lastname %></h1>
-
-<%= render 'form', user: @user %>
+<%= form_with(model: @user, class: 'form') do |f| %>
+  <%= render 'utils/error_messages', object: f.object %>
+  <%= render 'room_field', f: f %>
+  <div>
+    <%= f.submit 'Move' %>
+  </div>
+<% end %>

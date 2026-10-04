@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :new, @user
   end
 
@@ -32,13 +32,13 @@ class UsersController < ApplicationController
 
   def edit
     @user = User.find_by!(username: params[:username])
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :edit, @user
   end
 
   def create
     @user = User.new(user_params)
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :create, @user
     if @user.save
       flash[:success] = 'User created!'
@@ -50,10 +50,10 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find_by!(username: params[:username])
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :update, @user
-    if @user.update(user_params)
-      flash[:success] = 'User updated!'
+    if @user.update(params.require(:user).permit(:room_number, :room_override))
+      flash[:success] = 'User moved!'
       redirect_to @user
     else
       render 'edit', status: :unprocessable_entity
@@ -71,6 +71,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :username, :room_number)
+    params.require(:user).permit(:firstname, :lastname, :email, :username, :room_number, :room_override)
   end
 end

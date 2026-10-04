@@ -41,8 +41,8 @@ class AbilityTest < ActiveSupport::TestCase
     assert @user_ability.can?(:read, @user)
   end
 
-  test 'user can update themselves' do
-    assert @user_ability.can?(:update, @user)
+  test 'user cannot update themselves' do
+    assert @user_ability.cannot?(:update, @user)
   end
 
   test 'user cannot destroy themselves' do

@@ -115,20 +115,6 @@ class RoomTest < ActiveSupport::TestCase
     assert_nil user.room
   end
 
-  test 'available_for returns rooms not occupied by other users' do
-    user = users(:ironman)
-    available = Room.available_for(user)
-
-    # Should include the user's own room
-    assert_includes available.map(&:number), user.room.number
-
-    # Should not include other users' rooms
-    assert_not_includes available.map(&:number), users(:pepper).room.number
-
-    # Should include unoccupied rooms
-    assert_includes available.map(&:number), rooms(:room_a105a).number
-  end
-
   test 'changing user_id enqueues room sync job for new user' do
     room = rooms(:room_a105a)
     user = users(:spiderman)

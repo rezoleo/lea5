@@ -57,23 +57,38 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
   end
 
-  test 'should redirect if updates are valid in html' do
+  test 'should only update the room' do
     patch user_url(@user, format: :html), params: {
-      user: {
-        firstname: 'toto',
-        lastname: 'titi',
-        email: 'toto@titi.tu',
-        username: 'toto-titi',
-        room_number: 'B231'
-      }
+      user: { firstname: 'toto', room_number: 'B231' }
     }
-    assert_redirected_to @user.reload
+    assert_redirected_to @user
+    @user.reload
     assert_equal 'B231', @user.room.number
+    assert_not_equal 'toto', @user.firstname
   end
 
-  test 'should re-render edit if updates are invalid with html' do
-    patch user_path @user, params: { user: { firstname: '' } }
+  test 'should not move a user to an occupied room without confirmation' do
+    patch user_path @user, params: { user: { room_number: @admin.room.number } }
     assert_template 'users/edit'
+    assert_equal @admin, @admin.room.reload.user
+  end
+
+  test 'should move a user to an occupied room and unassign the previous occupant' do
+    room = @admin.room
+    patch user_path @user, params: { user: { room_number: room.number, room_override: '1' } }
+    assert_redirected_to @user
+    assert_equal @user, room.reload.user
+    assert_nil @admin.reload.room
+  end
+
+  test 'should create a user in an occupied room with confirmation' do
+    room = @admin.room
+    post users_path, params: {
+      user: { firstname: 'a', lastname: 'b', email: 'a@b.com', username: 'a-b',
+              room_number: room.number, room_override: '1' }
+    }
+    assert_equal 'a@b.com', room.reload.user.email
+    assert_nil @admin.reload.room
   end
 
   test 'should destroy a user and redirect to users in html' do

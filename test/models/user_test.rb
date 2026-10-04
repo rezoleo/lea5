@@ -96,6 +96,22 @@ class UserTest < ActiveSupport::TestCase
     assert_not_predicate @user, :valid?
   end
 
+  test 'saving without setting room_number keeps the room' do
+    room = @user.room
+    User.find(@user.id).save!
+    assert_equal room, @user.reload.room
+  end
+
+  test 'taking an occupied room requires confirmation' do
+    other = User.where.not(id: @user.id).joins(:room).first
+    @user.room_number = other.room.number
+    assert_not_predicate @user, :valid?
+
+    @user.room_override = true
+    assert @user.save
+    assert_nil other.reload.room
+  end
+
   test "username can't be empty" do
     @user.username = ' '
     assert_not_predicate @user, :valid?

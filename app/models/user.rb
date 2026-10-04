@@ -29,6 +29,9 @@ class User < ApplicationRecord
   validates :wifi_password, presence: true, allow_blank: false
   validates :username, presence: true, uniqueness: true, allow_blank: false
   validate :room_number_must_exist
+  validate :room_override_confirmed
+
+  attribute :room_override, :boolean, default: false
 
   before_validation :ensure_has_wifi_password
 
@@ -145,7 +148,18 @@ class User < ApplicationRecord
     errors.add(:room_number, 'does not exist')
   end
 
+  def room_override_confirmed
+    return if @room_number.blank? || room_override
+
+    occupant = Room.find_by(number: @room_number)&.user
+    return if occupant.nil? || occupant == self
+
+    errors.add(:room_number, :occupied, message: "is occupied by #{occupant.display_name}")
+  end
+
   def assign_room_from_number
+    return unless defined?(@room_number)
+
     self.room = @room_number.blank? ? nil : Room.find_by(number: @room_number)
   end
 
