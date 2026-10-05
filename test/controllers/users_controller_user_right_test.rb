@@ -23,6 +23,18 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'non-admin user should not edit themselves' do
+    assert_raises CanCan::AccessDenied do
+      get edit_user_path @user
+    end
+  end
+
+  test 'non-admin user should not update themselves' do
+    assert_raises CanCan::AccessDenied do
+      patch user_path @user, params: { user: { room_number: 'B231' } }
+    end
+  end
+
   test 'non-admin user should not see someone else in edit' do
     assert_raises CanCan::AccessDenied do
       get edit_user_path @admin

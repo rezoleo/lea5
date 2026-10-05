@@ -6,7 +6,7 @@ class UserAbility
   def initialize(user)
     return if user.blank?
 
-    can [:read, :update], User, id: user.id
+    can :read, User, id: user.id
     can [:read, :update, :destroy], Machine, user: user
     # User can create a new machine to themselves if they don't have too many machines
     can [:create], Machine do |machine|

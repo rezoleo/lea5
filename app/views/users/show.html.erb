@@ -19,7 +19,9 @@
           <%= svg_icon_tag 'profile' %>
           <h2>Personal Data</h2>
         </div>
-        <%= render "components/buttons/button_primary_edit", text: "edit", path: edit_user_path(@user), aria_label: "Edit your profile" %>
+        <% if can? :update, @user %>
+          <%= render "components/buttons/button_primary_edit", text: "move", path: edit_user_path(@user), aria_label: "Move this user" %>
+        <% end %>
       </div>
 
       <div class="divider"></div>

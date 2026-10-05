@@ -1,0 +1,14 @@
+<%# locals: (f:) -%>
+
+<div>
+  <%= f.label :room_number, 'Room' %>
+  <%= f.collection_select :room_number, @rooms, :number,
+                          ->(room) { room.user && room.user != f.object ? "#{room.number} (#{room.user.display_name})" : room.number },
+                          { include_blank: 'No room' } %>
+</div>
+<% if f.object.errors.of_kind?(:room_number, :occupied) %>
+  <div>
+    <%= f.check_box :room_override %>
+    <%= f.label :room_override, "Unassign the current occupant of #{f.object.room_number}" %>
+  </div>
+<% end %>

@@ -17,7 +17,7 @@ class UsersTest < ApplicationSystemTestCase
     assert_text @user.firstname
     assert_text @user.lastname
     assert_text @user.email
-    assert_text @user.room
+    assert_text @user.room.number
 
     @user.machines.each do |machine|
       assert_text machine.name
@@ -26,25 +26,28 @@ class UsersTest < ApplicationSystemTestCase
     end
   end
 
-  test 'editing the profile' do
-    new_firstname = 'Elon'
-    new_lastname = 'Musk'
+  test 'moving a user to an occupied room' do
+    click_on 'Logout'
+    sign_in_as @user, ['rezoleo']
+    pepper = users(:pepper)
+    target_room = pepper.room.number
 
     visit user_path @user
-    assert_no_text new_firstname
-    assert_no_text new_lastname
+    click_on 'Move this user'
 
-    click_on 'Edit your profile'
+    assert_selector 'h1', text: "Move #{@user.firstname} #{@user.lastname}"
+    assert_no_field 'Firstname'
 
-    assert_selector 'h1', text: "Edit #{@user.firstname} #{@user.lastname}"
+    select "#{target_room} (#{pepper.display_name})", from: 'Room'
+    click_on 'Move'
+    assert_text "is occupied by #{pepper.display_name}"
 
-    fill_in 'Firstname', with: new_firstname
-    fill_in 'Lastname', with: new_lastname
-    click_on 'Edit'
+    check "Unassign the current occupant of #{target_room}"
+    click_on 'Move'
 
-    assert_selector 'h1', text: 'My Profile'
-    assert_text new_firstname
-    assert_text new_lastname
+    assert_text 'User moved!'
+    assert_equal target_room, @user.reload.room.number
+    assert_nil pepper.reload.room
   end
 
   test 'adding a new machine' do
