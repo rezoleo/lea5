@@ -23,7 +23,7 @@ class AccountingQuery
 
     {
       total_revenue: Money.new(revenue_cents),
-      transaction_count: verified_sales.count,
+      sales_count: verified_sales.count,
       total_months_sold: subscription_months_sold,
       growth_rate: growth_rate(revenue_cents)
     }
@@ -60,7 +60,7 @@ class AccountingQuery
   # @return [Float, nil] nil when there is nothing comparable to measure against
   def growth_rate(revenue_cents)
     previous = previous_year_revenue
-    return nil if previous.nil? || !previous.positive?
+    return unless previous&.positive?
 
     ((revenue_cents - previous).to_f / previous * 100).round(2)
   end

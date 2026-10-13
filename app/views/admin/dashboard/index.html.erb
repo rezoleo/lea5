@@ -2,9 +2,9 @@
 
 <h1>Admin dashboard</h1>
 
-<div style="margin-bottom: 2rem;">
-  <%= link_to 'Accounting Dashboard', admin_accounting_path, class: 'button-primary', style: 'display: inline-block; padding: 1rem 1.5rem; text-decoration: none;' %>
-</div>
+<% if can?(:manage, :all) %>
+  <%= link_to 'Accounting dashboard', admin_accounting_path, class: 'button-primary' %>
+<% end %>
 
 <% if can?(:read, Article) %>
   <h2>Articles</h2>

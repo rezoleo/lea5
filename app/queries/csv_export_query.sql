@@ -71,7 +71,7 @@ refund_articles AS (
         JOIN articles_refunds ar ON ar.refund_id = r.id
         JOIN articles a ON a.id = ar.article_id
 
-    WHERE r.created_at BETWEEN :start_date AND :end_date
+    WHERE s.verified_at IS NOT NULL AND r.created_at BETWEEN :start_date AND :end_date
 ),
 
 refund_subs AS (
@@ -95,7 +95,7 @@ refund_subs AS (
         LEFT JOIN users ref ON ref.id = r.refunder_id
         JOIN payment_methods rm ON rm.id = r.refund_method_id
 
-    WHERE r.subscription_refund_cents IS NOT NULL AND r.created_at BETWEEN :start_date AND :end_date
+    WHERE s.verified_at IS NOT NULL AND r.subscription_refund_cents IS NOT NULL AND r.created_at BETWEEN :start_date AND :end_date
 )
 
 SELECT date

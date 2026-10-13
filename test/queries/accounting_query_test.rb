@@ -33,7 +33,7 @@ class AccountingQueryTest < ActiveSupport::TestCase
     kpis = @query.kpis
 
     assert_equal Money.new(400 + 1500), kpis[:total_revenue]
-    assert_equal 2, kpis[:transaction_count]
+    assert_equal 2, kpis[:sales_count]
   end
 
   test 'kpis sums subscription months sold for verified sales within the date range' do
@@ -109,7 +109,7 @@ class AccountingQueryTest < ActiveSupport::TestCase
     kpis = @query.kpis
 
     assert_equal Money.new(400), kpis[:total_revenue]
-    assert_equal 2, kpis[:transaction_count]
+    assert_equal 2, kpis[:sales_count]
   end
 
   test 'kpis ignores refunds made outside the date range' do
