@@ -13,6 +13,8 @@ class Sale < ApplicationRecord
   has_many :sales_subscription_offers, dependent: :destroy
   has_many :subscription_offers, through: :sales_subscription_offers
 
+  monetize :amount_cents
+
   # In the form to create a new Sale, also accept fields to create an article_sale
   # form >
   #   sale[duration], sale[payment_method_id]...
@@ -31,19 +33,10 @@ class Sale < ApplicationRecord
   validate :exhaustive_subscription_offers, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :no_duplicate_article_sale
 
+  before_validation :assign_amount
+
   def verify
     self.verified_at = Time.zone.now if verified_at.nil?
-  end
-
-  def total_price
-    total = Money.new(0)
-    articles_sales.each do |rec|
-      total += rec.quantity * rec.article.price
-    end
-    sales_subscription_offers.each do |rec|
-      total += rec.quantity * rec.subscription_offer.price
-    end
-    total
   end
 
   # Article lines of this sale that have not yet been covered by a previous refund.
@@ -74,6 +67,13 @@ class Sale < ApplicationRecord
   end
 
   private
+
+  def assign_amount
+    articles_total = articles_sales.to_a.sum { |rec| rec.quantity * rec.article.price }
+    subscription_total = sales_subscription_offers.to_a.sum { |rec| rec.quantity * rec.subscription_offer.price }
+
+    self.amount = articles_total + subscription_total
+  end
 
   def not_empty_sale
     return unless articles_sales.empty? && sales_subscription_offers.empty?

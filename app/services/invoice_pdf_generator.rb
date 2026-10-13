@@ -10,8 +10,7 @@ class InvoiceLib
 
   CONDITIONS = <<~CONDITIONS
     Conditions de règlement : Prix comptant sans escompte
-    Moyen de paiement : Chèque (ordre : Rézoléo), Espèces ou Virement
-    Conditions de vente : Prix de départ
+    Moyens de paiement autorisés : Chèque (ordre « Rézoléo »), Espèces ou Virement
 
     (1) TVA non applicable, article 293 B du CGI
   CONDITIONS
@@ -49,13 +48,12 @@ class InvoicePdfGenerator
   #   - :item_name (String) - Name of the item
   #   - :price (Money|Hash) - Price of the item as a Money object or its hash representation
   #   - :quantity (Integer) - Quantity of the item
-  # - :payment_amount (Money|Hash, optional) - Amount already paid as a Money object or its hash representation
   # - :payment_date (String, optional) - Date of payment
   # - :payment_method (String, optional) - Method of payment
   def initialize(input)
     @input = normalize_input(input)
     @doc_metadata = InvoiceLib::PDFMetadata.new(number: @input[:number], credit_note: credit_note?)
-    @total_price = @input[:items].sum { |item| item[:price] * item[:quantity] }
+    @total_amount = @input[:items].sum { |item| item[:price] * item[:quantity] }
     @composer = InvoiceComposer.new(document_title: credit_note? ? 'Avoir Rézoléo' : 'Facture Rézoléo')
     setup_document
   end
@@ -66,7 +64,7 @@ class InvoicePdfGenerator
     add_client_info
     add_items_table
     add_totals
-    add_payment_info
+    add_payment_line
 
     # return the result directly as a file stream
     pdf_stream = StringIO.new
@@ -157,41 +155,30 @@ class InvoicePdfGenerator
   def build_total_row
     [
       { content: 'Total', col_span: 5 },
-      table(@total_price.format, text_align: :right)
+      table(@total_amount.format, text_align: :right)
     ]
   end
 
   def add_totals
-    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_price.format}"
-    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_price.format}"
+    ht_s = "Somme totale hors taxes (en euros, HT) : #{@total_amount.format}"
+    ttc_s = "Somme totale à payer toutes taxes comprises (en euros, TTC) : #{@total_amount.format}"
 
     @composer.text(ht_s)
     @composer.text(ttc_s, margin: margin_bottom(1))
     @composer.text(InvoiceLib::CONDITIONS, style: :conditions, margin: margin_bottom(3))
   end
 
-  def add_payment_info
-    header = lambda do |_tb|
-      [{ background_color: 'C0C0C0' },
-       [
-         table('Date', style: :small),
-         table('Règlement', style: :small),
-         table('Montant', style: :small, text_align: :right),
-         table('À payer', style: :small, text_align: :right)
-       ]]
-    end
+  def add_payment_line
+    @composer.text(payment_line, style: :bold)
+  end
 
-    payment_amount = @input[:payment_amount]
-    left_to_pay = @total_price - payment_amount
+  def payment_line
+    method = @input[:payment_method]
+    return 'Moyen de paiement non renseigné' if method.blank?
 
-    data = [[
-      table(@input[:payment_date] || '', style: :small),
-      table(@input[:payment_method] || '', style: :small),
-      table(payment_amount.format, style: :small, text_align: :right),
-      table(left_to_pay.format, style: :small, text_align: :right)
-    ]]
+    return "Payé par #{method} le #{@input[:payment_date]}" if @input[:payment_date].present?
 
-    @composer.table(data, column_widths: [-3, -5, -2, -2], header: header, width: 300)
+    "À régler par #{method}"
   end
 
   def margin_bottom(lines)
@@ -210,8 +197,7 @@ class InvoicePdfGenerator
       sale_date: format_date(input[:sale_date]),
       issue_date: format_date(input[:issue_date]),
       payment_date: format_date(input[:payment_date]),
-      items: input[:items].map { |item| normalize_item(item) },
-      payment_amount: to_money(input[:payment_amount]) || Money.new(0)
+      items: input[:items].map { |item| normalize_item(item) }
     }
   end
 

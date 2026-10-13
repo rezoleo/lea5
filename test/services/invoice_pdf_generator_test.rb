@@ -20,7 +20,6 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
         { item_name: 'Article 1', price: Money.new(1000, 'EUR'), quantity: 2 },
         { item_name: 'Article 2', price: Money.new(500, 'EUR'), quantity: 3 }
       ],
-      payment_amount: Money.new(2500, 'EUR'),
       payment_date: '2024-07-21',
       payment_method: 'Carte Bancaire'
     }
@@ -78,12 +77,24 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_includes pdf_text, '35,00 €'
   end
 
-  test 'generate_pdf should include payment information' do
+  test 'generate_pdf should include the payment method and date when paid' do
     pdf = @generator.generate_pdf
     pdf_text = extract_text_from_pdf(pdf)
-    assert_includes pdf_text, '25,00 €'
-    assert_includes pdf_text, '21 juil. 2024'
-    assert_includes pdf_text, 'Carte Bancaire'
+    assert_includes pdf_text, 'Payé par Carte Bancaire le 21 juil. 2024'
+  end
+
+  test 'generate_pdf should mention the payment is pending when there is no payment date' do
+    generator = InvoicePdfGenerator.new(
+      number: @number,
+      sale_date: '2024-07-21',
+      issue_date: '2024-07-22',
+      client_name: users(:ironman).display_name,
+      client_address: users(:ironman).display_address,
+      items: [{ item_name: 'Article 1', price: Money.new(1000, 'EUR'), quantity: 2 }],
+      payment_method: 'Carte Bancaire'
+    )
+    pdf_text = extract_text_from_pdf(generator.generate_pdf)
+    assert_includes pdf_text, 'À régler par Carte Bancaire'
   end
 
   test 'generate_pdf should include correct metadata' do
@@ -106,7 +117,6 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
       client_name: users(:ironman).display_name,
       client_address: users(:ironman).display_address,
       items: [{ item_name: 'Remboursement abonnement', price: Money.new(3000, 'EUR'), quantity: 1 }],
-      payment_amount: Money.new(3000, 'EUR'),
       payment_date: '2024-07-22',
       payment_method: 'Cash'
     )
@@ -116,6 +126,7 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_includes pdf_text, 'Avoir Rézoléo'
     assert_includes pdf_text, 'Avoir n°4270'
     assert_includes pdf_text, "Facture d'origine n°1234"
+    assert_includes pdf_text, 'Payé par Cash le 22 juil. 2024'
 
     metadata = extract_metadata_from_pdf(pdf)
     assert_equal 'Avoir Rézoléo 4270', metadata[:Title]
