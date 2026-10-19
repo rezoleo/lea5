@@ -21,6 +21,20 @@ class SaleTest < ActiveSupport::TestCase
     assert_predicate @sale, :valid?
   end
 
+  test 'blank line quantity fails validation instead of raising' do
+    sale = Sale.new(client: @user, duration: 0, payment_method: @payment_method,
+                    articles_sales: [ArticlesSale.new(article: @article, quantity: nil)])
+    assert_not_predicate sale, :valid?
+  end
+
+  test 'fixture amounts match the computed amounts' do
+    Sale.find_each do |sale|
+      stored = sale.amount
+      sale.valid?
+      assert_equal sale.amount, stored, "Sale #{sale.id}"
+    end
+  end
+
   test 'client_id should be present' do
     @sale.client_id = nil
     assert_not_predicate @sale, :valid?
@@ -132,9 +146,9 @@ class SaleTest < ActiveSupport::TestCase
     assert sale.errors.added? :base, 'Cannot create an empty sale, add at least an article or a subscription'
   end
 
-  test 'total_price should calculate total from articles and subscription offers' do
-    expected_total = Money.new(3200, :eur)
-    assert_equal expected_total, @sale.total_price
+  test 'amount should calculate total from articles and subscription offers' do
+    @sale.valid? # triggers the amount calculation
+    assert_equal Money.new(3200, :eur), @sale.amount
   end
 
   test 'refundable_article_sales excludes articles already refunded' do

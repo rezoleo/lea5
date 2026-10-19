@@ -2,6 +2,10 @@
 
 <h1>Admin dashboard</h1>
 
+<% if can?(:manage, :all) %>
+  <%= link_to 'Accounting dashboard', admin_accounting_path, class: 'button-primary' %>
+<% end %>
+
 <% if can?(:read, Article) %>
   <h2>Articles</h2>
   <% if can?(:create, Article) %>

@@ -32,11 +32,7 @@ class Subscription < ApplicationRecord
   # Amount actually paid for this subscription's offers in its sale.
   # @return [Money]
   def paid
-    total = Money.new(0)
-    sale.sales_subscription_offers.each do |sso|
-      total += sso.quantity * sso.subscription_offer.price
-    end
-    total
+    sale.sales_subscription_offers.sum(Money.new(0), &:total)
   end
 
   # Credit-note amount when cutting this subscription as of as_of: what was paid,
