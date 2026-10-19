@@ -69,10 +69,14 @@ class Sale < ApplicationRecord
   private
 
   def assign_amount
-    articles_total = articles_sales.to_a.sum { |rec| rec.quantity * rec.article.price }
-    subscription_total = sales_subscription_offers.to_a.sum { |rec| rec.quantity * rec.subscription_offer.price }
+    articles_total = articles_sales.to_a.sum { |rec| line_total(rec.quantity, rec.article) }
+    subscription_total = sales_subscription_offers.to_a.sum { |rec| line_total(rec.quantity, rec.subscription_offer) }
 
     self.amount = articles_total + subscription_total
+  end
+
+  def line_total(quantity, priced)
+    quantity && priced ? quantity * priced.price : 0
   end
 
   def not_empty_sale

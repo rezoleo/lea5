@@ -175,10 +175,9 @@ class InvoicePdfGenerator
   def payment_line
     method = @input[:payment_method]
     return 'Moyen de paiement non renseigné' if method.blank?
+    return "À régler par #{method}" if @input[:payment_date].blank?
 
-    return "Payé par #{method} le #{@input[:payment_date]}" if @input[:payment_date].present?
-
-    "À régler par #{method}"
+    "#{credit_note? ? 'Remboursé' : 'Payé'} par #{method} le #{@input[:payment_date]}"
   end
 
   def margin_bottom(lines)

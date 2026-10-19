@@ -75,7 +75,7 @@ module Admin
 
     # rubocop:disable Metrics/MethodLength
     def generate_csv_data
-      CSV.generate(headers: true) do |csv|
+      CSV.generate(+"\uFEFF", col_sep: ';') do |csv|
         csv << csv_headers
 
         sanitized_query = ActiveRecord::Base.sanitize_sql_array([
@@ -114,11 +114,11 @@ module Admin
     end
 
     def format_date(date_value)
-      date_value.in_time_zone&.strftime('%Y-%m-%d %H:%M:%S %Z')
+      date_value.in_time_zone('Europe/Paris')&.strftime('%Y-%m-%d %H:%M:%S')
     end
 
     def format_currency(cents)
-      cents.to_i / 100.0
+      format('%.2f', cents.to_i / 100.0).tr('.', ',')
     end
   end
 end

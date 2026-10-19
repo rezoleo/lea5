@@ -69,13 +69,31 @@ module Admin
       get export_csv_admin_accounting_path, params: { period: 'all_time' }
 
       assert_operator assigns(:start_date), :<=, Refund.minimum(:created_at)
-      assert_includes response.body.split("\n").map { |line| line.split(',')[2] }, 'Refund'
+      assert_includes response.body.split("\n").map { |line| line.split(';')[2] }, 'Refund'
     end
 
     test 'should export csv' do
       get export_csv_admin_accounting_path
       assert_response :success
       assert_equal 'text/csv', response.content_type
+    end
+
+    test 'csv export is formatted for French spreadsheets' do
+      get export_csv_admin_accounting_path, params: { period: 'all_time' }
+
+      assert response.body.start_with?("\uFEFFDate;Invoice Number;")
+      assert_match(/;\d+,\d{2}\n/, response.body)
+      assert_match(/\n\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2};/, response.body)
+    end
+
+    test 'csv export dates are in Paris time' do
+      sale = sales(:ironman_cable_6_months)
+      sale.update_column(:created_at, Time.utc(2025, 7, 1, 10, 0, 0)) # rubocop:disable Rails/SkipsModelValidations
+
+      get export_csv_admin_accounting_path, params: { period: 'all_time' }
+
+      # UTC+2 in summer
+      assert_match(/\n2025-07-01 12:00:00;#{sale.invoice.number};Sale;/, response.body)
     end
   end
 end

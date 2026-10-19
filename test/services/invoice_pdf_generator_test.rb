@@ -126,7 +126,8 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_includes pdf_text, 'Avoir Rézoléo'
     assert_includes pdf_text, 'Avoir n°4270'
     assert_includes pdf_text, "Facture d'origine n°1234"
-    assert_includes pdf_text, 'Payé par Cash le 22 juil. 2024'
+    assert_includes pdf_text, 'Remboursé par Cash le 22 juil. 2024'
+    assert_not_includes pdf_text, 'Payé par'
 
     metadata = extract_metadata_from_pdf(pdf)
     assert_equal 'Avoir Rézoléo 4270', metadata[:Title]

@@ -19,6 +19,21 @@ class RefundTest < ActiveSupport::TestCase
     assert_equal Money.new(2200, :eur), @refund.amount
   end
 
+  test 'blank line quantity fails validation instead of raising' do
+    @refund.articles_refunds.build(article: articles(:adapter), quantity: nil)
+
+    assert_not_predicate @refund, :valid?
+    assert_includes @refund.errors.attribute_names, :articles_refunds
+  end
+
+  test 'fixture amounts match the computed amounts' do
+    Refund.find_each do |refund|
+      stored = refund.amount
+      refund.valid?
+      assert_equal refund.amount, stored, "Refund #{refund.id}"
+    end
+  end
+
   test 'create_with_credit_note refunds an article and generates a credit note' do
     sale = sales(:ironman_deleted_article)
     article = articles(:deleted_article)

@@ -5,6 +5,7 @@ ironman_cable_6_months:
   client: ironman
   payment_method: credit_card
   invoice: sale_ironman_cable_6_months
+  amount_cents: 3200
   verified_at: 2025-01-20 12:02:44
 
 pepper_1_year:
@@ -12,6 +13,7 @@ pepper_1_year:
   client: pepper
   payment_method: cash
   invoice: sale_pepper_1_year
+  amount_cents: 5000
   verified_at: 2025-01-26 14:02:44
 
 spiderman_1_year:
@@ -19,6 +21,7 @@ spiderman_1_year:
   client: spiderman
   payment_method: cash
   invoice: sale_spiderman_1_year
+  amount_cents: 5000
   verified_at: 2099-01-26 14:02:44
 
 ironman_deleted_article:
@@ -26,4 +29,5 @@ ironman_deleted_article:
   client: ironman
   payment_method: credit_card
   invoice: sale_ironman_deleted_article
+  amount_cents: 2000
   verified_at: 2025-01-21 12:02:44
