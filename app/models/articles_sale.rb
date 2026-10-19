@@ -14,4 +14,9 @@ class ArticlesSale < ApplicationRecord
     scope: :sale_id,
     message: 'can only be added once to a sale, please merge the quantities of the same articles'
   }
+
+  # @return [Money]
+  def total
+    quantity && article ? quantity * article.price : Money.new(0)
+  end
 end

@@ -74,14 +74,10 @@ class Refund < ApplicationRecord
   private
 
   def assign_amount
-    articles_total = articles_refunds.to_a.sum { |rec| line_total(rec.quantity, rec.article) }
+    articles_total = articles_refunds.to_a.sum(&:total)
     subscription_total = subscription_refunded? ? subscription_refund : Money.new(0)
 
     self.amount = articles_total + subscription_total
-  end
-
-  def line_total(quantity, priced)
-    quantity && priced ? quantity * priced.price : 0
   end
 
   def not_empty_refund
