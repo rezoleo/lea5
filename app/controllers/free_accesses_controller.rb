@@ -46,7 +46,7 @@ class FreeAccessesController < ApplicationController
   private
 
   def free_access_params
-    params.require(:free_access).permit(:start_at, :end_at, :reason)
+    params.expect(free_access: [:start_at, :end_at, :reason])
   end
 
   def owner

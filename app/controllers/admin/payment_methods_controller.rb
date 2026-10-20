@@ -49,7 +49,7 @@ module Admin
     end
 
     def payment_method_params
-      params.require(:payment_method).permit(:name, :auto_verify)
+      params.expect(payment_method: [:name, :auto_verify])
     end
   end
 end
