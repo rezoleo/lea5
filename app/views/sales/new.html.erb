@@ -1,9 +1,6 @@
 <%# locals: () %>
 
-<div class="flex items-center gap-2">
-  <%= render "components/back_link", to: user_path(@owner) %>
-  <h1>New sale for <%= @owner.display_name %></h1>
-</div>
+<%= render "components/page_header", title: "New sale for #{@owner.display_name}", back: user_path(@owner) %>
 
 <% if @subscription_offers.empty? %>
   <div class="alert alert-warning" role="alert">
@@ -22,7 +19,7 @@
       }) do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
 
-  <div data-sales-target="subscription" class="grid gap-1.5">
+  <div data-sales-target="subscription" class="field">
     <%= f.label :duration, "Internet subscription" %>
     <div class="flex flex-wrap items-center gap-3">
       <%= f.number_field :duration,
@@ -30,7 +27,7 @@
                          min: 0,
                          class: "input w-24",
                          data: { sales_target: 'duration', action: 'sales#updatePrice' } %>
-      <span class="text-sm opacity-60">
+      <span class="muted text-sm">
         months, <span data-sales-target="subPrice">0,00 €</span>
       </span>
     </div>
@@ -53,8 +50,8 @@
 
   <%= f.field :payment_method_id, :collection_select, @payment_methods, :id, :name, prompt: 'Select payment method' %>
 
-  <div class="flex items-baseline justify-between border-t border-base-300 pt-4">
-    <span class="opacity-60">Total</span>
+  <div class="line border-t border-base-300 pt-4">
+    <span class="muted">Total</span>
     <span class="text-xl font-semibold" data-sales-target="totalPrice">0,00 €</span>
   </div>
 

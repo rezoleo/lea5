@@ -102,7 +102,7 @@
   }
 }
 
-/* The two shapes every page is built from. Everything else is utility classes. */
+/* The shapes that repeat across pages. One-off layout stays in utility classes. */
 @layer components {
   /* A titled surface: page sections, lists, dashboards. */
   .panel {
@@ -112,6 +112,35 @@
   /* A card of stacked fields; DaisyFormBuilder#field supplies the rows. */
   .form {
     @apply grid max-w-md gap-4 rounded-box border border-base-300 bg-base-100 p-6;
+  }
+
+  /* A label stacked on its control. */
+  .field {
+    @apply grid gap-1.5;
+  }
+
+  /* An item of components/list. Actions go last, pushed right with ms-auto. */
+  .row {
+    @apply flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3;
+  }
+
+  /* A label and its amount on one line; the amount never wraps under the label. */
+  .line {
+    @apply flex items-baseline justify-between gap-x-4;
+  }
+
+  .line > :last-child {
+    @apply shrink-0;
+  }
+
+  /* Secondary text: dates, quantities, hints. */
+  .muted {
+    @apply text-base-content/60;
+  }
+
+  /* A button holding only an icon. Always give it an aria-label. */
+  .btn-icon {
+    @apply btn btn-square btn-ghost btn-sm;
   }
 
   /* Pagy renders plain <a> tags for components/pagination and doesn't accept

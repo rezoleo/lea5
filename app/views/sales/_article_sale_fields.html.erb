@@ -3,7 +3,7 @@
 <%# sales_controller.js reads the first select and the first input of this div,
     and deletes the remove button's closest div, so keep them direct children. %>
 <div data-sales-target="articles" class="flex flex-wrap items-end gap-3">
-  <div class="grid gap-1.5">
+  <div class="field">
     <%= form.label :article_id %>
     <%= form.collection_select :article_id, articles, :id,
                                ->(article) { "#{article.name} (#{humanized_money_with_symbol(article.price)})" },

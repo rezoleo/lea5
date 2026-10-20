@@ -1,9 +1,6 @@
 <%# locals: () -%>
 
-<div class="flex items-center gap-2">
-  <%= render "components/back_link", to: user_path(@user) %>
-  <h1>Move <%= @user.firstname %> <%= @user.lastname %></h1>
-</div>
+<%= render "components/page_header", title: "Move #{@user.firstname} #{@user.lastname}", back: user_path(@user) %>
 
 <%= form_with(model: @user, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>

@@ -1,10 +1,11 @@
 <%# locals: () %>
 
-<h1>Admin dashboard</h1>
-
-<% if can?(:manage, :all) %>
-  <%= link_to 'Accounting dashboard', admin_accounting_path, class: 'button-primary' %>
-<% end %>
+<div class="flex flex-wrap items-center justify-between gap-2">
+  <h1>Admin dashboard</h1>
+  <% if can?(:manage, :all) %>
+    <%= link_to 'Accounting', admin_accounting_path, class: 'btn btn-primary btn-sm' %>
+  <% end %>
+</div>
 
 <% if can?(:read, Article) %>
   <section class="panel">

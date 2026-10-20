@@ -38,6 +38,6 @@ class DaisyFormBuilder < ActionView::Helpers::FormBuilder
   # collection_select needs for its collection and value/text methods.
   def field(method, helper = :text_field, *, **options)
     control = public_send(helper, method, *, options)
-    @template.tag.div(class: 'grid gap-1.5') { label(method) + control }
+    @template.tag.div(class: 'field') { label(method) + control }
   end
 end

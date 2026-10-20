@@ -1,13 +1,11 @@
 <%# locals: (api_key:) -%>
 
-<li class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+<li class="row">
   <span class="font-medium"><%= api_key.name %></span>
-  <span class="text-sm opacity-60"><%= time_with_relative_tag api_key.created_at %></span>
+  <span class="muted text-sm"><%= time_with_relative_tag api_key.created_at %></span>
   <% if can?(:destroy, api_key) %>
     <div class="ms-auto">
-      <%= button_to(api_key, method: :delete, class: "btn btn-square btn-ghost btn-sm", data: { turbo_confirm: "Are you sure?" }, 'aria-label': 'Delete this api key') do %>
-        <%= svg_icon_tag 'icon_delete' %>
-      <% end %>
+      <%= icon_button 'icon_delete', api_key, method: :delete, label: 'Delete this api key' %>
     </div>
   <% end %>
 </li>

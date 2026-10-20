@@ -17,6 +17,16 @@ module ApplicationHelper
     link_to text, path, class: NAV_LINK_CLASS, 'aria-current': ('page' if current_page?(path))
   end
 
+  # An icon-only action. GET renders a link; any other method a form button,
+  # and DELETE asks for confirmation first.
+  def icon_button(icon, target, label:, method: :get, **options)
+    options = options.merge(class: class_names('btn-icon', options[:class]), 'aria-label': label)
+    return link_to(target, options) { svg_icon_tag(icon) } if method == :get
+
+    options[:data] = { turbo_confirm: 'Are you sure?', **options.fetch(:data, {}) } if method == :delete
+    button_to(target, options.merge(method:)) { svg_icon_tag(icon) }
+  end
+
   def time_with_relative_tag(date_or_time)
     time_ago_in_words = if date_or_time > Time.current
                           "in #{time_ago_in_words(date_or_time)}"

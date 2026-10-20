@@ -1,31 +1,28 @@
 <%# locals: () -%>
 
-<div class="flex items-center gap-2">
-  <%= render "components/back_link", to: user_path(@sale.client) %>
-  <h1>Refund sale for <%= @sale.client.display_name %></h1>
-</div>
+<%= render "components/page_header", title: "Refund sale for #{@sale.client.display_name}", back: user_path(@sale.client) %>
 
 <%= form_with(url: sale_refunds_path(@sale), method: :post, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: @refund %>
 
-  <div class="grid gap-1.5">
+  <div class="field">
     <span class="label">Articles</span>
     <% if @refundable_article_sales.any? %>
       <% @refundable_article_sales.each do |article_sale| %>
         <label class="flex cursor-pointer items-center gap-3">
           <%= check_box_tag 'refund[article_ids][]', article_sale.article_id, false,
                             id: "refund_article_#{article_sale.article_id}", class: 'checkbox' %>
-          <span><%= article_sale.article.name %> <span class="opacity-60">×<%= article_sale.quantity %></span></span>
+          <span><%= article_sale.article.name %> <span class="muted">×<%= article_sale.quantity %></span></span>
           <span class="ms-auto font-medium"><%= (article_sale.article.price * article_sale.quantity).format %></span>
         </label>
       <% end %>
     <% else %>
-      <p class="text-sm opacity-60">Every article on this sale has already been refunded.</p>
+      <p class="muted text-sm">Every article on this sale has already been refunded.</p>
     <% end %>
   </div>
 
   <% if @subscription&.refundable? %>
-    <div class="grid gap-1.5">
+    <div class="field">
       <span class="label">Subscription</span>
       <label class="flex cursor-pointer items-center gap-3">
         <%= check_box_tag 'refund[refund_subscription]', '1', false, id: 'refund_refund_subscription', class: 'checkbox' %>
@@ -34,7 +31,7 @@
     </div>
   <% end %>
 
-  <div class="grid gap-1.5">
+  <div class="field">
     <%= label_tag 'refund_refund_method_id', 'Refund method' %>
     <%= select_tag 'refund[refund_method_id]',
                    options_from_collection_for_select(@refund_methods, :id, :name),

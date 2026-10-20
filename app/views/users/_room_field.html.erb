@@ -1,6 +1,6 @@
 <%# locals: (f:) -%>
 
-<div class="grid gap-1.5">
+<div class="field">
   <%= f.label :room_number, 'Room' %>
   <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, f.object) },
                           { include_blank: 'No room' } %>

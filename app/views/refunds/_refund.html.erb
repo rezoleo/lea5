@@ -4,7 +4,7 @@
   <div class="flex flex-wrap items-center justify-between gap-2">
     <div>
       <span class="font-semibold">Refunded on <%= time_with_relative_tag refund.created_at %></span>
-      <span class="text-sm opacity-60">via <%= refund.refund_method.name %></span>
+      <span class="muted text-sm">via <%= refund.refund_method.name %></span>
     </div>
     <%= link_to download_invoice_path(refund.invoice), class: "btn btn-outline btn-sm w-32" do %>
       <%= svg_icon_tag 'icon_pdf' %>
@@ -14,25 +14,25 @@
 
   <ul class="grid gap-1">
     <% refund.articles_refunds.each do |article_refund| %>
-      <li class="flex items-baseline justify-between gap-x-4">
+      <li class="line">
         <span>
           <%= article_refund.article.name %>
           <% if article_refund.quantity > 1 %>
-            <span class="opacity-60">×<%= article_refund.quantity %></span>
+            <span class="muted">×<%= article_refund.quantity %></span>
           <% end %>
         </span>
-        <span class="shrink-0">&minus;<%= (article_refund.article.price * article_refund.quantity).format %></span>
+        <span>&minus;<%= (article_refund.article.price * article_refund.quantity).format %></span>
       </li>
     <% end %>
     <% if refund.subscription_refunded? %>
-      <li class="flex items-baseline justify-between gap-x-4">
+      <li class="line">
         <span>Subscription ended early</span>
-        <span class="shrink-0">&minus;<%= refund.subscription_refund.format %></span>
+        <span>&minus;<%= refund.subscription_refund.format %></span>
       </li>
     <% end %>
   </ul>
 
   <% if refund.reason.present? %>
-    <p class="text-sm opacity-60">Reason: <%= refund.reason %></p>
+    <p class="muted text-sm">Reason: <%= refund.reason %></p>
   <% end %>
 </li>

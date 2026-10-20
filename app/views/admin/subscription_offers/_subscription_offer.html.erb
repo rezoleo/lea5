@@ -1,13 +1,11 @@
 <%# locals: (subscription_offer:) %>
 
-<li class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3">
+<li class="row">
   <span class="font-medium"><%= pluralize(subscription_offer.duration, 'month') %></span>
-  <span class="opacity-60"><%= humanized_money_with_symbol(subscription_offer.price) %></span>
+  <span class="muted"><%= humanized_money_with_symbol(subscription_offer.price) %></span>
   <% if can?(:destroy, subscription_offer) %>
     <div class="ms-auto">
-      <%= button_to(subscription_offer, method: :delete, class: "btn btn-square btn-ghost btn-sm", data: { turbo_confirm: "Are you sure?" }, 'aria-label': 'Delete this subscription offer') do %>
-        <%= svg_icon_tag 'icon_delete' %>
-      <% end %>
+      <%= icon_button 'icon_delete', subscription_offer, method: :delete, label: 'Delete this subscription offer' %>
     </div>
   <% end %>
 </li>
