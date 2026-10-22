@@ -49,7 +49,7 @@ module Admin
     end
 
     def subscription_offer_params
-      params.require(:subscription_offer).permit(:price, :duration)
+      params.expect(subscription_offer: [:price, :duration])
     end
   end
 end

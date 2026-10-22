@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
+gem 'rails', '~> 8.1.4'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails', '~> 3.5'
@@ -42,7 +42,7 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'omniauth', '~> 2.1'
 gem 'omniauth_openid_connect', '~> 0.8.0'
-gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-rails_csrf_protection', '~> 2.0'
 
 gem 'cancancan', '~> 3.6'
 
@@ -53,7 +53,7 @@ gem 'cancancan', '~> 3.6'
 gem 'hexapdf', '~> 1.4.0'
 
 # Money management [https://github.com/RubyMoney/money-rails]
-gem 'money-rails', '~> 2.0.0'
+gem 'money-rails', '~> 3.0'
 
 # Pagination [https://github.com/ddnexus/pagy]
 gem 'pagy', '~> 43.6'
@@ -67,7 +67,7 @@ group :development, :test do
   gem 'debug', platforms: [:mri, :windows], require: 'debug/prelude'
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem 'brakeman', '~> 7.0', require: false
+  gem 'brakeman', '~> 8.1', require: false
 end
 
 group :development do
