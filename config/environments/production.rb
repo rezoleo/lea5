@@ -52,12 +52,7 @@ Rails.application.configure do
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT by default
-  # TODO: Re-enable cop once we update Rubocop configuration
-  # rubocop:disable Layout/MultilineMethodCallIndentation
-  config.logger = ActiveSupport::Logger.new($stdout)
-    .tap  { |logger| logger.formatter = Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-  # rubocop:enable Layout/MultilineMethodCallIndentation
+  config.logger = ActiveSupport::TaggedLogging.logger($stdout)
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -66,6 +61,9 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
+
+  # Prevent health checks from clogging up the logs.
+  config.silence_healthcheck_path = '/up'
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
