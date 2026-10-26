@@ -97,6 +97,19 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
     assert_includes pdf_text, 'À régler par Carte Bancaire'
   end
 
+  test 'generate_pdf should mention a missing payment method' do
+    generator = InvoicePdfGenerator.new(
+      number: @number,
+      sale_date: '2024-07-21',
+      issue_date: '2024-07-22',
+      client_name: users(:ironman).display_name,
+      client_address: users(:ironman).display_address,
+      items: [{ item_name: 'Article 1', price: Money.new(1000, 'EUR'), quantity: 2 }]
+    )
+    pdf_text = extract_text_from_pdf(generator.generate_pdf)
+    assert_includes pdf_text, 'Moyen de paiement non renseigné'
+  end
+
   test 'generate_pdf should include correct metadata' do
     pdf = @generator.generate_pdf
     metadata = extract_metadata_from_pdf(pdf)
@@ -143,7 +156,7 @@ class InvoicePdfGeneratorTest < ActiveSupport::TestCase
 
     def show_text(str)
       boxes = decode_text_with_positioning(str)
-      @content << boxes.string unless boxes.string.nil?
+      @content << boxes.string
     end
     alias show_text_with_positioning show_text
   end

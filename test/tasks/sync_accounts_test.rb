@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'minitest/mock'
 require 'rake'
 require 'webmock'
 
@@ -29,6 +30,24 @@ class SyncAccountsTest < ActiveSupport::TestCase
 
     peter.reload
     assert_equal 'peterp@univ.edu', peter.email # invalid email doesn't get updated
+  end
+
+  test 'retrieve_users_from_sso fetches every page' do
+    ZitadelStub.stub_list_users_page(offset: 0, users: [ZitadelStub::MOCK_ZITADEL_USER_OK], total: 501)
+    ZitadelStub.stub_list_users_page(offset: 500, users: [ZitadelStub::MOCK_ZITADEL_USER_BAD_EMAIL], total: 501)
+
+    sso_users = retrieve_users_from_sso
+
+    assert_equal [ZitadelStub::MOCK_ZITADEL_USER_OK[:userId], ZitadelStub::MOCK_ZITADEL_USER_BAD_EMAIL[:userId]],
+                 sso_users.keys
+  end
+
+  test 'destroy_user reports a failed destroy' do
+    user = users(:ironman)
+
+    user.stub(:destroy, false) do
+      assert_output("Error destroying user #{user.username}\n") { destroy_user(user) }
+    end
   end
 end
 
@@ -64,5 +83,11 @@ class ZitadelStub
                       body: JSON.dump({ result: [MOCK_ZITADEL_USER_OK, MOCK_ZITADEL_USER_BAD_EMAIL],
                                         details: { totalResult: 2 } }),
                       headers: { content_type: 'application/json' })
+  end
+
+  def self.stub_list_users_page(offset:, users:, total:)
+    WebMock.stub_request(:post, 'https://sso.rezoleo.fr/v2/users')
+           .with(body: { query: { offset: offset, limit: 500, asc: true } }.to_json)
+           .to_return(status: 200, body: JSON.dump({ result: users, details: { totalResult: total } }))
   end
 end
