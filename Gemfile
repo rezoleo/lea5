@@ -96,6 +96,6 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.22.0', require: false
-  gem 'simplecov-cobertura', '~> 3.0', require: false
+  gem 'simplecov-cobertura', '~> 3.2', require: false
   gem 'webmock', '~> 3.23'
 end

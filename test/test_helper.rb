@@ -40,7 +40,9 @@ module ActiveSupport
     end
 
     parallelize_teardown do |_worker|
-      SimpleCov.result
+      # Since Rails 8.1, teardown hooks also run in the parent process once workers are done.
+      # Only store results from workers, the parent formats the merged report at exit.
+      SimpleCov.result if Process.pid != SimpleCov.pid
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
