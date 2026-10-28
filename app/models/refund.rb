@@ -50,7 +50,7 @@ class Refund < ApplicationRecord
                                       refund_scope: refund_scope, cut_at: cut_at)
       raise ActiveRecord::Rollback unless refund.save
 
-      sale.subscription&.update!(cancelled_at: cut_at) if refund_scope.fetch(:refund_subscription, false)
+      sale.subscription.update!(cancelled_at: cut_at) if refund_scope.fetch(:refund_subscription, false)
     end
     refund
   end

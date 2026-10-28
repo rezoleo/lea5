@@ -25,12 +25,6 @@ Rails.application.configure do
   # Disable serving static files from `public/`, relying on NGINX/Apache to do so instead.
   # config.public_file_server.enabled = false
 
-  # Compress CSS using a preprocessor.
-  # config.assets.css_compressor = :sass
-
-  # Do not fall back to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
@@ -52,12 +46,7 @@ Rails.application.configure do
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
 
   # Log to STDOUT by default
-  # TODO: Re-enable cop once we update Rubocop configuration
-  # rubocop:disable Layout/MultilineMethodCallIndentation
-  config.logger = ActiveSupport::Logger.new($stdout)
-    .tap  { |logger| logger.formatter = Logger::Formatter.new }
-    .then { |logger| ActiveSupport::TaggedLogging.new(logger) }
-  # rubocop:enable Layout/MultilineMethodCallIndentation
+  config.logger = ActiveSupport::TaggedLogging.logger($stdout)
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
@@ -66,6 +55,9 @@ Rails.application.configure do
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
   config.log_level = ENV.fetch('RAILS_LOG_LEVEL', 'info')
+
+  # Prevent health checks from clogging up the logs.
+  config.silence_healthcheck_path = '/up'
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store

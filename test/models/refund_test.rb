@@ -106,4 +106,24 @@ class RefundTest < ActiveSupport::TestCase
     assert_not_predicate second, :persisted?
     assert_empty sale.refundable_article_sales
   end
+
+  test 'create_with_credit_note rejects refunding the subscription of a sale without one' do
+    refund = Refund.create_with_credit_note(
+      sale: sales(:ironman_deleted_article), refund_method: payment_methods(:cash), refunder: users(:ironman),
+      refund_scope: { refund_subscription: true }
+    )
+
+    assert_not_predicate refund, :persisted?
+    assert refund.errors.added?(:base, 'The subscription cannot be refunded (already ended or cancelled)')
+  end
+
+  test 'create_with_credit_note rejects a refund without refund method' do
+    refund = Refund.create_with_credit_note(
+      sale: sales(:ironman_cable_6_months), refund_method: nil, refunder: users(:ironman),
+      refund_scope: { article_ids: [articles(:cable).id] }
+    )
+
+    assert_not_predicate refund, :persisted?
+    assert_predicate refund.errors[:refund_method], :present?
+  end
 end

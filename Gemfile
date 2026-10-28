@@ -3,19 +3,19 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.2', '>= 7.2.2.1'
+gem 'rails', '~> 8.1.4'
 
-# The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
-gem 'sprockets-rails', '~> 3.5'
+# The modern asset pipeline for Rails [https://github.com/rails/propshaft]
+gem 'propshaft', '~> 1.3'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.6'
 
 # Use the Puma web server [https://github.com/puma/puma]
-gem 'puma', '~> 6.6'
+gem 'puma', '~> 8.0'
 
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
-gem 'importmap-rails', '~> 1.2'
+gem 'importmap-rails', '~> 2.2'
 
 # Hotwire's SPA-like page accelerator [https://turbo.hotwired.dev]
 gem 'turbo-rails', '~> 2.0'
@@ -42,7 +42,7 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'omniauth', '~> 2.1'
 gem 'omniauth_openid_connect', '~> 0.8.0'
-gem 'omniauth-rails_csrf_protection', '~> 1.0'
+gem 'omniauth-rails_csrf_protection', '~> 2.0'
 
 gem 'cancancan', '~> 3.6'
 
@@ -53,7 +53,7 @@ gem 'cancancan', '~> 3.6'
 gem 'hexapdf', '~> 1.4.0'
 
 # Money management [https://github.com/RubyMoney/money-rails]
-gem 'money-rails', '~> 2.0.0'
+gem 'money-rails', '~> 3.0'
 
 # Pagination [https://github.com/ddnexus/pagy]
 gem 'pagy', '~> 43.6'
@@ -67,7 +67,7 @@ group :development, :test do
   gem 'debug', platforms: [:mri, :windows], require: 'debug/prelude'
 
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
-  gem 'brakeman', '~> 7.0', require: false
+  gem 'brakeman', '~> 8.1', require: false
 end
 
 group :development do
@@ -96,6 +96,6 @@ group :test do
   gem 'rails-controller-testing', '~> 1.0'
   gem 'selenium-webdriver'
   gem 'simplecov', '~> 0.22.0', require: false
-  gem 'simplecov-cobertura', '~> 3.0', require: false
+  gem 'simplecov-cobertura', '~> 3.2', require: false
   gem 'webmock', '~> 3.23'
 end

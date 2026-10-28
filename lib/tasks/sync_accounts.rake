@@ -72,8 +72,6 @@ def destroy_user(user)
   if user.destroy
     puts "Destroyed #{user.username}"
   else
-    # :nocov:
     puts "Error destroying user #{user.username}"
-    # :nocov:
   end
 end

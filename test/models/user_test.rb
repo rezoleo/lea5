@@ -420,6 +420,15 @@ class UserTest < ActiveSupport::TestCase
     assert_internet_access_parity
   end
 
+  test 'clearing room_number frees the room' do
+    room = @user.room
+    @user.room_number = nil
+    @user.save!
+
+    assert_nil @user.reload.room
+    assert_nil room.reload.user
+  end
+
   private
 
   # Assert the SQL scope selects exactly the users that the Ruby predicate accepts.

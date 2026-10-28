@@ -60,7 +60,7 @@ class InvoiceNumberAssignmentTest < ActiveSupport::TestCase
   end
 
   test 'next_invoice_number! should initialize counter to 1 if setting does not exist' do
-    Setting.find_by(key: 'next_invoice_number')&.destroy
+    Setting.where(key: 'next_invoice_number').destroy_all
 
     result = Setting.next_invoice_number!
 
