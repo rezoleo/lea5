@@ -40,8 +40,15 @@
                   <%= f.hidden_field :oidc_id, value: sso_user[:oidc_id] %>
                   <div>
                     <%= f.label :room_number, 'Room' %>
-                    <%= f.collection_select :room_number, @rooms, :number, :number, { include_blank: 'No room' } %>
+                    <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, nil) },
+                                            { include_blank: 'No room', selected: @user.room_number } %>
                   </div>
+                  <% if @user.oidc_id == sso_user[:oidc_id] && @user.errors.of_kind?(:room_number, :occupied) %>
+                    <div>
+                      <%= f.check_box :room_override %>
+                      <%= f.label :room_override, "Unassign the current occupant of #{@user.room_number}" %>
+                    </div>
+                  <% end %>
                   <div>
                     <%= f.submit 'Create user from SSO' %>
                   </div>

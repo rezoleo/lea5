@@ -2,8 +2,7 @@
 
 <div>
   <%= f.label :room_number, 'Room' %>
-  <%= f.collection_select :room_number, @rooms, :number,
-                          ->(room) { room.user && room.user != f.object ? "#{room.number} (#{room.user.display_name})" : room.number },
+  <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, f.object) },
                           { include_blank: 'No room' } %>
 </div>
 <% if f.object.errors.of_kind?(:room_number, :occupied) %>
