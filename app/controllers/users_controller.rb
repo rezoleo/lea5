@@ -32,7 +32,7 @@ class UsersController < ApplicationController
 
   def new_from_sso
     @user = User.new
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :create, @user
     @query = params[:query].to_s.strip
     return if @query.blank?
@@ -63,7 +63,7 @@ class UsersController < ApplicationController
 
   def create_from_sso
     @user = User.new
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     authorize! :create, @user
     @query = sso_user_params[:query].to_s.strip
     sso_user = sso_users_service.find_by_id(user_id: sso_user_params[:oidc_id])
@@ -71,7 +71,7 @@ class UsersController < ApplicationController
     return render_sso_user_not_found if sso_user.nil?
 
     @user = user_from_sso(sso_user)
-    @rooms = Room.available_for(@user)
+    @rooms = Room.includes(:user).order(:number)
     return on_sso_user_created if @user.save
 
     @sso_users = [sso_user]
