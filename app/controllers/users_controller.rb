@@ -108,7 +108,7 @@ class UsersController < ApplicationController
   end
 
   def sso_user_params
-    params.permit(:query, :oidc_id, :room_number)
+    params.permit(:query, :oidc_id, :room_number, :room_override)
   end
 
   def sso_users_service
@@ -126,7 +126,8 @@ class UsersController < ApplicationController
       email: sso_user[:email],
       username: sso_user[:username],
       oidc_id: sso_user[:oidc_id],
-      room_number: sso_user_params[:room_number].presence
+      room_number: sso_user_params[:room_number].presence,
+      room_override: sso_user_params[:room_override]
     )
   end
 

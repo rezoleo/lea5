@@ -110,6 +110,34 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_match 'Username has already been taken', @response.body
   end
 
+  test 'should ask for confirmation when creating a user from SSO in an occupied room' do
+    oidc_id = '100000000000000001'
+    stub_find_user_by_id_request(oidc_id: oidc_id)
+    room = @admin.room
+
+    assert_no_difference 'User.count' do
+      post create_from_sso_users_path, params: { oidc_id: oidc_id, room_number: room.number, query: 'tony' }
+    end
+
+    assert_response :unprocessable_entity
+    assert_select 'input[type=checkbox][name=room_override]'
+    assert_equal @admin, room.reload.user
+  end
+
+  test 'should create a user from SSO in an occupied room with confirmation' do
+    oidc_id = '100000000000000001'
+    stub_find_user_by_id_request(oidc_id: oidc_id)
+    room = @admin.room
+
+    assert_difference 'User.count', 1 do
+      post create_from_sso_users_path,
+           params: { oidc_id: oidc_id, room_number: room.number, room_override: '1', query: 'tony' }
+    end
+
+    assert_equal oidc_id, room.reload.user.oidc_id
+    assert_nil @admin.reload.room
+  end
+
   test 'should create a user and redirect if user is valid in html' do
     assert_difference 'User.count', 1 do
       post users_url(format: :html), params: {
