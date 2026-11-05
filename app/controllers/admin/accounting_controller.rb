@@ -114,7 +114,7 @@ module Admin
     end
 
     def format_date(date_value)
-      date_value.in_time_zone('Europe/Paris')&.strftime('%Y-%m-%d %H:%M:%S')
+      date_value.in_time_zone('Europe/Paris').strftime('%Y-%m-%d %H:%M:%S')
     end
 
     def format_currency(cents)

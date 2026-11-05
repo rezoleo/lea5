@@ -149,4 +149,8 @@ class AbilityTest < ActiveSupport::TestCase
   test 'should be able to read everything with an api key' do
     assert @api_key_ability.can?(:read, :all)
   end
+
+  test 'should not be able to do anything without an api key' do
+    assert_not ApiKeyAbility.new(nil).can?(:read, :all)
+  end
 end

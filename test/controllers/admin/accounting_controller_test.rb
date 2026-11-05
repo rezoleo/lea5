@@ -95,5 +95,13 @@ module Admin
       # UTC+2 in summer
       assert_match(/\n2025-07-01 12:00:00;#{sale.invoice.number};Sale;/, response.body)
     end
+
+    test 'should fall back to the default range when custom dates are missing' do
+      get admin_accounting_path, params: { period: 'custom' }
+
+      assert_response :success
+      assert_equal Time.zone.now.beginning_of_month, assigns(:start_date)
+      assert_equal Time.zone.now.end_of_month.end_of_day, assigns(:end_date)
+    end
   end
 end

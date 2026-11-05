@@ -43,6 +43,6 @@ class RefundsController < ApplicationController
   end
 
   def refund_params
-    params.require(:refund).permit(:refund_method_id, :refund_subscription, article_ids: [])
+    params.expect(refund: [:refund_method_id, :refund_subscription, { article_ids: [] }])
   end
 end

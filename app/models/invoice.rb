@@ -14,7 +14,7 @@ class Invoice < ApplicationRecord
 
   # @return [User] the client this invoice (or credit note) concerns
   def user
-    (sale || refund&.sale).client
+    (sale || refund.sale).client
   end
 
   def to_param

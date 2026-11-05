@@ -49,7 +49,7 @@ module Admin
     end
 
     def article_params
-      params.require(:article).permit(:price, :name)
+      params.expect(article: [:price, :name])
     end
   end
 end

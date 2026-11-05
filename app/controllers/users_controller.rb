@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     @user = User.find_by!(username: params[:username])
     @rooms = Room.includes(:user).order(:number)
     authorize! :update, @user
-    if @user.update(params.require(:user).permit(:room_number, :room_override))
+    if @user.update(params.expect(user: [:room_number, :room_override]))
       flash[:success] = 'User moved!'
       redirect_to @user
     else
@@ -71,6 +71,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:firstname, :lastname, :email, :username, :room_number, :room_override)
+    params.expect(user: [:firstname, :lastname, :email, :username, :room_number, :room_override])
   end
 end

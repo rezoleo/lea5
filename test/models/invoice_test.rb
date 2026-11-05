@@ -62,4 +62,22 @@ class InvoiceTest < ActiveSupport::TestCase
       @invoice.destroy
     end
   end
+
+  test 'should not generate a pdf without a number' do
+    invoice = Invoice.build_from_sale(@sale)
+
+    assert_raises(RuntimeError, match: 'Invoice must have a number before generating PDF') do
+      invoice.send(:generate_pdf!)
+    end
+  end
+
+  test 'should keep an already attached pdf' do
+    invoice = Invoice.build_from_sale(@sale)
+    invoice.pdf.attach(io: StringIO.new('%PDF-1.4'), filename: 'existing.pdf', content_type: 'application/pdf')
+
+    assert_difference('ActiveStorage::Attachment.count', 1) do
+      invoice.save!
+    end
+    assert_equal 'existing.pdf', invoice.pdf.filename.to_s
+  end
 end

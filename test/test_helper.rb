@@ -40,7 +40,9 @@ module ActiveSupport
     end
 
     parallelize_teardown do |_worker|
-      SimpleCov.result
+      # Since Rails 8.1, teardown hooks also run in the parent process once workers are done.
+      # Only store results from workers, the parent formats the merged report at exit.
+      SimpleCov.result if Process.pid != SimpleCov.pid
     end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -97,14 +99,14 @@ module ActiveSupport
 
     # Depending on the test running, the methods are different to sign out
     def sign_out
-      if is_a? ActionDispatch::IntegrationTest
-        delete logout_path
-      elsif is_a? ApplicationSystemTestCase
+      if is_a? ApplicationSystemTestCase
         click_on 'Logout'
         # `click_on` doesn't wait for whatever is run by the click to end,
         # so we wait until the 'Login' button is visible (<=> we went through
         # the logout process).
         find_button 'Login'
+      else
+        delete logout_path
       end
     end
 
@@ -112,15 +114,15 @@ module ActiveSupport
 
     # Depending on the test running, the methods are different to sign in
     def sign_in
-      if is_a? ActionDispatch::IntegrationTest
-        get auth_callback_path
-      elsif is_a? ApplicationSystemTestCase
+      if is_a? ApplicationSystemTestCase
         visit root_path # We must first visit a page to click on the button
         click_on 'Login'
         # `click_on` doesn't wait for whatever is run by the click to end,
         # so we wait until the 'Logout' button is visible (<=> we went through
         # the login process).
         find_button 'Logout'
+      else
+        get auth_callback_path
       end
     end
   end

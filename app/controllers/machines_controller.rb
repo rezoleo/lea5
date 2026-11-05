@@ -50,7 +50,7 @@ class MachinesController < ApplicationController
   private
 
   def machine_params
-    params.require(:machine).permit(:mac, :name)
+    params.expect(machine: [:mac, :name])
   end
 
   def owner
