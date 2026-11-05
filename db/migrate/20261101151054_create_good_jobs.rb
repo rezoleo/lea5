@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize, Layout/LineLength, Rails/ThreeStateBooleanColumn
-class CreateGoodJobs < ActiveRecord::Migration[7.2]
+class CreateGoodJobs < ActiveRecord::Migration[8.1]
   def change
-    # Uncomment for Postgres v12 or earlier to enable gen_random_uuid() support
-    # enable_extension 'pgcrypto'
-
     create_table :good_jobs, id: :uuid do |t|
       t.text :queue_name
       t.integer :priority

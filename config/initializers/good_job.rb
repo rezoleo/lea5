@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.configure do
-  # Jobs run in the web process: volume is low, so no dedicated worker.
+  # Jobs run in the web process
   config.good_job.execution_mode = :async
   config.good_job.max_threads = 2
   config.good_job.preserve_job_records = true

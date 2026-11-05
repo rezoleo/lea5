@@ -19,7 +19,6 @@ class SyncAccountsJob < ApplicationJob
 
   private
 
-  # `sso_user` is nil when the SSO profile is incomplete: the user is left untouched
   def update_user(user, sso_user)
     return if sso_user.nil?
 
