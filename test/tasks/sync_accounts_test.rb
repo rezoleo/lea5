@@ -46,11 +46,11 @@ class SyncAccountsTest < ActiveSupport::TestCase
                  sso_users.keys
   end
 
-  test 'destroy_user reports a failed destroy' do
+  test 'deactivate_user reports a failed save' do
     user = users(:ironman)
 
-    user.stub(:destroy, false) do
-      assert_output("Error destroying user #{user.username}\n") { destroy_user(user) }
+    user.stub(:save, false) do
+      assert_output("Error deactivating user #{user.username}\n") { deactivate_user(user) }
     end
   end
 end
