@@ -6,18 +6,21 @@ to lea5.
 
 ## How it works
 
-The synchronization task performs the following operations:
+[`SyncAccountsJob`](../../app/jobs/sync_accounts_job.rb) performs the following operations:
 
-1. **Fetches all users from SSO**: Retrieves all users from the Zitadel SSO server (https://sso.rezoleo.fr/v2/users) using pagination (500 users per page)
-2. **Updates existing users**: For each user in the lea5 database, if they exist in the SSO:
+1. **Fetches all users from SSO**: Retrieves all users from the Zitadel SSO server (https://sso.rezoleo.fr/v2/users) through `SsoUsersService#all`, using pagination (500 users per page)
+2. **Updates existing users**: For each user in the lea5 database linked to the SSO (`oidc_id` set), if they exist in the SSO:
    - Updates their `firstname`, `lastname`, `email`, and `username` fields with the latest data from SSO
-3. **Removes deleted users**: If a user exists in lea5 but not in the SSO, they are deleted from the database
+3. **Deactivates deleted users**: If a linked user exists in lea5 but not in the SSO, their `oidc_id` is cleared. The account itself is kept, its legal deletion is handled separately.
 
 This ensures that the lea5 database stays in sync with the SSO as the single source of truth for user information.
 
 ## Configuration
 
-The task is defined in [`sync_accounts.rake`](../../lib/tasks/sync_accounts.rake), and runs every 3 hours.
-The timer is done with service/timer of systemd, the configuration can be found in [systemd folder](../../lib/support/systemd).
+The job is scheduled every 3 hours by [GoodJob](https://github.com/bensheldon/good_job)'s cron, configured in [`good_job.rb`](../../config/initializers/good_job.rb)
+(production only). GoodJob runs inside the web process and stores its jobs in PostgreSQL, so no extra service is needed.
+If the SSO times out, the job is retried 3 times.
 
-The task requires a Personal Access Token (PAT) configured in Rails credentials as `sso_lea5_pat` to authenticate with the SSO API.
+To run it manually: `bin/rails lea5:sync_accounts`.
+
+The job requires a Personal Access Token (PAT) configured in Rails credentials as `sso_lea5_pat` to authenticate with the SSO API.

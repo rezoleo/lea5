@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'minitest/mock'
 
 class SyncRoomToSsoJobTest < ActiveJob::TestCase
   test 'performs sync for existing user' do
@@ -37,5 +38,16 @@ class SyncRoomToSsoJobTest < ActiveJob::TestCase
     end
 
     assert_not_includes output.string, 'SSO dry-run: would sync room'
+  end
+
+  test 'retries on SSO HTTP errors' do
+    failing_service = Object.new
+    failing_service.define_singleton_method(:sync_room) { |_user| raise SsoHttpClient::HttpError, 'status 500' }
+
+    SsoMetadataService.stub :new, failing_service do
+      assert_enqueued_with(job: SyncRoomToSsoJob) do
+        SyncRoomToSsoJob.perform_now(users(:ironman).id)
+      end
+    end
   end
 end
