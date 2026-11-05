@@ -21,7 +21,13 @@ end
 
 require 'webmock/minitest'
 WebMock.disable_net_connect!(
-  allow_localhost: true
+  allow_localhost: true,
+  allow: [
+    'selenium',
+    'selenium:4444',
+    'rails-app',
+    'rails-app:45678'
+  ]
 )
 
 module ActiveSupport
