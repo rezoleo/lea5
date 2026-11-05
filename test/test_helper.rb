@@ -99,7 +99,7 @@ module ActiveSupport
 
     # Depending on the test running, the methods are different to sign out
     def sign_out
-      if is_a? ApplicationSystemTestCase
+      if system_test?
         click_on 'Logout'
         # `click_on` doesn't wait for whatever is run by the click to end,
         # so we wait until the 'Login' button is visible (<=> we went through
@@ -112,9 +112,14 @@ module ActiveSupport
 
     private
 
+    # ApplicationSystemTestCase is only loaded when system tests are part of the run
+    def system_test?
+      defined?(ApplicationSystemTestCase) && is_a?(ApplicationSystemTestCase)
+    end
+
     # Depending on the test running, the methods are different to sign in
     def sign_in
-      if is_a? ApplicationSystemTestCase
+      if system_test?
         visit root_path # We must first visit a page to click on the button
         click_on 'Login'
         # `click_on` doesn't wait for whatever is run by the click to end,
