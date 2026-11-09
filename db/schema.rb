@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_08_120000) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -117,6 +117,25 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.datetime "deleted_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "re2o_accounts", force: :cascade do |t|
+    t.string "pseudo", null: false
+    t.string "email"
+    t.string "firstname"
+    t.string "lastname"
+    t.string "room"
+    t.datetime "end_at", null: false
+    t.jsonb "machines", default: [], null: false
+    t.string "ntlm_hash"
+    t.bigint "claimed_by_user_id"
+    t.datetime "claimed_at"
+    t.jsonb "claim_report"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["claimed_by_user_id"], name: "index_re2o_accounts_on_claimed_by_user_id", unique: true, where: "(claimed_by_user_id IS NOT NULL)"
+    t.index ["email"], name: "index_re2o_accounts_on_email"
+    t.index ["pseudo"], name: "index_re2o_accounts_on_pseudo", unique: true
   end
 
   create_table "refunds", force: :cascade do |t|
@@ -224,6 +243,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
   add_foreign_key "free_accesses", "users"
   add_foreign_key "ips", "machines"
   add_foreign_key "machines", "users"
+  add_foreign_key "re2o_accounts", "users", column: "claimed_by_user_id", on_delete: :nullify
   add_foreign_key "refunds", "invoices"
   add_foreign_key "refunds", "payment_methods", column: "refund_method_id"
   add_foreign_key "refunds", "sales"

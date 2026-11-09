@@ -28,6 +28,15 @@ class SessionsControllerLocalLoginTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'should update an existing user with the submitted info' do
+    user = User.create!(firstname: 'Old', lastname: 'Name', email: 'john@doe.com', username: 'old-username')
+
+    get auth_callback_developer_path
+
+    user.reload
+    assert_equal ['John', 'Doe', 'john-doe'], [user.firstname, user.lastname, user.username]
+  end
+
   test 'should redirect to user profile' do
     get auth_callback_developer_path
 

@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_one :room, dependent: :nullify
   has_many :machines, dependent: :destroy
   has_many :free_accesses, dependent: :destroy
+  has_one :re2o_account, foreign_key: 'claimed_by_user_id', dependent: :nullify, inverse_of: :claimed_by
   has_many :free_accesses_by_date, lambda {
     order(end_at: :desc)
   }, dependent: :destroy, class_name: 'FreeAccess', inverse_of: :user
@@ -99,7 +100,8 @@ class User < ApplicationRecord
   def extend_subscription(duration:)
     return if duration <= 0
 
-    start_at = subscription_expired? ? Time.current : subscription_expiration
+    # Stack after any current access (subscription or free access, e.g. remaining re2o time)
+    start_at = [internet_expiration, Time.current].compact.max
     subscriptions.new(start_at: start_at, end_at: start_at + duration.months)
   end
 
@@ -169,10 +171,6 @@ class User < ApplicationRecord
     return unless defined?(@room_number)
 
     self.room = @room_number.blank? ? nil : Room.find_by(number: @room_number)
-  end
-
-  def subscription_expired?
-    subscription_expiration.nil? || (subscription_expiration < Time.current)
   end
 
   def ensure_has_wifi_password
