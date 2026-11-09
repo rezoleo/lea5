@@ -451,6 +451,16 @@ class UserTest < ActiveSupport::TestCase
     assert_nil room.reload.user
   end
 
+  test 'extend_subscription starts after a free access that ends later' do
+    user = User.create!(firstname: 'Miles', lastname: 'Morales', email: 'miles@univ.edu', username: 'miles')
+    access_end = 2.months.from_now
+    user.free_accesses.create!(reason: 'Migration re2o', start_at: Time.current, end_at: access_end)
+
+    subscription = user.extend_subscription(duration: 1)
+
+    assert_in_delta access_end, subscription.start_at, 1
+  end
+
   private
 
   # Assert the SQL scope selects exactly the users that the Ruby predicate accepts.

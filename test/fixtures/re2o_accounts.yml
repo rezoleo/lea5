@@ -1,0 +1,37 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# Same email as ironman: matched automatically
+tony:
+  pseudo: "tstark"
+  email: "tony@avengers.com"
+  firstname: "Tony"
+  lastname: "Stark"
+  room: "a109a"
+  end_at: <%= 30.days.from_now.to_fs(:db) %>
+  ntlm_hash: <%= OpenSSL::Digest::MD4.hexdigest('mark42'.encode('utf-16le')) %>
+  machines:
+    - { mac: "aa:bb:cc:dd:ee:01", name: "mark42" }
+    - { mac: "DE:1A:B3:17:95:C9", name: "jarvis" }
+    - { mac: "DE:1A:B3:17:95:B8", name: "friday" }
+
+# Personal email, not matching spiderman's lea5 email
+peter:
+  pseudo: "spidey"
+  email: "peter.parker@gmail.com"
+  firstname: "Peter"
+  lastname: "Parker"
+  room: "b231"
+  end_at: <%= 60.days.from_now.to_fs(:db) %>
+  ntlm_hash: <%= OpenSSL::Digest::MD4.hexdigest('webs'.encode('utf-16le')) %>
+  machines:
+    - { mac: "aa:bb:cc:dd:ee:02", name: "suit" }
+
+claimed:
+  pseudo: "ppotts"
+  email: "pepper@potts.com"
+  firstname: "Pepper"
+  lastname: "Potts"
+  end_at: <%= 10.days.from_now.to_fs(:db) %>
+  claimed_by: pepper
+  claimed_at: <%= 1.day.ago.to_fs(:db) %>
+  claim_report: {}

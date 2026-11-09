@@ -1,0 +1,65 @@
+<%# locals: () -%>
+
+<% step = if !logged_in? then 1 elsif @account then 3 else 2 end %>
+
+<main class="migration">
+  <h1 class="title">Migration from re2o</h1>
+
+  <ol class="migration-steps">
+    <% ['Log in', 'Import your re2o account', 'Connect to Rézoléo'].each.with_index(1) do |label, i| %>
+      <li class="<%= if i < step then 'is-done' elsif i == step then 'is-current' end %>"><%= label %></li>
+    <% end %>
+  </ol>
+
+  <% if step == 1 %>
+    <section class="migration-card">
+      <h2>Log in</h2>
+      <p>
+        Log in with your Rézoléo account to import your re2o account: your remaining internet time,
+        your room and your devices. No account yet? Create one with your school email on
+        <%= link_to 'signin.rezoleo.fr', 'https://signin.rezoleo.fr' %>.
+      </p>
+      <div class="migration-actions">
+        <%= link_to 'Create an account', 'https://signin.rezoleo.fr', class: 'migration-button' %>
+        <%= button_to 'Log in', AUTH_PATH, method: :post, class: 'migration-button', data: { turbo: false } %>
+      </div>
+    </section>
+
+  <% elsif step == 2 && @email_match %>
+    <section class="migration-card">
+      <h2>Import your re2o account</h2>
+      <p>We found a re2o account with your email.</p>
+      <dl class="migration-facts">
+        <dt>re2o username</dt><dd><%= @email_match.pseudo %></dd>
+        <dt>Internet left</dt><dd><%= distance_of_time_in_words_to_now(@email_match.end_at) %></dd>
+        <dt>Room</dt><dd><%= @email_match.room.presence&.upcase || '—' %></dd>
+        <dt>Devices</dt><dd><%= @email_match.machines.size %></dd>
+      </dl>
+      <p class="migration-help">Your lea5 name, email and username stay as they are.</p>
+      <%= button_to 'Import my account', claim_migration_path, class: 'migration-button' %>
+    </section>
+
+  <% elsif step == 2 %>
+    <section class="migration-card">
+      <h2>Import your re2o account</h2>
+      <p>Enter the username and password you used on re2o.</p>
+      <%= form_with url: claim_migration_path, class: 'migration-form',
+                    data: { controller: 'migration-lookup', migration_lookup_url_value: lookup_migration_path } do |f| %>
+        <%= f.label :identifier, 're2o username' %>
+        <%= f.text_field :identifier, required: true, autocomplete: 'username',
+                                      data: { action: 'input->migration-lookup#lookup' } %>
+        <%= f.label :password, 're2o password' %>
+        <%= f.password_field :password, required: true, autocomplete: 'current-password' %>
+        <button type="submit" formaction="<%= send_link_migration_path %>" formnovalidate hidden
+                class="migration-email-link" data-migration-lookup-target="emailLink">
+          or send an email to <span data-migration-lookup-target="maskedEmail"></span>
+        </button>
+        <%= f.submit 'Import my account', class: 'migration-button' %>
+      <% end %>
+      <p class="migration-help">Forgot your password and lost access to that email? Come see us at the helpdesk.</p>
+    </section>
+
+  <% else %>
+    <%= render 'migrations/report', account: @account, user: current_user, animate: @animate %>
+  <% end %>
+</main>
