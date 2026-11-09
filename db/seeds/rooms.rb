@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Seed rooms for the residence.
-# Rooms follow the pattern: Building (A-F) + Floor (0-3) + Number + optional letter (for shared apartments)
-# Special rooms: DF1-DF4, CLAP, ALUMNI, AGR1, AGR2
+# Regular rooms follow the pattern: Building (A-F) + Floor (0-3) + Number + optional letter (for shared apartments)
+# Special rooms include: DF1-DF4, CLAP, ALUMNI, AGR1, AGR2 ...
 
 # rubocop: disable Metrics/CollectionLiteralLength
 rooms = [
@@ -41,8 +41,6 @@ rooms = [
   { number: 'A111', group: 'A111', building: 'A', floor: 1 },
   { number: 'A112', group: 'A112', building: 'A', floor: 1 },
   { number: 'A113', group: 'A113', building: 'A', floor: 1 },
-  # Room A114 - A118 are missing. Do they exist? Is A119 a typo?
-  { number: 'A119', group: 'A119', building: 'A', floor: 1 },
 
   # Building A - Floor 2
   { number: 'A201', group: 'A201', building: 'A', floor: 2 },
@@ -82,8 +80,6 @@ rooms = [
   { number: 'A311', group: 'A311', building: 'A', floor: 3 },
   { number: 'A312', group: 'A312', building: 'A', floor: 3 },
   { number: 'A313', group: 'A313', building: 'A', floor: 3 },
-  # Room A314 and A315 are missing. Do they exist? Is A316 a typo?
-  { number: 'A316', group: 'A316', building: 'A', floor: 3 },
 
   # Building B - Floor 0
   { number: 'B001A', group: 'B001', building: 'B', floor: 0 },
@@ -91,8 +87,6 @@ rooms = [
   { number: 'B002', group: 'B002', building: 'B', floor: 0 },
   { number: 'B003', group: 'B003', building: 'B', floor: 0 },
   { number: 'B004', group: 'B004', building: 'B', floor: 0 },
-  # Room B005 - B009 are missing. Do they exist? Is B010 a typo?
-  { number: 'B010', group: 'B010', building: 'B', floor: 0 },
 
   # Building B - Floor 1
   { number: 'B101', group: 'B101', building: 'B', floor: 1 },
@@ -187,9 +181,6 @@ rooms = [
   { number: 'C113', group: 'C113', building: 'C', floor: 1 },
   { number: 'C114', group: 'C114', building: 'C', floor: 1 },
   { number: 'C115', group: 'C115', building: 'C', floor: 1 },
-  # Room C116 - C120 are missing. Do they exist? Is C121 a typo?
-  { number: 'C121A', group: 'C121', building: 'C', floor: 1 },
-  { number: 'C121B', group: 'C121', building: 'C', floor: 1 },
 
   # Building C - Floor 2
   { number: 'C201', group: 'C201', building: 'C', floor: 2 },
@@ -400,9 +391,6 @@ rooms = [
   { number: 'E124', group: 'E124', building: 'E', floor: 1 },
   { number: 'E125', group: 'E125', building: 'E', floor: 1 },
   { number: 'E126', group: 'E126', building: 'E', floor: 1 },
-  # Room E127 - E138 are missing. Do they exist? Is E139 a typo?
-  { number: 'E139A', group: 'E139', building: 'E', floor: 1 },
-  { number: 'E139B', group: 'E139', building: 'E', floor: 1 },
 
   # Building E - Floor 2
   { number: 'E201', group: 'E201', building: 'E', floor: 2 },
@@ -645,15 +633,19 @@ rooms = [
   { number: 'F337', group: 'F337', building: 'F', floor: 3 },
 
   # Special rooms
+  { number: 'AGR1', group: 'AGR', building: 'A', floor: 0 },
+  { number: 'AGR2', group: 'AGR', building: 'A', floor: 0 },
+  { number: 'CLAP', group: 'ASSO', building: 'B', floor: 0 },
+  { number: 'BIBLI', group: 'ASSO', building: 'B', floor: 0 },
+  { number: 'ÉCLOS', group: 'ASSO', building: 'B', floor: 0 },
+  { number: 'RÉZO', group: 'ASSO', building: 'D', floor: 0 },
+  { number: 'CAG', group: 'ASSO', building: 'D', floor: 0 },
+  { number: 'ALUMNI', group: 'ASSO', building: 'D', floor: 0 },
+  { number: 'GALA', group: 'ASSO', building: 'D', floor: 0 },
   { number: 'DF1', group: 'DF', building: 'D', floor: 0 },
   { number: 'DF2', group: 'DF', building: 'D', floor: 0 },
   { number: 'DF3', group: 'DF', building: 'D', floor: 0 },
   { number: 'DF4', group: 'DF', building: 'D', floor: 0 },
-  { number: 'CLAP', group: 'ASSO', building: 'D', floor: 0 },
-  { number: 'CAG', group: 'ASSO', building: 'D', floor: 0 },
-  { number: 'ALUMNI', group: 'ASSO', building: 'D', floor: 0 },
-  { number: 'AGR1', group: 'AGR', building: 'A', floor: 0 },
-  { number: 'AGR2', group: 'AGR', building: 'A', floor: 0 },
   { number: 'FOYER', group: 'FOYER', building: 'F', floor: 0 }
 ]
 # rubocop: enable Metrics/CollectionLiteralLength
