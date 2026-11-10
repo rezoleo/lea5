@@ -6,7 +6,7 @@
 # docker run -d -p 3000:3000 -e RAILS_MASTER_KEY=<value from config/master.key> --name lea5 lea5
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.4.2
+ARG RUBY_VERSION=3.4.12
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
