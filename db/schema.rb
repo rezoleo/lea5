@@ -137,8 +137,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
   end
 
   create_table "rooms", force: :cascade do |t|
-    t.string "number", limit: 6, null: false
-    t.string "group", limit: 6, null: false
+    t.string "number", limit: 8, null: false
+    t.string "group", limit: 8, null: false
     t.string "building", limit: 1, null: false
     t.integer "floor", null: false
     t.bigint "user_id"

@@ -24,8 +24,8 @@ class RoomTest < ActiveSupport::TestCase
     assert_not_predicate duplicate, :valid?
   end
 
-  test 'number must be at most 6 characters' do
-    @room.number = 'A123456'
+  test 'number must be at most 8 characters' do
+    @room.number = 'A12345678'
     assert_not_predicate @room, :valid?
   end
 
@@ -42,8 +42,8 @@ class RoomTest < ActiveSupport::TestCase
     assert_not_predicate @room, :valid?
   end
 
-  test 'group must be at most 6 characters' do
-    @room.group = 'A123456'
+  test 'group must be at most 8 characters' do
+    @room.group = 'A12345678'
     assert_not_predicate @room, :valid?
   end
 
