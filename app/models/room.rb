@@ -3,11 +3,11 @@
 class Room < ApplicationRecord
   belongs_to :user, optional: true
 
-  validates :number, presence: true, uniqueness: true, length: { maximum: 6 },
+  validates :number, presence: true, uniqueness: true, length: { maximum: 8 },
                      format: { with: /\A[\p{Lu}0-9]+\z/, message: 'must be uppercase alphanumeric' }
   # A room group can be the room number itself or a shared identifier
   # e.g. "A001" for "A001A" and "A001B", "ASSO" for "CLAP", "CAG" and "ALUMNI"
-  validates :group, presence: true, length: { maximum: 6 },
+  validates :group, presence: true, length: { maximum: 8 },
                     format: { with: /\A[\p{Lu}0-9]+\z/, message: 'must be uppercase alphanumeric' }
   validates :building, presence: true, inclusion: { in: ('A'..'F').to_a }
   validates :floor, presence: true, inclusion: { in: 0..3 }
