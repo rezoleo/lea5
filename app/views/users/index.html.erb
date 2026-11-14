@@ -3,6 +3,11 @@
 <h1>Users</h1>
 
 <section class="panel">
+  <%= render "components/card_header",
+             title: "Users",
+             link_text: ("New user from SSO" if can?(:create, User)),
+             link_path: new_from_sso_users_path,
+             link_label: "Create a user from SSO" %>
   <%= render "components/list", items: @users, empty: "No users" %>
   <%= render "components/pagination", pagy: @pagy %>
 </section>
