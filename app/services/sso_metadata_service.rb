@@ -1,15 +1,6 @@
 # frozen_string_literal: true
 
-class SsoMetadataService
-  SSO_BASE_URL = 'https://sso.rezoleo.fr'
-  HTTP_OPEN_TIMEOUT_SECONDS = 5
-  HTTP_READ_TIMEOUT_SECONDS = 10
-
-  class Error < StandardError; end
-  class HttpError < Error; end
-  class TimeoutError < Error; end
-  class RequestError < Error; end
-
+class SsoMetadataService < SsoHttpClient
   # @param user [User]
   def sync_room(user)
     return if user.oidc_id.blank?
@@ -41,61 +32,26 @@ class SsoMetadataService
   # Metadata values in Zitadel must be base64-encoded.
   # See https://zitadel.com/docs/reference/api/user/zitadel.user.v2.UserService.SetUserMetadata
   def post_room_metadata(user, room_number)
-    uri = URI("#{SSO_BASE_URL}/v2/users/#{user.oidc_id}/metadata")
     body = { metadata: [{ key: 'room', value: Base64.strict_encode64(room_number) }] }
 
-    req = build_request(Net::HTTP::Post, uri, body:)
-    res = execute_request(user:, req:)
+    req = build_request(Net::HTTP::Post, "/v2/users/#{user.oidc_id}/metadata", body:)
+    res = execute_request(context: "room metadata for user #{user.oidc_id}", request: req)
 
     return if res.is_a?(Net::HTTPSuccess)
 
-    fail_with_response!(user, uri, req, res)
+    fail_with_response!(context: "room metadata for user #{user.oidc_id}", request: req, response: res)
   end
 
   def delete_room_metadata(user)
-    uri = URI("#{SSO_BASE_URL}/v2/users/#{user.oidc_id}/metadata")
-    uri.query = URI.encode_www_form([['keys', 'room']])
-
-    req = build_request(Net::HTTP::Delete, uri)
-    res = execute_request(user:, req:)
+    req = build_request(
+      Net::HTTP::Delete,
+      "/v2/users/#{user.oidc_id}/metadata",
+      query: [['keys', 'room']]
+    )
+    res = execute_request(context: "room metadata for user #{user.oidc_id}", request: req)
 
     return if res.is_a?(Net::HTTPSuccess) || res.is_a?(Net::HTTPNotFound) # NotFound => No existing metadata to delete
 
-    fail_with_response!(user, uri, req, res)
-  end
-
-  def build_request(http_method, uri, body: nil)
-    req = http_method.new(uri)
-    req['Authorization'] = "Bearer #{access_token}"
-
-    return req if body.nil?
-
-    req.content_type = 'application/json'
-    req.body = body.to_json
-    req
-  end
-
-  def execute_request(user:, req:)
-    Net::HTTP.start(
-      req.uri.hostname,
-      req.uri.port,
-      use_ssl: true,
-      open_timeout: HTTP_OPEN_TIMEOUT_SECONDS,
-      read_timeout: HTTP_READ_TIMEOUT_SECONDS
-    ) do |http|
-      http.request(req)
-    end
-  rescue Net::OpenTimeout, Net::ReadTimeout => e
-    raise TimeoutError, "Timeout for user #{user.oidc_id}: #{e.message}"
-  rescue StandardError => e
-    raise RequestError, "Error syncing room for user #{user.oidc_id}: #{e.message}"
-  end
-
-  def fail_with_response!(user, uri, req, res)
-    raise HttpError, "Failed to sync room for user #{user.oidc_id} (#{req.method} #{uri}): #{res.code} #{res.body}"
-  end
-
-  def access_token
-    Rails.application.credentials.sso_lea5_pat!
+    fail_with_response!(context: "room metadata for user #{user.oidc_id}", request: req, response: res)
   end
 end
