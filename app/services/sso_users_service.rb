@@ -5,6 +5,7 @@ require 'json'
 class SsoUsersService < SsoHttpClient
   TEXT_QUERY_METHOD = 'TEXT_QUERY_METHOD_CONTAINS_IGNORE_CASE'
   SEARCH_LIMIT = 25
+  PAGE_SIZE = 500
 
   def search(query:, limit: SEARCH_LIMIT)
     return [] if query.blank?
@@ -16,6 +17,23 @@ class SsoUsersService < SsoHttpClient
   def find_by_id(user_id:)
     response = list_users(build_find_by_id_payload(user_id: user_id))
     normalize_user(response.fetch('result', []).first)
+  end
+
+  # All users known by the SSO, by id. A user with an incomplete profile maps to nil.
+  # @return [Hash<String, Hash<Symbol, String>, nil>]
+  def all
+    users = {}
+    offset = 0
+
+    loop do
+      response = list_users({ 'query' => { 'offset' => offset, 'limit' => PAGE_SIZE, 'asc' => true } })
+      response.fetch('result', []).each { |raw_user| users[raw_user['userId']] = normalize_user(raw_user) }
+
+      offset += PAGE_SIZE
+      break if offset >= response.dig('details', 'totalResult').to_i
+    end
+
+    users
   end
 
   private
