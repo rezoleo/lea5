@@ -45,6 +45,31 @@ class SyncAccountsJobTest < ActiveJob::TestCase
     end
   end
 
+  test 'users already in sync are not logged as updated' do
+    stub_list_users([ZITADEL_USER_OK.merge(profile: ZITADEL_USER_OK[:profile].merge(givenName: 'Tony'))])
+    output = StringIO.new
+    old_logger = Rails.logger
+    Rails.logger = ActiveSupport::Logger.new(output)
+
+    begin
+      SyncAccountsJob.perform_now
+    ensure
+      Rails.logger = old_logger
+    end
+
+    assert_not_includes output.string, 'Updated ironman'
+  end
+
+  test 'a user that fails validation keeps its oidc_id when missing from the SSO' do
+    stub_list_users([])
+    pepper = users(:pepper)
+    pepper.update_column(:email, 'invalid') # rubocop:disable Rails/SkipsModelValidations
+
+    SyncAccountsJob.perform_now
+
+    assert_equal '923403309843419676', pepper.reload.oidc_id
+  end
+
   ZITADEL_USER_OK = {
     userId: '340191509840366893',
     username: 'ironman',

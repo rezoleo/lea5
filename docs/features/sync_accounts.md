@@ -19,8 +19,8 @@ This ensures that the lea5 database stays in sync with the SSO as the single sou
 
 The job is scheduled every 3 hours by [GoodJob](https://github.com/bensheldon/good_job)'s cron, configured in [`good_job.rb`](../../config/initializers/good_job.rb)
 (production only). GoodJob runs inside the web process and stores its jobs in PostgreSQL.
-If the SSO times out, the job is retried 3 times.
+If the SSO is unreachable, the run fails and the next scheduled run picks up.
 
-To run it manually: `bin/rails lea5:sync_accounts`.
+To run it manually: `bin/rails runner 'SyncAccountsJob.perform_now'`.
 
 The job requires a Personal Access Token (PAT) configured in Rails credentials as `sso_lea5_pat` to authenticate with the SSO API.

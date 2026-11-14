@@ -11,7 +11,7 @@ gem 'propshaft', '~> 1.3'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.6'
 
-# Use GoodJob (PostgreSQL-backed) as the Active Job backend
+# Use GoodJob as the Active Job backend [https://github.com/bensheldon/good_job]
 gem 'good_job', '~> 4.0'
 
 # Use the Puma web server [https://github.com/puma/puma]

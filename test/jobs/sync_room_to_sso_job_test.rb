@@ -40,9 +40,9 @@ class SyncRoomToSsoJobTest < ActiveJob::TestCase
     assert_not_includes output.string, 'SSO dry-run: would sync room'
   end
 
-  test 'retries on SSO HTTP errors' do
+  test 'retries on SSO timeouts' do
     failing_service = Object.new
-    failing_service.define_singleton_method(:sync_room) { |_user| raise SsoHttpClient::HttpError, 'status 500' }
+    failing_service.define_singleton_method(:sync_room) { |_user| raise SsoHttpClient::TimeoutError, 'timeout' }
 
     SsoMetadataService.stub :new, failing_service do
       assert_enqueued_with(job: SyncRoomToSsoJob) do
