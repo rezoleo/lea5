@@ -63,14 +63,17 @@ class Re2oAccountTest < ActiveSupport::TestCase
 
   test 'claim adds the remaining re2o time after the current access' do
     user = User.create!(firstname: 'Miles', lastname: 'Morales', email: 'miles@univ.edu', username: 'miles')
-    current_end = 10.days.from_now
-    user.free_accesses.create!(reason: 'Gift', start_at: Time.current, end_at: current_end)
+    freeze_time do
+      current_end = 10.days.from_now
+      user.free_accesses.create!(reason: 'Gift', start_at: Time.current, end_at: current_end)
+      @peter.update!(end_at: 60.days.from_now)
 
-    @peter.claim!(user)
+      @peter.claim!(user)
 
-    access = user.free_accesses.find_by!(reason: Re2oAccount::MIGRATION_REASON)
-    assert_in_delta current_end, access.start_at, 1
-    assert_in_delta current_end + 60.days, access.end_at, 5
+      access = user.free_accesses.find_by!(reason: Re2oAccount::MIGRATION_REASON)
+      assert_in_delta current_end, access.start_at, 1
+      assert_in_delta current_end + 60.days, access.end_at, 1
+    end
   end
 
   test 'claim skips the access when re2o time has ended' do
