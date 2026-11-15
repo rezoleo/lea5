@@ -18,4 +18,14 @@ class ApplicationHelperTest < ActionView::TestCase
     assert_dom_equal '<svg class="size-[1.25em] shrink-0 fill-current"><use href="/icons.svg#icon_plus" /></svg>',
                      svg_icon_tag('icon_plus')
   end
+
+  test 'icon_button only asks for confirmation on delete' do
+    assert_dom_equal %(<a class="btn-icon" aria-label="Back" href="/users">#{svg_icon_tag('icon_arrow_left')}</a>),
+                     icon_button('icon_arrow_left', '/users', label: 'Back')
+    assert_includes icon_button('icon_delete', '/users/1', method: :delete, label: 'Delete'),
+                    'data-turbo-confirm="Are you sure?"'
+    patch_button = icon_button('icon_edit', '/users/1', method: :patch, label: 'Edit')
+    assert_includes patch_button, 'value="patch"'
+    assert_not_includes patch_button, 'data-turbo-confirm'
+  end
 end
