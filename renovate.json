@@ -4,7 +4,9 @@
   "extends": [
     "config:best-practices"
   ],
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "prHourlyLimit": 3,
   "timezone": "Europe/Paris",
   "packageRules": [
