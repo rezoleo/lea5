@@ -94,6 +94,13 @@ class User < ApplicationRecord
     internet_expiration.present? && internet_expiration > Time.current
   end
 
+  # @return [Symbol] :none, :expiring (less than a week left) or :active
+  def internet_status
+    return :none unless internet_access?
+
+    internet_expiration < 7.days.from_now ? :expiring : :active
+  end
+
   # @param [Integer] duration subscription duration in months
   # @return [Subscription, nil] an unsaved subscription record or nil when duration <= 0
   def extend_subscription(duration:)

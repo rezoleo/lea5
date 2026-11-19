@@ -2,6 +2,6 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Add a new free access</h1>
+<%= render "components/page_header", title: "Add a new free access", back: user_path(@owner) %>
 
 <%= render 'form', owner: @owner, free_access: @free_access %>

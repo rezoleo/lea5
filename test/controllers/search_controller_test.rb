@@ -23,7 +23,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     non_matching_users.each do |user|
       get search_path, params: { q: user }
       assert_response :success
-      assert_no_match 'Results among users:', @response.body, "should return nothing for #{user} (user not in DB)"
+      assert_dom '.user', { count: 0 }, "should return nothing for #{user} (user not in DB)"
     end
   end
 
@@ -40,8 +40,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       assert_msg = "should return #{number} result(s) for #{user}"
       get search_path, params: { q: user }
       assert_response :success
-      assert_match 'Results among users:', @response.body, assert_msg
-      assert_dom '.user', { count: number, text: /.*#{Regexp.escape(user)}.*/mi }
+      assert_dom '.user', { count: number, text: /.*#{Regexp.escape(user)}.*/mi }, assert_msg
     end
   end
 
@@ -51,7 +50,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     non_matching_macs.each do |mac|
       get search_path, params: { q: mac }
       assert_response :success
-      assert_no_match 'Results among machines:', @response.body, "should return nothing for #{mac} (mac not in DB)"
+      assert_dom '.machine', { count: 0 }, "should return nothing for #{mac} (mac not in DB)"
     end
   end
 
@@ -69,8 +68,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
       assert_msg = "should return #{number} result(s) for #{mac}"
       get search_path, params: { q: mac }
       assert_response :success
-      assert_match 'Results among machines:', @response.body, assert_msg
-      assert_dom '.machine-search', { count: number, text: /.*#{Regexp.escape(mac)}.*/mi }
+      assert_dom '.machine', { count: number, text: /.*#{Regexp.escape(mac)}.*/mi }, assert_msg
     end
   end
 
@@ -80,7 +78,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     invalid_ips.each do |query|
       get search_path, params: { q: query }
       assert_response :success
-      assert_no_match 'Results among machines:', @response.body, "should not return result for #{query}"
+      assert_dom '.machine', { count: 0 }, "should not return result for #{query}"
     end
   end
 
@@ -90,8 +88,7 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     valid_ips.each do |query|
       get search_path, params: { q: query }
       assert_response :success
-      assert_match 'Results among machines:', @response.body, "should return something for #{query}"
-      assert_dom '.machine-search', { count: 1, text: /.*#{Regexp.escape(query)}.*/ }
+      assert_dom '.machine', { count: 1, text: /.*#{Regexp.escape(query)}.*/ }
     end
   end
 
@@ -125,13 +122,13 @@ class SearchControllerTest < ActionDispatch::IntegrationTest
     create_matching_users((Pagy::OPTIONS[:limit] * 2) + 1)
 
     get search_path, params: { q: 'Paginated' }
-    assert_dom '.pagination a[href*=?]', 'q=Paginated'
-    assert_dom '.pagination a[href*=?]', 'users_page='
+    assert_dom '.pagy a[href*=?]', 'q=Paginated'
+    assert_dom '.pagy a[href*=?]', 'users_page='
   end
 
   test 'should not paginate search results that fit on a single page' do
     get search_path, params: { q: 'Tony' }
-    assert_dom '.pagination', count: 0
+    assert_dom '.pagy', count: 0
   end
 
   private

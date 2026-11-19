@@ -1,1 +1,14 @@
 <%# locals: () -%>
+
+<div class="panel place-items-center gap-4 p-10 text-center sm:p-16">
+  <%= image_tag "rezoleo_logo.png", alt: "", class: "size-20" %>
+  <h1>Lea5</h1>
+  <p class="muted max-w-prose">
+    Rezoleo's directory: your account, your machines and your internet subscription, all in one place.
+  </p>
+  <% if logged_in? %>
+    <%= link_to "Go to my profile", profile_path, class: "btn btn-primary" %>
+  <% else %>
+    <%= button_to "Log in with your Rezoleo account", AUTH_PATH, method: :post, class: "btn btn-primary", data: { turbo: false } %>
+  <% end %>
+</div>

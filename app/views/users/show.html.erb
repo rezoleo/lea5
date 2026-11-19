@@ -1,151 +1,129 @@
 <%# locals: () -%>
 
-<main>
-
-  <h1 class="title">
-    <% if current_user == @user %>
-      My Profile
-    <% else %>
-      Profile of <%= "#{@user.firstname} #{@user.lastname}" %>
-    <% end %>
-  </h1>
-
-  <div class="container">
-    
-
-    <div class="card-details-container card-user card-details-user ">
-      <div class="card card-details">
-        <div class="card-title">
-          <%= svg_icon_tag 'profile' %>
-          <h2>Personal Data</h2>
-        </div>
-        <% if can? :update, @user %>
-          <%= render "components/buttons/button_primary_edit", text: "move", path: edit_user_path(@user), aria_label: "Move this user" %>
-        <% end %>
-      </div>
-
-      <div class="divider"></div>
-    </div>
-    <div class="card card-user card-content">
-      <div class="card-content-user">
-        <span><%= "#{@user.firstname} #{@user.lastname}" %></span>
-        <%= render "components/internet_badge", user: @user %>
-        <span><%= @user.email %></span>
-        <% if @user.internet_expiration %>
-          <span>Internet on until <%= time_with_relative_tag @user.internet_expiration %></span>
-        <% else %>
-          <span>No Internet</span>
-        <% end %>
-        <span><%= @user.room&.number %></span>
-        <span><%= pluralize(@machines.size, "machine") %></span>
-        <% if current_user == @user %>
-          <div class="card-content-user-details" data-controller="user" data-user-password-value="<%= @user.wifi_password %>">
-            <label>Wifi Password:</label>
-            <p data-user-target="wifiPassword" class="password text-security-fallback"> ******************** </p>
-            <button data-action="click->user#togglePasswordVisibility">
-              <%= svg_icon_tag 'icon_eye', title: "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
-              <%= svg_icon_tag 'icon_eye_slash', title: "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
-            </button>
-            <div>
-            <button data-action="click->user#copyToClipboard">
-              <%= svg_icon_tag 'icon_clipboard', title: "Copy Wifi Password" %>
-            </button>
-              <span data-user-target="copyMessage" class="copy-message">Password copied to clipboard !</span>
-            </div>
-          </div>
-        <% end %>
-        <span>Wifi username : <%= @user.username %></span>
-      </div>
-    </div>
-
-    <div class="card-details-container card-machines card-details-machines">
-      <div class="card card-details">
-
-        <div class="card-title">
-          <% svg_icon_tag 'profile' %>
-          <h2>Machines</h2>
-        </div>
-
-        <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
-        <% if can?(:create, @user.machines.new) %>
-          <%= render "components/buttons/button_primary_create", text: "new machine", path: new_user_machine_path(@user), aria_label: "Add a new machine" %>
-        <% end %>
-
-      </div>
-
-      <div class="divider"></div>
-    </div>
-    <div class="card card-machines card-content">
-
-      <div class="card-content-machines">
-        <%= render(@machines) || "No machines" %>
-      </div>
-
-    </div>
-
-    <div class="card-details-container card-subscriptions card-details-subscriptions">
-      <div class="card card-details">
-
-        <div class="card-title">
-          <% svg_icon_tag 'profile' %>
-          <h2>Subscriptions</h2>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-    </div>
-    
-    <div class="card card-subscriptions card-content">
-
-      <div class="card-content-subscriptions">
-        <%= render(@subscriptions) || "No subscriptions" %>
-      </div>
-
-    </div>
-
-    <div class="card-details-container card-free-accesses card-details-free-accesses">
-      <div class="card card-details">
-
-        <div class="card-title">
-          <% svg_icon_tag 'profile' %>
-          <h2>Free accesses</h2>
-        </div>
-
-        <% if can?(:create, FreeAccess) %>
-          <%= render "components/buttons/button_primary_create", text: "new free access", path: new_user_free_access_path(@user), aria_label: "Add a new free access" %>
-        <% end %>
-      </div>
-
-      <div class="divider"></div>
-    </div>
-    <div class="card card-free-accesses card-content">
-
-      <div class="card-content-free-accesses">
-        <%= render(@free_accesses) || "No free accesses" %>
-      </div>
-
-    </div>
-  
-    <div class="card-details-container card-details-sales">
-      <div class="card card-details">
-
-        <div class="card-title">
-          <h2>Sales and invoices</h2>
-        </div>
-        <% if can?(:create, Sale) %>
-          <%= render "components/buttons/button_primary_create", text: "Sell", path: new_user_sale_path(@user), aria_label: "Create a sell" %>
-        <% end %>
-      </div>
-
-      <div class="divider"></div>
-    </div>
-    <div class="card card-sales card-content">
-
-      <div class="card-content-sales">
-        <%= render(@sales) || "No sales" %>
-      </div>
-
-    </div>  
-
+<div class="grid gap-1">
+  <h1><%= @user.firstname %> <%= @user.lastname %></h1>
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+    <span class="muted"><%= @user.username %></span>
+    <span class="muted"><%= @user.email %></span>
+    <%# The room is the only thing staff can change on a user, so its action sits right beside it. %>
+    <span class="flex items-center gap-2">
+      <span class="muted"><%= @user.room ? "Room #{@user.room.number}" : "No room" %></span>
+      <% if can?(:update, @user) %>
+        <%= link_to "Move", edit_user_path(@user), class: "btn btn-outline btn-xs", 'aria-label': "Move this user" %>
+      <% end %>
+    </span>
   </div>
-</main>
+</div>
+
+<% status = @user.internet_status %>
+<section class="panel">
+  <div class="flex flex-wrap items-center justify-between gap-2 border-b border-base-300 px-4 py-3">
+    <div class="flex flex-wrap items-center gap-2">
+      <h2>Access</h2>
+      <%= render "components/internet_badge", user: @user %>
+    </div>
+    <% if can?(:create, Sale) %>
+      <%= link_to new_user_sale_path(@user),
+                  class: class_names("btn btn-primary btn-sm", "btn-soft" => status == :active) do %>
+        <%= svg_icon_tag 'icon_calendar_plus' %>
+        <% if status != :none %>
+          Extend
+        <% elsif @user.internet_expiration %>
+          Renew
+        <% else %>
+          Subscribe
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="flex flex-wrap items-start gap-x-8 gap-y-5 p-4">
+    <div class="self-center">
+      <% if status != :none %>
+        <p class="text-lg font-semibold">Until <%= time_with_relative_tag(@user.internet_expiration) %></p>
+        <p class="muted text-sm">Ends in <%= time_ago_in_words(@user.internet_expiration) %></p>
+      <% elsif @user.internet_expiration %>
+        <p class="text-lg font-semibold">Ended <%= time_with_relative_tag(@user.internet_expiration) %></p>
+        <p class="muted text-sm"><%= time_ago_in_words(@user.internet_expiration).upcase_first %> ago</p>
+      <% else %>
+        <p class="text-lg font-semibold">Never subscribed</p>
+      <% end %>
+    </div>
+
+    <% if current_user == @user %>
+      <dl class="grid content-start gap-0.5 sm:ms-auto"
+           data-controller="user"
+           data-user-password-value="<%= @user.wifi_password %>">
+        <dt class="muted text-sm">Wi-Fi password</dt>
+        <dd class="flex flex-wrap items-center gap-1">
+          <input type="password"
+                 readonly
+                 value="<%= @user.wifi_password %>"
+                 data-user-target="wifiPassword"
+                 aria-label="Wi-Fi password"
+                 class="input input-sm w-52 font-mono" />
+          <button type="button"
+                  class="btn-icon"
+                  data-action="user#togglePasswordVisibility"
+                  aria-label="Show wifi password">
+            <%= svg_icon_tag 'icon_eye', 'data-user-target': 'eyeIcon' %>
+            <%= svg_icon_tag 'icon_eye_slash', 'data-user-target': 'eyeIcon', class: 'hidden' %>
+          </button>
+          <button type="button"
+                  class="btn-icon"
+                  data-action="user#copyToClipboard"
+                  aria-label="Copy Wi-Fi password">
+            <%= svg_icon_tag 'icon_clipboard' %>
+          </button>
+          <span data-user-target="copyMessage" class="hidden text-sm text-success" role="status">Copied</span>
+        </dd>
+        <dd class="muted text-sm">Sign in to the Wi-Fi as <span class="font-medium"><%= @user.username %></span></dd>
+      </dl>
+    <% end %>
+  </div>
+</section>
+
+<section class="panel">
+  <%# Need to pass an instance for an ability with block https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_abilities_with_blocks.md %>
+  <%= render "components/card_header",
+             title: "Machines",
+             count: "#{@machines.size} of #{USER_MACHINES_LIMIT}",
+             link_text: ("New machine" if can?(:create, @user.machines.new)),
+             link_path: new_user_machine_path(@user),
+             link_label: "Add a new machine" %>
+  <%= render "components/list", items: @machines, empty: "No machines" %>
+</section>
+
+<section class="panel">
+  <%= render "components/card_header", title: "Subscriptions" %>
+  <%= render "components/list", items: @subscriptions, empty: "No subscriptions" %>
+</section>
+
+<section class="panel">
+  <%= render "components/card_header",
+             title: "Free accesses",
+             link_text: ("New free access" if can?(:create, FreeAccess)),
+             link_path: new_user_free_access_path(@user),
+             link_label: "Add a new free access" %>
+  <%= render "components/list", items: @free_accesses, empty: "No free accesses" %>
+</section>
+
+<section class="panel">
+  <%= render "components/card_header",
+             title: "Sales and invoices",
+             link_text: ("New sale" if can?(:create, Sale)),
+             link_path: new_user_sale_path(@user),
+             link_label: "Create a sale" %>
+  <%= render "components/list", items: @sales, empty: "No sales" %>
+  <% if @sales.any? %>
+    <% paid = @sales.sum(Money.new(0), &:amount) %>
+    <% refunded = @sales.flat_map(&:refunds).sum(Money.new(0), &:amount) %>
+    <dl class="grid gap-1 border-t border-base-300 px-4 py-3">
+      <% if refunded.positive? %>
+        <div class="line muted"><dt>Paid</dt><dd><%= paid.format %></dd></div>
+        <div class="line muted"><dt>Refunded</dt><dd>&minus;<%= refunded.format %></dd></div>
+      <% end %>
+      <div class="line font-semibold"><dt>Total</dt><dd><%= (paid - refunded).format %></dd></div>
+    </dl>
+  <% end %>
+</section>

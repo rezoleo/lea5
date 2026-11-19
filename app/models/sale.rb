@@ -47,6 +47,14 @@ class Sale < ApplicationRecord
     articles_sales.where.not(article_id: already_refunded)
   end
 
+  def subscription_price
+    total = Money.new(0)
+    sales_subscription_offers.each do |rec|
+      total += rec.quantity * rec.subscription_offer.price
+    end
+    total
+  end
+
   # @param [Hash] attributes
   # @param [User] seller
   def self.build_with_invoice(attributes = {}, seller:)

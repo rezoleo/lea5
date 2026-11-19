@@ -1,13 +1,9 @@
 <%# locals: (user:) -%>
 
 <li>
-  <%= link_to user, class: "user" do %>
-  <span><%= user.firstname %> <%= user.lastname %></span>
-  <span><%= user.room&.number %></span>
-  <% if user.internet_expiration.nil? || user.internet_expiration < Time.current %>
-    <span style="color:var(--red-900)">No Internet</span>
-  <% else %>
-    <span style="color:var(--green-900)">Internet</span>
-  <% end %>
+  <%= link_to user, class: "user row hover:bg-base-200" do %>
+    <span class="font-medium"><%= user.firstname %> <%= user.lastname %></span>
+    <span class="muted text-sm"><%= user.room&.number %></span>
+    <span class="ms-auto"><%= render "components/internet_badge", user: user %></span>
   <% end %>
 </li>

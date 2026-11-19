@@ -1,0 +1,8 @@
+<%# locals: (items:, empty:) -%>
+
+<% rows = render items %>
+<% if rows %>
+  <ul class="divide-y divide-base-300"><%= rows %></ul>
+<% else %>
+  <p class="muted px-4 py-8 text-center text-sm"><%= empty %></p>
+<% end %>

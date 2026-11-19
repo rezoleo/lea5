@@ -12,7 +12,7 @@ class UsersTest < ApplicationSystemTestCase
   test 'visiting profile' do
     visit user_path @user
 
-    assert_selector 'h1', text: 'My Profile'
+    assert_selector 'h1', text: "#{@user.firstname} #{@user.lastname}"
 
     assert_text @user.firstname
     assert_text @user.lastname
@@ -64,7 +64,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in 'Mac', with: mac
     click_on 'Create'
 
-    assert_selector 'h1', text: 'My Profile'
+    assert_selector 'h1', text: "#{@user.firstname} #{@user.lastname}"
 
     assert_text(/#{mac}/i)
   end
@@ -79,9 +79,9 @@ class UsersTest < ApplicationSystemTestCase
     assert_selector 'h1', text: 'Edit the machine'
 
     fill_in 'Name', with: new_name
-    click_on 'Edit'
+    click_on 'Save changes'
 
-    assert_selector 'h1', text: 'My Profile'
+    assert_selector 'h1', text: "#{@user.firstname} #{@user.lastname}"
 
     assert_text new_name
   end
@@ -103,7 +103,7 @@ class UsersTest < ApplicationSystemTestCase
     sign_out
     sign_in_as @user
 
-    assert_selector 'h1', text: 'My Profile'
+    assert_selector 'h1', text: "#{@user.firstname} #{@user.lastname}"
     assert_text @user.email
   end
 
@@ -113,6 +113,7 @@ class UsersTest < ApplicationSystemTestCase
 
     sign_out
 
-    assert_selector 'h1', count: 0
+    assert_current_path root_path
+    assert_button 'Log in'
   end
 end

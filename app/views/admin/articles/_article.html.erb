@@ -1,11 +1,11 @@
 <%# locals: (article:) %>
 
-<div class="article">
-  <span><%= article.name %></span>
-  <span><%= humanized_money_with_symbol(article.price) %></span>
+<li class="row">
+  <span class="font-medium"><%= article.name %></span>
+  <span class="muted"><%= humanized_money_with_symbol(article.price) %></span>
   <% if can?(:destroy, article) %>
-    <%= button_to(article, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this article') do %>
-      <%= svg_icon_tag 'icon_delete' %>
-    <% end %>
+    <div class="ms-auto">
+      <%= icon_button 'icon_delete', article, method: :delete, label: 'Delete this article' %>
+    </div>
   <% end %>
-</div>
+</li>

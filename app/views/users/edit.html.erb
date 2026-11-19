@@ -1,11 +1,9 @@
 <%# locals: () -%>
 
-<h1>Move <%= @user.firstname %> <%= @user.lastname %></h1>
+<%= render "components/page_header", title: "Move #{@user.firstname} #{@user.lastname}", back: user_path(@user) %>
 
 <%= form_with(model: @user, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
   <%= render 'room_field', f: f %>
-  <div>
-    <%= f.submit 'Move' %>
-  </div>
+  <%= f.submit 'Move' %>
 <% end %>
