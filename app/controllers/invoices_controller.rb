@@ -5,6 +5,6 @@ class InvoicesController < ApplicationController
     @invoice = Invoice.find_by!(number: params[:number])
     authorize! :read, @invoice
 
-    redirect_to rails_blob_path(@invoice.pdf, disposition: 'attachment')
+    send_data @invoice.pdf.download, filename: @invoice.pdf.filename.to_s, type: 'application/pdf'
   end
 end

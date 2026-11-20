@@ -42,6 +42,15 @@ class Invoice < ApplicationRecord
     end
   end
 
+  def generate_pdf!
+    raise 'Invoice must have a number before generating PDF' if number.nil?
+    return if pdf.attached?
+
+    pdf_data = generation_json.deep_symbolize_keys.merge(number: number)
+    pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
+    pdf.attach(io: pdf_stream, filename: "facture-#{number}.pdf", content_type: 'application/pdf')
+  end
+
   private
 
   # @return [Integer] the assigned invoice number
@@ -51,15 +60,6 @@ class Invoice < ApplicationRecord
     new_invoice_number = Setting.next_invoice_number!
     self.number = new_invoice_number
     new_invoice_number
-  end
-
-  def generate_pdf!
-    raise 'Invoice must have a number before generating PDF' if number.nil?
-    return if pdf.attached?
-
-    pdf_data = generation_json.deep_symbolize_keys.merge(number: number)
-    pdf_stream = InvoicePdfGenerator.new(pdf_data).generate_pdf
-    pdf.attach(io: pdf_stream, filename: "facture-#{number}.pdf", content_type: 'application/pdf')
   end
 
   class << self

@@ -6,10 +6,10 @@ sale_ironman_cable_6_months:
     items:
       - quantity: 1
         item_name: "Ethernet cable (2m)"
-        price_cents: 200
+        price: { cents: 200, currency_iso: "EUR" }
       - quantity: 6
         item_name: "Subscription - 1 month"
-        price_cents: 500
+        price: { cents: 500, currency_iso: "EUR" }
     sale_date: "2025-01-20"
     issue_date: "2025-01-20"
     client_name: "Tony STARK"
@@ -23,7 +23,7 @@ sale_pepper_1_year:
     items:
       - quantity: 1
         item_name: "Subscription - 12 months"
-        price_cents: 5000
+        price: { cents: 5000, currency_iso: "EUR" }
     sale_date: "2025-01-26"
     issue_date: "2025-01-26"
     client_name: "Pepper POTTS"
@@ -37,7 +37,7 @@ sale_spiderman_1_year:
     items:
       - quantity: 1
         item_name: "Subscription - 12 months"
-        price_cents: 5000
+        price: { cents: 5000, currency_iso: "EUR" }
     sale_date: "2099-01-15"
     issue_date: "2099-01-15"
     client_name: "Peter PARKER"
@@ -52,10 +52,10 @@ refund_ironman_cable_4_months:
     items:
       - quantity: 1
         item_name: "Ethernet cable (2m)"
-        price_cents: 200
+        price: { cents: 200, currency_iso: "EUR" }
       - quantity: 4
         item_name: "Subscription - 1 month"
-        price_cents: 500
+        price: { cents: 500, currency_iso: "EUR" }
     sale_date: "2025-01-30"
     issue_date: "2025-01-30"
     client_name: "Tony STARK"
@@ -69,7 +69,7 @@ sale_ironman_deleted_article:
     items:
       - quantity: 1
         item_name: "Deleted router"
-        price_cents: 2000
+        price: { cents: 2000, currency_iso: "EUR" }
     sale_date: "2025-01-21"
     issue_date: "2025-01-21"
     client_name: "Tony STARK"
@@ -85,7 +85,7 @@ refund_pepper_1_year:
     items:
       - quantity: 1
         item_name: "Remboursement abonnement"
-        price_cents: 1000
+        price: { cents: 1000, currency_iso: "EUR" }
     sale_date: "2025-02-01"
     issue_date: "2025-02-01"
     client_name: "Pepper POTTS"
