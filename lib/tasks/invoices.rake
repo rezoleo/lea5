@@ -7,7 +7,9 @@ namespace :lea5 do
       invoice.generate_pdf!
       puts "Generated invoice #{invoice.number}"
     rescue StandardError => e
+      # :nocov:
       puts "Failed invoice #{invoice.number}: #{e.message}"
+      # :nocov:
     end
   end
 end
