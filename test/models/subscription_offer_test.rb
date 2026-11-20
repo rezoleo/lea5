@@ -6,6 +6,12 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   def setup
     super
     @subscription_offer = subscription_offers(:month)
+    @new_subscription_offer = @subscription_offer.dup
+  end
+
+  test 'price and duration cannot change once created' do
+    assert_raises(ActiveRecord::ReadonlyAttributeError) { @subscription_offer.update(price_cents: 1) }
+    assert_raises(ActiveRecord::ReadonlyAttributeError) { @subscription_offer.update(duration: 2) }
   end
 
   test 'should be valid' do
@@ -13,34 +19,34 @@ class SubscriptionOfferTest < ActiveSupport::TestCase
   end
 
   test 'should not be valid without duration' do
-    @subscription_offer.duration = nil
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.duration = nil
+    assert_not_predicate @new_subscription_offer, :valid?
   end
 
   test 'duration should be integer' do
-    @subscription_offer.duration = 10.56
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.duration = 10.56
+    assert_not_predicate @new_subscription_offer, :valid?
   end
 
   test 'duration should be strictly positive' do
-    @subscription_offer.duration = -5
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.duration = -5
+    assert_not_predicate @new_subscription_offer, :valid?
 
-    @subscription_offer.duration = 0
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.duration = 0
+    assert_not_predicate @new_subscription_offer, :valid?
   end
 
   test 'should not be valid without price' do
-    @subscription_offer.price_cents = nil
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.price_cents = nil
+    assert_not_predicate @new_subscription_offer, :valid?
   end
 
   test 'price should be strictly positive' do
-    @subscription_offer.price_cents = -5
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.price_cents = -5
+    assert_not_predicate @new_subscription_offer, :valid?
 
-    @subscription_offer.price_cents = 0
-    assert_not_predicate @subscription_offer, :valid?
+    @new_subscription_offer.price_cents = 0
+    assert_not_predicate @new_subscription_offer, :valid?
   end
 
   test 'offer should soft delete' do

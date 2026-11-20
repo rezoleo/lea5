@@ -6,6 +6,8 @@ class SubscriptionOffer < ApplicationRecord
 
   monetize :price_cents, numericality: { greater_than: 0 }
 
+  attr_readonly :price_cents, :duration
+
   validates :duration, presence: true, allow_blank: false,
                        numericality: { only_integer: true, greater_than: 0 }
 

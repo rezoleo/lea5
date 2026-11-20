@@ -27,6 +27,7 @@ class FreeAccessesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to @owner
+    assert_equal @owner, FreeAccess.last.created_by
   end
 
   test 'should re-render new if free_access is invalid' do

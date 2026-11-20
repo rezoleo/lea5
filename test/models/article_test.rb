@@ -6,6 +6,12 @@ class ArticleTest < ActiveSupport::TestCase
   def setup
     super
     @article = articles(:cable)
+    @new_article = @article.dup
+  end
+
+  test 'price and name cannot change once created' do
+    assert_raises(ActiveRecord::ReadonlyAttributeError) { @article.update(price_cents: 1) }
+    assert_raises(ActiveRecord::ReadonlyAttributeError) { @article.update(name: 'Other') }
   end
 
   test 'should be valid' do
@@ -13,21 +19,21 @@ class ArticleTest < ActiveSupport::TestCase
   end
 
   test 'should not be valid without name' do
-    @article.name = nil
-    assert_not_predicate @article, :valid?
+    @new_article.name = nil
+    assert_not_predicate @new_article, :valid?
   end
 
   test 'should not be valid without price' do
-    @article.price_cents = nil
-    assert_not_predicate @article, :valid?
+    @new_article.price_cents = nil
+    assert_not_predicate @new_article, :valid?
   end
 
   test 'price should be strictly positive' do
-    @article.price_cents = -5
-    assert_not_predicate @article, :valid?
+    @new_article.price_cents = -5
+    assert_not_predicate @new_article, :valid?
 
-    @article.price_cents = 0
-    assert_not_predicate @article, :valid?
+    @new_article.price_cents = 0
+    assert_not_predicate @new_article, :valid?
   end
 
   test 'article should soft delete' do

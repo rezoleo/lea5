@@ -14,7 +14,7 @@ class FreeAccessesController < ApplicationController
   end
 
   def create
-    @free_access = @owner.free_accesses.new(free_access_params)
+    @free_access = @owner.free_accesses.new(free_access_params.merge(created_by: current_user))
     authorize! :create, @free_access
     if @free_access.save
       flash[:success] = 'Free access added!'

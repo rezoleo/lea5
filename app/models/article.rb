@@ -8,6 +8,8 @@ class Article < ApplicationRecord
 
   monetize :price_cents, numericality: { greater_than: 0 }
 
+  attr_readonly :price_cents, :name
+
   validates :name, presence: true, allow_blank: false
 
   scope :sellable, -> { where(deleted_at: nil) }
