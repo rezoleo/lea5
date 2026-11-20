@@ -10,6 +10,7 @@ module Api
                         .includes(:ip, user: [:valid_subscriptions_by_date, :free_accesses_by_date])
                         .order(:id)
       machines = machines.with_internet_access if ActiveModel::Type::Boolean.new.cast(params[:with_internet_access])
+      machines = machines.where(mac: params[:mac]) if params[:mac].present?
 
       @machines = paginate(machines)
     end
@@ -32,8 +33,6 @@ module Api
 
     def current_machine
       @machine = Machine.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      @machine = Machine.find_by!(mac: params[:id])
     end
 
     def machine_params

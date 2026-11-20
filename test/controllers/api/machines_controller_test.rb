@@ -57,25 +57,28 @@ module Api
     end
 
     test 'should be able to query machines by mac address with api key' do
-      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      get api_machines_path(mac: @machine.mac.delete(':')), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
-      response_body = response.parsed_body
-      assert_equal @machine.id, response_body[:id]
-      assert_equal @machine.name, response_body[:name]
-      assert_equal @machine.mac, response_body[:mac]
-      assert_equal @machine.ip.ip.to_s, response_body[:ip]
-      assert_equal api_machine_url(@machine), response_body[:url]
-      assert_equal @machine.user.internet_expiration, response_body[:internet_expiration]
+      assert_equal [@machine.id], response.parsed_body.pluck(:id)
     end
 
     test 'should return empty array when querying machines by unknown mac address with api key' do
-      get api_machine_url('DE:1A:B3:17:95:FF'), headers: { 'Authorization' => "Bearer #{@original_key}" }
-      assert_response :not_found
+      get api_machines_path(mac: 'DE:1A:B3:17:95:FF'), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :success
+      assert_empty response.parsed_body
     end
 
     test 'should return bad request when querying machines by invalid mac address with api key' do
-      get api_machine_url('invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      get api_machines_path(mac: 'invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :bad_request
+    end
+
+    test 'should not read a machine by mac address' do
+      @machine2.update!(mac: '12:34:56:78:9A:BC')
+      @machine.user.machines.create!(id: 12, name: 'decoy', mac: 'AA:AA:AA:AA:AA:AA')
+
+      get '/api/machines/12:34:56:78:9a:bc', headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :not_found
     end
 
     test 'should not be able to query machines by mac address if api key is wrong' do
