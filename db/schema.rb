@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_120000) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -81,6 +81,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.string "reason", limit: 255, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "created_by_id"
+    t.index ["created_by_id"], name: "index_free_accesses_on_created_by_id"
     t.index ["user_id"], name: "index_free_accesses_on_user_id"
   end
 
@@ -130,7 +132,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.datetime "updated_at", null: false
     t.integer "subscription_refund_cents"
     t.bigint "amount_cents", default: 0, null: false
-    t.index ["invoice_id"], name: "index_refunds_on_invoice_id"
+    t.index ["invoice_id"], name: "index_refunds_on_invoice_id", unique: true
     t.index ["refund_method_id"], name: "index_refunds_on_refund_method_id"
     t.index ["refunder_id"], name: "index_refunds_on_refunder_id"
     t.index ["sale_id"], name: "index_refunds_on_sale_id"
@@ -160,7 +162,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.datetime "updated_at", null: false
     t.bigint "amount_cents", default: 0, null: false
     t.index ["client_id"], name: "index_sales_on_client_id"
-    t.index ["invoice_id"], name: "index_sales_on_invoice_id"
+    t.index ["invoice_id"], name: "index_sales_on_invoice_id", unique: true
     t.index ["payment_method_id"], name: "index_sales_on_payment_method_id"
     t.index ["seller_id"], name: "index_sales_on_seller_id"
   end
@@ -197,7 +199,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.datetime "end_at", null: false
     t.virtual "duration", type: :integer, comment: "Duration in months", as: "((EXTRACT(year FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))) * (12)::numeric) + EXTRACT(month FROM age(date_trunc('months'::text, end_at), date_trunc('months'::text, start_at))))", stored: true
     t.bigint "sale_id", null: false
-    t.index ["sale_id"], name: "index_subscriptions_on_sale_id"
+    t.index ["sale_id"], name: "index_subscriptions_on_sale_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -212,7 +214,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["oidc_id"], name: "index_users_on_oidc_id", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
-    t.index ["wifi_password"], name: "index_users_on_wifi_password"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -222,6 +223,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_07_01_120000) do
   add_foreign_key "articles_sales", "articles"
   add_foreign_key "articles_sales", "sales"
   add_foreign_key "free_accesses", "users"
+  add_foreign_key "free_accesses", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "ips", "machines"
   add_foreign_key "machines", "users"
   add_foreign_key "refunds", "invoices"
