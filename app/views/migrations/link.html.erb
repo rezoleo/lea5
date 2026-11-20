@@ -1,0 +1,19 @@
+<%# locals: () -%>
+
+<main class="migration">
+  <section class="migration-card">
+    <% if @account.nil? %>
+      <h2>This link is no longer valid</h2>
+      <p>It has expired or was already used. You can ask for a new one on the migration page.</p>
+      <%= link_to 'Back to the migration', migration_path, class: 'migration-button' %>
+    <% elsif !logged_in? %>
+      <h2>Log in first</h2>
+      <p>Log in with your Rézoléo account, then open the link from your email again.</p>
+      <%= button_to 'Log in', AUTH_PATH, method: :post, class: 'migration-button', data: { turbo: false } %>
+    <% else %>
+      <h2>Import re2o account <%= @account.pseudo %>?</h2>
+      <p>Your internet time, room and devices will be added to your lea5 account <strong><%= current_user.username %></strong>.</p>
+      <%= button_to 'Import my account', claim_migration_path, params: { token: @token }, class: 'migration-button' %>
+    <% end %>
+  </section>
+</main>

@@ -55,6 +55,20 @@
           </div>
         <% end %>
         <span>Wifi username : <%= @user.username %></span>
+        <% if @user.re2o_account %>
+          <span>Migrated from re2o account <%= @user.re2o_account.pseudo %></span>
+        <% elsif can?(:manage, :all) %>
+          <%= form_with url: admin_claim_migration_path, class: 'form' do |f| %>
+            <%= f.hidden_field :username, value: @user.username %>
+            <div>
+              <%= f.label :pseudo, 'Link a re2o account (pseudo)' %>
+              <%= f.text_field :pseudo, required: true %>
+            </div>
+            <div>
+              <%= f.submit 'Migrate from re2o' %>
+            </div>
+          <% end %>
+        <% end %>
       </div>
     </div>
 

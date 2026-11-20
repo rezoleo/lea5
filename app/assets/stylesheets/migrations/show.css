@@ -1,0 +1,299 @@
+.migration {
+    width: min(40rem, 100% - 2rem);
+    margin: var(--padding-md) 0 3rem;
+    color: var(--gray-800);
+}
+
+/* Steps: plain breadcrumb */
+
+.migration-steps {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--padding-xs) var(--padding-md);
+    margin-bottom: var(--padding-md);
+    font-size: 0.9rem;
+    color: var(--gray-400);
+    counter-reset: step;
+}
+
+.migration-steps li {
+    counter-increment: step;
+}
+
+.migration-steps li::before {
+    content: counter(step) ". ";
+}
+
+.migration-steps .is-done {
+    color: var(--gray-600);
+}
+
+.migration-steps .is-done::before {
+    content: "✓ ";
+    color: var(--green-700);
+}
+
+.migration-steps .is-current {
+    color: var(--gray-900);
+    font-weight: var(--font-bold);
+}
+
+/* Card */
+
+.migration-card {
+    border: 2px solid var(--primary-200);
+    border-radius: var(--rounded-lg);
+    background-color: var(--white);
+    padding: calc(var(--padding-md) * 1.5);
+}
+
+.migration-card > * + *,
+.migration-finale > * + * {
+    margin-top: var(--padding-md);
+}
+
+.migration-help {
+    font-size: 0.9rem;
+    color: var(--gray-500);
+}
+
+.migration-facts {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--padding-xs) var(--padding-md);
+}
+
+.migration-facts dt {
+    color: var(--gray-500);
+}
+
+.migration-facts dd {
+    font-weight: var(--font-medium);
+    overflow-wrap: anywhere;
+}
+
+/* Form and buttons, same look as the rest of lea5 */
+
+.migration-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-xs);
+}
+
+.migration-form label {
+    font-weight: var(--font-medium);
+}
+
+.migration-form label:not(:first-child) {
+    margin-top: var(--padding-xs);
+}
+
+.migration-form input:not([type="submit"]) {
+    border: 2px solid var(--primary-500);
+    border-radius: var(--rounded-lg);
+    font-size: 1rem;
+    padding: var(--padding-xs);
+    background-color: var(--primary-50);
+}
+
+.migration-form input:focus {
+    outline: none;
+    border-color: var(--primary-800);
+}
+
+.migration-email-link {
+    align-self: flex-start;
+    background: none;
+    padding: 0;
+    color: var(--primary-600);
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.migration-email-link[hidden] {
+    display: none;
+}
+
+.migration-button {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    margin-top: var(--padding-sm);
+    padding: var(--padding-sm) var(--padding-md);
+    border: none;
+    border-radius: var(--rounded-lg);
+    background-color: var(--primary-600);
+    color: var(--primary-50);
+    font-size: var(--text-sm);
+    font-weight: var(--font-bold);
+    letter-spacing: var(--spacing-lg);
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.migration-button:hover {
+    background-color: var(--primary-700);
+}
+
+/* Two buttons side by side */
+.migration-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--padding-sm);
+}
+
+.migration-actions .migration-button {
+    margin-top: 0;
+}
+
+/* Turbo sets aria-busy on the form while it is submitting */
+form[aria-busy="true"] .migration-button {
+    opacity: 0.7;
+    cursor: progress;
+}
+
+/* Import report */
+
+.migration-rows {
+    list-style: none;
+}
+
+.migration-row {
+    display: flex;
+    align-items: center;
+    gap: var(--padding-sm);
+    padding: var(--padding-sm) 0;
+    border-bottom: 1px solid var(--primary-100);
+}
+
+.migration-row div {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.migration-row div > span {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
+}
+
+.migration-row.is-skipped div > span {
+    color: var(--red-700);
+}
+
+.migration-status {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--green-700);
+}
+
+.is-skipped .migration-status {
+    background-color: var(--red-300);
+}
+
+.migration-status svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: var(--white);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.migration-spinner {
+    display: none;
+    width: 1rem;
+    height: 1rem;
+    border: 3px solid var(--primary-200);
+    border-top-color: var(--primary-600);
+    border-radius: 50%;
+}
+
+.is-ok .migration-warn,
+.is-skipped .migration-check {
+    display: none;
+}
+
+.migration-finale {
+    padding-top: var(--padding-sm);
+}
+
+/* Import sequence, played once right after the claim by migration_controller.js */
+
+@media (prefers-reduced-motion: no-preference) {
+    .is-animated .migration-row {
+        opacity: 0;
+        transform: translateY(6px);
+        transition: opacity 0.25s, transform 0.25s ease-out;
+    }
+
+    .is-animated .migration-row.is-running {
+        opacity: 1;
+        transform: none;
+    }
+
+    .is-animated .migration-row:not(.is-resolved) .migration-status {
+        background-color: var(--primary-100);
+    }
+
+    .is-animated .migration-row:not(.is-resolved) .migration-status svg {
+        display: none;
+    }
+
+    .is-animated .migration-row.is-running:not(.is-resolved) .migration-spinner {
+        display: block;
+        animation: migration-spin 0.7s linear infinite;
+    }
+
+    .is-animated .is-resolved .migration-status {
+        animation: migration-pop 0.3s ease-out;
+    }
+
+    .is-animated .is-resolved .migration-check path {
+        stroke-dasharray: 24;
+        animation: migration-draw 0.35s 0.05s ease-out both;
+    }
+
+    .is-animated .is-resolved.is-skipped {
+        animation: migration-shake 0.35s;
+    }
+
+    .is-animated .migration-finale {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 0.4s, transform 0.4s ease-out;
+    }
+
+    .is-animated .migration-finale.is-visible {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes migration-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes migration-pop {
+    from { transform: scale(0.6); }
+}
+
+@keyframes migration-draw {
+    from { stroke-dashoffset: 24; }
+    to { stroke-dashoffset: 0; }
+}
+
+@keyframes migration-shake {
+    0%, 100% { transform: none; }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
