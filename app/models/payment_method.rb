@@ -7,7 +7,7 @@ class PaymentMethod < ApplicationRecord
   validates :name, presence: true, allow_blank: false
   validates :auto_verify, inclusion: { in: [true, false] }
 
-  default_scope { where(deleted_at: nil) }
+  scope :sellable, -> { where(deleted_at: nil) }
 
   def soft_delete
     update(deleted_at: Time.zone.now) if deleted_at.nil?

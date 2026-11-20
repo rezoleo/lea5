@@ -67,9 +67,10 @@ class MachineTest < ActiveSupport::TestCase
   end
 
   test 'machines should be destroyed when the user is destroyed' do
-    @machine.save
+    user = users(:hulk)
+    @machine.update!(user: user)
     assert_difference 'Machine.count', -1 do
-      @user.destroy
+      user.destroy
     end
   end
 

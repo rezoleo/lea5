@@ -126,4 +126,15 @@ class RefundTest < ActiveSupport::TestCase
     assert_not_predicate refund, :persisted?
     assert_predicate refund.errors[:refund_method], :present?
   end
+
+  test 'a deleted refund method cannot be used' do
+    payment_methods(:cash).soft_delete
+    refund = Refund.create_with_credit_note(
+      sale: sales(:ironman_deleted_article), refund_method: payment_methods(:cash), refunder: users(:ironman),
+      refund_scope: { article_ids: [articles(:deleted_article).id] }
+    )
+
+    assert_not_predicate refund, :persisted?
+    assert_includes refund.errors[:refund_method], 'is no longer accepted'
+  end
 end

@@ -15,8 +15,16 @@ class ArticlesSale < ApplicationRecord
     message: 'can only be added once to a sale, please merge the quantities of the same articles'
   }
 
+  validate :article_must_be_sellable, on: :create
+
   # @return [Money]
   def total
     quantity && article ? quantity * article.price : Money.new(0)
+  end
+
+  private
+
+  def article_must_be_sellable
+    errors.add(:article, 'is no longer sold') if article&.deleted_at
   end
 end

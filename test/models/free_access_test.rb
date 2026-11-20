@@ -40,12 +40,11 @@ class FreeAccessTest < ActiveSupport::TestCase
   end
 
   test 'free_access should be destroyed when the user is destroyed' do
-    @user.free_accesses.destroy_all
-    @user.reload
-    @user.free_accesses.create(start_at: Time.current, end_at: 3.months.from_now, reason: 'Good cop')
+    user = users(:hulk)
+    user.free_accesses.create!(start_at: Time.current, end_at: 3.months.from_now, reason: 'Good cop')
 
     assert_difference 'FreeAccess.count', -1 do
-      @user.destroy
+      user.destroy
     end
   end
 end

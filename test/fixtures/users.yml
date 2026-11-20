@@ -23,3 +23,12 @@ spiderman:
   oidc_id: "326906230427557669"
   wifi_password: "1234567"
   username: "peter-parker"
+
+# No sales, machines or free accesses: can be destroyed
+hulk:
+  firstname: "Bruce"
+  lastname: "Banner"
+  email: "bruce@banner.com"
+  oidc_id: "326906230427557670"
+  wifi_password: "password"
+  username: "bruce-banner"

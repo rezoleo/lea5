@@ -32,6 +32,7 @@ class Sale < ApplicationRecord
   validate :not_empty_sale, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :exhaustive_subscription_offers, unless: ->(sale) { sale.errors.include?(:duration) }
   validate :no_duplicate_article_sale
+  validate :payment_method_must_be_sellable, on: :create
 
   before_validation :assign_amount
 
@@ -82,6 +83,10 @@ class Sale < ApplicationRecord
     return if remaining_duration == 0
 
     errors.add(:base, 'Subscription offers are not exhaustive!')
+  end
+
+  def payment_method_must_be_sellable
+    errors.add(:payment_method, 'is no longer accepted') if payment_method&.deleted_at
   end
 
   def no_duplicate_article_sale

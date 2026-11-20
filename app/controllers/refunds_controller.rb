@@ -39,7 +39,7 @@ class RefundsController < ApplicationController
   def load_form_data
     @refundable_article_sales = @sale.refundable_article_sales.includes(:article)
     @subscription = @sale.subscription
-    @refund_methods = PaymentMethod.all
+    @refund_methods = PaymentMethod.sellable
   end
 
   def refund_params

@@ -32,7 +32,7 @@ class ArticleTest < ActiveSupport::TestCase
 
   test 'article should soft delete' do
     @article.deleted_at = nil
-    assert_no_difference 'Article.unscoped.count' do
+    assert_no_difference 'Article.count' do
       @article.soft_delete
     end
     assert_not_nil @article.deleted_at
@@ -48,13 +48,13 @@ class ArticleTest < ActiveSupport::TestCase
   test 'article should be destroyed if no sales' do
     @article.sales.destroy_all
     @article.refunds.destroy_all
-    assert_difference 'Article.unscoped.count', -1 do
+    assert_difference 'Article.count', -1 do
       assert_predicate @article, :destroy
     end
   end
 
   test 'article should not destroy if dependant' do
-    assert_no_difference 'Article.unscoped.count' do
+    assert_no_difference 'Article.count' do
       assert_not_predicate @article, :destroy
     end
 

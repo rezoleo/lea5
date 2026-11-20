@@ -80,7 +80,8 @@ class UserTest < ActiveSupport::TestCase
 
   test 'destroying a user nullifies the associated room user_id' do
     room = rooms(:room_a109a)
-    user = room.user
+    user = users(:hulk)
+    room.update!(user: user)
 
     assert_difference 'User.count', -1 do
       user.destroy!
@@ -449,6 +450,21 @@ class UserTest < ActiveSupport::TestCase
 
     assert_nil @user.reload.room
     assert_nil room.reload.user
+  end
+
+  test 'a user with sales cannot be destroyed' do
+    assert_not @user.destroy
+    assert User.exists?(@user.id)
+  end
+
+  test 'destroying a refunder keeps their refunds' do
+    refund = refunds(:pepper_1_year_refund)
+    refunder = users(:hulk)
+    refund.update_column(:refunder_id, refunder.id) # rubocop:disable Rails/SkipsModelValidations
+
+    refunder.destroy!
+
+    assert_nil refund.reload.refunder
   end
 
   private

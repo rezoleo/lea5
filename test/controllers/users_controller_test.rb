@@ -21,6 +21,13 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_template 'users/index'
   end
 
+  test 'should show sales paid with a deleted payment method' do
+    payment_methods(:cash).soft_delete
+    get user_path @user
+    assert_response :success
+    assert_match 'Payment method: Cash', @response.body
+  end
+
   test 'should get show' do
     get user_path @user
     assert_template 'users/show'
@@ -200,10 +207,19 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should destroy a user and redirect to users in html' do
+    user = users(:hulk)
     assert_difference 'User.count', -1 do
-      delete user_url(@user, format: :html)
+      delete user_url(user, format: :html)
     end
     assert_redirected_to users_url
+  end
+
+  test 'should not destroy a user with sales' do
+    assert_no_difference 'User.count' do
+      delete user_url(@user, format: :html)
+    end
+    assert_redirected_to user_url(@user)
+    assert_equal 'Cannot delete record because dependent sales as client exist', flash[:error]
   end
 
   test 'should paginate index' do
@@ -223,10 +239,8 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'should not paginate index when results fit on a single page' do
-    User.where.not(id: @admin.id).find_each(&:destroy)
-
     get users_path
-    assert_dom '.user', count: 1
+    assert_dom '.user', count: User.count
     assert_dom '.pagination', count: 0
   end
 

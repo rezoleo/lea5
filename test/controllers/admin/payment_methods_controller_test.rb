@@ -17,14 +17,14 @@ module Admin
     end
 
     test 'should create payment_method' do
-      assert_difference 'PaymentMethod.unscoped.count', 1 do
+      assert_difference 'PaymentMethod.count', 1 do
         post payment_methods_path, params: { payment_method: { name: 'Credit Card', auto_verify: true } }
       end
       assert_redirected_to admin_path
     end
 
     test 'should re-render if missing payment_method information' do
-      assert_no_difference 'PaymentMethod.unscoped.count' do
+      assert_no_difference 'PaymentMethod.count' do
         post payment_methods_path, params: { payment_method: { name: nil } }
       end
 
@@ -32,7 +32,7 @@ module Admin
     end
 
     test 'should soft_delete payment_method' do
-      assert_no_difference 'PaymentMethod.unscoped.count' do
+      assert_no_difference 'PaymentMethod.count' do
         delete payment_method_path(@payment_method)
       end
       assert_redirected_to admin_path
@@ -40,7 +40,7 @@ module Admin
 
     test 'should hard_delete payment_method' do
       payment_method = PaymentMethod.create!(name: 'Unused payment_method that can be hard deleted', auto_verify: true)
-      assert_difference 'PaymentMethod.unscoped.count', -1 do
+      assert_difference 'PaymentMethod.count', -1 do
         delete payment_method_path(payment_method)
       end
       assert_redirected_to admin_path
