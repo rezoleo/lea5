@@ -7,9 +7,9 @@ class SalesController < ApplicationController
     @sale = @owner.sales_as_client.new
     authorize! :new, @sale
 
-    @articles = Article.sellable.all
-    @subscription_offers = SubscriptionOffer.order(duration: :desc)
-    @payment_methods = PaymentMethod.all
+    @articles = Article.sellable
+    @subscription_offers = SubscriptionOffer.sellable.order(duration: :desc)
+    @payment_methods = PaymentMethod.sellable
   end
 
   def create
@@ -20,9 +20,9 @@ class SalesController < ApplicationController
       flash[:success] = 'Sale was successfully created.'
       redirect_to @owner
     else
-      @articles = Article.all
-      @subscription_offers = SubscriptionOffer.order(duration: :desc)
-      @payment_methods = PaymentMethod.all
+      @articles = Article.sellable
+      @subscription_offers = SubscriptionOffer.sellable.order(duration: :desc)
+      @payment_methods = PaymentMethod.sellable
 
       render 'new', status: :unprocessable_entity
     end

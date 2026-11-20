@@ -7,13 +7,14 @@ class User < ApplicationRecord
   has_many :free_accesses_by_date, lambda {
     order(end_at: :desc)
   }, dependent: :destroy, class_name: 'FreeAccess', inverse_of: :user
-  has_many :sales_as_client, class_name: 'Sale', foreign_key: 'client_id', dependent: :destroy, inverse_of: :client
+  has_many :sales_as_client, class_name: 'Sale', foreign_key: 'client_id', dependent: :restrict_with_error,
+                             inverse_of: :client
   has_many :sales_as_seller, class_name: 'Sale', foreign_key: 'seller_id', dependent: :nullify, inverse_of: :seller
-  has_many :refunds, foreign_key: 'refunder_id', dependent: :destroy, inverse_of: :refunder
-  has_many :subscriptions, through: :sales_as_client, dependent: :destroy
+  has_many :refunds, foreign_key: 'refunder_id', dependent: :nullify, inverse_of: :refunder
+  has_many :subscriptions, through: :sales_as_client
   has_many :valid_subscriptions_by_date, lambda {
     where(cancelled_at: nil).order(end_at: :desc)
-  }, through: :sales_as_client, dependent: :destroy, class_name: 'Subscription', source: :subscription
+  }, through: :sales_as_client, class_name: 'Subscription', source: :subscription
 
   normalizes :email, with: ->(email) { email.strip.downcase }
 

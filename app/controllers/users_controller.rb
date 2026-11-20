@@ -96,9 +96,13 @@ class UsersController < ApplicationController
   def destroy
     @user = User.includes(machines: :ip).find_by!(username: params[:username])
     authorize! :destroy, @user
-    @user.destroy
-    flash[:success] = 'User deleted!'
-    redirect_to users_url
+    if @user.destroy
+      flash[:success] = 'User deleted!'
+      redirect_to users_url
+    else
+      flash[:error] = @user.errors.full_messages.to_sentence
+      redirect_to @user
+    end
   end
 
   private

@@ -174,4 +174,22 @@ class SaleTest < ActiveSupport::TestCase
     assert_not result
     assert_predicate sale, :invalid?
   end
+
+  test 'a deleted article or payment method cannot be sold' do
+    deleted_article = { article_id: articles(:deleted_article).id, quantity: 1 }
+    sale = @user.sales_as_client.build_with_invoice({ payment_method_id: @payment_method.id,
+                                                      articles_sales_attributes: [deleted_article] }, seller: @user)
+    assert_not_predicate sale, :valid?
+
+    @payment_method.soft_delete
+    sale = @user.sales_as_client.build_with_invoice({ duration: 1, payment_method_id: @payment_method.id },
+                                                    seller: @user)
+    assert_not_predicate sale, :valid?
+    assert_includes sale.errors[:payment_method], 'is no longer accepted'
+  end
+
+  test 'old sales stay valid once their payment method is deleted' do
+    @payment_method.soft_delete
+    assert_predicate @sale.reload, :valid?
+  end
 end

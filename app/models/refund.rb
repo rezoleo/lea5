@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# It is recommended to instantiate a refund using {Refund.create_with_credit_note}
+# Build new refunds with {Refund.build_with_credit_note} or {Refund.create_with_credit_note}:
+# they add the credit note a valid refund needs
 class Refund < ApplicationRecord
   belongs_to :refunder, class_name: 'User', optional: true
   belongs_to :refund_method, class_name: 'PaymentMethod'
@@ -18,6 +19,7 @@ class Refund < ApplicationRecord
 
   validate :not_empty_refund
   validate :subscription_must_be_refundable
+  validate :refund_method_must_be_sellable, on: :create
 
   before_validation :assign_amount
 
@@ -72,6 +74,10 @@ class Refund < ApplicationRecord
   private_class_method :build_articles_refunds
 
   private
+
+  def refund_method_must_be_sellable
+    errors.add(:refund_method, 'is no longer accepted') if refund_method&.deleted_at
+  end
 
   def assign_amount
     articles_total = articles_refunds.to_a.sum(&:total)
