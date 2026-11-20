@@ -56,6 +56,7 @@ class RefundTest < ActiveSupport::TestCase
   test 'create_with_credit_note cuts the subscription and prorates the credit' do
     sale = sales(:spiderman_1_year) # 1 year (50 €), starts in 2099 => not yet consumed
     subscription = subscriptions(:subscription3)
+    subscription.update!(start_at: Time.zone.local(2099, 1, 15, 12))
 
     refund = nil
     assert_difference 'Refund.count', 1 do
