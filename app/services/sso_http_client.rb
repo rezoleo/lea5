@@ -8,7 +8,7 @@ class SsoHttpClient
   class TimeoutError < Error; end
   class RequestError < Error; end
 
-  SSO_BASE_URI = URI('https://sso.rezoleo.fr')
+  SSO_BASE_URI = URI(SSO_URL)
   HTTP_OPEN_TIMEOUT_SECONDS = 5
   HTTP_READ_TIMEOUT_SECONDS = 10
 

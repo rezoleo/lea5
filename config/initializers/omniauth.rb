@@ -14,7 +14,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :oidc,
     scope: [:openid, :email, :profile],
     response_type: :code,
-    issuer: 'https://sso.rezoleo.fr',
+    issuer: SSO_URL,
     discovery: true,
     pkce: true,
     client_options: oidc_client_options
