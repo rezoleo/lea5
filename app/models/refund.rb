@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# It is recommended to instantiate a refund using {Refund.create_with_credit_note}
+# Build new refunds with {Refund.build_with_credit_note} or {Refund.create_with_credit_note}:
+# they add the credit note a valid refund needs
 class Refund < ApplicationRecord
   belongs_to :refunder, class_name: 'User', optional: true
   belongs_to :refund_method, class_name: 'PaymentMethod'

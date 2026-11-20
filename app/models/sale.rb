@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# It is recommended to instantiate a new sale using {Sale.build_with_invoice}
+# Build new sales with {Sale.build_with_invoice}: it adds the invoice and subscription a valid sale needs
 class Sale < ApplicationRecord
   belongs_to :seller, class_name: 'User', optional: true
   belongs_to :client, class_name: 'User'
