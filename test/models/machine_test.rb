@@ -54,7 +54,8 @@ class MachineTest < ActiveSupport::TestCase
                     'AD:14D4:87:4B:D7',
                     'AD14.D487.',
                     'AD14.D487.4BD',
-                    'AD14.D487.4BD78']
+                    'AD14.D487.4BD78',
+                    'AD14XD487X4BD7']
     valid_macs.each do |valid_mac|
       @machine.mac = valid_mac
       assert_predicate @machine, :valid?, "#{valid_mac.inspect} should be valid"
