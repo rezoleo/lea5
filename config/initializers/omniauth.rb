@@ -25,7 +25,7 @@ def oidc_client_options
   if Rails.env.production?
     {
       identifier: Rails.application.credentials.sso_id,
-      redirect_uri: "https://lea5.rezoleo.fr#{AUTH_CALLBACK_PATH}"
+      redirect_uri: "#{APP_URL}#{AUTH_CALLBACK_PATH}"
     }
   elsif Rails.env.development?
     {
