@@ -30,6 +30,9 @@ module Lea5
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: ['assets', 'tasks'])
 
+    # Invoices are served by InvoicesController, which checks authorization
+    config.active_storage.draw_routes = false
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

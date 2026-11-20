@@ -16,7 +16,8 @@ class InvoicesControllerUserRightTest < ActionDispatch::IntegrationTest
 
     get download_invoice_path(@user_invoice)
 
-    assert_response :redirect
+    assert_response :success
+    assert_equal 'application/pdf', response.media_type
   end
 
   test 'non-admin user cannot download someone else invoice' do
@@ -32,6 +33,7 @@ class InvoicesControllerUserRightTest < ActionDispatch::IntegrationTest
 
     get download_invoice_path(@user_invoice)
 
-    assert_response :redirect
+    assert_response :success
+    assert_equal 'application/pdf', response.media_type
   end
 end
