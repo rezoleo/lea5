@@ -11,17 +11,15 @@ class RefundsControllerUserRightTest < ActionDispatch::IntegrationTest
   end
 
   test 'non-admin user should not see refund creation page' do
-    assert_raises CanCan::AccessDenied do
-      get new_sale_refund_path(@sale)
-    end
+    get new_sale_refund_path(@sale)
+    assert_response :forbidden
   end
 
   test 'non-admin user should not create a refund' do
-    assert_raises CanCan::AccessDenied do
-      post sale_refunds_path(@sale), params: { refund: {
-        refund_method_id: payment_methods(:cash).id,
-        article_ids: [articles(:deleted_article).id]
-      } }
-    end
+    post sale_refunds_path(@sale), params: { refund: {
+      refund_method_id: payment_methods(:cash).id,
+      article_ids: [articles(:deleted_article).id]
+    } }
+    assert_response :forbidden
   end
 end

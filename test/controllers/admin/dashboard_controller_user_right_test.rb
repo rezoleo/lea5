@@ -11,9 +11,8 @@ module Admin
     end
 
     test 'non-admin user should not see the dashboard page' do
-      assert_raises CanCan::AccessDenied do
-        get admin_path
-      end
+      get admin_path
+      assert_response :forbidden
     end
   end
 end

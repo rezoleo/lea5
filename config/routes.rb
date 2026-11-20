@@ -3,6 +3,7 @@
 Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
   get AUTH_CALLBACK_PATH, to: 'sessions#create', as: 'auth_callback'
+  get '/auth/failure', to: 'sessions#failure', as: 'auth_failure'
   # Only allow insecure local login during development and tests
   get '/auth/developer/callback', to: 'sessions#create_developer', as: 'auth_callback_developer' if Rails.env.local?
 

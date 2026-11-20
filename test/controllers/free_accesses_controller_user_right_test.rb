@@ -11,26 +11,22 @@ class FreeAccessesControllerUserRightTest < ActionDispatch::IntegrationTest
   end
 
   test 'non-admin user should not see free_access creation page' do
-    assert_raises CanCan::AccessDenied do
-      get new_user_free_access_path @user
-    end
+    get new_user_free_access_path @user
+    assert_response :forbidden
   end
 
   test 'non-admin user should not create a new free_access' do
-    assert_raises CanCan::AccessDenied do
-      post user_free_accesses_url @user, params: { free_access: { reason: '' } }
-    end
+    post user_free_accesses_url @user, params: { free_access: { reason: '' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not delete a free_access' do
-    assert_raises CanCan::AccessDenied do
-      delete free_access_url @user.free_accesses.first
-    end
+    delete free_access_url @user.free_accesses.first
+    assert_response :forbidden
   end
 
   test 'non-admin user should not be able to update a free_access' do
-    assert_raises CanCan::AccessDenied do
-      patch free_access_url(@user.free_accesses.first), params: { free_access: { reason: '' } }
-    end
+    patch free_access_url(@user.free_accesses.first), params: { free_access: { reason: '' } }
+    assert_response :forbidden
   end
 end

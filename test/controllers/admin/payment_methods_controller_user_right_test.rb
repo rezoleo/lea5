@@ -13,21 +13,18 @@ module Admin
     end
 
     test 'non-admin user should not see payment method creation page' do
-      assert_raises CanCan::AccessDenied do
-        get new_payment_method_path
-      end
+      get new_payment_method_path
+      assert_response :forbidden
     end
 
     test 'non-admin user should not create a new payment method' do
-      assert_raises CanCan::AccessDenied do
-        post payment_methods_path params: { payment_method: { name: 'New payment method', auto_verify: true } }
-      end
+      post payment_methods_path params: { payment_method: { name: 'New payment method', auto_verify: true } }
+      assert_response :forbidden
     end
 
     test 'non-admin user should not delete a payment method' do
-      assert_raises CanCan::AccessDenied do
-        delete payment_method_path @payment_method
-      end
+      delete payment_method_path @payment_method
+      assert_response :forbidden
     end
   end
 end

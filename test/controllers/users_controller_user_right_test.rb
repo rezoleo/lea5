@@ -18,50 +18,42 @@ class UsersControllerUserRight < ActionDispatch::IntegrationTest
   end
 
   test 'non-admin user should not see someone else in show' do
-    assert_raises CanCan::AccessDenied do
-      get user_path @admin
-    end
+    get user_path @admin
+    assert_response :forbidden
   end
 
   test 'non-admin user should not edit themselves' do
-    assert_raises CanCan::AccessDenied do
-      get edit_user_path @user
-    end
+    get edit_user_path @user
+    assert_response :forbidden
   end
 
   test 'non-admin user should not update themselves' do
-    assert_raises CanCan::AccessDenied do
-      patch user_path @user, params: { user: { room_number: 'B231' } }
-    end
+    patch user_path @user, params: { user: { room_number: 'B231' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not see someone else in edit' do
-    assert_raises CanCan::AccessDenied do
-      get edit_user_path @admin
-    end
+    get edit_user_path @admin
+    assert_response :forbidden
   end
 
   test 'non-admin user should not see user creation page' do
-    assert_raises CanCan::AccessDenied do
-      get new_user_path
-    end
+    get new_user_path
+    assert_response :forbidden
   end
 
   test 'non-admin user should not create a new user' do
-    assert_raises CanCan::AccessDenied do
-      post users_path, params: { user: { firstname: '' } }
-    end
+    post users_path, params: { user: { firstname: '' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not update someone else' do
-    assert_raises CanCan::AccessDenied do
-      patch user_path @admin, params: { user: { firstname: '' } }
-    end
+    patch user_path @admin, params: { user: { firstname: '' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not destroy themselves' do
-    assert_raises CanCan::AccessDenied do
-      delete user_path @user
-    end
+    delete user_path @user
+    assert_response :forbidden
   end
 end

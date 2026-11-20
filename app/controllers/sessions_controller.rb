@@ -23,6 +23,11 @@ class SessionsController < ApplicationController
     redirect_to profile_path
   end
 
+  def failure
+    flash[:error] = "Login failed: #{params[:message].to_s.humanize}"
+    redirect_to root_path
+  end
+
   def destroy
     log_out
     flash[:success] = 'You are now logged out!'

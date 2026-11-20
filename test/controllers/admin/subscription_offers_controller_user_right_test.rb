@@ -13,21 +13,18 @@ module Admin
     end
 
     test 'non-admin user should not see subscription offer creation page' do
-      assert_raises CanCan::AccessDenied do
-        get new_subscription_offer_path
-      end
+      get new_subscription_offer_path
+      assert_response :forbidden
     end
 
     test 'non-admin user should not create a new subscription offer' do
-      assert_raises CanCan::AccessDenied do
-        post subscription_offers_path params: { subscription_offer: { duration: 1, price: 5.00 } }
-      end
+      post subscription_offers_path params: { subscription_offer: { duration: 1, price: 5.00 } }
+      assert_response :forbidden
     end
 
     test 'non-admin user should not delete a subscription offer' do
-      assert_raises CanCan::AccessDenied do
-        delete subscription_offer_path @subscription_offer
-      end
+      delete subscription_offer_path @subscription_offer
+      assert_response :forbidden
     end
   end
 end
