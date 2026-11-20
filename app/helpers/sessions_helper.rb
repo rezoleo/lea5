@@ -25,7 +25,6 @@ module SessionsHelper
     session[:groups] = user.groups
   end
 
-  # TODO: also logout of sso
   def log_out
     reset_session
   end
