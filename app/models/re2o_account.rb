@@ -16,6 +16,7 @@ class Re2oAccount < ApplicationRecord
 
   validates :pseudo, presence: true, uniqueness: true
   validates :end_at, presence: true
+  validates :email, uniqueness: true, allow_nil: true
 
   scope :unclaimed, -> { where(claimed_by_user_id: nil) }
 
@@ -67,7 +68,7 @@ class Re2oAccount < ApplicationRecord
       lock!
       raise ClaimError, 'This re2o account has already been migrated.' if claimed?
 
-      update!(claimed_by: user, claimed_at: Time.current)
+      update!(claimed_by: user, claimed_at: Time.current, ntlm_hash: nil)
       update!(claim_report: { 'access' => import_access(user),
                               'room' => import_room(user),
                               'machines' => machines.map { |m| import_machine(user, m['mac'], m['name']) } })

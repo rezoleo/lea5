@@ -30,6 +30,12 @@ class Re2oAccountTest < ActiveSupport::TestCase
     assert_predicate @tony, :claim_skipped_anything?
   end
 
+  test 'claim wipes the re2o NTLM hash' do
+    @peter.claim!(users(:spiderman))
+
+    assert_nil @peter.reload.ntlm_hash
+  end
+
   test 'claim never changes the lea5 identity of the user' do
     user = users(:spiderman)
     identity = user.attributes.slice('firstname', 'lastname', 'email', 'username', 'oidc_id', 'wifi_password')

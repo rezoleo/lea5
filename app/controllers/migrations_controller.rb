@@ -7,7 +7,8 @@ class MigrationsController < ApplicationController
   rate_limit to: 10, within: 1.hour, only: [:claim, :send_link], name: 'per-user',
              by: -> { current_user.id }, with: -> { too_many_attempts }
   rate_limit to: 5, within: 1.hour, only: [:claim, :send_link], name: 'per-account',
-             by: -> { params[:identifier].to_s.strip.downcase }, with: -> { too_many_attempts }
+             by: -> { params[:identifier].to_s.strip.downcase }, with: -> { too_many_attempts },
+             unless: -> { params[:identifier].blank? }
   rate_limit to: 30, within: 1.minute, only: :lookup, by: -> { current_user.id }, with: -> { head :too_many_requests }
 
   def show

@@ -15,9 +15,14 @@ namespace :lea5 do
       )
     end
 
+    duplicates = rows.filter_map { |row| row['email'] }.tally.select { |_, count| count > 1 }.keys
+    rows.each { |row| row['email'] = nil if duplicates.include?(row['email']) }
+
     if rows.any?
       # Only the snapshot columns are updated: claims and reports are kept
       Re2oAccount.upsert_all(rows, unique_by: :pseudo, update_only: rows.first.keys.excluding('created_at')) # rubocop:disable Rails/SkipsModelValidations
+      # A re-import must not bring back the hashes wiped at claim time
+      Re2oAccount.where.not(claimed_at: nil).update_all(ntlm_hash: nil) # rubocop:disable Rails/SkipsModelValidations
     end
     puts "Loaded #{rows.size} re2o accounts"
   end
