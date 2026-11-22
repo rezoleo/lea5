@@ -12,17 +12,15 @@ class SalesControllerUserRightTest < ActionDispatch::IntegrationTest
   # TODO: Add a test to ensure users can see their own sales but not others
 
   test 'non-admin user should not see sales creation page' do
-    assert_raises CanCan::AccessDenied do
-      get new_user_sale_path @user
-    end
+    get new_user_sale_path @user
+    assert_response :forbidden
   end
 
   test 'non-admin user should not create a new sale' do
-    assert_raises CanCan::AccessDenied do
-      post user_sales_path @user, params: { sale: {
-        duration: 1,
-        payment_method_id: payment_methods(:credit_card).id
-      } }
-    end
+    post user_sales_path @user, params: { sale: {
+      duration: 1,
+      payment_method_id: payment_methods(:credit_card).id
+    } }
+    assert_response :forbidden
   end
 end

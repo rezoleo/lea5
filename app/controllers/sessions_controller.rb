@@ -4,6 +4,7 @@ class SessionsController < ApplicationController
   def create
     user = User.upsert_from_auth_hash(request.env['omniauth.auth'])
     log_in user
+    session[:sso] = true
     flash[:success] = 'You are now logged in!'
     redirect_to profile_path
   end
@@ -23,9 +24,19 @@ class SessionsController < ApplicationController
     redirect_to profile_path
   end
 
+  def failure
+    flash[:error] = "Login failed: #{params[:message].to_s.humanize}"
+    redirect_to root_path
+  end
+
   def destroy
+    sso = session[:sso]
     log_out
     flash[:success] = 'You are now logged out!'
-    redirect_to root_path
+    client_id = Rails.application.credentials.sso_id
+    return redirect_to root_path unless sso && client_id
+
+    logout_params = { client_id: client_id, post_logout_redirect_uri: root_url }
+    redirect_to "#{SSO_LOGOUT_URL}?#{logout_params.to_query}", allow_other_host: true
   end
 end

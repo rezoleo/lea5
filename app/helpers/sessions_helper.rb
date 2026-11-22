@@ -4,7 +4,12 @@ module SessionsHelper
   def current_user
     return nil if session[:user_id].nil?
 
-    @current_user ||= User.find(session[:user_id])
+    @current_user ||= User.find_by(id: session[:user_id])
+    if @current_user.nil?
+      session.clear
+      return nil
+    end
+
     @current_user.groups = session[:groups]
     @current_user
   end
@@ -20,7 +25,6 @@ module SessionsHelper
     session[:groups] = user.groups
   end
 
-  # TODO: also logout of sso
   def log_out
     reset_session
   end

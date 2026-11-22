@@ -11,15 +11,13 @@ module Admin
     end
 
     test 'non-admin user should not see the accounting dashboard' do
-      assert_raises CanCan::AccessDenied do
-        get admin_accounting_path
-      end
+      get admin_accounting_path
+      assert_response :forbidden
     end
 
     test 'non-admin user is denied before the date parameters are parsed' do
-      assert_raises CanCan::AccessDenied do
-        get admin_accounting_path, params: { period: 'custom', start_date: 'notadate' }
-      end
+      get admin_accounting_path, params: { period: 'custom', start_date: 'notadate' }
+      assert_response :forbidden
     end
   end
 end

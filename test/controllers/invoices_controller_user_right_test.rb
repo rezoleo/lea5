@@ -22,9 +22,9 @@ class InvoicesControllerUserRightTest < ActionDispatch::IntegrationTest
   test 'non-admin user cannot download someone else invoice' do
     sign_in_as @user
 
-    assert_raises CanCan::AccessDenied do
-      get download_invoice_path(@other_invoice)
-    end
+    get download_invoice_path(@other_invoice)
+
+    assert_response :forbidden
   end
 
   test 'admin can download any invoice' do

@@ -14,7 +14,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     name: :oidc,
     scope: [:openid, :email, :profile],
     response_type: :code,
-    issuer: 'https://sso.rezoleo.fr',
+    issuer: SSO_URL,
     discovery: true,
     pkce: true,
     client_options: oidc_client_options
@@ -25,7 +25,7 @@ def oidc_client_options
   if Rails.env.production?
     {
       identifier: Rails.application.credentials.sso_id,
-      redirect_uri: "https://lea5.rezoleo.fr#{AUTH_CALLBACK_PATH}"
+      redirect_uri: "#{APP_URL}#{AUTH_CALLBACK_PATH}"
     }
   elsif Rails.env.development?
     {

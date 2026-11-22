@@ -21,11 +21,22 @@ class ApplicationController < ActionController::Base
 
   before_action :still_authenticated?
 
+  rescue_from CanCan::AccessDenied, with: :access_denied
+
   def current_ability
     @current_ability ||= UserAbility.new(current_user)
   end
 
   private
+
+  def access_denied
+    if logged_in?
+      render 'errors/forbidden', status: :forbidden
+    else
+      flash[:error] = 'Please log in to access this page.'
+      redirect_to root_path
+    end
+  end
 
   def still_authenticated?
     log_out if should_log_out?

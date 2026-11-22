@@ -46,4 +46,47 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to root_path
   end
+
+  test 'logout after an SSO login also logs out of the SSO' do
+    Rails.application.credentials.sso_id = 'lea5'
+    sign_in_as users(:pepper)
+    delete logout_path
+
+    assert_redirected_to "#{SSO_LOGOUT_URL}?client_id=lea5&post_logout_redirect_uri=#{CGI.escape(root_url)}"
+    assert_not_predicate self, :logged_in?
+  ensure
+    Rails.application.credentials.sso_id = nil
+  end
+
+  test 'logout stays local when no SSO client is configured' do
+    sign_in_as users(:pepper)
+    delete logout_path
+
+    assert_redirected_to root_path
+  end
+
+  test 'a failed SSO login redirects to root with the reason' do
+    get auth_failure_path, params: { message: 'access_denied' }
+
+    assert_redirected_to root_path
+    assert_equal 'Login failed: Access denied', flash[:error]
+  end
+
+  test 'a deleted user is logged out instead of crashing' do
+    user = User.create!(firstname: 'No', lastname: 'Sales', email: 'no@sales.com', username: 'no-sales', oidc_id: '42')
+    sign_in_as user
+    user.destroy!
+
+    get root_path
+
+    assert_response :success
+    assert_not_predicate self, :logged_in?
+  end
+
+  test 'an anonymous user is sent to log in' do
+    get user_path(users(:ironman))
+
+    assert_redirected_to root_path
+    assert_equal 'Please log in to access this page.', flash[:error]
+  end
 end

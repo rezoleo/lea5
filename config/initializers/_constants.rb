@@ -9,6 +9,11 @@ AUTH_PATH = '/auth/oidc'
 # Callback path from SSO authentication
 AUTH_CALLBACK_PATH = "#{AUTH_PATH}/callback".freeze
 
+APP_URL = 'https://lea5.rezoleo.fr'
+
+SSO_URL = 'https://sso.rezoleo.fr'
+SSO_LOGOUT_URL = "#{SSO_URL}/oidc/v1/end_session".freeze
+
 SESSION_DURATION_TIME = 3.hours
 
 # The number of machines a user can create on their own

@@ -22,7 +22,7 @@ end
 # @return [Hash<String, Hash<String, Object>>]
 def retrieve_users_from_sso
   access_token = Rails.application.credentials.sso_lea5_pat!
-  uri = URI('https://sso.rezoleo.fr/v2/users')
+  uri = URI("#{SSO_URL}/v2/users")
   limit = 500
   offset = 0
   all_users = {}

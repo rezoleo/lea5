@@ -11,39 +11,33 @@ class MachinesControllerUserRightTest < ActionDispatch::IntegrationTest
   end
 
   test 'non-admin user should not see someone else machine in show' do
-    assert_raises CanCan::AccessDenied do
-      get machine_path @admin.machines.first
-    end
+    get machine_path @admin.machines.first
+    assert_response :forbidden
   end
 
   test 'non-admin user should not see someone else machine in new' do
-    assert_raises CanCan::AccessDenied do
-      get new_user_machine_path @admin
-    end
+    get new_user_machine_path @admin
+    assert_response :forbidden
   end
 
   test 'non-admin user should not see someone else machine in edit' do
-    assert_raises CanCan::AccessDenied do
-      get edit_machine_path @admin.machines.first
-    end
+    get edit_machine_path @admin.machines.first
+    assert_response :forbidden
   end
 
   test 'non-admin user should not be able to add to someone else a machine' do
-    assert_raises CanCan::AccessDenied do
-      post user_machines_url(@admin), params: { machine: { name: '' } }
-    end
+    post user_machines_url(@admin), params: { machine: { name: '' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not be able to update someone else machine' do
-    assert_raises CanCan::AccessDenied do
-      patch machine_url(@admin.machines.first), params: { machine: { name: '' } }
-    end
+    patch machine_url(@admin.machines.first), params: { machine: { name: '' } }
+    assert_response :forbidden
   end
 
   test 'non-admin user should not be able to destroy someone else machine' do
-    assert_raises CanCan::AccessDenied do
-      delete machine_url(@admin.machines.first)
-    end
+    delete machine_url(@admin.machines.first)
+    assert_response :forbidden
   end
 
   test 'non-admin user should be able to create a machine if it is in the limit' do
@@ -73,9 +67,8 @@ class MachinesControllerUserRightTest < ActionDispatch::IntegrationTest
     @user.machines.destroy_all
 
     machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
-    assert_raises CanCan::AccessDenied do
-      post user_machines_url(@user), params: { machine: }
-    end
+    post user_machines_url(@user), params: { machine: }
+    assert_response :forbidden
   ensure
     silence_warnings do
       Object.const_set(:USER_MACHINES_LIMIT, old_value)
