@@ -67,6 +67,13 @@ class MachineTest < ActiveSupport::TestCase
     end
   end
 
+  test 'mac should be normalized' do
+    ['AD:14:D4:87:4B:D7', 'AD-14-D4-87-4B-D7', 'AD14D4874BD7', 'AD14.D487.4BD7'].each do |mac|
+      @machine.mac = mac
+      assert_equal 'ad:14:d4:87:4b:d7', @machine.mac
+    end
+  end
+
   test 'machines should be destroyed when the user is destroyed' do
     @machine.save
     assert_difference 'Machine.count', -1 do

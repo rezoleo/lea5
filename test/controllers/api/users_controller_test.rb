@@ -14,13 +14,14 @@ module Api
       get api_user_path(@user), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
       response_body = response.parsed_body
-      assert_equal @user.id, response_body[:id]
+      assert_not response_body.key?(:id)
+      assert_equal @user.username, response_body[:username]
       assert_equal @user.firstname, response_body[:firstname]
       assert_equal @user.lastname, response_body[:lastname]
       assert_equal @user.email, response_body[:email]
       assert_equal @user.room.number, response_body[:room]
       assert_equal api_user_url(@user), response_body[:url]
-      assert_equal @user.internet_expiration, response_body[:internet_expiration]
+      assert_equal @user.internet_access?, response_body[:internet_access]
       openssl_legacy_provider = OpenSSL::Provider.load('legacy')
       assert_equal OpenSSL::Digest::MD4.hexdigest(@user.wifi_password.encode('utf-16le')),
                    response_body[:ntlm_password]
@@ -99,10 +100,10 @@ module Api
     test 'should not repeat users across API pages' do
       get api_users_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
                           params: { limit: 2, page: 1 }
-      first_page = response.parsed_body.pluck(:id)
+      first_page = response.parsed_body.pluck(:username)
       get api_users_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
                           params: { limit: 2, page: 2 }
-      second_page = response.parsed_body.pluck(:id)
+      second_page = response.parsed_body.pluck(:username)
 
       assert_empty first_page & second_page
       assert_equal User.count, (first_page + second_page).uniq.size

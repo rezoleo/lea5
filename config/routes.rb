@@ -45,7 +45,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
       # to determine the format to return (e.g. GET /users/1.json)
       # https://guides.rubyonrails.org/routing.html#specifying-constraints-on-id
       resources :users, param: :username, constraints: { username: %r{[^/]+} }
-      resources :machines, constraints: { id: /\d+/ }
+      resources :machines, param: :mac, constraints: { mac: %r{[^/]+} }
       resources :api_keys
     end
   end

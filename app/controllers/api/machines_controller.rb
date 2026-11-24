@@ -10,7 +10,6 @@ module Api
                         .includes(:ip, user: [:valid_subscriptions_by_date, :free_accesses_by_date])
                         .order(:id)
       machines = machines.with_internet_access if ActiveModel::Type::Boolean.new.cast(params[:with_internet_access])
-      machines = machines.where(mac: params[:mac]) if params[:mac].present?
 
       @machines = paginate(machines)
     end
@@ -23,7 +22,7 @@ module Api
       @machine = @owner.machines.new(machine_params)
       authorize! :create, @machine
       if @machine.save
-        render json: @machine, status: :created
+        render :show, status: :created
       else
         render json: @machine.errors, status: :unprocessable_entity
       end
@@ -32,7 +31,7 @@ module Api
     private
 
     def current_machine
-      @machine = Machine.find(params[:id])
+      @machine = Machine.find_by!(mac: params[:mac])
     end
 
     def machine_params
@@ -40,7 +39,7 @@ module Api
     end
 
     def owner
-      @owner = User.find(params[:user_id])
+      @owner = User.find_by!(username: params[:username])
     end
   end
 end
