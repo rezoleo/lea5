@@ -44,10 +44,10 @@ class User < ApplicationRecord
     now = Time.current
     with_subscription = User.joins(:subscriptions)
                             .where(subscriptions: { cancelled_at: nil })
-                            .where('subscriptions.end_at > ?', now)
+                            .where('subscriptions.start_at <= :now AND subscriptions.end_at > :now', now: now)
                             .select(:id)
     with_free_access = User.joins(:free_accesses)
-                           .where('free_accesses.end_at > ?', now)
+                           .where('free_accesses.start_at <= :now AND free_accesses.end_at > :now', now: now)
                            .select(:id)
     where(id: with_subscription).or(where(id: with_free_access))
   }
@@ -91,7 +91,9 @@ class User < ApplicationRecord
   end
 
   def internet_access?
-    internet_expiration.present? && internet_expiration > Time.current
+    now = Time.current
+    accesses = valid_subscriptions_by_date + free_accesses_by_date
+    accesses.any? { |access| access.start_at <= now && now < access.end_at }
   end
 
   # @param [Integer] duration subscription duration in months

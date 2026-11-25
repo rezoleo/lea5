@@ -442,6 +442,15 @@ class UserTest < ActiveSupport::TestCase
     assert_internet_access_parity
   end
 
+  test 'with_internet_access excludes accesses that have not started yet' do
+    subscriptions(:subscription3).update!(start_at: 1.day.from_now)
+    free_accesses(:one).update!(start_at: 1.day.from_now, end_at: 1.month.from_now)
+
+    assert_not_includes User.with_internet_access, users(:spiderman)
+    assert_not_includes User.with_internet_access, @user
+    assert_internet_access_parity
+  end
+
   test 'clearing room_number frees the room' do
     room = @user.room
     @user.room_number = nil
