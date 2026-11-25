@@ -14,12 +14,12 @@ You will get the related json
 ## List of endpoints
 
 - GET /api/users : Get users index
-- GET /api/users/_id_ : Get user with the given id or username
+- GET /api/users/_username_ : Get user with the given username
 - GET /api/machines : Get machines index
 - GET /api/machines?with_internet_access=true : Filter only machines own by a user with a valid subscription
-- GET /api/machines/_id_ : Get machine with the given id or mac address
+- GET /api/machines/_mac_ : Get machine with the given mac address
 - GET /api/api_keys : Get api keys index
-- POST /api/machines data={"user_id": <user_id>, "machine": {"mac":<mac>,"name":<name>}}: Create a machine with given mac and name for user with the given user_id
+- POST /api/machines data={"username": <username>, "machine": {"mac":<mac>,"name":<name>}}: Create a machine with given mac and name for user with the given username
 
 ## Pagination (on users and machines index endpoints)
 

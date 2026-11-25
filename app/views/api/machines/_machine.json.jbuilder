@@ -2,7 +2,8 @@
 
 # locals: (json:, machine:)
 
-json.extract! machine, :id, :name, :mac, :created_at, :updated_at
+json.extract! machine, :mac, :name, :created_at, :updated_at
+json.username machine.user.username
 json.ip machine.ip.ip.to_s
-json.url api_machine_url(machine)
-json.internet_expiration machine.user.internet_expiration
+json.url api_machine_url(machine.mac)
+json.internet_access machine.user.internet_access?

@@ -54,7 +54,8 @@ class MachineTest < ActiveSupport::TestCase
                     'AD:14D4:87:4B:D7',
                     'AD14.D487.',
                     'AD14.D487.4BD',
-                    'AD14.D487.4BD78']
+                    'AD14.D487.4BD78',
+                    'AD14XD487X4BD7']
     valid_macs.each do |valid_mac|
       @machine.mac = valid_mac
       assert_predicate @machine, :valid?, "#{valid_mac.inspect} should be valid"
@@ -63,6 +64,13 @@ class MachineTest < ActiveSupport::TestCase
     invalid_macs.each do |invalid_mac|
       @machine.mac = invalid_mac
       assert_not_predicate @machine, :valid?, "#{invalid_mac.inspect} should be invalid"
+    end
+  end
+
+  test 'mac should be normalized' do
+    ['AD:14:D4:87:4B:D7', 'AD-14-D4-87-4B-D7', 'AD14D4874BD7', 'AD14.D487.4BD7'].each do |mac|
+      @machine.mac = mac
+      assert_equal 'ad:14:d4:87:4b:d7', @machine.mac
     end
   end
 

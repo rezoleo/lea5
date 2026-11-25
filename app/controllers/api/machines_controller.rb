@@ -22,7 +22,7 @@ module Api
       @machine = @owner.machines.new(machine_params)
       authorize! :create, @machine
       if @machine.save
-        render json: @machine, status: :created
+        render :show, status: :created
       else
         render json: @machine.errors, status: :unprocessable_entity
       end
@@ -31,9 +31,7 @@ module Api
     private
 
     def current_machine
-      @machine = Machine.find(params[:id])
-    rescue ActiveRecord::RecordNotFound
-      @machine = Machine.find_by!(mac: params[:id])
+      @machine = Machine.find_by!(mac: params[:mac])
     end
 
     def machine_params
@@ -41,7 +39,7 @@ module Api
     end
 
     def owner
-      @owner = User.find(params[:user_id])
+      @owner = User.find_by!(username: params[:username])
     end
   end
 end

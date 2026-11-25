@@ -11,24 +11,24 @@ module Api
     end
 
     test 'should be able to read machine with api key' do
-      get api_machine_url(@machine), headers: { 'Authorization' => "Bearer #{@original_key}" }
+      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
       response_body = response.parsed_body
-      assert_equal @machine.id, response_body[:id]
+      assert_not response_body.key?(:id)
       assert_equal @machine.name, response_body[:name]
       assert_equal @machine.mac, response_body[:mac]
       assert_equal @machine.ip.ip.to_s, response_body[:ip]
-      assert_equal api_machine_url(@machine), response_body[:url]
-      assert_equal @machine.user.internet_expiration, response_body[:internet_expiration]
+      assert_equal api_machine_url(@machine.mac), response_body[:url]
+      assert_equal @machine.user.internet_access?, response_body[:internet_access]
     end
 
     test 'should not be able to read machine if api key is wrong' do
-      get api_machine_url(@machine), headers: { 'Authorization' => 'Bearer wrong_key' }
+      get api_machine_url(@machine.mac), headers: { 'Authorization' => 'Bearer wrong_key' }
       assert_response(:unauthorized)
     end
 
     test 'should not be able to read machine if api key is missing' do
-      get api_machine_url(@machine)
+      get api_machine_url(@machine.mac)
       assert_response(:unauthorized)
     end
 
@@ -56,65 +56,58 @@ module Api
       assert_equal 1, response_body.size
     end
 
-    test 'should be able to query machines by mac address with api key' do
-      get api_machine_url(@machine.mac), headers: { 'Authorization' => "Bearer #{@original_key}" }
+    test 'should accept any mac address format' do
+      get api_machine_url(@machine.mac.delete(':')), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :success
-      response_body = response.parsed_body
-      assert_equal @machine.id, response_body[:id]
-      assert_equal @machine.name, response_body[:name]
-      assert_equal @machine.mac, response_body[:mac]
-      assert_equal @machine.ip.ip.to_s, response_body[:ip]
-      assert_equal api_machine_url(@machine), response_body[:url]
-      assert_equal @machine.user.internet_expiration, response_body[:internet_expiration]
+      assert_equal @machine.mac, response.parsed_body[:mac]
     end
 
-    test 'should return empty array when querying machines by unknown mac address with api key' do
+    test 'should return not found for unknown mac address with api key' do
       get api_machine_url('DE:1A:B3:17:95:FF'), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :not_found
     end
 
-    test 'should return bad request when querying machines by invalid mac address with api key' do
+    test 'should return bad request for invalid mac address with api key' do
       get api_machine_url('invalid_mac'), headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :bad_request
     end
 
-    test 'should not be able to query machines by mac address if api key is wrong' do
-      get api_machines_path(mac: @machine.mac), headers: { 'Authorization' => 'Bearer wrong_key' }
-      assert_response(:unauthorized)
-    end
-
-    test 'should not be able to query machines by mac address if api key is missing' do
-      get api_machines_path(mac: @machine.mac)
-      assert_response(:unauthorized)
+    test 'should not read a machine by id' do
+      get "/api/machines/#{@machine.id}", headers: { 'Authorization' => "Bearer #{@original_key}" }
+      assert_response :bad_request
     end
 
     test 'should be able to create a machine with api key' do
       user = users(:ironman)
-      post api_machines_path, params: { user_id: user.id, machine: { mac: '00:11:22:33:44:55', name: 'New Machine' } },
+      post api_machines_path, params: { username: user.username,
+                                        machine: { mac: '00-11-22-AA-BB-CC', name: 'New Machine' } },
                               headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :created
       response_body = response.parsed_body
-      assert_equal '00:11:22:33:44:55', response_body[:mac]
+      assert_not response_body.key?(:id)
+      assert_equal '00:11:22:aa:bb:cc', response_body[:mac]
       assert_equal 'New Machine', response_body[:name]
-      assert_equal user.id, response_body[:user_id]
+      assert_equal user.username, response_body[:username]
     end
 
     test 'should not be able to create a machine if api key is wrong' do
       user = users(:ironman)
-      post api_machines_path, params: { user_id: user.id, machine: { mac: '00:11:22:33:44:55', name: 'New Machine' } },
+      post api_machines_path, params: { username: user.username,
+                                        machine: { mac: '00:11:22:33:44:55', name: 'New Machine' } },
                               headers: { 'Authorization' => 'Bearer wrong_key' }
       assert_response(:unauthorized)
     end
 
     test 'should not be able to create a machine if api key is missing' do
       user = users(:ironman)
-      post api_machines_path, params: { user_id: user.id, machine: { mac: '00:11:22:33:44:55', name: 'New Machine' } }
+      post api_machines_path, params: { username: user.username,
+                                        machine: { mac: '00:11:22:33:44:55', name: 'New Machine' } }
       assert_response(:unauthorized)
     end
 
     test 'should not create machine with invalid params' do
       user = users(:ironman)
-      post api_machines_path, params: { user_id: user.id, machine: { name: 'No Mac' } },
+      post api_machines_path, params: { username: user.username, machine: { name: 'No Mac' } },
                               headers: { 'Authorization' => "Bearer #{@original_key}" }
       assert_response :unprocessable_entity
     end
@@ -130,7 +123,7 @@ module Api
 
       machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
       assert_difference 'Machine.count', 1 do
-        post api_machines_url, params: { user_id: user.id, machine: machine },
+        post api_machines_url, params: { username: user.username, machine: machine },
                                headers: { 'Authorization' => "Bearer #{@original_key}" }
       end
     ensure
@@ -149,7 +142,7 @@ module Api
       user.machines.destroy_all
       machine = { name: 'ultron', mac: '66:66:66:66:66:66' }
 
-      post api_machines_url, params: { user_id: user.id, machine: machine },
+      post api_machines_url, params: { username: user.username, machine: machine },
                              headers: { 'Authorization' => "Bearer #{@original_key}" }
 
       assert_response :forbidden
@@ -179,14 +172,14 @@ module Api
       assert_response :success
       assert_equal 1, response.parsed_body.size
       assert_equal '1', response.headers['total-count']
-      assert_equal @machine2.id, response.parsed_body.first[:id]
+      assert_equal @machine2.mac, response.parsed_body.first[:mac]
     end
 
     test 'should count only matching machines when filtering and paginating' do
       get api_machines_path, headers: { 'Authorization' => "Bearer #{@original_key}" },
                              params: { with_internet_access: '1', limit: 1, page: 1 }
       assert_response :success
-      assert_equal [@machine2.id], response.parsed_body.pluck(:id)
+      assert_equal [@machine2.mac], response.parsed_body.pluck(:mac)
       assert_equal '1', response.headers['total-pages']
     end
 
