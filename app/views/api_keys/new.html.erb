@@ -2,6 +2,6 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>ApiKey#new</h1>
+<%= render "components/page_header", title: "Add a new API key", back: api_keys_path %>
 
 <%= render 'form' %>

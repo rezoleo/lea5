@@ -1,65 +1,55 @@
 <%# locals: () -%>
 
-<main class="sso-user-search-page">
-  <h1>Create user from SSO</h1>
+<%= render "components/page_header", title: "Create user from SSO", back: users_path %>
 
-  <%= render 'utils/error_messages', object: @user %>
+<%= render 'utils/error_messages', object: @user %>
 
-  <%= form_with url: new_from_sso_users_path, method: :get, class: 'form sso-user-search-form' do |f| %>
-    <div>
-      <%= f.label :query, 'Search in SSO' %>
-      <%= f.text_field :query, value: @query, required: true %>
-    </div>
-    <div>
-      <%= f.submit 'Search' %>
-    </div>
-  <% end %>
+<%= form_with url: new_from_sso_users_path, method: :get, class: "join w-full max-w-md" do |f| %>
+  <%= f.label :query, "Search in SSO", class: "sr-only" %>
+  <%= f.search_field :query, value: @query, required: true, placeholder: "Name, email or username",
+                             class: "input join-item w-full" %>
+  <%= f.submit "Search", class: "btn btn-primary join-item" %>
+<% end %>
 
-  <% if @query.present? %>
-    <section class="sso-search-results">
-      <% if @sso_users.present? %>
-        <h2>SSO users</h2>
+<% if @query.present? %>
+  <section class="panel">
+    <%= render "components/card_header", title: "SSO users", count: @sso_users&.size %>
+    <% if @sso_users.present? %>
+      <ul class="divide-y divide-base-300">
+        <% @sso_users.each do |sso_user| %>
+          <% existing_user = @existing_users_by_oidc_id[sso_user[:oidc_id]] %>
+          <li class="row">
+            <div>
+              <p class="font-medium"><%= sso_user[:firstname] %> <%= sso_user[:lastname] %></p>
+              <p class="muted text-sm"><%= sso_user[:email] %> · <%= sso_user[:username] %></p>
+            </div>
 
-        <ul class="sso-users-results">
-          <% @sso_users.each do |sso_user| %>
-            <% existing_user = @existing_users_by_oidc_id[sso_user[:oidc_id]] %>
-
-            <li class="sso-user-result">
-              <p class="sso-user-name"><%= "#{sso_user[:firstname]} #{sso_user[:lastname]}" %></p>
-              <p><%= sso_user[:email] %></p>
-              <p><%= sso_user[:username] %></p>
-
-              <% if existing_user %>
-                <p class="sso-existing-user">
-                  User already exists:
-                  <%= link_to existing_user.display_name, existing_user %>
-                </p>
-              <% else %>
-                <%= form_with url: create_from_sso_users_path, method: :post, class: 'form sso-create-form' do |f| %>
-                  <%= f.hidden_field :query, value: @query %>
-                  <%= f.hidden_field :oidc_id, value: sso_user[:oidc_id] %>
-                  <div>
-                    <%= f.label :room_number, 'Room' %>
-                    <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, nil) },
-                                            { include_blank: 'No room', selected: @user.room_number } %>
-                  </div>
-                  <% if @user.oidc_id == sso_user[:oidc_id] && @user.errors.of_kind?(:room_number, :occupied) %>
-                    <div>
-                      <%= f.check_box :room_override %>
-                      <%= f.label :room_override, "Unassign the current occupant of #{@user.room_number}" %>
-                    </div>
+            <% if existing_user %>
+              <%= link_to "Already exists: #{existing_user.display_name}", existing_user,
+                          class: "btn btn-ghost btn-sm ms-auto" %>
+            <% else %>
+              <%= form_with url: create_from_sso_users_path, method: :post,
+                            class: "ms-auto flex flex-wrap items-center gap-2" do |f| %>
+                <%= f.hidden_field :query, value: @query %>
+                <%= f.hidden_field :oidc_id, value: sso_user[:oidc_id] %>
+                <%= f.label :room_number, "Room", class: "sr-only" %>
+                <%= f.collection_select :room_number, @rooms, :number, ->(room) { room_option_label(room, nil) },
+                                        { include_blank: "No room", selected: @user.room_number },
+                                        class: "select select-sm w-auto" %>
+                <%= f.submit "Create", class: "btn btn-primary btn-sm", 'aria-label': "Create user from SSO" %>
+                <% if @user.oidc_id == sso_user[:oidc_id] && @user.errors.of_kind?(:room_number, :occupied) %>
+                  <%= f.label :room_override, class: "flex w-full cursor-pointer items-center gap-3 rounded-box border border-warning bg-warning/10 p-3" do %>
+                    <%= f.check_box :room_override, class: "checkbox checkbox-warning" %>
+                    <span>Unassign the current occupant of <%= @user.room_number %></span>
                   <% end %>
-                  <div>
-                    <%= f.submit 'Create user from SSO' %>
-                  </div>
                 <% end %>
               <% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% else %>
-        <p class="sso-results-empty">No SSO user found for "<%= @query %>".</p>
-      <% end %>
-    </section>
-  <% end %>
-</main>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="muted px-4 py-8 text-center text-sm">No SSO user found for "<%= @query %>"</p>
+    <% end %>
+  </section>
+<% end %>

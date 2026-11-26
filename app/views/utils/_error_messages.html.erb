@@ -1,14 +1,15 @@
 <%# locals: (object:) -%>
 
 <% if object.errors.any? %>
-  <div class="alert alert-error">
+  <div class="alert alert-error" role="alert">
+    <%= svg_icon_tag 'cross' %>
     <div>
-      The form contains <%= pluralize(object.errors.count, "error") %>:
+      <p>The form contains <%= pluralize(object.errors.count, "error") %>:</p>
+      <ul class="list-disc pl-5">
+        <% object.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
     </div>
-    <ul class="error_messages">
-      <% object.errors.full_messages.each do |msg| %>
-        <li>- <%= msg %></li>
-      <% end %>
-    </ul>
   </div>
 <% end %>

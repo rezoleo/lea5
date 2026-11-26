@@ -1,13 +1,11 @@
 <%# locals: (subscription:) -%>
 
-<div class="subscription">
-  <span>
-    <span class="<%= class_names({ subscription_cancelled: subscription.cancelled_at }) %>">
-      <%= time_with_relative_tag subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag subscription.end_at %>
-    </span>
-    <span>(<%= pluralize(subscription.duration, "month") %>)</span>
+<li class="row justify-between">
+  <span class="<%= class_names('muted line-through' => subscription.cancelled_at) %>">
+    <%= time_with_relative_tag subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag subscription.end_at %>
+    <span class="muted">(<%= pluralize(subscription.duration, "month") %>)</span>
   </span>
   <% unless subscription.cancelled_at.nil? %>
-    <span>Cancelled at: <%= time_with_relative_tag subscription.cancelled_at %></span>
+    <span class="muted text-sm">Cancelled <%= time_with_relative_tag subscription.cancelled_at %></span>
   <% end %>
-</div>
+</li>

@@ -1,15 +1,14 @@
 <%# locals: (free_access:) -%>
 
-<div class="free-access">
+<li class="row">
   <span><%= time_with_relative_tag free_access.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag free_access.end_at %></span>
-  <% if can?(:edit, free_access) %>
-    <%= button_to(edit_free_access_path(free_access), method: :get, 'aria-label': 'Edit this free access') do %>
-      <%= svg_icon_tag 'icon_edit' %>
+  <span class="muted"><%= free_access.reason %></span>
+  <div class="ms-auto flex gap-1">
+    <% if can?(:edit, free_access) %>
+      <%= icon_button 'icon_edit', edit_free_access_path(free_access), label: 'Edit this free access' %>
     <% end %>
-  <% end %>
-  <% if can?(:destroy, free_access) %>
-    <%= button_to(free_access, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this free access') do %>
-      <%= svg_icon_tag 'icon_delete' %>
+    <% if can?(:destroy, free_access) %>
+      <%= icon_button 'icon_delete', free_access, method: :delete, label: 'Delete this free access' %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+</li>

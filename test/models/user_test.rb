@@ -396,6 +396,17 @@ class UserTest < ActiveSupport::TestCase
     assert_nil @user.internet_expiration
   end
 
+  test 'internet status follows how long access has left' do
+    assert_equal :none, @user.internet_status
+
+    spiderman = users(:spiderman)
+    subscriptions(:subscription3).update!(start_at: 1.month.ago, end_at: 3.days.from_now)
+    assert_equal :expiring, spiderman.reload.internet_status
+
+    subscriptions(:subscription3).update!(end_at: 1.year.from_now)
+    assert_equal :active, spiderman.reload.internet_status
+  end
+
   test 'with_internet_access matches internet_access? with only expired fixtures' do
     subscriptions(:subscription3).update!(start_at: 2.years.ago, end_at: 1.year.ago)
 

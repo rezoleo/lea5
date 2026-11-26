@@ -1,17 +1,15 @@
 <%# locals: (machine:) -%>
 
-<div class="machine">
-  <span><%= machine.name %></span>
-  <span><%= machine.mac.upcase %></span>
-  <span><%= machine.ip.ip %></span>
-  <% if can?(:edit, machine) %>
-    <%= button_to(edit_machine_path(machine), method: :get, 'aria-label': 'Edit this machine') do %>
-      <%= svg_icon_tag 'icon_edit' %>
+<li class="machine row">
+  <span class="font-medium"><%= machine.name %></span>
+  <span class="muted font-mono text-sm"><%= machine.mac.upcase %></span>
+  <span class="muted font-mono text-sm"><%= machine.ip.ip %></span>
+  <div class="ms-auto flex gap-1">
+    <% if can?(:edit, machine) %>
+      <%= icon_button 'icon_edit', edit_machine_path(machine), label: 'Edit this machine' %>
     <% end %>
-  <% end %>
-  <% if can?(:destroy, machine) %>
-    <%= button_to(machine, method: :delete, data: { turbo_confirm: "Are you sure ?" }, 'aria-label': 'Delete this machine') do %>
-      <%= svg_icon_tag 'icon_delete' %>
+    <% if can?(:destroy, machine) %>
+      <%= icon_button 'icon_delete', machine, method: :delete, label: 'Delete this machine' %>
     <% end %>
-  <% end %>
-</div>
+  </div>
+</li>

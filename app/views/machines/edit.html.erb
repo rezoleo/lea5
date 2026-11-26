@@ -1,7 +1,7 @@
 <%# locals: () -%>
 
-<% provide :button_text, "Edit" %>
+<% provide :button_text, "Save changes" %>
 
-<h1>Edit the machine</h1>
+<%= render "components/page_header", title: "Edit the machine", back: user_path(@machine.user) %>
 
 <%= render 'form', owner: @owner, machine: @machine %>

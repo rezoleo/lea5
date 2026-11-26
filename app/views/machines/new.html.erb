@@ -2,6 +2,6 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Add a new machine</h1>
+<%= render "components/page_header", title: "Add a new machine", back: user_path(@owner) %>
 
 <%= render 'form', owner: @owner, machine: @machine %>

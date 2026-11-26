@@ -2,19 +2,11 @@
 
 <% provide :button_text, "Create" %>
 
-<h1>Add a new article</h1>
+<%= render "components/page_header", title: "Add a new article", back: admin_path %>
 
 <%= form_with(model: @article, class: 'form') do |f| %>
   <%= render 'utils/error_messages', object: f.object %>
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name, required: true %>
-  </div>
-  <div>
-    <%= f.label :price %>
-    <%= f.number_field :price, min: 0, step: 0.01, required: true, placeholder: "0.00" %>
-  </div>
-  <div>
-    <%= f.submit yield(:button_text) %>
-  </div>
+  <%= f.field :name, required: true %>
+  <%= f.field :price, :number_field, min: 0, step: 0.01, required: true, placeholder: "0.00" %>
+  <%= f.submit yield(:button_text) %>
 <% end %>

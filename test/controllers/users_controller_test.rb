@@ -213,7 +213,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     get users_path
     assert_dom '.user', count: limit
-    assert_dom '.pagination'
+    assert_dom '.pagy'
 
     get users_path, params: { page: 2 }
     assert_dom '.user', count: limit
@@ -227,7 +227,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     get users_path
     assert_dom '.user', count: 1
-    assert_dom '.pagination', count: 0
+    assert_dom '.pagy', count: 0
   end
 
   test 'should render an empty page for an out of range page number' do

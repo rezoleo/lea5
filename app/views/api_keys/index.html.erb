@@ -1,27 +1,12 @@
 <%# locals: () -%>
 
-<main>
-    <div class="container">
-        <div class="card-details-container card-api-keys card-details-api-keys">
-            <div class="card card-details">
+<h1>API keys</h1>
 
-            <div class="card-title">
-                <%= svg_icon_tag 'profile' %>
-                <h2>Api Keys</h2>
-            </div>
-
-            <% if can?(:create, ApiKey) %>
-                <%= render "components/buttons/button_primary_create", text: "new api key", path: new_api_key_path, aria_label: "Add a new api key" %>
-            <% end %>
-
-            </div>
-
-            <div class="divider"></div>
-        </div>
-        <div class="card card-api-key card-content">
-            <div class="card-content-api-keys">
-            <%= render(@api_keys) || "No API keys" %>
-            </div>
-        </div>
-    </div>
-</main>
+<section class="panel">
+  <%= render "components/card_header",
+             title: "API keys",
+             link_text: ("New API key" if can?(:create, ApiKey)),
+             link_path: new_api_key_path,
+             link_label: "Add a new API key" %>
+  <%= render "components/list", items: @api_keys, empty: "No API keys" %>
+</section>

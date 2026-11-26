@@ -1,27 +1,60 @@
 <%# locals: (sale:) -%>
 
-<div class="sale">
-
-    <%sale.articles_sales.each do |article_sale| %>
-        <b><%= article_sale.article.name %> <%if article_sale.quantity > 1 %> (×<%= article_sale.quantity %>) <% end %></b>
-        <p>Price: <%= (article_sale.article.price * article_sale.quantity).format %> </p>
-    <% end %>
-            
-    <%if sale.subscription%>
-        <b>Internet subscription</b>
-        <p><%= time_with_relative_tag sale.subscription.start_at %> - <%= time_with_relative_tag sale.subscription.end_at %> (<%= pluralize(sale.subscription.duration, "month") %>)</p>
-    <% end %>
-
-    <p>Payment method: <%= sale.payment_method.name %></p>
-    <%= link_to(download_invoice_path(sale.invoice), class: 'button-primary') do %>
-        Invoice
+<% lines = sale.articles_sales.size + (sale.subscription ? 1 : 0) %>
+<li class="grid gap-3 px-4 py-4">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <div>
+      <span class="font-semibold"><%= time_with_relative_tag sale.created_at %></span>
+      <span class="muted text-sm">Paid with <%= sale.payment_method.name %></span>
+    </div>
+    <div class="flex items-center gap-2">
+      <% if can?(:create, Refund) %>
+        <%= icon_button "icon_refund", new_sale_refund_path(sale), label: "Refund this sale", title: "Refund" %>
+      <% end %>
+      <%# Same fixed width as the credit note button, so the two line up. %>
+      <%= link_to download_invoice_path(sale.invoice), class: "btn btn-outline btn-sm w-32" do %>
         <%= svg_icon_tag 'icon_pdf' %>
+        Invoice
+      <% end %>
+    </div>
+  </div>
+
+  <ul class="grid gap-1">
+    <% sale.articles_sales.each do |article_sale| %>
+      <li class="line">
+        <span>
+          <%= article_sale.article.name %>
+          <% if article_sale.quantity > 1 %>
+            <span class="muted">×<%= article_sale.quantity %></span>
+          <% end %>
+        </span>
+        <span><%= (article_sale.article.price * article_sale.quantity).format %></span>
+      </li>
     <% end %>
 
-    <% if can?(:create, Refund) %>
-        <%= link_to 'Refund', new_sale_refund_path(sale), class: 'button-secondary' %>
+    <% if sale.subscription %>
+      <li class="line">
+        <span>
+          <%= pluralize(sale.subscription.duration, "month") %> Internet subscription
+          <span class="muted">
+            <%= time_with_relative_tag sale.subscription.start_at %>&nbsp;&ndash;&nbsp;<%= time_with_relative_tag sale.subscription.end_at %>
+          </span>
+        </span>
+        <span><%= sale.subscription_price.format %></span>
+      </li>
     <% end %>
 
-    <%= render sale.refunds %>
+    <% if lines > 1 %>
+      <li class="line font-semibold">
+        <span>Total</span>
+        <span><%= sale.amount.format %></span>
+      </li>
+    <% end %>
+  </ul>
 
-</div>
+  <% if sale.refunds.any? %>
+    <ul class="grid gap-3 border-s-2 border-secondary/60 ps-4">
+      <%= render sale.refunds %>
+    </ul>
+  <% end %>
+</li>

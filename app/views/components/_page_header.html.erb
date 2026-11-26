@@ -1,0 +1,11 @@
+<%# locals: (title:, back:, subtitle: nil) -%>
+
+<div class="flex items-center gap-2">
+  <%= icon_button 'icon_arrow_left', back, label: "Back" %>
+  <div>
+    <h1><%= title %></h1>
+    <% if subtitle %>
+      <p class="muted text-sm"><%= subtitle %></p>
+    <% end %>
+  </div>
+</div>

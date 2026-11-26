@@ -1,7 +1,7 @@
 <%# locals: () -%>
 
-<% provide :button_text, "Edit" %>
+<% provide :button_text, "Save changes" %>
 
-<h1>Edit the free access</h1>
+<%= render "components/page_header", title: "Edit the free access", back: user_path(@free_access.user) %>
 
 <%= render 'form', owner: @owner, free_access: @free_access %>
