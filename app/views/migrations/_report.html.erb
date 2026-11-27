@@ -1,0 +1,76 @@
+<%# locals: (account:, user:, animate: false) -%>
+
+<% report = account.claim_report || {} %>
+<% access = report['access'] || {} %>
+<% room = report['room'] || {} %>
+
+<section class="migration-card" <%= 'data-controller=migration' if animate %>>
+  <h2>re2o account <%= account.pseudo %> imported</h2>
+
+  <ul class="migration-rows">
+    <li class="migration-row <%= access['status'] == 'imported' ? 'is-ok' : 'is-skipped' %>" data-migration-target="row">
+      <%= render 'migrations/status_icon' %>
+      <div>
+        <% if access['status'] == 'imported' %>
+          <strong>+<span data-count-to="<%= access['days'] %>"><%= access['days'] %></span> days of internet</strong>
+          <span>Until <%= l Time.zone.parse(access['end_at']).to_date, format: :long %></span>
+        <% else %>
+          <strong>Internet time</strong>
+          <span><%= access['reason'] %></span>
+        <% end %>
+      </div>
+    </li>
+
+    <li class="migration-row <%= room['status'] == 'skipped' ? 'is-skipped' : 'is-ok' %>" data-migration-target="row">
+      <%= render 'migrations/status_icon' %>
+      <div>
+        <strong>Room <%= room['number'] %></strong>
+        <span>
+          <% if room['status'] == 'imported' %>Assigned to you
+          <% elsif room['status'] == 'kept' %>You already had this room in lea5
+          <% else %><%= room['reason'] %>
+          <% end %>
+        </span>
+      </div>
+    </li>
+
+    <% (report['machines'] || []).each do |machine| %>
+      <li class="migration-row <%= machine['status'] == 'imported' ? 'is-ok' : 'is-skipped' %>" data-migration-target="row">
+        <%= render 'migrations/status_icon' %>
+        <div>
+          <strong><%= machine['name'] %></strong>
+          <span>
+            <code><%= machine['mac'] %></code>
+            · <%= machine['status'] == 'imported' ? machine['ip'] : machine['reason'] %>
+          </span>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="migration-finale" data-migration-target="finale">
+    <% if account.claim_skipped_anything? %>
+      <p class="migration-help">Something was skipped? Come see us at the helpdesk, we will sort it out.</p>
+    <% end %>
+    <h2>Connect to Rézoléo</h2>
+    <p>On each device, forget the <strong>Federez</strong> network, then connect to <strong>Rézoléo</strong> with:</p>
+    <dl class="migration-facts">
+      <dt>Username</dt><dd><%= user.username %></dd>
+    </dl>
+    <div class="card-content-user-details" data-controller="user" data-user-password-value="<%= user.wifi_password %>">
+      <label>Password:</label>
+      <p data-user-target="wifiPassword" class="password text-security-fallback"> ******************** </p>
+      <button data-action="click->user#togglePasswordVisibility">
+        <%= svg_icon_tag 'icon_eye', title: "Hide Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-hidden' %>
+        <%= svg_icon_tag 'icon_eye_slash', title: "Show Wifi Password", 'data-user-target':'eyeIcon', class: 'eye-visible' %>
+      </button>
+      <div>
+        <button data-action="click->user#copyToClipboard">
+          <%= svg_icon_tag 'icon_clipboard', title: "Copy Wifi Password" %>
+        </button>
+        <span data-user-target="copyMessage" class="copy-message">Password copied to clipboard !</span>
+      </div>
+    </div>
+    <%= link_to 'Go to my profile', profile_path, class: 'migration-button' %>
+  </div>
+</section>

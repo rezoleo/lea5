@@ -34,6 +34,14 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
 
   get '/search', as: 'search', to: 'search#search'
 
+  resource :migration, only: [:show] do
+    get :link
+    get :lookup
+    post :claim
+    post :send_link
+    post :admin_claim
+  end
+
   resources :api_keys
   resources :invoices, only: [], param: :number do
     get :download, on: :member
