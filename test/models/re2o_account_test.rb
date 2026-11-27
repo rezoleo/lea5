@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'minitest/mock'
 require 'test_helper'
 
 class Re2oAccountTest < ActiveSupport::TestCase
@@ -132,5 +133,27 @@ class Re2oAccountTest < ActiveSupport::TestCase
     @peter.claim!(users(:spiderman))
 
     assert_nil Re2oAccount.find_by_token_for(:claim, token)
+  end
+  test 'claim skips a missing or unknown room' do
+    @peter.update!(room: nil)
+    assert_equal 'skipped', @peter.claim!(users(:spiderman))['room']['status']
+
+    @tony.update!(room: 'z999')
+    user = User.create!(firstname: 'Miles', lastname: 'Morales', email: 'miles@univ.edu', username: 'miles')
+    assert_equal 'Room not found in lea5', @tony.claim!(user)['room']['reason']
+  end
+
+  test 'a machine refused by lea5 validations is skipped' do
+    @peter.update!(machines: [{ 'mac' => '08002b:010203', 'name' => 'odd' }])
+
+    report = @peter.claim!(users(:spiderman))
+
+    assert_equal 'skipped', report['machines'].first['status']
+  end
+
+  test 'a concurrent claim by the same user is reported' do
+    @peter.stub(:update!, ->(*) { raise ActiveRecord::RecordNotUnique }) do
+      assert_raises(Re2oAccount::ClaimError) { @peter.claim!(users(:spiderman)) }
+    end
   end
 end

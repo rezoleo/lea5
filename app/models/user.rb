@@ -82,10 +82,6 @@ class User < ApplicationRecord
     free_accesses_by_date.first
   end
 
-  def subscription_expiration
-    current_subscription&.end_at # Safe operator, return nil if object is nil
-  end
-
   def internet_expiration
     # .compact removes all nil from an array
     [current_subscription&.end_at, current_free_access&.end_at].compact.max

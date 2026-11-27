@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'minitest/mock'
 require 'test_helper'
 
 class MigrationsControllerTest < ActionDispatch::IntegrationTest
@@ -131,5 +132,63 @@ class MigrationsControllerTest < ActionDispatch::IntegrationTest
     assert_raises CanCan::AccessDenied do
       post admin_claim_migration_path, params: { username: users(:spiderman).username, pseudo: 'spidey' }
     end
+  end
+  test 'an unknown account with a password does not claim' do
+    sign_in_as users(:spiderman)
+    post claim_migration_path, params: { identifier: 'nobody', password: 'webs' }
+
+    assert_equal "We couldn't verify this re2o account.", flash[:error]
+  end
+
+  test 'an already migrated user cannot claim another account' do
+    sign_in_as users(:pepper)
+    post claim_migration_path, params: { identifier: 'spidey', password: 'webs' }
+
+    assert_redirected_to migration_path
+    assert_equal 'Your lea5 account has already been migrated from re2o.', flash[:error]
+    assert_not_predicate re2o_accounts(:peter).reload, :claimed?
+  end
+
+  test 'send_link refuses accounts without email' do
+    re2o_accounts(:peter).update!(email: nil)
+    sign_in_as users(:spiderman)
+
+    assert_enqueued_emails(0) { post send_link_migration_path, params: { identifier: 'spidey' } }
+    assert_equal 'This re2o account has no email. Use your password, or come see us at the helpdesk.', flash[:error]
+  end
+
+  test 'too many attempts are rate limited' do
+    sign_in_as users(:spiderman)
+
+    MigrationsController.cache_store.stub(:increment, 100) do
+      post claim_migration_path, params: { identifier: 'spidey', password: 'webs' }
+    end
+
+    assert_redirected_to migration_path
+    assert_equal 'Too many attempts, please try again later.', flash[:error]
+    assert_not_predicate re2o_accounts(:peter).reload, :claimed?
+  end
+
+  test 'an admin linking an unknown pseudo gets an error' do
+    sign_in_as users(:ironman), ['rezoleo']
+    post admin_claim_migration_path, params: { username: users(:spiderman).username, pseudo: 'nobody' }
+
+    assert_redirected_to users(:spiderman)
+    assert_equal 'No unclaimed re2o account with this pseudo.', flash[:error]
+  end
+
+  test 'an admin cannot link a second account to a migrated user' do
+    sign_in_as users(:ironman), ['rezoleo']
+    post admin_claim_migration_path, params: { username: users(:pepper).username, pseudo: 'spidey' }
+
+    assert_redirected_to users(:pepper)
+    assert_equal 'Your lea5 account has already been migrated from re2o.', flash[:error]
+  end
+
+  test 'the admin link form asks for confirmation' do
+    sign_in_as users(:ironman), ['rezoleo']
+    get user_path(users(:spiderman))
+
+    assert_select 'form[action=?][data-turbo-confirm]', admin_claim_migration_path
   end
 end
