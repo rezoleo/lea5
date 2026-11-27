@@ -88,5 +88,7 @@ test:
 production:
   <<: *default
   database: lea5_production
+  # Puma threads + GoodJob threads (max_threads: 2) + GoodJob LISTEN and cron connections
+  max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 }.to_i + 4 %>
   username: lea5
   password: <%= ENV["LEA5_DATABASE_PASSWORD"] %>
